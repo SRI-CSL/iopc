@@ -4,6 +4,9 @@ BINDIR = /usr/local/iop
 LOCALDIR = ~/bin/IOP
 #temporary bin dir (also appears in src/c_makefile)
 TMPBINDIR = /tmp/iopbin
+
+TMPDOCDIR = /tmp/iopdoc
+
 all:
 	cd src; make -f c_makefile
 
@@ -20,7 +23,8 @@ zip:
 	cd ..; mv IOP.zip IOP.zip.bak; zip -r IOP IOP
 
 doc:
-	cd src; make doc_local -f java_makefile; mv doc ..
+	rm -rf ${TMPDOCDIR}
+	cd src; make doc_www -f Makefile
 
 clean:
 	cd src; make -f c_makefile clean;

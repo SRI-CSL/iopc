@@ -41,7 +41,7 @@ doc_www:
 		-use \
 		-public \
 		-splitIndex \
-		-d doc \
+		-d /tmp/iopdoc \
 		-doctitle 'Graphics2D Actor  API' \
 		-windowtitle 'Graphics2D Actor  API' \
 		-header 'Graphics2D Actor  API' \
