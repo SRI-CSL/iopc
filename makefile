@@ -1,16 +1,3 @@
-#use the system wide default if unset
-ifndef (${IOPBINDIR})
-	IOPBINDIR = /usr/local/iop
-endif
-#use the system wide default if unset
-ifndef (${IOPTMPBINDIR})
-	IOPTMPBINDIR = /tmp/iopbin
-endif
-#use the system wide default if unset
-ifndef (${IOPTMPDOCDIR})
-	IOPTMPDOCDIR = /tmp/iopdoc
-endif
-
 all:
 	cd src; make -f c_makefile
 
@@ -45,6 +32,7 @@ clean:
 	rm -rf ${IOPTMPBINDIR}
 
 install:
+	mkdir -p ${IOPBINDIR}
 	rm -rf ${IOPBINDIR}/bin;
 	mkdir ${IOPBINDIR}/bin;
 	cp -rf ${IOPTMPBINDIR}/* ${IOPBINDIR}/bin/
