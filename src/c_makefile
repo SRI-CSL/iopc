@@ -57,6 +57,7 @@ scripts:
 	cp jlambda   ${IOPTMPBINDIR}/
 
 java: 
+	make -f java_cup_makefile
 	make -f Makefile
 	make -f Ezd_Makefile	
 	make -f GUI_Makefile	

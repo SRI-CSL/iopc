@@ -1,3 +1,7 @@
+ifndef $IOPTMPBINDIR
+IOPTMPBINDIR = /tmp/iopbin
+endif
+
 all: jlex java_cup dotParser
 
 dotParser: 
@@ -11,8 +15,8 @@ jlex:
 	javac -source 1.2 -nowarn g2d/graph/JLex/Main.java
 
 java_cup:
-	javac g2d/graph/java_cup/runtime/*a
-	javac g2d/graph/java_cup/*a
+	javac -source 1.4 -d ${IOPTMPBINDIR} g2d/graph/java_cup/runtime/*a
+	javac -source 1.4 -d ${IOPTMPBINDIR} g2d/graph/java_cup/*a
 
 
 
