@@ -1,6 +1,9 @@
 # Makefile.include
 # This file is included in all other makefiles.
 
+ifndef $IOPTMPBINDIR
+IOPTMPBINDIR = /tmp/iopbin
+endif
 
 # relies on:
 # TOP_DIR  the package root dir

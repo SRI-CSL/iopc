@@ -165,8 +165,9 @@ int main(int argc, char** argv){
 	    writeMsg(STDERR_FILENO, response);
 	    /*  writeMsg(STDOUT_FILENO, response);*/
 	  }
-	  if ((response==NULL) && (SAL_DIED))
-	    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
+	  if (SAL_DIED)
+	    /*	    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);*/
+	    fprintf(stderr,"response is %p \n",response);
 	  }
 	}
     }   

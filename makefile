@@ -1,3 +1,13 @@
+ifndef $IOPBINDIR
+IOPBINDIR = /usr/local/iop
+endif
+ifndef $IOPTMPBINDIR
+IOPTMPBINDIR = /tmp/iopbin
+endif
+ifndef $IOPTMPDOCDIR
+IOPTMPDOCDIR = /tmp/iopdoc
+endif
+
 all:
 	cd src; make -f c_makefile
 

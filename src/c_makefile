@@ -1,5 +1,9 @@
 COMPILER = gcc
 
+ifndef $IOPTMPBINDIR
+IOPTMPBINDIR = /tmp/iopbin
+endif
+
 ifneq (,$(findstring Darwin,$(shell uname )))
 #Mac flags
 SCRIPT = mac_iop
