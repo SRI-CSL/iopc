@@ -1,17 +1,15 @@
-ifndef $IOPBINDIR
+ifeq (${IOPBINDIR},)
 IOPBINDIR = /usr/local/iop
 endif
-ifndef $IOPTMPBINDIR
+ifeq (${IOPTMPBINDIR},)
 IOPTMPBINDIR = /tmp/iopbin
 endif
-ifndef $IOPTMPDOCDIR
+ifeq (${IOPTMPDOCDIR},)
 IOPTMPDOCDIR = /tmp/iopdoc
 endif
 
 all:
 	cd src; make -f c_makefile
-
-
 
 java:
 	cd src; make -f c_makefile java

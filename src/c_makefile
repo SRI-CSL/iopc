@@ -1,6 +1,6 @@
 COMPILER = gcc
 
-ifndef $IOPTMPBINDIR
+ifeq (${IOPTMPBINDIR},)
 IOPTMPBINDIR = /tmp/iopbin
 endif
 
