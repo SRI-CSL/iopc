@@ -50,8 +50,8 @@ ${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS} $< -c 
 
 scripts:
-	rm -rf ${TMPBINDIR}
-	mkdir ${TMPBINDIR}
+#	rm -rf ${TMPBINDIR}
+	mkdir -p ${TMPBINDIR}
 	cp ${SCRIPT}  ${TMPBINDIR}/iop
 	cp jlambda   ${TMPBINDIR}/
 
@@ -60,7 +60,8 @@ java:
 	make -f Ezd_Makefile	
 	make -f GUI_Makefile	
 	make -f GraphAct_Makefile	
-	cp -r g2d/Images ${TMPBINDIR}/g2d/
+	mkdir -p  ${TMPBINDIR}/g2d/Images
+	cp g2d/Images/*.gif ${TMPBINDIR}/g2d/Images/
 
 
 javaclean: 

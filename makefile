@@ -4,7 +4,7 @@ BINDIR = /usr/local/iop
 LOCALDIR = ~/bin/IOP
 #temporary bin dir (also appears in src/c_makefile)
 TMPBINDIR = /tmp/iopbin
-
+#temporary doc bin for javadoc
 TMPDOCDIR = /tmp/iopdoc
 
 all:
