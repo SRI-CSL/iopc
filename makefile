@@ -24,7 +24,6 @@ doc:
 
 clean:
 	cd src; make -f c_makefile clean;
-	rm -f bin/*/*.class
 	rm -rf ${TMPBINDIR}
 
 install:
