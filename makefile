@@ -35,8 +35,7 @@ install:
 	mkdir ${BINDIR}/bin;
 	cp -rf ${TMPBINDIR}/* ${BINDIR}/bin/
 	rm -rf ${BINDIR}/doc;
-	mkdir ${BINDIR}/doc;		
-	cp -r  doc/* ${BINDIR}/doc/
+	mv ${TMPDOCDIR} ${BINDIR}/doc
 
 local:
 	rm -rf ${LOCALDIR};
