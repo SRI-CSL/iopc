@@ -28,7 +28,11 @@ static void sal_actor_sigint_handler(int sig){
   }
   _exit(EXIT_FAILURE);
 }
-
+/*
+  ian says: this is not correct, will put the time of termination
+  out of this process' control. Better to set a flag and make sure
+  we keep tabs on the flag.
+*/
 static void sal_actor_sigchild_handler(int sig){
   if (SAL_ACTOR_DEBUG)
     fprintf(stderr, "SAL died! Exiting\n"); 
