@@ -51,7 +51,6 @@ ${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS} $< -c 
 
 scripts:
-#	rm -rf ${IOPTMPBINDIR}
 	mkdir -p ${IOPTMPBINDIR}
 	cp ${SCRIPT}  ${IOPTMPBINDIR}/iop
 	cp jlambda   ${IOPTMPBINDIR}/
