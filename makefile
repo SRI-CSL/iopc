@@ -2,7 +2,8 @@
 BINDIR = /usr/local/iop
 #local single user location (for make local)
 LOCALDIR = ~/bin/IOP
-
+#temporary bin dir (also appears in src/c_makefile)
+TMPBINDIR = /tmp/iopbin
 all:
 	cd src; make -f c_makefile
 
@@ -24,11 +25,12 @@ doc:
 clean:
 	cd src; make -f c_makefile clean;
 	rm -f bin/*/*.class
+	rm -rf ${TMPBINDIR}
 
 install:
 	rm -rf ${BINDIR}/bin;
 	mkdir ${BINDIR}/bin;
-	cp -rf bin/* ${BINDIR}/bin/
+	cp -rf ${TMPBINDIR}/* ${BINDIR}/bin/
 	rm -rf ${BINDIR}/doc;
 	mkdir ${BINDIR}/doc;		
 	cp -r  doc/* ${BINDIR}/doc/
