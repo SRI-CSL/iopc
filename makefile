@@ -25,6 +25,14 @@ zip:
 doc:
 	rm -rf ${TMPDOCDIR}
 	cd src; make doc_www -f Makefile
+	rm -rf ${BINDIR}/doc;
+	cp -rf ${TMPDOCDIR} ${BINDIR}/doc
+
+mcs_doc:
+	rm -rf ${HOME}/public_html/GraphicsActor2D/doc
+	cp -rf ${TMPDOCDIR} ${HOME}/public_html/GraphicsActor2D/doc
+	chmod -R go+rx ${HOME}/public_html/GraphicsActor2D/doc
+
 
 clean:
 	cd src; make -f c_makefile clean;
@@ -34,8 +42,6 @@ install:
 	rm -rf ${BINDIR}/bin;
 	mkdir ${BINDIR}/bin;
 	cp -rf ${TMPBINDIR}/* ${BINDIR}/bin/
-	rm -rf ${BINDIR}/doc;
-	mv ${TMPDOCDIR} ${BINDIR}/doc
 
 local:
 	rm -rf ${LOCALDIR};
