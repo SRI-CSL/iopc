@@ -1,0 +1,82 @@
+COMPILER = gcc
+
+ifneq (,$(findstring Darwin,$(shell uname )))
+#Mac flags
+SCRIPT = mac_iop
+CFLAGS =  -Wall -D_MAC
+LIBS = -lpthread -lm 
+else
+#Linux flags
+SCRIPT = linux_iop
+CFLAGS =  -Wall -pthread -D_LINUX -pedantic
+LIBS =  -lm 
+endif
+
+
+EXE = iop_executor\
+      iop_registry\
+      iop_main\
+      iop_filemanager\
+      iop_socketfactory\
+      iop_listener\
+      iop_socket\
+      iop_graphics_wrapper\
+      iop_graphics2d_wrapper\
+      iop_pvs_wrapper\
+      iop_maude_wrapper\
+      iop_sal_actor\
+      iop_sal_spawner
+
+SCRIPTS = iop jlambda  
+HEADERS = cheaders.h constants.h types.h dbugflags.h externs.h options.h sal_lib.h
+MISC    = c_makefile 
+
+COBJS = actor.o\
+        registry_lib.o\
+        iop_lib.o\
+        socket_lib.o\
+        msg.o argv.o wrapper_lib.o sal_lib.o
+
+all:  scripts ${EXE} java 
+
+${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
+	${COMPILER} ${CFLAGS}  ${LIBS} ${COBJS} $< -o $@
+	cp $@ ../bin/
+
+%.o: %.c %.h ${HEADERS} makefile
+	${COMPILER} ${CFLAGS} $< -c 
+
+scripts:
+	cp ${SCRIPT}  ../bin/iop
+	cp jlambda  ../bin
+
+java: 
+	make -f Makefile
+	make -f Ezd_Makefile	
+	make -f GUI_Makefile	
+	make -f GraphAct_Makefile	
+	cp -r classes/* ../bin/
+	cp -r g2d/Images ../bin/g2d/
+
+javaclean: 
+	make -f Makefile clean
+	make -f GUI_Makefile clean	
+
+clean_tmp:
+	rm -f /tmp/iop_*
+
+
+clean:
+	rm -f ${EXE}
+	rm -f ${EXE} ${COBJS} *~ */*.class */*/*.class *.zip *.bak
+	rm -f ../bin/GUI/*.class
+	cd ../bin; rm -f ${EXE} ${SCRIPTS}
+	make -f Makefile clean
+	make -f Ezd_Makefile clean	
+	make -f GUI_Makefile clean	
+	make -f GraphAct_Makefile clean	
+
+zip:
+	make -f c_makefile clean
+	rm -f *~ *.zip *.bak
+	cd ..; mv src.zip src.zip.bak; zip -r src src

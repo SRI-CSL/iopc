@@ -1,0 +1,235 @@
+/*
+    The InterOperability Platform: IOP
+    Copyright (C) 2004 Ian A. Mason
+    School of Mathematics, Statistics, and Computer Science   
+    University of New England, Armidale, NSW 2351, Australia
+    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
+    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+#include "cheaders.h"
+#include "constants.h"
+#include "types.h"
+#include "socket_lib.h"
+#include "dbugflags.h"
+
+
+void socketCleanUp(){
+  return;
+}
+
+int closeSocket(int s){
+  return close(s);
+}
+
+int socketStartUp(){
+  return 1;
+}
+
+int *acceptSocket(int listenSocket, char **comments){
+  int *retval = (int*)calloc(1, sizeof(int));
+  char *buff = (char *)calloc(BUFFSZ,sizeof(char));
+  char *hostname;
+  struct sockaddr_in from;
+#ifdef	_LINUX    
+  socklen_t fromlen = sizeof(from);
+#else
+  int fromlen = sizeof(from);
+#endif
+  struct hostent *hostptr;
+  if((retval == NULL) || (buff == NULL)){
+    fprintf(stderr, "calloc failed in acceptSocket\n");
+    return NULL;
+  }
+
+ restart:
+
+  *retval = accept(listenSocket, (struct sockaddr*)&from, &fromlen);
+
+  if((*retval == -1) && (errno == EINTR)) goto restart;
+
+  if (*retval == INVALID_SOCKET)
+    sprintf(buff, "acceptSocket: accept() error %d\n", errno);
+  hostptr = gethostbyaddr((char*)&(from.sin_addr.s_addr), 4, AF_INET);
+  hostname = "unknown";
+  if(hostptr != NULL) hostname =(*hostptr).h_name;
+  sprintf(buff, 
+          "acceptSocket got connection from:\n\t %s, port %u\n", 
+          hostname,
+	  htons(from.sin_port));
+  *comments = buff;
+  return retval;
+}
+
+            
+
+int allocateSocket(unsigned short port, char *host, int* sockp){
+  int retval = - 1;
+  struct sockaddr_in server;
+  struct hostent *hp;
+  int  conn_socket;
+  hp = gethostbyname(host);
+  if (hp == NULL) {
+    fprintf(stderr,
+            "Cannot resolve address [%s]: Error %d\n",
+            host,
+            h_errno);
+    return retval;
+  }
+  memset(&server, 0, sizeof(server));
+  memcpy(&(server.sin_addr), hp->h_addr, hp->h_length);
+  server.sin_family = hp->h_addrtype;
+  server.sin_port = htons(port);
+  conn_socket = socket(AF_INET, SOCK_STREAM, 0); /* Open a socket */
+  if (conn_socket < 0 ) {
+    fprintf(stderr, "Error Opening socket\n");
+    return retval;
+  }
+  if (connect(conn_socket, (struct sockaddr*)&server, sizeof(server))
+      == -1 ) {
+    fprintf(stderr, "connect() failed\n");
+    return retval;
+  }
+  retval = 1;
+  *sockp = conn_socket;
+  return retval;
+}
+
+int allocateListeningSocket(unsigned short port, int* sockp){
+  struct sockaddr_in server;
+  int listen_socket;
+  int retval = -1;
+  server.sin_family = AF_INET;
+  server.sin_addr.s_addr = INADDR_ANY; 
+  server.sin_port = htons(port);
+  if((listen_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
+    return retval;
+
+  }
+  if((bind(listen_socket, (struct sockaddr*)&server, sizeof(server)) < 0) ||
+     (listen(listen_socket, MAXBACKLOG) < 0)){
+    return retval;
+  }
+  retval = 1;
+  *sockp = listen_socket;
+  return retval;
+}
+
+void* in2socket(void *sp){
+  int socket = *((int *)sp);
+  char buff[BUFFSZ];
+  int retval;
+  while(fgets(buff, BUFFSZ, stdin) != NULL){
+    retval = send(socket, buff, strlen(buff), 0);
+    if (retval == SOCKET_ERROR) {
+      fprintf(stderr, "send to socket failed\n");
+      socketCleanUp();
+      return NULL;
+    }
+    if(SOCKET_LIB_DEBUG)
+      fprintf(stderr, "sent %d chars to socket\n", retval);
+  }
+  return NULL;
+}
+
+void* socket2outGentle(void *sp){
+  int socket = *((int *)sp);
+  char buff[BUFFSZ];
+  int i, retval, gots = 0;
+  while(1){
+    if(SOCKET_LIB_DEBUG)
+      fprintf(stderr, "socket2outGentle commencing recv on %d\n", (int)socket);
+    gots++;
+    retval = recv(socket, buff, BUFFSZ, 0);
+    if(retval == 0){
+      fprintf(stderr, "Closed connection\n");
+      closeSocket(socket);
+      return  NULL;
+    } 
+    else if (retval == SOCKET_ERROR) {
+      perror("Closing socket");
+      closeSocket(socket);
+      return  NULL;
+    } else {
+      if(SOCKET_LIB_DEBUG)
+        fprintf(stderr, "sending %d chars to stdout\n", retval);
+      for(i = 0; i < retval; i++) putc(buff[i], stdout);
+      fprintf(stdout, "\n");
+      fflush(stdout);
+    }
+  };
+  return NULL;
+}
+
+void* socket2outGentleWithHttpAck(void *sp){
+  int socket = *((int *)sp);
+  char buff[BUFFSZ];
+  int i, retval, gots = 0;
+  char ack204[] = "HTTP/1.1 204 OK\r\n\r\n";
+  while(1){
+    if(SOCKET_LIB_DEBUG)
+      fprintf(stderr, "socket2outGentle commencing recv on %d\n", (int)socket);
+    gots++;
+    retval = recv(socket, buff, BUFFSZ, 0);
+    if(retval == 0){
+      fprintf(stderr, "Closed connection\n");
+      closeSocket(socket);
+      return  NULL;
+    } 
+    else if (retval == SOCKET_ERROR) {
+      perror("Closing socket");
+      closeSocket(socket);
+      return  NULL;
+    } else {
+      if(SOCKET_LIB_DEBUG)
+        fprintf(stderr, "sending %d chars to stdout\n", retval);
+      for(i = 0; i < retval; i++) putc(buff[i], stdout);
+      fprintf(stdout, "\n");
+      fflush(stdout);
+      send(socket, ack204, strlen(ack204), 0);  
+      /*      closeSocket(socket);    */
+    }
+  };
+  return NULL;
+}
+
+void* socket2outViolent(void *sp){
+  int socket = *((int *)sp);
+  char buff[BUFFSZ];
+  int i, retval, gots = 0;
+  while((retval = recv(socket, buff, BUFFSZ, 0)) !=  SOCKET_ERROR){
+    gots++;
+    if(retval == 0){
+      fprintf(stderr, "Closed connection\n");
+      closeSocket(socket);
+      exit(EXIT_SUCCESS);
+    } 
+    else
+      for(i = 0; i < retval; i++) putc(buff[i], stdout);
+  }
+  if (retval == SOCKET_ERROR) {
+    closeSocket(socket);
+    socketCleanUp();
+    return NULL;
+  }
+  return NULL;
+}
+
+
+
+

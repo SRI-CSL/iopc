@@ -1,0 +1,31 @@
+#This is an example .ioprc file, it should be called
+# .ioprc, and live in the users home directory.
+#
+#
+#The first (non comment line) should be the name of a file.
+#when you start up iop, it first looks for a input.txt in the
+#pwd, if there is none it will use this file.
+/homes/cs/iam/SRI/All/xix.txt
+#this is a comment
+font size = 12
+font style = bold
+font type = Lucinda Sans
+#show font familes = true
+#window width = 450
+#window height = 550
+#
+#to dynamically configure use the start instruction:
+#
+# <maude bin dir> should be where maude lives
+#  for example: /usr/local/maude-linux/bin
+#
+# <iop bin dir> should be where iop lives
+#  for example: /usr/bin/iop
+#
+#
+start maude iop_maude_wrapper <maude bin dir>
+start socketfactory iop_socketfactory *FIFO_IN* *FIFO_OUT*
+start graphics iop_graphics_wrapper <iop bin dir>
+start graphics2d iop_graphics2d_wrapper <iop bin dir>
+start executor iop_executor
+start filemanager iop_filemanager

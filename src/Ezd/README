@@ -1,0 +1,17 @@
+This is Ian A. Mason's version of the Ezd package.
+I have changed it as I saw fit to suit my needs. The
+HTML documentation is no longer entirely accurate.
+
+
+To do list:
+
+	0. Eliminate the trivial deprecation. [Done]
+	1. Eliminate the use of the deprecated Thread API.  [Done]
+	3. Tightened up the imports. [Done]
+	4. Port the event aspects to the AWTEvent event model [Done]
+	5. Eliminate the deprecated use of FontMetrics.  [Done]
+	6. Port to Swing. [Done]
+	7. Move to 1.2 Collections [Done]
+	8. Eliminate the double buffering in favour of Swing's
+
+

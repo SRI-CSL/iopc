@@ -1,0 +1,51 @@
+# Makefile.include
+# This file is included in all other makefiles.
+
+# relies on:
+# TOP_DIR  the package root dir
+# PACKAGE_DIR The package dir path
+
+# set here the target dir for all classes
+CLASS_DIR       =$(TOP_DIR)/classes
+
+# compiler field
+#JDEBUGFLAGS	= -g -deprecation
+#JDEBUGFLAGS	= -O -depend -nowarn
+JDEBUGFLAGS	= -source 1.4 
+JCC		= javac 
+
+# nothing should be changed below...
+#
+
+all: classes
+
+LOCAL_CLASS_DIR       =$(CLASS_DIR)/$(PACKAGE_DIR)
+
+# create target class dir if not present.
+$(LOCAL_CLASS_DIR):
+	mkdir -p $(LOCAL_CLASS_DIR)
+
+
+# new rule for java
+.SUFFIXES: .java .class
+
+
+# magical command that tells make to find class files in another dir
+vpath %.class $(LOCAL_CLASS_DIR)
+
+
+# compil command
+.java.class:
+	CLASSPATH=$(CLASS_DIR):$(TOP_DIR) $(JCC) -d $(CLASS_DIR) $(JDEBUGFLAGS) $<
+
+
+# find out target files
+
+FILES = $(wildcard *.java)
+classes: $(FILES:.java=.class)
+
+
+clean:
+	@@ echo 'rm -f *~ *.class core *.bak $(LOCAL_CLASS_DIR)/*.class'
+	@@rm -f *~ *.class core *.bak $(LOCAL_CLASS_DIR)/*.class
+

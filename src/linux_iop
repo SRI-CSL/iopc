@@ -1,0 +1,24 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $iop = `which iop`;
+if(!$iop){
+    print "Could not find iop, exiting\n";
+    die; 
+}
+$iop =~ m|(.*)/iop$|;
+$iop = $1;
+
+
+my $maude = `which maude.linux`;
+if(!$maude){
+    print "Could not find maude.linux, exiting\n";
+    die; 
+}
+$maude =~ m|(.*)/maude\.linux$|;
+$maude = $1;
+
+#print "iop_main @ARGV $iop $maude\n";
+
+system("iop_main @ARGV $iop $maude");

@@ -1,0 +1,78 @@
+For Ben:
+
+Can we rotate glyphs? Can we translate glyphs?
+
+Can we rotate complexes? Can we translate complexes?
+
+Using the Graphics2d we should be able to update the Ezd package
+so that all this can be easily done (using AffineTransformations)!
+
+Serialization of complexes.
+
+Make Graphics actor's Graphs look more like Bionet's graphs.
+
+Dot processing for the Graphics actor's Graphs. 
+
+Dot serialization for Graphs?
+
+===================================================================
+Here is a first pass at a uniform approach:
+
+The types of things:
+
+Frames (top-level window thing with optional menubar). Examples are
+Graphs, Strings, Grids, PfdCanvases, and IOPCanvas (used in the Sprite
+example). Also things like Dialogs.
+
+Containers (I haven't decided about these, they may be unnecessary. We
+haven't needed to nest containers yet), so the only containers so far
+have been the unnamed ones in the frames.
+
+Complexes (collections of glyphs, interrelated & interpositioned &
+interlayered) I guess the main difference between a glyph and a
+complex is that the complex has an identity, and perhaps its internal
+positions are "relatively fixed".  The constituent glyphs can all have
+different responses to Mouse events, and perhaps can be repositioned
+relative to the other glyphs, though this may be very restrictive.
+Examples would be the Rover, and a Pfd.
+
+Glyphs (interrelated & interpositioned & interlayered) A Graph could
+be seen as an example of a whole bunch of glyphs placed in a
+frame/container, or I guess it could be thought of as a single complex
+placed in a container.
+
+Issues:
+
+Need to flesh out the interrelated, interpositioned, and interlayered
+concepts.
+
+Is a complex just a container, and do we have containers containing
+containers?
+
+Similarly a glyph could just be considered a special case of a
+complex.
+
+Operations like extending a complex or deleting from a complex are
+obvious, e.g.  Graph extensions and deletions.
+
+
+=======================================================================
+
+
+odds 'n ends that need to be incorporated/thought about/dismissed:
+fix the label vs identifier problem.
+
+fix the naming convention that puts too much emphasis on Maude.
+
+if we are consistent with setting and getting of attributes, parsing
+of attributes (at least) could be done by reflection.
+
+E.g.   void  setColor(String desc)
+       Color string2Color(String desc)
+       Color getColor()
+
+is a slight variation on Java beans.
+
+
+I also wonder if switching to XML descriptions would enable us to use
+built in Java classes for parsing?
