@@ -1,14 +1,20 @@
-#global multiuser location (for make install)
-BINDIR = /usr/local/iop
-#local single user location (for make local)
-LOCALDIR = ~/bin/IOP
-#temporary bin dir (also appears in src/c_makefile)
-TMPBINDIR = /tmp/iopbin
-#temporary doc bin for javadoc
-TMPDOCDIR = /tmp/iopdoc
+#use the system wide default if unset
+ifndef (${IOPBINDIR})
+	IOPBINDIR = /usr/local/iop
+endif
+#use the system wide default if unset
+ifndef (${IOPTMPBINDIR})
+	IOPTMPBINDIR = /tmp/iopbin
+endif
+#use the system wide default if unset
+ifndef (${IOPTMPDOCDIR})
+	IOPTMPDOCDIR = /tmp/iopdoc
+endif
 
 all:
 	cd src; make -f c_makefile
+
+
 
 java:
 	cd src; make -f c_makefile java
@@ -23,27 +29,22 @@ zip:
 	cd ..; mv IOP.zip IOP.zip.bak; zip -r IOP IOP
 
 doc:
-	rm -rf ${TMPDOCDIR}
+	rm -rf ${IOPTMPDOCDIR}
 	cd src; make doc_www -f Makefile
-	rm -rf ${BINDIR}/doc;
-	cp -rf ${TMPDOCDIR} ${BINDIR}/doc
+	rm -rf ${IOPBINDIR}/doc;
+	cp -rf ${IOPTMPDOCDIR} ${IOPBINDIR}/doc
 
 mcs_doc:
 	rm -rf ${HOME}/public_html/GraphicsActor2D/doc
-	cp -rf ${TMPDOCDIR} ${HOME}/public_html/GraphicsActor2D/doc
+	cp -rf ${IOPTMPDOCDIR} ${HOME}/public_html/GraphicsActor2D/doc
 	chmod -R go+rx ${HOME}/public_html/GraphicsActor2D/doc
 
 
 clean:
 	cd src; make -f c_makefile clean;
-	rm -rf ${TMPBINDIR}
+	rm -rf ${IOPTMPBINDIR}
 
 install:
-	rm -rf ${BINDIR}/bin;
-	mkdir ${BINDIR}/bin;
-	cp -rf ${TMPBINDIR}/* ${BINDIR}/bin/
-
-local:
-	rm -rf ${LOCALDIR};
-	mkdir ${LOCALDIR};
-	cp -rf bin/* ${LOCALDIR}
+	rm -rf ${IOPBINDIR}/bin;
+	mkdir ${IOPBINDIR}/bin;
+	cp -rf ${IOPTMPBINDIR}/* ${IOPBINDIR}/bin/

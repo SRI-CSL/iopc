@@ -20,6 +20,7 @@ static char * sal_argv[MAX_ARGUMENTS];
 static char* myname ;
 static int pin[2], pout[2], perr[2];
 static int size = 0;
+static int SAL_DIED = 0;
 
 static void sal_actor_sigint_handler(int sig){
   char sal_exit[] = "(exit)\n";
@@ -34,9 +35,11 @@ static void sal_actor_sigint_handler(int sig){
   we keep tabs on the flag.
 */
 static void sal_actor_sigchild_handler(int sig){
-  if (SAL_ACTOR_DEBUG)
-    fprintf(stderr, "SAL died! Exiting\n"); 
-    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
+  /*  if (SAL_ACTOR_DEBUG)*/
+  fprintf(stderr, "SAL died! Exiting\n"); 
+  SAL_DIED = 1;
+  fprintf(stderr,"SAL_DIED is %d\n",SAL_DIED);
+  /*    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);*/
   /*  sendFormattedMsgFD(STDERR_FILENO, "system\n%s\nstop %s\n", myname, myname);*/
     /*  exit(EXIT_SUCCESS);*/
 }
@@ -140,7 +143,7 @@ int main(int argc, char** argv){
     }
       else{ /* I am the boss */
 	pthread_t errThread;
-
+	
 	if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
 	  fprintf(stderr,"Could not spawn echoErrors thread\n");
 	  return -1;
@@ -149,17 +152,24 @@ int main(int argc, char** argv){
 	  int length;
 	  msg *response = NULL;
 	  
+	  if (!SAL_DIED) {
+	    fprintf(stderr,"Doing a pause\n");
+	    pause();
+	    fprintf(stderr,"pause returned\n");
+	  }
+	  response = NULL;
 	  response = readSALMsg(pout[0]);
 	  if(response != NULL){
 	    length = parseString(response->data, response->bytesUsed);
 	    response->bytesUsed = length;
 	    writeMsg(STDERR_FILENO, response);
-	    writeMsg(STDOUT_FILENO, response);
+	    /*  writeMsg(STDOUT_FILENO, response);*/
 	  }
-	  if(SAL_ACTOR_DEBUG) fprintf(stderr, "Listening to SAL\n");
+	  if ((response==NULL) && (SAL_DIED))
+	    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
+	  }
 	}
-      }   
-    }
+    }   
     else {
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", messageIn->data);
       continue;

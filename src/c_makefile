@@ -1,6 +1,3 @@
-#temporary bin dir (also appears in ../makefile)
-TMPBINDIR = /tmp/iopbin
-
 COMPILER = gcc
 
 ifneq (,$(findstring Darwin,$(shell uname )))
@@ -44,24 +41,24 @@ all:  scripts ${EXE} java
 
 ${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS}  ${LIBS} ${COBJS} $< -o $@
-	cp $@ ${TMPBINDIR}/
+	cp $@ ${IOPTMPBINDIR}/
 
 %.o: %.c %.h ${HEADERS} makefile
 	${COMPILER} ${CFLAGS} $< -c 
 
 scripts:
-#	rm -rf ${TMPBINDIR}
-	mkdir -p ${TMPBINDIR}
-	cp ${SCRIPT}  ${TMPBINDIR}/iop
-	cp jlambda   ${TMPBINDIR}/
+#	rm -rf ${IOPTMPBINDIR}
+	mkdir -p ${IOPTMPBINDIR}
+	cp ${SCRIPT}  ${IOPTMPBINDIR}/iop
+	cp jlambda   ${IOPTMPBINDIR}/
 
 java: 
 	make -f Makefile
 	make -f Ezd_Makefile	
 	make -f GUI_Makefile	
 	make -f GraphAct_Makefile	
-	mkdir -p  ${TMPBINDIR}/g2d/Images
-	cp g2d/Images/*.gif ${TMPBINDIR}/g2d/Images/
+	mkdir -p  ${IOPTMPBINDIR}/g2d/Images
+	cp g2d/Images/*.gif ${IOPTMPBINDIR}/g2d/Images/
 
 
 javaclean: 

@@ -2,15 +2,12 @@
 # This file is included in all other makefiles.
 
 
-#temporary bin dir (also appears in ../makefile)
-TMPBINDIR = /tmp/iopbin
-
 # relies on:
 # TOP_DIR  the package root dir
 # PACKAGE_DIR The package dir path
 
 # set here the target dir for all classes
-CLASS_DIR       = ${TMPBINDIR}
+CLASS_DIR       = ${IOPTMPBINDIR}
 
 # compiler field
 #JDEBUGFLAGS	= -g -deprecation
