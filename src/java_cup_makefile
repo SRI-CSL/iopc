@@ -1,6 +1,6 @@
-ifndef $IOPTMPBINDIR
-IOPTMPBINDIR = /tmp/iopbin
-endif
+#ifndef $IOPTMPBINDIR
+#IOPTMPBINDIR = /tmp/iopbin
+#endif
 
 all: jlex java_cup dotParser
 
