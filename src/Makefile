@@ -7,8 +7,11 @@ SUBDIRS	= g2d\
           g2d/closure\
           g2d/glyph\
           g2d/graph\
+	  g2d/graph/java_cup\
+	  g2d/graph/java_cup/runtime\
           g2d/swing\
-          g2d/util\
+          g2d/util
+
 
 all:
 	@@for p in $(SUBDIRS); do \
