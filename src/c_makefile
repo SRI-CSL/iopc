@@ -43,15 +43,11 @@ COBJS = actor.o\
         socket_lib.o\
         msg.o argv.o wrapper_lib.o sal_lib.o
 
-vpath % ${IOPTMPBINDIR}
 
 all:  scripts ${EXE} java 
 
 ${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS}  ${LIBS} ${COBJS} $< -o ${IOPTMPBINDIR}/$@
-#	cp $@ ${IOPTMPBINDIR}/
-
-
 
 %.o: %.c %.h ${HEADERS} makefile
 	${COMPILER} ${CFLAGS} $< -c 
