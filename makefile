@@ -8,14 +8,16 @@ ifeq (${IOPTMPDOCDIR},)
 IOPTMPDOCDIR = /tmp/iopdoc
 endif
 
-all:
+all: java
 	cd src; make -f c_makefile
 
 java:
-	cd src; make -f c_makefile java
+	ant
+#	cd src; make -f c_makefile java
 
 javaclean:
-	cd src; make -f c_makefile javaclean
+	ant clean
+#	cd src; make -f c_makefile javaclean
 
 zip:
 	cd src; make -f c_makefile clean 
@@ -35,12 +37,13 @@ mcs_doc:
 	chmod -R go+rx ${HOME}/public_html/GraphicsActor2D/doc
 
 
-clean:
+clean: javaclean
 	cd src; make -f c_makefile clean;
 	rm -rf ${IOPTMPBINDIR}
 
 install:
 	mkdir -p ${IOPBINDIR}
-	rm -rf ${IOPBINDIR}/bin;
-	mkdir ${IOPBINDIR}/bin;
-	cp -rf ${IOPTMPBINDIR}/* ${IOPBINDIR}/bin/
+	rm -rf ${IOPBINDIR}; #/bin;
+	mkdir ${IOPBINDIR}; #/bin;
+	cp -rf ${IOPTMPBINDIR}/* ${IOPBINDIR} #/bin/
+	cp build/lib/iop.jar ${IOPBINDIR}

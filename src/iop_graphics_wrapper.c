@@ -60,7 +60,7 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
   self = argv[0];
-  graphics_argv[2] = argv[1];
+  graphics_argv[2] = strcat(argv[1],"/iop.jar"); /* IAN: PLEASE CORRECT THIS WITH MEMORY ALLOCATION! */
   graphics_wrapper_installHandler();
 
   if((pipe(pin) != 0) || 

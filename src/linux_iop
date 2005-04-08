@@ -5,7 +5,7 @@ use strict;
 if(!defined($ENV{IOPBINDIR})){
     print "You must set envionment variable IOPBINDIR!\n";
 } else {
-    my $iop = "$ENV{IOPBINDIR}/bin";
+    my $iop = "$ENV{IOPBINDIR}"; #/bin";
     my $maude = `which maude.linux`;
     if(!$maude){
 	print "Could not find maude.linux, exiting\n";

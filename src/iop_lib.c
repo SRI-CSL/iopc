@@ -312,7 +312,7 @@ static actor_spec *launchMaude(int argc, char** argv){
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
   char  input_exe[] = "java";
   char* input_argv[] = {INWINDOW, "-cp", NULL, "GUI.Editor", NULL, NULL, NULL};
-  input_argv[2] = code_dir;
+  input_argv[2] = strcat(code_dir,"/iop.jar"); /* IAN: PLEASE CORRECT THIS WITH MEMORY ALLOCATION! */
   input_argv[4] = pid_str;
   input_argv[5] = port_str;
   return launchActor(1, "input", input_exe, input_argv);
