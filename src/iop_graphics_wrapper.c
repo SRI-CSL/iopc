@@ -38,7 +38,6 @@ pid_t child;
 static void graphics_wrapper_sigchild_handler(int sig){
   fprintf(stderr, "%s died! Exiting\n", graphics_argv[3]);
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
-  exit(EXIT_FAILURE);
 }
 
 static void graphics_wrapper_installHandler(){

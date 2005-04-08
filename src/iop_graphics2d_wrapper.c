@@ -37,7 +37,6 @@ static char* graphics_argv[] = {"java", "-cp", NULL, "g2d.Main", NULL, NULL};
 static void graphics_wrapper_sigchild_handler(int sig){
   fprintf(stderr, "%s died! Exiting\n", graphics_argv[3]);
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myName, myName);
-  exit(EXIT_FAILURE);
 }
 
 static void graphics_wrapper_installHandler(){
