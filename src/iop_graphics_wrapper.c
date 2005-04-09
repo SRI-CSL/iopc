@@ -27,6 +27,7 @@
 #include "msg.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h"
+#include "iop_lib.h"
 #include "externs.h"
 
 static char  graphics_exe[] = "java";
@@ -60,13 +61,9 @@ int main(int argc, char** argv){
   }
   self = argv[0];
 
-  graphics_argv[2] = calloc(strlen(argv[1]) + strlen(JARPATH) + 1, sizeof(char));
-  if(graphics_argv[2] == NULL){
-    fprintf(stderr, "calloc failed in %s: %s\n", self, strerror(errno));
+  if((graphics_argv[2] = iop_alloc_jarpath(argv[1], self)) == NULL){
     exit(EXIT_FAILURE);
   }
-  strcpy(graphics_argv[2], argv[1]);
-  strcat(graphics_argv[2], JARPATH);
 
   graphics_wrapper_installHandler();
 
