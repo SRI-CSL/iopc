@@ -23,12 +23,13 @@ static int size = 0;
 int SAL_DIED = 0;
 
 static void sal_actor_sigint_handler(int sig){
+  /* 
   char sal_exit[] = "(exit)\n";
-  fprintf(stderr,"\n \n SIGINT received \n\n");
-  /* if(child > 0){
+  if(child > 0){
     write(pin[1], sal_exit, strlen(sal_exit));
   }
   _exit(EXIT_FAILURE);*/
+  fprintf(stderr,"\n \n SIGINT received \n\n");
 }
 /*
   ian says: this is not correct, will put the time of termination

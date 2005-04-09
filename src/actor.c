@@ -311,9 +311,9 @@ int deleteFromRegistry(char *name){
   if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tOpening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
     goto fail;
-  //rapolzan
+  /* rapolzan */
   if(ACTOR_DEBUG) fprintf(stderr,"deleteFromRegistry \t:\t registry_fifo_out is: %s\n",registry_fifo_out);
-  //rapolzan
+  /* rapolzan */
   if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tOpened Registry read fifo\n");  
 
 

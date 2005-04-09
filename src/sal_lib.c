@@ -11,6 +11,8 @@
 
 #define MSG_BUFFSZ 1024
 
+void mannounce(const char *format, ...);
+
 int writeSALMsg(int fd, msg* m){
   int blksz = 1024;
   int bytesRemaining, bytesWritten;
