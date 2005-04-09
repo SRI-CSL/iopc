@@ -49,6 +49,7 @@
 #define MINPORT           8001
 #define MAXPORT           9000
 #define HOME              "HOME"
+#define JARPATH           "/iop.jar"
 
 /* name of configuration file, must be keep in synch with GUI/Constants.java */
 #define IOPRC             ".ioprc"

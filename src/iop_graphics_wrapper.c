@@ -29,7 +29,6 @@
 #include "wrapper_lib.h"
 #include "externs.h"
 
-
 static char  graphics_exe[] = "java";
 static char* graphics_argv[] = {"java", "-cp", NULL, "GraphAct.Main", NULL};
 static char* self;
@@ -60,7 +59,15 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
   self = argv[0];
-  graphics_argv[2] = strcat(argv[1],"/iop.jar"); /* IAN: PLEASE CORRECT THIS WITH MEMORY ALLOCATION! */
+
+  graphics_argv[2] = calloc(strlen(argv[1]) + strlen(JARPATH) + 1, sizeof(char));
+  if(graphics_argv[2] == NULL){
+    fprintf(stderr, "calloc failed in %s: %s\n", self, strerror(errno));
+    exit(EXIT_FAILURE);
+  }
+  strcpy(graphics_argv[2], argv[1]);
+  strcat(graphics_argv[2], JARPATH);
+
   graphics_wrapper_installHandler();
 
   if((pipe(pin) != 0) || 

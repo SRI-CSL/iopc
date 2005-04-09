@@ -312,7 +312,15 @@ static actor_spec *launchMaude(int argc, char** argv){
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
   char  input_exe[] = "java";
   char* input_argv[] = {INWINDOW, "-cp", NULL, "GUI.Editor", NULL, NULL, NULL};
-  input_argv[2] = strcat(code_dir,"/iop.jar"); /* IAN: PLEASE CORRECT THIS WITH MEMORY ALLOCATION! */
+
+  input_argv[2] = calloc(strlen(code_dir) + strlen(JARPATH) + 1, sizeof(char));
+  if(input_argv[2] == NULL){
+    fprintf(stderr, "calloc failed in launchGUI: %s\n", strerror(errno));
+    exit(EXIT_FAILURE);
+  }
+  strcpy(input_argv[2], code_dir);
+  strcat(input_argv[2], JARPATH);
+
   input_argv[4] = pid_str;
   input_argv[5] = port_str;
   return launchActor(1, "input", input_exe, input_argv);
