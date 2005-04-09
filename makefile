@@ -21,7 +21,7 @@ javaclean:
 
 zip:
 	cd src; make -f c_makefile clean 
-	rm -f bin/*/*.class
+#	rm -f bin/*/*.class
 	rm -f *~ *.zip *.bak
 	cd ..; mv IOP.zip IOP.zip.bak; zip -r IOP IOP
 

@@ -78,10 +78,10 @@ clean_tmp:
 clean:
 	rm -f ${EXE}
 	rm -f ${EXE} ${COBJS} *~ */*.class */*/*.class *.zip *.bak
-	make -f Makefile clean
-	make -f Ezd_Makefile clean	
-	make -f GUI_Makefile clean	
-	make -f GraphAct_Makefile clean	
+#	make -f Makefile clean
+#	make -f Ezd_Makefile clean	
+#	make -f GUI_Makefile clean	
+#	make -f GraphAct_Makefile clean	
 
 zip:
 	make -f c_makefile clean
