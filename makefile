@@ -18,8 +18,8 @@ java:
 javaclean:
 	ant clean
 
-zip: clean
-	cd ..; mv IOP.zip IOP.zip.bak; zip -r IOP IOP
+zip:
+	ant zip
 
 doc: 
 	ant javadoc
