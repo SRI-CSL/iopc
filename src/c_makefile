@@ -3,6 +3,8 @@ COMPILER = gcc
 ifeq (${IOPTMPBINDIR},)
 IOPTMPBINDIR = /tmp/iopbin
 endif
+# location of temporary build products
+BUILDDIR = ../build
 
 ifneq (,$(findstring Darwin,$(shell uname )))
 #Mac flags
@@ -35,7 +37,7 @@ SCRIPTS = iop jlambda
 HEADERS = cheaders.h constants.h types.h dbugflags.h externs.h options.h sal_lib.h
 MISC    = c_makefile 
 
-vpath % ${IOPTMPBINDIR}
+vpath % ${BUILDDIR}
 
 COBJS = actor.o\
         registry_lib.o\
@@ -44,46 +46,27 @@ COBJS = actor.o\
         msg.o argv.o wrapper_lib.o sal_lib.o
 
 
-all:  scripts ${EXE} #java 
+all:  scripts ${EXE}
 
 ${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
-	${COMPILER} ${CFLAGS}  ${LIBS} ${COBJS} $< -o ${IOPTMPBINDIR}/$@
+	${COMPILER} ${CFLAGS}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
 
 %.o: %.c %.h ${HEADERS} makefile
 	${COMPILER} ${CFLAGS} $< -c 
 
 scripts:
-	mkdir -p ${IOPTMPBINDIR}
-	cp ${SCRIPT}  ${IOPTMPBINDIR}/iop
-	cp jlambda   ${IOPTMPBINDIR}/
-
-#java: 
-#	make -f java_cup_makefile
-#	make -f Makefile
-#	make -f Ezd_Makefile	
-#	make -f GUI_Makefile	
-#	make -f GraphAct_Makefile	
-#	mkdir -p  ${IOPTMPBINDIR}/g2d/Images
-#	cp g2d/Images/*.gif ${IOPTMPBINDIR}/g2d/Images/
-
-
-#javaclean: 
-#	make -f Makefile clean
-#	make -f GUI_Makefile clean	
+	mkdir -p ${BUILDDIR}
+	cp ${SCRIPT}  ${BUILDDIR}/iop
+	cp jlambda   ${BUILDDIR}/
 
 clean_tmp:
 	rm -f /tmp/iop_*
 
-
 clean:
-	rm -f ${EXE}
-	rm -f ${EXE} ${COBJS} *~ */*.class */*/*.class *.zip *.bak
-#	make -f Makefile clean
-#	make -f Ezd_Makefile clean	
-#	make -f GUI_Makefile clean	
-#	make -f GraphAct_Makefile clean	
+#	rm -f ${EXE}
+	rm -f ${EXE} ${COBJS} #*~ *.zip *.bak
 
-zip:
-	make -f c_makefile clean
+zip: clean
+#	make -f c_makefile clean
 	rm -f *~ *.zip *.bak
 	cd ..; mv src.zip src.zip.bak; zip -r src src

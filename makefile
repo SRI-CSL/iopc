@@ -1,33 +1,36 @@
 ifeq (${IOPBINDIR},)
 IOPBINDIR = /usr/local/iop
 endif
-ifeq (${IOPTMPBINDIR},)
-IOPTMPBINDIR = /tmp/iopbin
-endif
-ifeq (${IOPTMPDOCDIR},)
-IOPTMPDOCDIR = /tmp/iopdoc
-endif
+#ifeq (${IOPTMPBINDIR},)
+#IOPTMPBINDIR = /tmp/iopbin
+#endif
+#ifeq (${IOPTMPDOCDIR},)
+IOPTMPDOCDIR = doc/apidoc
+#endif
 
-all: java
+.PHONY: all c java doc clean install
+
+all: java c
+
+c:
 	cd src; make -f c_makefile
 
 java:
 	ant
-#	cd src; make -f c_makefile java
 
 javaclean:
 	ant clean
-#	cd src; make -f c_makefile javaclean
 
-zip:
-	cd src; make -f c_makefile clean 
+zip: clean
+#	cd src; make -f c_makefile clean 
 #	rm -f bin/*/*.class
-	rm -f *~ *.zip *.bak
+#	rm -f *~ *.zip *.bak
 	cd ..; mv IOP.zip IOP.zip.bak; zip -r IOP IOP
 
-doc:
-	rm -rf ${IOPTMPDOCDIR}
-	cd src; make doc_www -f Makefile
+doc: 
+	ant javadoc
+#	rm -rf ${IOPTMPDOCDIR}
+#	cd src; make doc_www -f Makefile
 	rm -rf ${IOPBINDIR}/doc;
 	cp -rf ${IOPTMPDOCDIR} ${IOPBINDIR}/doc
 
@@ -38,12 +41,14 @@ mcs_doc:
 
 
 clean: javaclean
+#	rm -Rf *~ *.zip *.bak
 	cd src; make -f c_makefile clean;
-	rm -rf ${IOPTMPBINDIR}
+#	rm -rf ${IOPTMPBINDIR}
 
 install:
-	mkdir -p ${IOPBINDIR}
-	rm -rf ${IOPBINDIR}; #/bin;
-	mkdir ${IOPBINDIR}; #/bin;
-	cp -rf ${IOPTMPBINDIR}/* ${IOPBINDIR} #/bin/
-	cp build/lib/iop.jar ${IOPBINDIR}
+	ant install
+#	mkdir -p ${IOPBINDIR}
+#	rm -rf ${IOPBINDIR}; #/bin;
+#	mkdir ${IOPBINDIR}; #/bin;
+#	cp -rf build/* ${IOPBINDIR} #/bin/
+#	cp build/lib/iop.jar ${IOPBINDIR}
