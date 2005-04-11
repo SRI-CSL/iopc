@@ -313,7 +313,7 @@ char* iop_alloc_jarpath(char* code_dir, char* who){
   char *retval = calloc(strlen(code_dir) + strlen(JARPATH) + 1, sizeof(char));
   if(retval == NULL){
     fprintf(stderr, 
-	    "calloc failed in iop_alloc_jarpath called by  %s: %s\n",
+	    "calloc failed in iop_alloc_jarpath called by %s: %s\n",
 	    who, strerror(errno));
   } else {
     strcpy(retval, code_dir);

@@ -484,12 +484,17 @@ int writeMsg(int fd, msg* m){
   bytesRemaining = m->bytesUsed;
   buff = m->data;
   while(bytesRemaining > 0){
+  restart:
     if((bytesWritten = write(fd, 
 			     buff, 
 			     ((bytesRemaining < blksz) ? 
 			      bytesRemaining : 
 			      blksz))) < 0){
-      perror("Write failed in writeMsg");
+      if(errno == EINTR){
+	goto restart; 
+      } else {
+	perror("Write failed in writeMsg");
+      }
       return -1;
     }
     bytesRemaining -= bytesWritten;
