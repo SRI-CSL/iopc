@@ -18,21 +18,7 @@
 	are to be used.
 
 */
-#define __EXTENSIONS__
 #include "cheaders.h"
-
-//#include "defs.h"
-
-//#include <netdb.h>
-//#include <sys/socket.h>
-//#include <netinet/in.h>
-
-#if STD_UNIX_VERSION < SUV_SUS3
-#ifdef SOLARIS
-#undef __EXTENSIONS__
-#endif
-#endif
-
 #include "ec.h"
 #include "macrostr.h"
 
