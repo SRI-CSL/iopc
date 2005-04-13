@@ -43,7 +43,9 @@ COBJS = actor.o\
         registry_lib.o\
         iop_lib.o\
         socket_lib.o\
-        msg.o argv.o wrapper_lib.o sal_lib.o
+        msg.o argv.o wrapper_lib.o sal_lib.o\
+	ec.o macrostr.o
+#Linda: comment out the above line if it still fails
 
 
 all:  scripts ${EXE}
@@ -51,7 +53,7 @@ all:  scripts ${EXE}
 ${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
 
-%.o: %.c %.h ${HEADERS} makefile
+%.o: %.c %.h ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS} $< -c 
 
 scripts:

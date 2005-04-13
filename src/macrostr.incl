@@ -126,16 +126,16 @@
 {"errno", (intptr_t)EHOSTUNREACH, "EHOSTUNREACH", ""},
 {"errno", (intptr_t)ESTALE, "ESTALE", ""},
 {"errno", (intptr_t)EUSERS, "EUSERS", ""},
-#ifndef DARWIN
+#ifndef _MAC
 {"errno", (intptr_t)ENOMSG, "ENOMSG", ""},
 {"errno", (intptr_t)EIDRM, "EIDRM", ""},
 {"errno", (intptr_t)EREMOTE, "EREMOTE", ""},
 {"errno", (intptr_t)EOVERFLOW, "EOVERFLOW", ""},
 {"errno", (intptr_t)EILSEQ, "EILSEQ", ""},
-#endif /* DARWIN */
+#endif /* _MAC */
 #endif /* _POSIX_SOURCE */
 {"errno", (intptr_t)EC_EINTERNAL, "EC_EINTERNAL", ""},
-#ifndef DARWIN
+#ifndef _MAC
 {"eai", (intptr_t)EAI_ADDRFAMILY, "EAI_ADDRFAMILY", ""},
 {"eai", (intptr_t)EAI_AGAIN, "EAI_AGAIN", ""},
 {"eai", (intptr_t)EAI_BADFLAGS, "EAI_BADFLAGS", ""},
@@ -149,7 +149,7 @@
 #ifdef EAI_OVERFLOW
 {"eai", (intptr_t)EAI_OVERFLOW, "EAI_OVERFLOW", ""},
 #endif
-#endif /* DARWIN */
+#endif /* _MAC */
 {"sigaction", (intptr_t)SIG_DFL, "SIG_DFL", ""},
 {"sigaction", (intptr_t)SIG_IGN, "SIG_IGN", ""},
 {"sigaction", (intptr_t)SIG_ERR, "SIG_ERR", ""},
