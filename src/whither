@@ -13,7 +13,8 @@ if(!defined($path)){
 
 my ($found, $location) = &whither($exe);
 if($found){
-    print "${location}\n";
+    my ($dir, $rexe) = &cdDotDot($location);
+    print "dir = ${dir}  exe = ${rexe}\n";
 }
 
 sub whither {
@@ -24,7 +25,7 @@ sub whither {
 	if(defined($file)){
 	    if(-l $file){ 
 		my $link = readlink($file);
-		my $base = &cdDotDot($file);
+		my ($base) = &cdDotDot($file);
 		if(File::Spec->file_name_is_absolute($link)){
 		    return (1, $link);
 		} else {
@@ -59,9 +60,9 @@ sub resolve {
 sub cdDotDot {
     my $file = $_[0];
     if(${file} =~ m|(.*/)([^/]+?)/?$|){
-	return $1; 
+	return ($1, $2); 
     }  else {
-	return $file;
+	return ($file, undef);
     } 
 }
 
@@ -69,7 +70,7 @@ sub blend {
     my ($base, $link) = @_;
     while($link =~ m|^\.\./(.*)$|){
 	$link = $1;
-	$base = &cdDotDot($base);
+	($base) = &cdDotDot($base);
     }
     return File::Spec->catfile($base, $link);
 }
