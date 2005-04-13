@@ -13,8 +13,12 @@ if(!defined($path)){
 
 my ($found, $location) = &whither($exe);
 if($found){
-    my ($dir, $rexe) = &cdDotDot($location);
-    print "dir = ${dir}  exe = ${rexe}\n";
+    if(-d $location){
+	print "dir = ${location}\n";
+    } else {
+	my ($dir, $file) = &cdDotDot($location);
+	print "dir = ${dir}  exe = ${file}\n";
+    }
 }
 
 sub whither {
