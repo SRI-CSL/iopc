@@ -1,8 +1,8 @@
 COMPILER = gcc
 
-ifeq (${IOPTMPBINDIR},)
-IOPTMPBINDIR = /tmp/iopbin
-endif
+#ifeq (${IOPTMPBINDIR},)
+#IOPTMPBINDIR = /tmp/iopbin
+#endif
 # location of temporary build products
 BUILDDIR = ../build
 
@@ -65,10 +65,8 @@ clean_tmp:
 	rm -f /tmp/iop_*
 
 clean:
-#	rm -f ${EXE}
-	rm -f ${EXE} ${COBJS} #*~ *.zip *.bak
+	rm -f ${EXE} ${COBJS} 
 
 zip: clean
-#	make -f c_makefile clean
 	rm -f *~ *.zip *.bak
 	cd ..; mv src.zip src.zip.bak; zip -r src src
