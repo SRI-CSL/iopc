@@ -26,7 +26,6 @@ EXE = iop_executor\
       iop_socketfactory\
       iop_listener\
       iop_socket\
-      iop_graphics_wrapper\
       iop_graphics2d_wrapper\
       iop_pvs_wrapper\
       iop_maude_wrapper\
@@ -44,7 +43,7 @@ COBJS = actor.o\
         iop_lib.o\
         socket_lib.o\
         msg.o argv.o wrapper_lib.o sal_lib.o\
-	ec.o macrostr.o
+#	ec.o macrostr.o
 #Linda: comment out the above line if it still fails
 
 
