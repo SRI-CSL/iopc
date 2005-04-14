@@ -67,8 +67,6 @@ int main(int argc, char** argv){
   graphics_argv[4] = myName;
   graphics_wrapper_installHandler();
 
-  fprintf(stderr, "class path = \"%s\"\n", graphics_argv[2]);
-
   if((pipe(pin) != 0) || 
      (pipe(perr) != 0) ||
      (pipe(pout) != 0)){
