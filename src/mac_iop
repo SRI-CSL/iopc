@@ -1,19 +1,89 @@
 #!/usr/bin/perl
 use warnings;
 use strict;
-
-
-if(!defined($ENV{IOPBINDIR})){
-    print "You must set envionment variable IOPBINDIR!\n";
-} else {
-    my $iop = "$ENV{IOPBINDIR}"; #/bin";
-    my $maude = `which maude.darwin`;
-    if(!$maude){
-	print "Could not find maude.darwin, exiting\n";
-	die; 
+use File::Spec;
+my $platform = 'darwin';
+my $iop = $ENV{IOPBINDIR};
+if(!defined($iop)){
+    print "Environment variable IOPBINDIR not set, searching PATH\n";
+    my ($found, $location) = &whither('iop');
+    if($found){
+	($iop) = &cdDotDot($location);
+    } else {
+	die "Couldn't locate iop, advise you set IOPBINDIR!\n";
     }
-    $maude =~ m|(.*)/maude\.darwin$|;
-    $maude = $1;
+}
+my $maude = $ENV{MAUDE_LIB};
+if(!defined($maude)){
+    print "Environment variable MAUDE_LIB not set, searching PATH\n";
+    my ($found, $location) = &whither("maude.${platform}");
+    if($found){
+	($maude) = &cdDotDot($location);
+    } else {
+	print "Couldn't find maude.${platform}, looking for maude\n";
+	($found, $location) = &whither('maude');
+	if($found){
+	    ($maude) = &cdDotDot($location);
+	} else {
+	    die "Couldn't locate maude.${platform} or maude, advise you set MAUDE_LIB!\n";
+	}
+    }
+}
+#print "iop_main @ARGV $iop $maude\n";
+system("iop_main @ARGV $iop $maude");
 
-    system("iop_main @ARGV $iop $maude");
+sub whither {
+    my $exe  = $_[0];
+    my @PATH = File::Spec->path();
+    foreach my $node (@PATH){
+	my $file = &resolve($exe, $node);
+	if(defined($file)){
+	    if(-l $file){ 
+		my $link = readlink($file);
+		my ($base) = &cdDotDot($file);
+		if(File::Spec->file_name_is_absolute($link)){
+		    return (1, $link);
+		} else {
+		    return (1,  &blend($base, $link));
+		}
+	    } else {
+		return (1, $file);
+	    }
+	    last;
+	} 
+    }
+    return (0, undef);
+}
+
+sub resolve {
+    my ($exe, $node) = @_;
+    if(-d $node){
+	my $handle;
+	opendir($handle, $node) || die "Couldn't opendir ${node}: $!\n";
+	while(my $file = readdir($handle)){
+	    if($file =~ /^${exe}$/){
+		return File::Spec->catfile($node, $file);
+	    }
+	}
+	closedir($handle);
+    }
+    return undef;
+}
+
+sub cdDotDot {
+    my $file = $_[0];
+    if(${file} =~ m|(.*/)([^/]+?)/?$|){
+	return ($1, $2); 
+    }  else {
+	return ($file, undef);
+    } 
+}
+
+sub blend {
+    my ($base, $link) = @_;
+    while($link =~ m|^\.\./(.*)$|){
+	$link = $1;
+	($base) = &cdDotDot($base);
+    }
+    return File::Spec->catfile($base, $link);
 }
