@@ -1,8 +1,5 @@
 COMPILER = gcc
 
-#ifeq (${IOPTMPBINDIR},)
-#IOPTMPBINDIR = /tmp/iopbin
-#endif
 # location of temporary build products
 BUILDDIR = ../build
 
