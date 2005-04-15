@@ -14,7 +14,7 @@ LIBS = -lpthread -lm
 else
 #Linux flags
 SCRIPT = linux_iop
-CFLAGS =  -Wall -pthread -D_LINUX -pedantic
+CFLAGS =  -Wall -pthread -D_LINUX -pedantic -g
 LIBS =  -lm 
 endif
 

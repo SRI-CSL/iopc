@@ -29,7 +29,8 @@ char* registry_fifo_out          = NULL;
 int   reg2InPort                 = -1;
 int   in2RegPort                 = -1;
 int   in2RegFd                   = -1;
- 
+char* iop_bin_dir                = NULL;
+
 int   iop_debug_flag             =  0;
 int   iop_no_windows_flag        =  0;
 int   iop_hardwired_actors_flag  =  0;

@@ -57,12 +57,18 @@ int main(int argc, char** argv){
 
 
   /* set externs */
-  iop_pid = getppid();
-  registry_fifo_in  = argv[argc - 4];
-  registry_fifo_out = argv[argc - 3];
-  in2RegPort        = atoi(argv[argc - 2]);
-  in2RegFd          = atoi(argv[argc - 1]);
+  iop_pid           = getppid();
+  registry_fifo_in  = argv[argc - 5];
+  registry_fifo_out = argv[argc - 4];
+  in2RegPort        = atoi(argv[argc - 3]);
+  in2RegFd          = atoi(argv[argc - 2]);
+  iop_bin_dir       = argv[argc - 1];
   registry_pid      = getpid();
+
+  assert(strlen(registry_fifo_in)  < PATH_MAX);
+  assert(strlen(registry_fifo_out) < PATH_MAX);
+  assert(strlen(iop_bin_dir)       < PATH_MAX);
+  
 
   /* install signal handlers */
   if(registry_installHandler() != 0){

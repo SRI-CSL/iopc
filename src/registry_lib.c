@@ -49,6 +49,7 @@ extern int iop_hardwired_actors_flag;
 extern int iop_debug_flag;
 extern char* registry_fifo_in;
 extern char* registry_fifo_out;
+extern char* iop_bin_dir;
 extern pid_t iop_pid;
 extern int reg2InPort;
 
@@ -1128,7 +1129,9 @@ char* registryLaunchActor(char* name, int argc, char** argv){
       strcpy(argv[i], registry_fifo_in);
     } else if(!strcmp(argv[i], FIFO_OUT)){
       strcpy(argv[i], registry_fifo_out);
-    } 
+    } else if(!strcmp(argv[i], IOP_BIN_DIR)){
+      strcpy(argv[i], iop_bin_dir);
+    }
   }
 
   rannounce("registryLaunchActor calling newActor\n");  
@@ -1185,10 +1188,11 @@ void  processRegistryStartMessage(char *sender, char *rest, int notify){
     int argc;
     char**argv;
     char* actorName;
-    argc = makeArgv(args, " \t", &argv);
+    argc = makeArgv(args, " \t\n", &argv);
     /*
       printArgv(stderr, argc, argv);
     */
+
     if(argc > 0){
       actorName = registryLaunchActor(name, argc, argv);
       if(actorName != NULL){

@@ -45,6 +45,7 @@ extern char* registry_fifo_out;
 extern int   in2RegPort;
 extern int   in2RegFd;
 extern pid_t iop_pid;
+extern char* iop_bin_dir;
 
 
 /* statics */
@@ -58,7 +59,7 @@ static actor_spec *launchFilemanager(void);
 static actor_spec *launchSocketfactory(void);
 static actor_spec *launchRemoteApplet(int remoteFd);
 /* static actor_spec *launchPVS(void); */
-static char** mkRegistryArgv(int, char**, char*, char*, char*, char*);
+static char** mkRegistryArgv(int, char**, char*, char*, char*, char*, char*);
 static void iop_sigint_handler(int);
 static void iop_sigchld_handler(int);
 static int iop_installHandler();
@@ -105,7 +106,6 @@ void spawnServer(int argc, char** argv){
 void iop_init(int argc, char** argv, int optind, int remoteFd){  
   char reg_in[SIZE], reg_out[SIZE], iopPid[SIZE];
   char in2RegPortString[SIZE], in2RegFdString[SIZE];
-  char iop_gui_dir[PATH_MAX + 1];
   char** registry_argv;
   actor_spec *registry_spec;
 
@@ -114,13 +114,12 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
    
   if((argc - optind) < 1){
     fprintf(stderr, 
-	    "Usage: %s [maude_files] <iop_executable_dir> <maude_executable_dir>\n",
+	    "Usage: %s  <iop_executable_dir> <maude_executable_dir>\n",
 	    argv[0]);
     exit(EXIT_FAILURE);
   }
 
-
-  sprintf(iop_gui_dir, "%s", argv[argc - 2]);
+  iop_bin_dir = argv[argc - 2];
 
   iop_pid = getpid();
 
@@ -163,7 +162,9 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
   registry_argv = 
     mkRegistryArgv(argc, argv, 
-		   registry_fifo_in, registry_fifo_out, in2RegPortString, in2RegFdString);
+		   registry_fifo_in, registry_fifo_out, 
+		   in2RegPortString, in2RegFdString,
+		   iop_bin_dir);
 
   iannounce("spawning registry\n");
   
@@ -208,26 +209,22 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
   iannounce("spawning GUI\n");
   if(!iop_no_windows_flag){
-    if(launchGUI(iop_gui_dir, iopPid, in2RegPortString) == NULL)
+    if(launchGUI(iop_bin_dir, iopPid, in2RegPortString) == NULL)
       goto bail;
   }
   iannounce("spawned GUI\n");
 
-
-
   iannounce("spawning hardwired actors actors\n");
-
-
 
 
   if(iop_hardwired_actors_flag && launchMaude(argc, argv) == NULL) goto bail;
 
   /*
-    if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics(iop_gui_dir) == NULL) 
+    if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics(iop_bin_dir) == NULL) 
       goto bail;
   */
   
-  if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics2d(iop_gui_dir) == NULL) goto bail;
+  if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics2d(iop_bin_dir) == NULL) goto bail;
    
   if(iop_hardwired_actors_flag && launchExecutor() == NULL) goto bail;
   
@@ -502,9 +499,12 @@ void parseOptions(int argc, char** argv, const char* options){
 }
 #endif
 
-char** mkRegistryArgv(int argc, char** argv, char* fifoIn, char* fifoOut, char* port, char* fd){
+char** mkRegistryArgv(int argc, char** argv, 
+		      char* fifoIn, char* fifoOut, 
+		      char* port, char* fd,
+		      char* dir){
   int i;
-  char ** retval = (char **)calloc(argc + 5, sizeof(char *));
+  char ** retval = (char **)calloc(argc + 6, sizeof(char *));
   if(retval == NULL){
     fprintf(stderr, "calloc failed in mkRegistryArgv\n");
     exit(EXIT_SUCCESS);
@@ -516,7 +516,8 @@ char** mkRegistryArgv(int argc, char** argv, char* fifoIn, char* fifoOut, char* 
   retval[argc + 1] = fifoOut;
   retval[argc + 2] = port;
   retval[argc + 3] = fd;
-  retval[argc + 4] = NULL;
+  retval[argc + 4] = dir;
+  retval[argc + 5] = NULL;
   return retval;
 }
 
