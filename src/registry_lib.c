@@ -583,7 +583,7 @@ static void sendActor(actor_id *rcv, char* buff){
 static void* errorLog(void *arg){
   actor_id *act = (actor_id *)arg;
   msg *errmsg = NULL;
-  int fd;
+  int fd, failures = 0;
   if(act == NULL){
     pthread_exit(NULL);
     return NULL; 
@@ -598,8 +598,14 @@ static void* errorLog(void *arg){
  
     if((errmsg = readMsgVolatile(fd, &act->exitFlag)) == NULL){
       fprintf(stderr, "readMsgVolatile in errorLog returned NULL\n");
+      if(++failures > 5){
+	fprintf(stderr, "errorLog giving up!\n");
+	pthread_exit(NULL); 
+      };
       continue;
     }
+
+    failures = 0;
 
     if(!iop_no_windows_flag){
       sendMsg2Input(errmsg, ERROR);
