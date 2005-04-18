@@ -20,16 +20,14 @@ static char* sal_exe;
 static char * sal_argv[MAX_ARGUMENTS];
 static int pin[2], pout[2], perr[2];
 static int size = 0;
-int SAL_DIED = 0;
+static int SAL_DIED = 0;
 
 static void sal_actor_sigint_handler(int sig){
-  /* 
   char sal_exit[] = "(exit)\n";
   if(child > 0){
     write(pin[1], sal_exit, strlen(sal_exit));
   }
-  _exit(EXIT_FAILURE);*/
-  fprintf(stderr,"\n \n SIGINT received \n\n");
+  _exit(EXIT_FAILURE);
 }
 /*
   ian says: this is not correct, will put the time of termination
@@ -37,10 +35,13 @@ static void sal_actor_sigint_handler(int sig){
   we keep tabs on the flag.
 */
 static void sal_actor_sigchild_handler(int sig){
+  /*  if (SAL_ACTOR_DEBUG)*/
+  fprintf(stderr, "SAL died! Exiting\n"); 
   SAL_DIED = 1;
-  /*  kill(getpid(),SIGINT);*/
-
-  /*  fprintf(stderr,"SAL_DIED is (sigchild) %d\n",SAL_DIED);*/
+  fprintf(stderr,"SAL_DIED is %d\n",SAL_DIED);
+  /*    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);*/
+  /*  sendFormattedMsgFD(STDERR_FILENO, "system\n%s\nstop %s\n", myname, myname);*/
+    /*  exit(EXIT_SUCCESS);*/
 }
 
 static void sal_actor_installHandler(){
@@ -64,7 +65,7 @@ int main(int argc, char** argv){
     fprintf(stderr, "didn't understand: (argv == NULL)\n");
     exit(EXIT_FAILURE);
   }
-  sal_actor_installHandler();
+  /*  sal_actor_installHandler();*/
   myname = argv[0];
   while(1){
     requestNo++;
@@ -136,7 +137,7 @@ int main(int argc, char** argv){
         return -1;
       } else {
 	execvp(sal_exe, sal_argv);
-        perror("Sal_Actor:couldn't execvp");
+        perror("couldn't execvp");
         return -1;
       }
     }
@@ -147,25 +148,21 @@ int main(int argc, char** argv){
 	  fprintf(stderr,"Could not spawn echoErrors thread\n");
 	  return -1;
 	}
-	/*      sleepagain:*/
-	if (!SAL_DIED) {
-	  fprintf(stderr,"Doing a sleep\n");
-	  sleep(5);
-	  fprintf(stderr,"sleep returned\n");
-	  fprintf(stderr,"\n\n SAL_DIED(main) is %d\n\n \n",SAL_DIED);
-	  /*	  if (!SAL_DIED) goto sleepagain;*/
-	  }
+	/*	if (!SAL_DIED) {
+	    fprintf(stderr,"My name is \t:\t \n%s",myname);
+	    fprintf(stderr,"Doing a pause\n");
+	    pause();
+	    fprintf(stderr,"pause returned\n");
+	    }*/
 	while(1){
-	  int length;
+	   int length;
 	   msg *response = NULL;
-	   if (SAL_ACTOR_DEBUG)
-	   fprintf(stderr,"\nINSIDE WHILE \n");
+	   
 	   response = readSALMsg(pout[0]);
 	   if(response != NULL){
 	     length = parseString(response->data, response->bytesUsed);
 	     response->bytesUsed = length;
-	   writeagain:
-	     if(( writeSALMsg(STDERR_FILENO, response) == -1) && (errno == EINTR)) goto writeagain;
+	     writeMsg(STDERR_FILENO, response);
 	   }
 	   if (response == NULL) break;
 	}

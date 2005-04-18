@@ -11,33 +11,6 @@
 
 #define MSG_BUFFSZ 1024
 
-void mannounce(const char *format, ...);
-
-int writeSALMsg(int fd, msg* m){
-  int blksz = 1024;
-  int bytesRemaining, bytesWritten;
-  char *buff;
-  if(m == NULL) return 0;
-  bytesRemaining = m->bytesUsed;
-  buff = m->data;
-  while(bytesRemaining > 0){
-    if((bytesWritten = write(fd, 
-			     buff, 
-			     ((bytesRemaining < blksz) ? 
-			      bytesRemaining : 
-			      blksz))) < 0){
-      if (errno != EINTR) 
-	perror("Write failed in writeSALMsg");
-      else if (SAL_ACTOR_DEBUG)
-	perror("Write failed in writeSALMsg");
-      return -1;
-    }
-    bytesRemaining -= bytesWritten;
-    if(bytesRemaining > 0) buff = &buff[bytesWritten];
-  }
-  return 1;
-}
-
 msg* readSALMsg(int fd){
   fd_set rfds;
   struct timeval tv;
@@ -50,12 +23,7 @@ msg* readSALMsg(int fd){
   
   tv.tv_sec = 2;
   tv.tv_usec = 0;
- restartselect:
   if(  select(fd+1, &rfds, NULL, NULL, &tv) == -1){
-    if (errno == EINTR) {
-      if (SAL_ACTOR_DEBUG) perror("select error:");
-      goto restartselect;
-    }
     perror("select error:");
   }
   else if (!FD_ISSET(fd,&rfds)){
