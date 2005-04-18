@@ -11,6 +11,8 @@
 #include <sys/types.h>
 #include <sys/select.h>
 #include "sal_lib.h"
+#include <unistd.h>       
+#include <fcntl.h>
 
 
 #define MAX_ARGUMENTS 32
@@ -20,7 +22,26 @@ static char* sal_exe;
 static char * sal_argv[MAX_ARGUMENTS];
 static int pin[2], pout[2], perr[2];
 static int size = 0;
-static int SAL_DIED = 0;
+
+int setFlag(int fd, int flags){
+  int val;
+  if((val = fcntl(fd, F_GETFL, 0)) < 0){
+    perror("fcntl(fd, F_GETFL, 0) failed");
+    fprintf(stderr, "pid = %d fd = %d\n", getpid(), fd);
+    return -1;
+  }
+  val |= flags;
+  if(fcntl(fd, F_SETFL, val) < 0){
+    perror("fcntl(fd, F F_SETFL, val) failed");
+    return -1;
+  }
+  return 0;
+}
+
+static void sal_actor_sigpipe_handler(int sig){
+  fprintf(stderr,"\n Received signal \t:\t SIGPIPE, SalActor exiting \n");
+  sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
+}
 
 static void sal_actor_sigint_handler(int sig){
   char sal_exit[] = "(exit)\n";
@@ -29,32 +50,28 @@ static void sal_actor_sigint_handler(int sig){
   }
   _exit(EXIT_FAILURE);
 }
-/*
-  ian says: this is not correct, will put the time of termination
-  out of this process' control. Better to set a flag and make sure
-  we keep tabs on the flag.
-*/
-static void sal_actor_sigchild_handler(int sig){
-  /*  if (SAL_ACTOR_DEBUG)*/
+/*static void sal_actor_sigchild_handler(int sig){
   fprintf(stderr, "SAL died! Exiting\n"); 
-  SAL_DIED = 1;
-  fprintf(stderr,"SAL_DIED is %d\n",SAL_DIED);
-  /*    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);*/
-  /*  sendFormattedMsgFD(STDERR_FILENO, "system\n%s\nstop %s\n", myname, myname);*/
-    /*  exit(EXIT_SUCCESS);*/
-}
+  exit(EXIT_SUCCESS);
+  }*/
 
 static void sal_actor_installHandler(){
-  struct sigaction sigactchild;
+  /*  struct sigaction sigactchild;*/
   struct sigaction sigactint;
-  sigactchild.sa_handler = sal_actor_sigchild_handler;
+  struct sigaction sigpipe;
+  /*  sigactchild.sa_handler = sal_actor_sigchild_handler;
   sigactchild.sa_flags = SA_NOCLDSTOP;
   sigfillset(&sigactchild.sa_mask);
-  sigaction(SIGCHLD, &sigactchild, NULL);
+  sigaction(SIGCHLD, &sigactchild, NULL);*/
   sigactint.sa_handler = sal_actor_sigint_handler;
   sigactint.sa_flags = 0;
   sigfillset(&sigactint.sa_mask);
   sigaction(SIGINT, &sigactint, NULL);
+  
+  sigpipe.sa_handler = sal_actor_sigpipe_handler;
+  sigpipe.sa_flags = 0;
+  sigfillset(&sigpipe.sa_mask);
+  sigaction(SIGPIPE, &sigpipe, NULL); 
 }
 
 int main(int argc, char** argv){
@@ -65,7 +82,7 @@ int main(int argc, char** argv){
     fprintf(stderr, "didn't understand: (argv == NULL)\n");
     exit(EXIT_FAILURE);
   }
-  /*  sal_actor_installHandler();*/
+  sal_actor_installHandler();
   myname = argv[0];
   while(1){
     requestNo++;
@@ -97,7 +114,6 @@ int main(int argc, char** argv){
     }
     if( !strcmp(cmd,"sal-smc") || !strcmp(cmd,"sal-bmc") || !strcmp(cmd,"sal-path-finder") ||
 	!strcmp(cmd,"sal-deadlock-checker")){
-
       sal_exe = cmd;
       sal_argv[size] = cmd;
       size++;
@@ -144,16 +160,12 @@ int main(int argc, char** argv){
       else{ /* I am the boss */
 	pthread_t errThread;
 	
+	/*setFlag(pout[0],O_NONBLOCK);*/
+	
 	if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
 	  fprintf(stderr,"Could not spawn echoErrors thread\n");
 	  return -1;
 	}
-	/*	if (!SAL_DIED) {
-	    fprintf(stderr,"My name is \t:\t \n%s",myname);
-	    fprintf(stderr,"Doing a pause\n");
-	    pause();
-	    fprintf(stderr,"pause returned\n");
-	    }*/
 	while(1){
 	   int length;
 	   msg *response = NULL;

@@ -12,13 +12,13 @@
 #define MSG_BUFFSZ 1024
 
 msg* readSALMsg(int fd){
-  fd_set rfds;
-  struct timeval tv;
+  /*  fd_set rfds;
+      struct timeval tv;*/
   int bytes = 0;
   char buff[MSG_BUFFSZ];
   msg* retval = makeMsg(MSG_BUFFSZ);
   
-  FD_ZERO(&rfds);
+  /*  FD_ZERO(&rfds);
   FD_SET(fd, &rfds);
   
   tv.tv_sec = 2;
@@ -30,7 +30,7 @@ msg* readSALMsg(int fd){
     if (SAL_ACTOR_DEBUG)
       fprintf(stderr,"No data within 2 seconds\n");
     goto fail;
-  }
+    }*/
   if(retval == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
     goto fail;
@@ -42,13 +42,16 @@ msg* readSALMsg(int fd){
     
     if((bytes = read(fd, buff, MSG_BUFFSZ)) < 0){
       if(errno == EINTR){
-	mannounce("readSALMsg  in %d restarting after being interrupted by a signal\n", getpid());
+	fprintf(stderr,"readSALMsg  in %d restarting after being interrupted by a signal\n", getpid());
 	goto restart;
       }
       
       if(errno == EBADF){
 	fprintf(stderr, "readSALMsg  in %d failing because of a bad file descriptor\n", getpid());
 	goto fail;
+      }
+      if (errno == EAGAIN){
+	fprintf(stderr,"\n EMPTY  PIPE \n");
       }
       fprintf(stderr, "Read  in %d returned with nothing\n", getpid());
       return retval;

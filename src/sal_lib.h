@@ -1,4 +1,4 @@
 #include "types.h"
 
-#define SAL_ACTOR_DEBUG 0
+#define SAL_ACTOR_DEBUG 1
 msg* readSALMsg(int fd);
