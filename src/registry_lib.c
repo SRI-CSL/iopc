@@ -598,9 +598,9 @@ static void* errorLog(void *arg){
     }
  
     if((errmsg = readMsgVolatile(fd, &act->exitFlag)) == NULL){
-      fprintf(stderr, "readMsgVolatile in errorLog returned NULL\n");
+      rannounce("readMsgVolatile in errorLog returned NULL\n");
       if(++failures > 5){
-	fprintf(stderr, "errorLog giving up!\n");
+	rannounce("errorLog giving up!\n");
 	pthread_exit(NULL); 
       };
       continue;

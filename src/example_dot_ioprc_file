@@ -1,7 +1,7 @@
 #This is an example .ioprc file, it should be called
 # .ioprc, and live in the users home directory.
 #
-#
+#Any line that begins with a # is a comment and is ignored.
 #The first (non comment line) should be the name of a file.
 #when you start up iop, it first looks for a input.txt in the
 #pwd, if there is none it will use this file.
@@ -19,13 +19,13 @@ font type = Lucinda Sans
 # <maude bin dir> should be where maude lives
 #  for example: /usr/local/maude-linux/bin
 #
-# <iop bin dir> should be where iop lives
-#  for example: /usr/bin/iop
-#
 #
 start maude iop_maude_wrapper <maude bin dir>
 start socketfactory iop_socketfactory *FIFO_IN* *FIFO_OUT*
-start graphics iop_graphics_wrapper <iop bin dir>
-start graphics2d iop_graphics2d_wrapper <iop bin dir>
+start graphics2d iop_graphics2d_wrapper *IOPBINDIR*
 start executor iop_executor
 start filemanager iop_filemanager
+#
+# to choose the actor that the system is talking to at startup
+# use the select instruction:
+select maude

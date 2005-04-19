@@ -47,7 +47,6 @@ extern int   in2RegFd;
 extern pid_t iop_pid;
 extern char* iop_bin_dir;
 
-
 /* statics */
 static actor_spec *launchActor(int notify, char* name, char* exe, char** argv);
 static actor_spec *launchMaude(int argc, char** argv);

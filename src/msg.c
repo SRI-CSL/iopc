@@ -128,8 +128,10 @@ void echo(int from, int to){
 int setFlag(int fd, int flags){
   int val;
   if((val = fcntl(fd, F_GETFL, 0)) < 0){
-    perror("fcntl(fd, F_GETFL, 0) failed");
-    fprintf(stderr, "pid = %d fd = %d\n", getpid(), fd);
+    if(MSG_DEBUG){
+      perror("fcntl(fd, F_GETFL, 0) failed");
+      fprintf(stderr, "pid = %d fd = %d\n", getpid(), fd);
+    }
     return -1;
   }
   val |= flags;
@@ -143,8 +145,10 @@ int setFlag(int fd, int flags){
 int clearFlag(int fd, int flags){
   int val;
   if((val = fcntl(fd, F_GETFL, 0)) < 0){
-    perror("fcntl(fd, F_GETFL, 0) failed");
-    fprintf(stderr, "pid = %d fd = %d\n", getpid(), fd);
+    if(MSG_DEBUG){
+      perror("fcntl(fd, F_GETFL, 0) failed");
+      fprintf(stderr, "pid = %d fd = %d\n", getpid(), fd);
+    }
     return -1;
   }
   val &= ~flags;
