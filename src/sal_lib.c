@@ -56,6 +56,9 @@ msg* readSALMsg(int fd){
       fprintf(stderr, "Read  in %d returned with nothing\n", getpid());
       return retval;
     }
+    else if (bytes == 0){
+      fprintf(stderr,"\nReached EOF\n");
+    }
     if (SAL_ACTOR_DEBUG)
       fprintf(stderr, "readSALMsg read %d bytes\n", bytes);
     if(addToMsg(retval, bytes, buff) != 0){

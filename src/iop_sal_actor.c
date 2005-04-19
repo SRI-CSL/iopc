@@ -13,7 +13,7 @@
 #include "sal_lib.h"
 #include <unistd.h>       
 #include <fcntl.h>
-
+#include <sys/ioctl.h>
 
 #define MAX_ARGUMENTS 32
 static int requestNo = 0;
@@ -22,6 +22,23 @@ static char* sal_exe;
 static char * sal_argv[MAX_ARGUMENTS];
 static int pin[2], pout[2], perr[2];
 static int size = 0;
+
+int setNonblocking(int fd)
+{
+  int flags;
+  
+  /* If they have O_NONBLOCK, use the Posix way to do it */
+#if defined(O_NONBLOCK)
+  /* Fixme: O_NONBLOCK is defined but broken on SunOS 4.1.x and AIX 3.2.5. */
+  if (-1 == (flags = fcntl(fd, F_GETFL, 0)))
+    flags = 0;
+  return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+#else
+  /* Otherwise, use the old way of doing it */
+  flags = 1;
+  return ioctl(fd, FIOBIO, &flags);
+#endif
+}     
 
 int setFlag(int fd, int flags){
   int val;
@@ -50,19 +67,20 @@ static void sal_actor_sigint_handler(int sig){
   }
   _exit(EXIT_FAILURE);
 }
-/*static void sal_actor_sigchild_handler(int sig){
+/*atic void sal_actor_sigchild_handler(int sig){
   fprintf(stderr, "SAL died! Exiting\n"); 
   exit(EXIT_SUCCESS);
   }*/
 
 static void sal_actor_installHandler(){
-  /*  struct sigaction sigactchild;*/
+  /*struct sigaction sigactchild;*/
   struct sigaction sigactint;
   struct sigaction sigpipe;
   /*  sigactchild.sa_handler = sal_actor_sigchild_handler;
   sigactchild.sa_flags = SA_NOCLDSTOP;
   sigfillset(&sigactchild.sa_mask);
   sigaction(SIGCHLD, &sigactchild, NULL);*/
+
   sigactint.sa_handler = sal_actor_sigint_handler;
   sigactint.sa_flags = 0;
   sigfillset(&sigactint.sa_mask);
@@ -161,7 +179,8 @@ int main(int argc, char** argv){
 	pthread_t errThread;
 	
 	/*setFlag(pout[0],O_NONBLOCK);*/
-	
+	/*	setNonblocking(pout[1]);*/
+
 	if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
 	  fprintf(stderr,"Could not spawn echoErrors thread\n");
 	  return -1;
