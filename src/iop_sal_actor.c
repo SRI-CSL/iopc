@@ -24,6 +24,7 @@ static int pin[2], pout[2], perr[2];
 static int size = 0;
 extern int DEAD_SAL;
 
+
 static void sal_actor_sigint_handler(int sig){
   char sal_exit[] = "(exit)\n";
   if(child > 0){
@@ -55,7 +56,7 @@ static void sal_actor_installHandler(){
 
 int main(int argc, char** argv){
   msg *messageIn = NULL, *messageOut = NULL;
-  char *sender, *rest, *body, *cmd;
+  char *sender, *rest, *body, *cmd, *bytesSend = NULL;
   int retval;
   if(argv == NULL){
     fprintf(stderr, "didn't understand: (argv == NULL)\n");
@@ -137,20 +138,51 @@ int main(int argc, char** argv){
       }
     }
       else{ /* I am the boss */
-	/*	pthread_t errThread;
-		if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
-	  fprintf(stderr,"Could not spawn echoErrors thread\n");
+	if((close(pin[0]) !=  0) ||
+	   (close(perr[1]) !=  0) ||
+	   (close(pout[1]) !=  0)){
+	  perror("couldn't close fd's");
 	  return -1;
-	  }*/
+	}
 	while(1){
 	   int length;
 	   msg *response = NULL;
+	   msg *tmp = NULL;
 	   
 	   response = readSALMsg(pout[0]);
 	   if(response != NULL){
 	     length = parseString(response->data, response->bytesUsed);
 	     response->bytesUsed = length;
-	     writeMsg(STDERR_FILENO, response);
+	     
+	     if (bytesSend != NULL) {
+	       free(bytesSend);
+	       bytesSend = NULL;
+	     }
+	     bytesSend = (char *)calloc(SIZE,sizeof(char));
+	     if (bytesSend == NULL){
+	       fprintf(stderr,"\nCalloc failed in SalActor for bytesSend \n");
+	       return -1;
+	     }
+	     sprintf(bytesSend,"%d",response->bytesUsed);
+	     
+	     if (tmp != NULL){
+	       freeMsg(tmp);
+	       tmp = NULL;
+	     }
+	     tmp = makeMsg(MSG_BUFFSZ);
+	     if(tmp == NULL){
+	       fprintf(stderr, "makeMsg in %d failed(parent code)\n", getpid());
+	       return -1;
+	     }
+	     if(addToSALMsg(tmp, SIZE, bytesSend) != 0){
+	       fprintf(stderr, "addToSALMsg in %d failed(parent code)\n", getpid());
+	       return -1;
+	     }
+	     length = parseString(tmp->data, tmp->bytesUsed);
+	     tmp->bytesUsed = length;
+	     
+	     writeMsg(STDOUT_FILENO,tmp);
+	     writeMsg(STDOUT_FILENO, response);
 	   }
 	   if (response == NULL) break;
 	}

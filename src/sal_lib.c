@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include "sal_lib.h"
 
-#define MSG_BUFFSZ 1024
+
 int DEAD_SAL;
 
 msg* readSALMsg(int fd){
@@ -59,8 +59,9 @@ msg* readSALMsg(int fd){
     }
     if (SAL_ACTOR_DEBUG)
       fprintf(stderr, "readSALMsg read %d bytes\n", bytes);
-    if(addToMsg(retval, bytes, buff) != 0){
-      fprintf(stderr, "addToMsg in %d failed\n", getpid());
+    if(addToSALMsg(retval, bytes, buff) != 0){
+      if (SAL_ACTOR_DEBUG)
+	fprintf(stderr, "addToSALMsg in %d failed\n", getpid());
       goto fail;
     }
     else break;
@@ -69,6 +70,48 @@ msg* readSALMsg(int fd){
  fail:
   return NULL;
 }
+
+int addToSALMsg(msg* m, int bytes, char* buff){
+  if((bytes <= 0) || (buff == NULL)){
+    if (SAL_ACTOR_DEBUG)
+      fprintf(stderr, "Bad arguments to addToSALMsg\n");
+    return -1;
+  }
+  if (SAL_ACTOR_DEBUG){
+    fprintf(stderr,"addToSALMsg: bytes = %d m->bytesLeft = %d\n", bytes, m->bytesLeft);
+  }
+  if(bytes < m->bytesLeft){
+    memcpy(&m->data[m->bytesUsed], buff, bytes);
+    m->bytesUsed += bytes;
+    m->bytesLeft -= bytes;
+    m->data[m->bytesUsed] = '\0';
+    return 0;
+  } else {
+    int current, desired, new;
+    char *tmp;
+    current = m->bytesUsed + m->bytesLeft;
+    desired = m->bytesUsed + bytes;
+    new = 2 * current;
+    while(new < desired) new *= 2;
+    tmp = m->data;
+    m->data = (char *)calloc(new, sizeof(char));
+    if(m->data == NULL){
+      fprintf(stderr, "Calloc failed in addToSALMsg\n");
+      free(tmp);
+      m->bytesUsed = 0;
+      m->bytesLeft = 0;
+      return -1;
+    }
+    memcpy(m->data, tmp, m->bytesUsed);
+    memcpy(&m->data[m->bytesUsed], buff, bytes);
+    m->bytesUsed += bytes;
+    m->bytesLeft = new - desired;
+    m->data[m->bytesUsed] = '\0';
+    free(tmp);
+    return 0;
+  }
+} 
+
 
 
 
