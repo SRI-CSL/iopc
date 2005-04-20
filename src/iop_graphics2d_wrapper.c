@@ -67,63 +67,70 @@ int main(int argc, char** argv){
   graphics_argv[4] = myName;
   graphics_wrapper_installHandler();
 
-  if((pipe(pin) != 0) || 
+  if((pipe(pin)  != 0) || 
      (pipe(perr) != 0) ||
      (pipe(pout) != 0)){
     perror("couldn't make pipes");
-    return -1;
-  } else {
-    child = fork();
-    if(child < 0){
-      perror("couldn't fork");
-      return -1;
-    } else if(child == 0){
+    exit(EXIT_FAILURE);
+  }
+  child = fork();
+  if(child < 0){
+    perror("couldn't fork");
+    exit(EXIT_FAILURE);
+  } else if(child == 0){
       /* i'm destined to be the java graphics program */
-      if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
-         (dup2(perr[1], STDERR_FILENO) < 0) ||
-         (dup2(pout[1], STDOUT_FILENO) < 0)){
-        perror("couldn't dup fd's");
-        return -1;
-      } else if((close(pin[0]) !=  0) ||
-                (close(perr[1]) !=  0) ||
-                (close(pout[1]) !=  0)){
-        perror("couldn't close fd's");
-        return -1;
-      } else {
-	execvp(graphics_exe, graphics_argv);
-        perror("couldn't execvp");
-        return -1;
-      }
-    } else {
-      /* i'm the boss */
-      pthread_t errThread;
-      pthread_t outThread;
-      msg* message = NULL;
-      int requestNo = 0;
-
-      if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
-	fprintf(stderr, "Could not spawn echoErrors thread\n");
-	return -1;
-      }
-
-      if(pthread_create(&outThread, NULL, wrapper_echoOut, &pout[0])){
-	fprintf(stderr, "Could not spawn wrapper_echoOut thread\n");
-	return -1;
-      }
-      
-      while(1){
-	int size;
-	requestNo++;
-	freeMsg(message);
-	message = acceptMsg(STDIN_FILENO);
-	if(message == NULL){
-	  perror("graphics readMsg failed");
-	  continue;
-	}
-	size = message->bytesUsed;
-	sendMsg(pin[1], message);
-      }
+    if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
+       (dup2(perr[1], STDERR_FILENO) < 0) ||
+       (dup2(pout[1], STDOUT_FILENO) < 0)){
+      perror("couldn't dup fd's");
+      exit(EXIT_FAILURE);
     }
+    if((close(pin[0])  !=  0) ||
+       (close(perr[1]) !=  0) ||
+       (close(pout[1]) !=  0)){
+      perror("couldn't close fd's");
+      exit(EXIT_FAILURE);
+    } 
+    execvp(graphics_exe, graphics_argv);
+    perror("couldn't execvp");
+    exit(EXIT_FAILURE);
+    /* end of child code */
+  } else {
+    /* i'm the boss */
+    pthread_t errThread, outThread;
+    msg* message = NULL;
+    int requestNo = 0;
+
+    if((close(pin[0])  !=  0) ||
+       (close(perr[1]) !=  0) ||
+       (close(pout[1]) !=  0)){
+      perror("couldn't close fd's");
+      exit(EXIT_FAILURE);
+    }
+
+    if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
+      fprintf(stderr, "Could not spawn echoErrors thread\n");
+      exit(EXIT_FAILURE);
+    }
+
+    if(pthread_create(&outThread, NULL, wrapper_echoOut, &pout[0])){
+      fprintf(stderr, "Could not spawn wrapper_echoOut thread\n");
+      exit(EXIT_FAILURE);
+    }
+      
+    while(1){
+      int size;
+      requestNo++;
+      freeMsg(message);
+      message = acceptMsg(STDIN_FILENO);
+      if(message == NULL){
+	perror("graphics readMsg failed");
+	continue;
+      }
+      size = message->bytesUsed;
+      sendMsg(pin[1], message);
+    }
+    /* end of boss code */
   }
 }
 

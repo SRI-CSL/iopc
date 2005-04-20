@@ -163,81 +163,90 @@ int main(int argc, char** argv){
   maudebindir = argv[1];
   maude_wrapper_installHandler();
   getcwd(current_dir, PATH_MAX);
-  if((pipe(pin) != 0) || 
-     (pipe(perr) != 0) ||
+  if((pipe(pin)  != 0)  || 
+     (pipe(perr) != 0)  ||
      (pipe(pout) != 0)){
     perror("couldn't make pipes");
-    return -1;
-  } else {
-    child = fork();
-    if(child < 0){
-      perror("couldn't fork");
-      return -1;
-    } else if(child == 0){
-      /* i'm destined to be maude */
-      if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
-         (dup2(perr[1], STDERR_FILENO) < 0) ||
-         (dup2(pout[1], STDOUT_FILENO) < 0)){
-        perror("couldn't dup fd's");
-        return -1;
-      } else if((close(pin[0]) !=  0) ||
-                (close(perr[1]) !=  0) ||
-                (close(pout[1]) !=  0)){
-        perror("couldn't close fd's");
-        return -1;
-      } else {
-	if(chdir(maudebindir) != 0)
-	  fprintf(stderr, "Couldn't change to %s\n", maudebindir);
-	execvp(maude_exe, maude_argv);
-        perror("couldn't execvp");
-        return -1;
-      }
-    } else {
-      /* i'm the boss */
-      char cmdBuff[PATH_MAX + SIZE];
-      int len;
-
-      wait4Maude(pout[0], perr[0]);
-
+    exit(EXIT_FAILURE);;
+  }
+  child = fork();
+  if(child < 0){
+    perror("couldn't fork");
+    exit(EXIT_FAILURE);;
+  } 
+  if(child == 0){
+    /* i'm destined to be maude */
+    if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
+       (dup2(perr[1], STDERR_FILENO) < 0) ||
+       (dup2(pout[1], STDOUT_FILENO) < 0)){
+      perror("couldn't dup fd's");
+      exit(EXIT_FAILURE);;
+    }
+    if((close(pin[0])  !=  0) ||
+       (close(perr[1]) !=  0) ||
+       (close(pout[1]) !=  0)){
+      perror("couldn't close fd's");
+      exit(EXIT_FAILURE);;
+    } 
+    if(chdir(maudebindir) != 0)
+      fprintf(stderr, "Couldn't change to %s\n", maudebindir);
+    execvp(maude_exe, maude_argv);
+    perror("couldn't execvp");
+    exit(EXIT_FAILURE);;
+    /* end of child code */
+  } else { 
+    /* i'm the boss */
+    char cmdBuff[PATH_MAX + SIZE];
+    int len;
+    
+    if((close(pin[0])  !=  0)  ||
+       (close(perr[1]) !=  0)  ||
+       (close(pout[1]) !=  0)){
+      perror("couldn't close fd's");
+      exit(EXIT_FAILURE);
+    }
+    
+    wait4Maude(pout[0], perr[0]);
+    
+    if(MAUDE_WRAPPER_DEBUG)
+      fprintf(stderr, "%s\t:\tcding to %s\n", argv[0], current_dir); 
+    
+    sprintf(cmdBuff, "cd %s\n", current_dir);
+    len = strlen(cmdBuff);
+    if(write(pin[1], cmdBuff, len) != len){
+      fprintf(stderr, "write failed of \"%s\" command", cmdBuff);
+      /* forge on, notify registry, die calmly? */
+      exit(EXIT_FAILURE);
+    };
+    if(MAUDE_WRAPPER_DEBUG)fprintf(stderr, cmdBuff); 
+    wait4Maude(pout[0], perr[0]);
+    
+    if(argc == 3){
       if(MAUDE_WRAPPER_DEBUG)
-	fprintf(stderr, "%s\t:\tcding to %s\n", argv[0], current_dir); 
-
-      sprintf(cmdBuff, "cd %s\n", current_dir);
+	fprintf(stderr, "%s\t:\tloading %s\n", argv[0], argv[2]); 
+      
+      sprintf(cmdBuff, "load %s\n", argv[2]);
       len = strlen(cmdBuff);
-      if(write(pin[1], cmdBuff, len) != len){
+      if(write(pin[1], cmdBuff, len) !=  len){
 	fprintf(stderr, "write failed of \"%s\" command", cmdBuff);
 	/* forge on, notify registry, die calmly? */
 	exit(EXIT_FAILURE);
       };
-      if(MAUDE_WRAPPER_DEBUG)fprintf(stderr, cmdBuff); 
+      if(MAUDE_WRAPPER_DEBUG)fprintf(stderr, cmdBuff);
       wait4Maude(pout[0], perr[0]);
-
-      if(argc == 3){
-	if(MAUDE_WRAPPER_DEBUG)
-	  fprintf(stderr, "%s\t:\tloading %s\n", argv[0], argv[2]); 
-	
-	sprintf(cmdBuff, "load %s\n", argv[2]);
-	len = strlen(cmdBuff);
-	if(write(pin[1], cmdBuff, len) !=  len){
-	  fprintf(stderr, "write failed of \"%s\" command", cmdBuff);
-	  /* forge on, notify registry, die calmly? */
-	  exit(EXIT_FAILURE);
-	};
-	if(MAUDE_WRAPPER_DEBUG)fprintf(stderr, cmdBuff);
-	wait4Maude(pout[0], perr[0]);
-      }
-
-      
-      while(1){
-	if(MAUDE_WRAPPER_DEBUG)
-	  fprintf(stderr, "Listening to IO\n");
-	echo2Maude(STDIN_FILENO, pin[1]);
-	if(MAUDE_WRAPPER_DEBUG)
-	  fprintf(stderr, "Listening to Maude\n");
-	wait4Maude(pout[0], perr[0]);
-      }
     }
+          
+    while(1){
+      if(MAUDE_WRAPPER_DEBUG)
+	fprintf(stderr, "Listening to IO\n");
+      echo2Maude(STDIN_FILENO, pin[1]);
+      if(MAUDE_WRAPPER_DEBUG)
+	fprintf(stderr, "Listening to Maude\n");
+      wait4Maude(pout[0], perr[0]);
+    }
+    /* end of boss code */
   }
 }
+
 
 
