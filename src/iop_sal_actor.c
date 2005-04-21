@@ -8,19 +8,15 @@
 #include "externs.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h"
-#include <sys/types.h>
-#include <sys/select.h>
 #include "sal_lib.h"
-#include <unistd.h>       
-#include <fcntl.h>
-#include <sys/ioctl.h>
 #include "argv.h"
+
+extern int dead_sal;
 
 static int requestNo = 0;
 static char* myname;
 static char ** sal_argv;
 static int pin[2], pout[2], perr[2];
-extern int DEAD_SAL;
 static int sal_argc;
 
 static void sal_actor_sigint_handler(int sig){
@@ -34,7 +30,7 @@ static void sal_actor_sigchild_handler(int sig){
   if (SAL_ACTOR_DEBUG){
     fprintf(stderr, "\nSAL died! Exiting\n"); 
   }
-  DEAD_SAL = 1;
+  dead_sal = 1;
 }
 
 static void sal_actor_installHandler(){
@@ -84,71 +80,78 @@ int main(int argc, char** argv){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", messageIn->data);
       continue;
     }
-    if ((sal_argc = makeArgv(body," ",&sal_argv)) <=1 ){
-      fprintf(stderr,"\n An error occured in makeArgv\n");
-      return -1;
+    if ((sal_argc = makeArgv(body," \t\n",&sal_argv)) <=1 ){
+      fprintf(stderr,"\nAn error occured in makeArgv\n");
+      exit(EXIT_FAILURE);
     }
-    if( !strcmp(sal_argv[0],"sal-smc") || !strcmp(sal_argv[0],"sal-bmc") || 
-	!strcmp(sal_argv[0],"sal-path-finder") ||
-	!strcmp(sal_argv[0],"sal-deadlock-checker")){
-
-      if((pipe(pin) != 0) || 
-	 (pipe(perr) != 0) ||
-	 (pipe(pout) != 0)){
-	perror("couldn't make pipes");
-	return -1;
-      } 
-      /*it's time to fork */
-      child = fork();
-      if(child < 0){
-	perror("couldn't fork");
-	return -1;
-      } else if(child == 0){
-	/* i'm destined to be sal */
-	if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
-	   (dup2(perr[1], STDERR_FILENO) < 0) ||
-	   (dup2(pout[1], STDOUT_FILENO) < 0)){
-	  perror("couldn't dup fd's");
-	  return -1;
-      } else if((close(pin[0]) !=  0) ||
-                (close(perr[1]) !=  0) ||
-                (close(pout[1]) !=  0)){
-        perror("couldn't close fd's");
-        return -1;
-      } else {
-	execvp(sal_argv[0], sal_argv);
-        perror("couldn't execvp");
-        return -1;
-      }
-    }
-      else{ /* I am the boss */
-	if((close(pin[0]) !=  0) ||
-	   (close(perr[1]) !=  0) ||
-	   (close(pout[1]) !=  0)){
-	  perror("couldn't close fd's");
-	  return -1;
-	}
-	while(1){
-	   int length;
-	   msg *response = NULL;
-	   
-	   response = readSALMsg(pout[0]);
-	   if(response != NULL){
-	     length = parseString(response->data, response->bytesUsed);
-	     response->bytesUsed = length;
-	     
-	     sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname,response->data);
-	   }
-	   if (response == NULL) break;
-	}
-	sleep(1);
-	sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
-      }
-    }   
-    else {
+    
+    if(strcmp(sal_argv[0], "sal-smc")         && 
+       strcmp(sal_argv[0], "sal-bmc")         && 
+       strcmp(sal_argv[0], "sal-path-finder") &&
+       strcmp(sal_argv[0], "sal-deadlock-checker")){
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", messageIn->data);
-      freeArgv(sal_argc,sal_argv);
+      freeArgv(sal_argc, sal_argv);
       continue;
     }
+  
+    if((pipe(pin) != 0) || 
+       (pipe(perr) != 0) ||
+       (pipe(pout) != 0)){
+      perror("couldn't make pipes");
+      exit(EXIT_FAILURE);
+    } 
+    /*it's time to fork */
+    child = fork();
+    if(child < 0){
+      perror("couldn't fork");
+      exit(EXIT_FAILURE);
+    }
+    if(child == 0){
+      /* i'm destined to be sal */
+      if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
+	 (dup2(perr[1], STDERR_FILENO) < 0) ||
+	 (dup2(pout[1], STDOUT_FILENO) < 0)){
+	perror("couldn't dup fd's");
+	exit(EXIT_FAILURE);
+      }
+      if((close(pin[0]) !=  0) ||
+	 (close(perr[1]) !=  0) ||
+	 (close(pout[1]) !=  0)){
+        perror("couldn't close fd's");
+        exit(EXIT_FAILURE);
+      }
+      execvp(sal_argv[0], sal_argv);
+      perror("couldn't execvp");
+      exit(EXIT_FAILURE);
+    }else { 
+      /* I am the boss */
+      msg *response = NULL;
+
+      /* pthread_t errThread; */
+    
+      if((close(pin[0])  !=  0) ||
+	 (close(perr[1]) !=  0) ||
+	 (close(pout[1]) !=  0)){
+	perror("couldn't close fd's");
+	exit(EXIT_FAILURE);
+      }
+
+      /*
+	if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
+	fprintf(stderr, "Could not spawn echoErrors thread\n");
+	exit(EXIT_FAILURE);
+	}
+      */
+
+      response = readSALMsg(pout[0]);
+      
+      if((response != NULL) && (response->bytesUsed > 0)){
+	sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname, response->data);
+      }
+    }
+    usleep(100);
+    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
   }
 }
+
+

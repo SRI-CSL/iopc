@@ -75,8 +75,12 @@ void freeMsg(msg* m){
 }
 
 int addToMsg(msg* m, int bytes, char* buff){
-  if((bytes <= 0) || (buff == NULL)){
-    fprintf(stderr, "Bad arguments to addToMsg\n");
+  if(bytes <= 0){
+    fprintf(stderr, "Bad arguments to addToMsg (bytes <= 0)\n");
+    return -1;
+  }
+  if(buff == NULL){
+    fprintf(stderr, "Bad arguments to addToMsg (buff == NULL)\n");
     return -1;
   }
   mannounce("addToMsg: bytes = %d m->bytesLeft = %d\n", bytes, m->bytesLeft);

@@ -97,11 +97,18 @@ void parsePVSThenEcho(char *prompt, int from, int to){
 
 void *echoErrors(void *arg){
   int fd;
+  sigset_t mask;
   if(arg == NULL){
     fprintf(stderr, "Bad arg to echoErrors\n");
     return NULL;
   }
   fd = *((int *)arg);
+  if((sigemptyset(&mask) != 0) && (sigaddset(&mask, SIGCHLD) != 0)){
+    fprintf(stderr, "futzing with sigsets failed in echoErrors\n");
+  }
+  if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
+    fprintf(stderr, "pthread_sigmask failed in echoErrors\n");
+  }
   while(1)
     echo(fd, STDERR_FILENO);
   return NULL;
