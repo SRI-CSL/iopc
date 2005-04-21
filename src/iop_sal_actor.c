@@ -127,7 +127,7 @@ int main(int argc, char** argv){
       /* I am the boss */
       msg *response = NULL;
 
-      /* pthread_t errThread; */
+      pthread_t errThread;
     
       if((close(pin[0])  !=  0) ||
 	 (close(perr[1]) !=  0) ||
@@ -135,7 +135,6 @@ int main(int argc, char** argv){
 	perror("couldn't close fd's");
 	exit(EXIT_FAILURE);
       }
-
       /*
 	if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
 	fprintf(stderr, "Could not spawn echoErrors thread\n");

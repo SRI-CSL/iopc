@@ -351,6 +351,7 @@ msg* readMsg(int fd){
     }
   }
  exit:
+
   mannounce("readMsg in %d read exiting non-blocking mode (bytes = %d)\n", getpid(), bytes);
   clearFlag(fd, O_NONBLOCK);
   mannounce("readMsg in %d cleared non-blocking flag\n", getpid());
@@ -363,9 +364,9 @@ msg* readMsg(int fd){
       return retval;
     }
     retval->bytesUsed--;
+    mannounce("readMsg in %d read exiting non-blocking mode (retval->bytesUsed = %d)\n", 
+	      getpid(), retval->bytesUsed);
   }
-  mannounce("readMsg in %d read exiting non-blocking mode (retval->bytesUsed = %d)\n", 
-	    getpid(), retval->bytesUsed);
   return retval;
  fail:
   return retval;
