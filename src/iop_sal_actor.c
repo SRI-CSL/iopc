@@ -135,15 +135,14 @@ int main(int argc, char** argv){
 	perror("couldn't close fd's");
 	exit(EXIT_FAILURE);
       }
-      /*
-	if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
+      
+      if(pthread_create(&errThread, NULL, echoSALErrors, &perr[0])){
 	fprintf(stderr, "Could not spawn echoErrors thread\n");
 	exit(EXIT_FAILURE);
-	}
-      */
-
+      }
+    
       response = readSALMsg(pout[0]);
-      
+	
       if((response != NULL) && (response->bytesUsed > 0)){
 	sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname, response->data);
       }

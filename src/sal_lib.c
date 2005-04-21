@@ -56,9 +56,7 @@ msg* readSALMsg(int fd){
     if (SAL_ACTOR_DEBUG)fprintf(stderr, "readSALMsg read %d bytes\n", bytes);
     
     if(bytes > 0){
-      /*
-	fprintf(stderr, "buff == NULL: %d\n", buff == NULL);
-      */
+     
       if(addToMsg(retval, bytes, buff) != 0){
 	if (SAL_ACTOR_DEBUG)
 	  fprintf(stderr, "addToMsg in %d failed\n", getpid());
@@ -72,3 +70,32 @@ msg* readSALMsg(int fd){
  fail:
   return NULL;
 }
+
+void echoSAL(int from, int to){
+  char buff[MSG_BUFFSZ];
+  int bytesRead = 0;
+  bytesRead = read(from,buff,MSG_BUFFSZ);
+  if(bytesRead > 0){
+    write(to,buff,bytesRead);
+  }
+}
+
+void *echoSALErrors(void *arg){
+  int fd;
+  sigset_t mask;
+  if(arg == NULL){
+    fprintf(stderr, "Bad arg to echoErrors\n");
+    return NULL;
+  }
+  fd = *((int *)arg);
+  if((sigemptyset(&mask) != 0) && (sigaddset(&mask, SIGCHLD) != 0)){
+    fprintf(stderr, "futzing with sigsets failed in echoErrors\n");
+  }
+  if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
+    fprintf(stderr, "pthread_sigmask failed in echoErrors\n");
+  }
+  while(!dead_sal)
+    echoSAL(fd, STDERR_FILENO);
+  return NULL;
+}
+
