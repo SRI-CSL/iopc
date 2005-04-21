@@ -181,8 +181,11 @@ int main(int argc, char** argv){
 	     length = parseString(tmp->data, tmp->bytesUsed);
 	     tmp->bytesUsed = length;
 	     
-	     writeMsg(STDOUT_FILENO,tmp);
-	     writeMsg(STDOUT_FILENO, response);
+	     /*	     writeMsg(STDOUT_FILENO,tmp);*/
+	     /* writeMsg(STDOUT_FILENO, response);*/
+	     
+	     sendSALFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname,response->data);
+	     
 	   }
 	   if (response == NULL) break;
 	}

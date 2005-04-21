@@ -4,3 +4,4 @@
 #define SAL_ACTOR_DEBUG 0
 msg* readSALMsg(int fd);
 int addToSALMsg(msg* m, int bytes, char* buff);
+int sendSALFormattedMsgFD(int fd, char* fmt, ...);
