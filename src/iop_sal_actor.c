@@ -14,16 +14,14 @@
 #include <unistd.h>       
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include "argv.h"
 
-#define MAX_ARGUMENTS 32
 static int requestNo = 0;
 static char* myname;
-static char* sal_exe;
-static char * sal_argv[MAX_ARGUMENTS];
+static char ** sal_argv;
 static int pin[2], pout[2], perr[2];
-static int size = 0;
 extern int DEAD_SAL;
-
+static int sal_argc;
 
 static void sal_actor_sigint_handler(int sig){
   char sal_exit[] = "(exit)\n";
@@ -56,7 +54,7 @@ static void sal_actor_installHandler(){
 
 int main(int argc, char** argv){
   msg *messageIn = NULL, *messageOut = NULL;
-  char *sender, *rest, *body, *cmd, *bytesSend = NULL;
+  char *sender, *body; 
   int retval;
   if(argv == NULL){
     fprintf(stderr, "didn't understand: (argv == NULL)\n");
@@ -81,33 +79,19 @@ int main(int argc, char** argv){
       perror("sal_actor: acceptMsg failed");
       continue;
     }
-    if(SAL_ACTOR_DEBUG)
-      fprintf(stderr, "%s processing request:\n\"%s\"\n", myname, messageIn->data);
     retval = parseActorMsg(messageIn->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", messageIn->data);
       continue;
     }
-    if(getNextToken(body, &cmd, &rest) != 1){
-      fprintf(stderr, "didn't understand: (cmd)\n\t \"%s\" \n", body);
-      continue;
+    if ((sal_argc = makeArgv(body," ",&sal_argv)) <=1 ){
+      fprintf(stderr,"\n An error occured in makeArgv\n");
+      return -1;
     }
-    if( !strcmp(cmd,"sal-smc") || !strcmp(cmd,"sal-bmc") || !strcmp(cmd,"sal-path-finder") ||
-	!strcmp(cmd,"sal-deadlock-checker")){
-      sal_exe = cmd;
-      sal_argv[size] = cmd;
-      size++;
-     
-      while(getNextToken(rest,&cmd,&rest) == 1){
-	if (SAL_ACTOR_DEBUG) fprintf(stderr,"Next token: %s\n",cmd);
-	sal_argv[size] = cmd;
-	size++;
-	if (size > MAX_ARGUMENTS){
-	  fprintf(stderr,"Less then %d arguments please\n",size);
-	  exit(EXIT_FAILURE);
-	}
-      }
-      sal_argv[size]=NULL;
+    if( !strcmp(sal_argv[0],"sal-smc") || !strcmp(sal_argv[0],"sal-bmc") || 
+	!strcmp(sal_argv[0],"sal-path-finder") ||
+	!strcmp(sal_argv[0],"sal-deadlock-checker")){
+
       if((pipe(pin) != 0) || 
 	 (pipe(perr) != 0) ||
 	 (pipe(pout) != 0)){
@@ -132,7 +116,7 @@ int main(int argc, char** argv){
         perror("couldn't close fd's");
         return -1;
       } else {
-	execvp(sal_exe, sal_argv);
+	execvp(sal_argv[0], sal_argv);
         perror("couldn't execvp");
         return -1;
       }
@@ -147,53 +131,23 @@ int main(int argc, char** argv){
 	while(1){
 	   int length;
 	   msg *response = NULL;
-	   msg *tmp = NULL;
 	   
 	   response = readSALMsg(pout[0]);
 	   if(response != NULL){
 	     length = parseString(response->data, response->bytesUsed);
 	     response->bytesUsed = length;
 	     
-	     if (bytesSend != NULL) {
-	       free(bytesSend);
-	       bytesSend = NULL;
-	     }
-	     bytesSend = (char *)calloc(SIZE,sizeof(char));
-	     if (bytesSend == NULL){
-	       fprintf(stderr,"\nCalloc failed in SalActor for bytesSend \n");
-	       return -1;
-	     }
-	     sprintf(bytesSend,"%d",response->bytesUsed);
-	     
-	     if (tmp != NULL){
-	       freeMsg(tmp);
-	       tmp = NULL;
-	     }
-	     tmp = makeMsg(MSG_BUFFSZ);
-	     if(tmp == NULL){
-	       fprintf(stderr, "makeMsg in %d failed(parent code)\n", getpid());
-	       return -1;
-	     }
-	     if(addToSALMsg(tmp, SIZE, bytesSend) != 0){
-	       fprintf(stderr, "addToSALMsg in %d failed(parent code)\n", getpid());
-	       return -1;
-	     }
-	     length = parseString(tmp->data, tmp->bytesUsed);
-	     tmp->bytesUsed = length;
-	     
-	     /*	     writeMsg(STDOUT_FILENO,tmp);*/
-	     /* writeMsg(STDOUT_FILENO, response);*/
-	     
-	     sendSALFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname,response->data);
-	     
+	     sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname,response->data);
 	   }
 	   if (response == NULL) break;
 	}
+	sleep(1);
 	sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
       }
     }   
     else {
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", messageIn->data);
+      freeArgv(sal_argc,sal_argv);
       continue;
     }
   }
