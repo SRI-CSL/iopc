@@ -8,8 +8,8 @@ if(!defined($ENV{IOPBINDIR})){
     my $iop = "$ENV{IOPBINDIR}"; #/bin";
 
     if($ARGV[0]){
-	system "java -ea -cp ${iop} g2d/jlambda/ReadEvalPrintLoop $ARGV[0]";
+	system "java -ea -cp ${iop}/iop.jar g2d/jlambda/ReadEvalPrintLoop $ARGV[0]";
     } else {
-	system "java -ea  -cp ${iop} g2d/jlambda/ReadEvalPrintLoop";
+	system "java -ea  -cp ${iop}/iop.jar g2d/jlambda/ReadEvalPrintLoop";
     }
 }
