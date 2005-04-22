@@ -35,7 +35,7 @@ static char* pvs_argv[] = {"pvs", "-raw", NULL};
 static char* myname = "pvs";
 static int pin[2], pout[2], perr[2];
 
-static int child_died = 0;
+static volatile int child_died = 0;
 
 static void pvs_wrapper_sigint_handler(int sig){
   char pvs_exit[] = "(excl:exit)\n";
@@ -107,7 +107,7 @@ int main(int argc, char** argv){
 
     /* for monitoring the error stream */
     errFdB.fd = perr[0];
-    errFdB.exit = &child_died;
+    errFdB.exit = child_died;
 
     if((close(pin[0]) !=  0) ||
        (close(perr[1]) !=  0) ||

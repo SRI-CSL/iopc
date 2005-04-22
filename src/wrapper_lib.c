@@ -125,7 +125,7 @@ void *echoErrorsSilently(void *arg){
   if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
     fprintf(stderr, "pthread_sigmask failed in echoErrorsSilentlyn");
   }
-  while(!(*(fdB.exit))){
+  while(!fdB.exit){
     errcode = echoSilently(fdB.fd, STDERR_FILENO);
     if(errcode <= 0){
       if(++failures > 5){ return NULL; }
@@ -143,8 +143,8 @@ void *wrapper_echoOutSilently(void *arg){
     return NULL;
   }
   fdB = *((fdBundle *)arg);
-  while(!(*(fdB.exit))){
-    echoMsgVolatile(fdB.fd, STDOUT_FILENO, fdB.exit);
+  while(!fdB.exit){
+    echoMsgVolatile(fdB.fd, STDOUT_FILENO, &fdB.exit);
   }
   return NULL;
 }

@@ -11,7 +11,8 @@
 #include "sal_lib.h"
 #include "argv.h"
 
-static int child_died = 0;
+static volatile int child_died = 0;
+
 
 static int requestNo = 0;
 static char* myname;
@@ -132,11 +133,11 @@ int main(int argc, char** argv){
 
       /* for monitoring the error stream of SAL */
       errFdB.fd = perr[0];
-      errFdB.exit = &child_died;
+      errFdB.exit = child_died;
 
       /* for monitoring the output stream of SAL */
       outFdB.fd = pout[0];
-      outFdB.exit = &child_died;
+      outFdB.exit = child_died;
     
 
       if((close(pin[0])  !=  0) ||
