@@ -23,8 +23,8 @@
 */
 
 void wrapper_sigint_handler(int sig);
-void *echoErrors(void *);
-void *wrapper_echoOut(void *);
+void *echoErrorsSilently(void *arg);
+void *wrapper_echoOutSilently(void *);
 void parseMaudeThenEcho(int, int);
 void parsePVSThenEcho(char* prompt, int from, int to);
 int parseString(char*, int);

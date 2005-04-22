@@ -47,7 +47,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag);
 int  sendMsg(int fd, msg*);
 int sendFormattedMsgFP(FILE*, char* fmt, ...);
 int sendFormattedMsgFD(int, char* fmt, ...);
-void echoMsg(int from, int to);
+void echoMsgVolatile(int from, int to,  volatile int* exitFlag);
 void echo2Maude(int from, int to);
 void echo2PVS(int from, int to);
 void* echoLoopDieOnFail(void* args);

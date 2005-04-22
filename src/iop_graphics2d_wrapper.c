@@ -34,8 +34,11 @@ static char* myName;
 static char  graphics_exe[] = "java";
 static char* graphics_argv[] = {"java", "-cp", NULL, "g2d.Main", NULL, NULL};
 
+static int child_died = 0;
+
 static void graphics_wrapper_sigchild_handler(int sig){
   fprintf(stderr, "%s died! Exiting\n", graphics_argv[3]);
+  child_died = 1;
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myName, myName);
 }
 
@@ -100,6 +103,15 @@ int main(int argc, char** argv){
     pthread_t errThread, outThread;
     msg* message = NULL;
     int requestNo = 0;
+    fdBundle  errFdB, outFdB;
+
+    /* for monitoring the error stream */
+    errFdB.fd = perr[0];
+    errFdB.exit = &child_died;
+
+    /* for monitoring the output stream */
+    outFdB.fd = pout[0];
+    outFdB.exit = &child_died;
 
     if((close(pin[0])  !=  0) ||
        (close(perr[1]) !=  0) ||
@@ -108,12 +120,12 @@ int main(int argc, char** argv){
       exit(EXIT_FAILURE);
     }
 
-    if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
-      fprintf(stderr, "Could not spawn echoErrors thread\n");
+    if(pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB)){
+      fprintf(stderr, "Could not spawn echoErrorsSilently thread\n");
       exit(EXIT_FAILURE);
     }
 
-    if(pthread_create(&outThread, NULL, wrapper_echoOut, &pout[0])){
+    if(pthread_create(&outThread, NULL, wrapper_echoOutSilently, &outFdB)){
       fprintf(stderr, "Could not spawn wrapper_echoOut thread\n");
       exit(EXIT_FAILURE);
     }

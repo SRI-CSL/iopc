@@ -6,15 +6,14 @@
 #include "sal_lib.h"
 
 
-int dead_sal = 0;
-
-msg* readSALMsg(int fd){
+msg* readSALMsg(fdBundle* fdB){
   fd_set rfds;
   struct timeval tv;
   int bytes = 0, finished = 0;
-  char buff[MSG_BUFFSZ];
-  msg* retval = makeMsg(MSG_BUFFSZ);
-  
+  char buff[BUFFSZ];
+  msg* retval = makeMsg(BUFFSZ);
+  int fd = fdB->fd;
+
   FD_ZERO(&rfds);
   FD_SET(fd, &rfds);
   
@@ -29,7 +28,7 @@ msg* readSALMsg(int fd){
   restart: 
     if (SAL_ACTOR_DEBUG)fprintf(stderr, "readSALMsg blocking on read.\n");
 
-    if(dead_sal){
+    if(*(fdB->exit)){
       if(select(fd+1, &rfds, NULL, NULL, &tv) == -1){
 	perror("select error:");
 	goto fail;
@@ -38,9 +37,9 @@ msg* readSALMsg(int fd){
 	return retval;
       }
       finished = 1;
-    } /* dead_sal */
+    } /* child_died */
 
-    if((bytes = read(fd, buff, MSG_BUFFSZ)) < 0){
+    if((bytes = read(fd, buff, BUFFSZ)) < 0){
       if(errno == EINTR){
 	if (SAL_ACTOR_DEBUG)fprintf(stderr,"readSALMsg  in %d restarting after being interrupted by a signal\n", getpid());
 	goto restart;
@@ -72,30 +71,12 @@ msg* readSALMsg(int fd){
 }
 
 void echoSAL(int from, int to){
-  char buff[MSG_BUFFSZ];
+  char buff[BUFFSZ];
   int bytesRead = 0;
-  bytesRead = read(from,buff,MSG_BUFFSZ);
+  bytesRead = read(from, buff,BUFFSZ);
   if(bytesRead > 0){
     write(to,buff,bytesRead);
   }
 }
 
-void *echoSALErrors(void *arg){
-  int fd;
-  sigset_t mask;
-  if(arg == NULL){
-    fprintf(stderr, "Bad arg to echoErrors\n");
-    return NULL;
-  }
-  fd = *((int *)arg);
-  if((sigemptyset(&mask) != 0) && (sigaddset(&mask, SIGCHLD) != 0)){
-    fprintf(stderr, "futzing with sigsets failed in echoErrors\n");
-  }
-  if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
-    fprintf(stderr, "pthread_sigmask failed in echoErrors\n");
-  }
-  while(!dead_sal)
-    echoSAL(fd, STDERR_FILENO);
-  return NULL;
-}
 

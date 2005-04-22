@@ -35,6 +35,8 @@ static char* pvs_argv[] = {"pvs", "-raw", NULL};
 static char* myname = "pvs";
 static int pin[2], pout[2], perr[2];
 
+static int child_died = 0;
+
 static void pvs_wrapper_sigint_handler(int sig){
   char pvs_exit[] = "(excl:exit)\n";
   if(child > 0){
@@ -45,6 +47,7 @@ static void pvs_wrapper_sigint_handler(int sig){
 
 static void pvs_wrapper_sigchild_handler(int sig){
   fprintf(stderr, "PVS died! Exiting\n");
+  child_died = 1;
   exit(EXIT_FAILURE);
 }
 
@@ -73,81 +76,94 @@ int main(int argc, char** argv){
      (pipe(perr) != 0) ||
      (pipe(pout) != 0)){
     perror("couldn't make pipes");
-    return -1;
+    exit(EXIT_FAILURE);
+  }
+  child = fork();
+  if(child < 0){
+    perror("couldn't fork");
+    exit(EXIT_FAILURE);
+  } 
+  if(child == 0){
+    /* i'm destined to be pvs */
+    if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
+       (dup2(perr[1], STDERR_FILENO) < 0) ||
+       (dup2(pout[1], STDOUT_FILENO) < 0)){
+      perror("couldn't dup fd's");
+      exit(EXIT_FAILURE);
+    }
+    if((close(pin[0]) !=  0) ||
+       (close(perr[1]) !=  0) ||
+       (close(pout[1]) !=  0)){
+      perror("couldn't close fd's");
+      exit(EXIT_FAILURE);
+    }
+    execvp(pvs_exe, pvs_argv);
+    perror("couldn't execvp");
+    exit(EXIT_FAILURE);
   } else {
-    child = fork();
-    if(child < 0){
-      perror("couldn't fork");
-      return -1;
-    } else if(child == 0){
-      /* i'm destined to be pvs */
-      if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
-         (dup2(perr[1], STDERR_FILENO) < 0) ||
-         (dup2(pout[1], STDOUT_FILENO) < 0)){
-        perror("couldn't dup fd's");
-        return -1;
-      } else if((close(pin[0]) !=  0) ||
-                (close(perr[1]) !=  0) ||
-                (close(pout[1]) !=  0)){
-        perror("couldn't close fd's");
-        return -1;
-      } else {
-	execvp(pvs_exe, pvs_argv);
-        perror("couldn't execvp");
-        return -1;
-      }
-    } else {
-      /* i'm the boss */
-      pthread_t errThread;
+    /* i'm the boss */
+    pthread_t errThread;
+    fdBundle  errFdB;
 
-      /*      sleep(2); */
+    /* for monitoring the error stream */
+    errFdB.fd = perr[0];
+    errFdB.exit = &child_died;
 
-      if(pthread_create(&errThread, NULL, echoErrors, &perr[0])){
-	fprintf(stderr, "Could not spawn echoErrors thread\n");
-	return -1;
-      }
+    if((close(pin[0]) !=  0) ||
+       (close(perr[1]) !=  0) ||
+       (close(pout[1]) !=  0)){
+      perror("couldn't close fd's");
+      exit(EXIT_FAILURE);
+    }
+    
+    /*      sleep(2); */
+    
+    if(pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB)){
+      fprintf(stderr, "Could not spawn echoErrorsSilently thread\n");
+      exit(EXIT_FAILURE);
+    }
+      
+    if(WRAPPER_DEBUG)fprintf(stderr, "Listening to PVS\n");
+    parsePVSThenEcho("\ncl-user(", pout[0], STDOUT_FILENO);
+
+    write(pin[1], "(in-package 'pvs)\n", strlen("(in-package 'pvs)\n"));
+    
+    if(WRAPPER_DEBUG)fprintf(stderr, "Listening to PVS\n");
+    parsePVSThenEcho("\npvs(", pout[0], STDOUT_FILENO);
+    
+    while(1){
+      int length, retval;
+      msg *query = NULL, *response = NULL;
+      char *sender, *command;
+      
+      if(WRAPPER_DEBUG)fprintf(stderr, "Listening to IO\n");
+      query = acceptMsg(STDIN_FILENO);
+      if(query == NULL) continue;
+      retval = parseActorMsg(query->data, &sender, &command);
+      
+      write(pin[1], command, strlen(command));
+      write(pin[1], "\n", 1);
       
       if(WRAPPER_DEBUG)fprintf(stderr, "Listening to PVS\n");
-      parsePVSThenEcho("\ncl-user(", pout[0], STDOUT_FILENO);
-
-      write(pin[1], "(in-package 'pvs)\n", strlen("(in-package 'pvs)\n"));
-
-      if(WRAPPER_DEBUG)fprintf(stderr, "Listening to PVS\n");
-      parsePVSThenEcho("\npvs(", pout[0], STDOUT_FILENO);
-
-      while(1){
-	int length, retval;
-	msg *query = NULL, *response = NULL;
-	char *sender, *command;
-
-	if(WRAPPER_DEBUG)fprintf(stderr, "Listening to IO\n");
-	query = acceptMsg(STDIN_FILENO);
-	if(query == NULL) continue;
-	retval = parseActorMsg(query->data, &sender, &command);
+      
+      response = readPVSMsg("\npvs(", pout[0]);
+      if(response != NULL){
+	length = parseString(response->data, response->bytesUsed);
+	response->bytesUsed = length;
 	
-	write(pin[1], command, strlen(command));
-	write(pin[1], "\n", 1);
-
-	if(WRAPPER_DEBUG)fprintf(stderr, "Listening to PVS\n");
-  
-	response = readPVSMsg("\npvs(", pout[0]);
-	if(response != NULL){
-	  length = parseString(response->data, response->bytesUsed);
-	  response->bytesUsed = length;
-	  
-	  sendFormattedMsgFP(stdout, "%s\n%s\n%s\n", sender, myname, response->data);
-
-	  if(WRAPPER_DEBUG){
-	    writeMsg(STDERR_FILENO, response);
-	    fprintf(stderr, "\nparseThenEcho wrote %d bytes\n", response->bytesUsed);
-	  }
+	sendFormattedMsgFP(stdout, "%s\n%s\n%s\n", sender, myname, response->data);
+	
+	if(WRAPPER_DEBUG){
+	  writeMsg(STDERR_FILENO, response);
+	  fprintf(stderr, "\nparseThenEcho wrote %d bytes\n", response->bytesUsed);
 	}
-
-	freeMsg(query);
-	freeMsg(response);
-	
       }
+      
+      freeMsg(query);
+      freeMsg(response);
+      
     }
   }
 }
+
 

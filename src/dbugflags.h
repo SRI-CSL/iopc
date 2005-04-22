@@ -43,5 +43,6 @@
 #define SOCKET_LIB_DEBUG          0
 #define WRAPPER_DEBUG             0
 #define MAUDE_WRAPPER_DEBUG       0
+#define SAL_ACTOR_DEBUG           0
 
 

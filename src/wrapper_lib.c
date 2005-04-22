@@ -94,36 +94,57 @@ void parsePVSThenEcho(char *prompt, int from, int to){
   }
 }
 
+static int echoSilently(int from, int to){
+  char buff[BUFFSZ];
+  int bytesRead = 0, bytesLeft = 0, bytesWritten = 0;
+  bytesRead = read(from, buff, BUFFSZ);
+  if(bytesRead <= 0){ return bytesRead; }
+  bytesLeft = bytesRead;
+  while(bytesLeft > 0){
+    bytesWritten = write(to, buff, bytesLeft);
+    if(bytesWritten < 0){
+      if(errno != EINTR){ return -1; } else { continue; }
+    }
+    bytesLeft -= bytesWritten;
+  }
+  return bytesRead;
+}
 
-void *echoErrors(void *arg){
-  int fd;
+void *echoErrorsSilently(void *arg){
+  fdBundle fdB;
+  int errcode, failures = 0;
   sigset_t mask;
   if(arg == NULL){
-    fprintf(stderr, "Bad arg to echoErrors\n");
+    fprintf(stderr, "Bad arg to echoErrorsSilently\n");
     return NULL;
   }
-  fd = *((int *)arg);
+  fdB = *((fdBundle *)arg);
   if((sigemptyset(&mask) != 0) && (sigaddset(&mask, SIGCHLD) != 0)){
-    fprintf(stderr, "futzing with sigsets failed in echoErrors\n");
+    fprintf(stderr, "futzing with sigsets failed in echoErrorsSilently\n");
   }
   if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
-    fprintf(stderr, "pthread_sigmask failed in echoErrors\n");
+    fprintf(stderr, "pthread_sigmask failed in echoErrorsSilentlyn");
   }
-  while(1)
-    echo(fd, STDERR_FILENO);
+  while(!(*(fdB.exit))){
+    errcode = echoSilently(fdB.fd, STDERR_FILENO);
+    if(errcode <= 0){
+      if(++failures > 5){ return NULL; }
+    } else {
+      failures = 0;
+    }
+  }
   return NULL;
 }
 
-
-void *wrapper_echoOut(void *arg){
-  int fd;
+void *wrapper_echoOutSilently(void *arg){
+  fdBundle fdB;
   if(arg == NULL){
-    fprintf(stderr, "Bad arg to echoOut\n");
+    fprintf(stderr, "Bad arg to echoOutSilently\n");
     return NULL;
   }
-  fd = *((int *)arg);
-  while(1){
-    echoMsg(fd, STDOUT_FILENO);
+  fdB = *((fdBundle *)arg);
+  while(!(*(fdB.exit))){
+    echoMsgVolatile(fdB.fd, STDOUT_FILENO, fdB.exit);
   }
   return NULL;
 }

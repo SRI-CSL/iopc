@@ -64,5 +64,9 @@ typedef struct _echofds {
 } echofds;
 
 
+typedef struct _fdBundle {
+  int fd;
+  int* volatile exit;
+} fdBundle;
 
 #endif

@@ -29,8 +29,6 @@
 #include "actor.h"
 #include "dbugflags.h"
 
-#define MSG_BUFFSZ 1024
-
 /* statics */
 static int setFlag(int fd, int flags);
 static int clearFlag(int fd, int flags);
@@ -167,17 +165,17 @@ msg* readMaudeMsg(int fd){
   char prompt[] = "Maude> ";
   char *promptPointer = NULL;
   int bytes = 0, iteration = 0;
-  msg* retval = makeMsg(MSG_BUFFSZ);
+  msg* retval = makeMsg(BUFFSZ);
   if(retval == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
     goto fail;
   }
 
   while(1){
-    char buff[MSG_BUFFSZ];
+    char buff[BUFFSZ];
     mannounce("readMaudeMsg\t:\tcommencing a read\n");
   restart:
-    if((bytes = read(fd, buff, MSG_BUFFSZ)) < 0){
+    if((bytes = read(fd, buff, BUFFSZ)) < 0){
       mannounce("readMaudeMsg\t:\tread error read returned %d bytes\n", bytes);
       if(errno == EINTR){
 	mannounce("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
@@ -189,7 +187,7 @@ msg* readMaudeMsg(int fd){
       }
       fprintf(stderr, "Read  in %d returned with nothing\n", getpid());
       return retval;
-    } /* if((bytes = read(fd, buff, MSG_BUFFSZ)) < 0) */
+    } /* if((bytes = read(fd, buff, BUFFSZ)) < 0) */
 
     mannounce("readMaudeMsg\t:\tread read %d bytes\n", bytes);
 
@@ -264,15 +262,15 @@ msg* readPVSMsg(char *prompt, int fd){
   /*  char prompt[] = "\ncl-user(";  */
   char *promptPointer = NULL;
   int bytes = 0;
-  char buff[MSG_BUFFSZ];
-  msg* retval = makeMsg(MSG_BUFFSZ);
+  char buff[BUFFSZ];
+  msg* retval = makeMsg(BUFFSZ);
   if(retval == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
     goto fail;
   }
   while(1){
   restart:
-    if((bytes = read(fd, buff, MSG_BUFFSZ)) < 0){
+    if((bytes = read(fd, buff, BUFFSZ)) < 0){
       if(errno == EINTR){
 	mannounce("readPVSMsg  in %d restarting after being interrupted by a signal\n", getpid());
 	goto restart;
@@ -305,11 +303,11 @@ msg* readPVSMsg(char *prompt, int fd){
 
 msg* readMsg(int fd){
   int bytes = 0;
-  char buff[MSG_BUFFSZ];
+  char buff[BUFFSZ];
   msg* retval = NULL;
  restart:
   mannounce("readMsg  in %d starting (or restarting)\n", getpid());
-  if((bytes = read(fd, buff, MSG_BUFFSZ)) < 0){
+  if((bytes = read(fd, buff, BUFFSZ)) < 0){
     if(errno == EINTR){
       mannounce("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
       goto restart;
@@ -330,7 +328,7 @@ msg* readMsg(int fd){
   }
   if(setFlag(fd, O_NONBLOCK) < 0) goto fail;
   mannounce("readMsg in %d setFlag to O_NONBLOCK\n", getpid());
-  if((retval = makeMsg(MSG_BUFFSZ)) == NULL){
+  if((retval = makeMsg(BUFFSZ)) == NULL){
     fprintf(stderr, 
 	    "makeMsg in %d failed\n", getpid());
     goto exit;
@@ -342,7 +340,7 @@ msg* readMsg(int fd){
     goto exit;
   }
   mannounce("readMsg in %d added  buff to Msg\n", getpid());
-  while(usleep(1), (bytes = read(fd, buff, MSG_BUFFSZ)) > 0){
+  while(usleep(1), (bytes = read(fd, buff, BUFFSZ)) > 0){
     mannounce("readMsg in %d read in non-blocking mode (bytes = %d)\n", getpid(), bytes);
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg  in %d failed\n", getpid());
@@ -374,7 +372,7 @@ msg* readMsg(int fd){
 
 msg* readMsgVolatile(int fd, volatile int* exitFlag){
   int bytes = 0;
-  char buff[MSG_BUFFSZ];
+  char buff[BUFFSZ];
   msg* retval = NULL;
  restart:
   if(*exitFlag){
@@ -383,7 +381,7 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   }
   mannounce("readMsgVolatile  in %d (exitFlag = %d) starting (or restarting)\n", 
 	    getpid(), *exitFlag);
-  if((bytes = read(fd, buff, MSG_BUFFSZ)) < 0){
+  if((bytes = read(fd, buff, BUFFSZ)) < 0){
     if(*exitFlag){ 
       mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
       return NULL; 
@@ -420,7 +418,7 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL; 
   }
-  if((retval = makeMsg(MSG_BUFFSZ)) == NULL){
+  if((retval = makeMsg(BUFFSZ)) == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
     goto exit;
   }
@@ -440,7 +438,7 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     return NULL;
   }
   while(usleep(1), 
-	(bytes = read(fd, buff, MSG_BUFFSZ)) > 0){
+	(bytes = read(fd, buff, BUFFSZ)) > 0){
     if(*exitFlag){ 
       mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
       return NULL; 
@@ -649,7 +647,7 @@ char* readline(int fd){
 
 
 msg* acceptMsg(int fd){
-  char buff[MSG_BUFFSZ];
+  char buff[BUFFSZ];
   int bytes, bytesIncoming, errcode;
   msg* retval;
   errcode = readInt(fd, &bytesIncoming);
@@ -659,7 +657,7 @@ msg* acceptMsg(int fd){
   if(retval == NULL) goto fail;
   while(1){
   restart:
-    if((bytes = read(fd, buff, (bytesIncoming < MSG_BUFFSZ ? bytesIncoming : MSG_BUFFSZ))) < 0){
+    if((bytes = read(fd, buff, (bytesIncoming < BUFFSZ ? bytesIncoming : BUFFSZ))) < 0){
       if(errno == EINTR){
 	mannounce("acceptMsg: restarting after being interrupted by a signal\n");
 	goto restart;
@@ -694,7 +692,7 @@ msg* acceptMsg(int fd){
 }
 
 msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
-  char buff[MSG_BUFFSZ];
+  char buff[BUFFSZ];
   int bytes, bytesIncoming, errcode;
   msg* retval;
   mannounce("acceptMsgVolatile: calling readInt\n");
@@ -714,7 +712,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
   while(1){
   restart:
     if(*exitFlag) return NULL;
-    if((bytes = read(fd, buff, (bytesIncoming < MSG_BUFFSZ ? bytesIncoming : MSG_BUFFSZ))) < 0){
+    if((bytes = read(fd, buff, (bytesIncoming < BUFFSZ ? bytesIncoming : BUFFSZ))) < 0){
       if(errno == EINTR){
 	mannounce("acceptMsgVolatile: restarting after being interrupted by a signal\n");
 	goto restart;
@@ -778,7 +776,7 @@ int sendFormattedMsgFP(FILE* fp, char* fmt, ...){
   double dval;
   char numbuff[16];
   va_list ap;
-  msg* m = makeMsg(MSG_BUFFSZ);
+  msg* m = makeMsg(BUFFSZ);
   if(m == NULL) return -1;
   va_start(ap, fmt);
   for(p = fmt; *p; p++){
@@ -819,7 +817,7 @@ int sendFormattedMsgFD(int fd, char* fmt, ...){
   double dval;
   char numbuff[16];
   va_list ap;
-  msg* m = makeMsg(MSG_BUFFSZ);
+  msg* m = makeMsg(BUFFSZ);
   if(m == NULL) return -1;
   va_start(ap, fmt);
   for(p = fmt; *p; p++){
@@ -854,9 +852,9 @@ int sendFormattedMsgFD(int fd, char* fmt, ...){
   return m->bytesUsed;
 }
 
-void echoMsg(int from, int to){
+void echoMsgVolatile(int from, int to, volatile int* exitFlag){
   msg* message;
-  message = acceptMsg(from);
+  message = acceptMsgVolatile(from, exitFlag);
   if(message != NULL){
     sendMsg(to, message);
     if(MSG_DEBUG){

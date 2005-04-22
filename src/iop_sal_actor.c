@@ -11,7 +11,7 @@
 #include "sal_lib.h"
 #include "argv.h"
 
-extern int dead_sal;
+static int child_died = 0;
 
 static int requestNo = 0;
 static char* myname;
@@ -30,7 +30,7 @@ static void sal_actor_sigchild_handler(int sig){
   if (SAL_ACTOR_DEBUG){
     fprintf(stderr, "\nSAL died! Exiting\n"); 
   }
-  dead_sal = 1;
+  child_died = 1;
 }
 
 static void sal_actor_installHandler(){
@@ -106,6 +106,7 @@ int main(int argc, char** argv){
       perror("couldn't fork");
       exit(EXIT_FAILURE);
     }
+
     if(child == 0){
       /* i'm destined to be sal */
       if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
@@ -126,9 +127,18 @@ int main(int argc, char** argv){
     }else { 
       /* I am the boss */
       msg *response = NULL;
-
       pthread_t errThread;
+      fdBundle  errFdB, outFdB;
+
+      /* for monitoring the error stream of SAL */
+      errFdB.fd = perr[0];
+      errFdB.exit = &child_died;
+
+      /* for monitoring the output stream of SAL */
+      outFdB.fd = pout[0];
+      outFdB.exit = &child_died;
     
+
       if((close(pin[0])  !=  0) ||
 	 (close(perr[1]) !=  0) ||
 	 (close(pout[1]) !=  0)){
@@ -136,12 +146,13 @@ int main(int argc, char** argv){
 	exit(EXIT_FAILURE);
       }
       
-      if(pthread_create(&errThread, NULL, echoSALErrors, &perr[0])){
-	fprintf(stderr, "Could not spawn echoErrors thread\n");
+
+      if(pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB)){
+	fprintf(stderr, "Could not spawn echoErrorsSilently thread\n");
 	exit(EXIT_FAILURE);
       }
-    
-      response = readSALMsg(pout[0]);
+
+      response = readSALMsg(&outFdB);
 	
       if((response != NULL) && (response->bytesUsed > 0)){
 	sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname, response->data);
