@@ -9,7 +9,7 @@ typedef enum {EC_ERRNO = 0, EC_EAI = 1, EC_GETDATE = 2, EC_NONE = 3} EC_ERRTYPE;
 	ec_warn();\
 	ec_cleanup_bgn:\
 	{\
-		bool ec_in_cleanup;\
+		int ec_in_cleanup;\
 		ec_in_cleanup = 1;
 
 #define EC_CLEANUP_END\

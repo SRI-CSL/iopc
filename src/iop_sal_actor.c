@@ -1,3 +1,10 @@
+/* 
+   N.B. This code is testing the ec.h error macros!
+   See: "Advanced UNIX Programming" 
+         Marc J. Rochkind
+         2nd Edition 2004
+	 Addison Wesley.
+*/
 #include "cheaders.h"
 #include "constants.h"
 #include "types.h"
@@ -10,9 +17,9 @@
 #include "wrapper_lib.h"
 #include "sal_lib.h"
 #include "argv.h"
+#include "ec.h"
 
 static int child_died = 0;
-
 
 static int requestNo = 0;
 static char* myname;
@@ -34,19 +41,24 @@ static void sal_actor_sigchild_handler(int sig){
   child_died = 1;
 }
 
-static void sal_actor_installHandler(){
+static int sal_actor_installHandler(){
   struct sigaction sigactchild;
   struct sigaction sigactint;
-
   sigactchild.sa_handler = sal_actor_sigchild_handler;
   sigactchild.sa_flags = SA_NOCLDSTOP;
-  sigfillset(&sigactchild.sa_mask);
-  sigaction(SIGCHLD, &sigactchild, NULL);
+  ec_neg1( sigfillset(&sigactchild.sa_mask) );
+  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
 
   sigactint.sa_handler = sal_actor_sigint_handler;
   sigactint.sa_flags = 0;
-  sigfillset(&sigactint.sa_mask);
-  sigaction(SIGINT, &sigactint, NULL);
+  ec_neg1( sigfillset(&sigactint.sa_mask) );
+  ec_neg1( sigaction(SIGINT, &sigactint, NULL) );
+  return 0;
+
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
+
 }
 
 int main(int argc, char** argv){
@@ -57,7 +69,9 @@ int main(int argc, char** argv){
     fprintf(stderr, "didn't understand: (argv == NULL)\n");
     exit(EXIT_FAILURE);
   }
-  sal_actor_installHandler();
+
+  ec_neg1( sal_actor_installHandler() );
+
   myname = argv[0];
   while(1){
     requestNo++;
@@ -81,7 +95,7 @@ int main(int argc, char** argv){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", messageIn->data);
       continue;
     }
-    if ((sal_argc = makeArgv(body," \t\n",&sal_argv)) <=1 ){
+    if ((sal_argc = makeArgv(body," \t\n",&sal_argv)) <= 1 ){
       fprintf(stderr,"\nAn error occured in makeArgv\n");
       exit(EXIT_FAILURE);
     }
@@ -95,37 +109,29 @@ int main(int argc, char** argv){
       continue;
     }
   
-    if((pipe(pin) != 0) || 
-       (pipe(perr) != 0) ||
-       (pipe(pout) != 0)){
-      perror("couldn't make pipes");
-      exit(EXIT_FAILURE);
-    } 
+    ec_neg1( pipe(pin) );
+    ec_neg1( pipe(perr) );
+    ec_neg1( pipe(pout) );
+
     /*it's time to fork */
-    child = fork();
-    if(child < 0){
-      perror("couldn't fork");
-      exit(EXIT_FAILURE);
-    }
+    ec_neg1( child = fork() );
 
     if(child == 0){
       /* i'm destined to be sal */
-      if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
-	 (dup2(perr[1], STDERR_FILENO) < 0) ||
-	 (dup2(pout[1], STDOUT_FILENO) < 0)){
-	perror("couldn't dup fd's");
-	exit(EXIT_FAILURE);
-      }
-      if((close(pin[0]) !=  0) ||
-	 (close(perr[1]) !=  0) ||
-	 (close(pout[1]) !=  0)){
-        perror("couldn't close fd's");
-        exit(EXIT_FAILURE);
-      }
+
+      ec_neg1( dup2(pin[0],  STDIN_FILENO) );
+      ec_neg1( dup2(perr[1], STDERR_FILENO) );
+      ec_neg1( dup2(pout[1], STDOUT_FILENO) );
+
+      ec_neg1( close(pin[0]) );
+      ec_neg1( close(perr[1]) );
+      ec_neg1( close(pout[1]) );
+
       execvp(sal_argv[0], sal_argv);
       perror("couldn't execvp");
       exit(EXIT_FAILURE);
-    }else { 
+
+    } else { 
       /* I am the boss */
       msg *response = NULL;
       pthread_t errThread;
@@ -139,19 +145,11 @@ int main(int argc, char** argv){
       outFdB.fd = pout[0];
       outFdB.exit = &child_died;
     
-
-      if((close(pin[0])  !=  0) ||
-	 (close(perr[1]) !=  0) ||
-	 (close(pout[1]) !=  0)){
-	perror("couldn't close fd's");
-	exit(EXIT_FAILURE);
-      }
+      ec_neg1( close(pin[0]) );
+      ec_neg1( close(perr[1]) );
+      ec_neg1( close(pout[1]) );
       
-
-      if(pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB)){
-	fprintf(stderr, "Could not spawn echoErrorsSilently thread\n");
-	exit(EXIT_FAILURE);
-      }
+      ec_rv( pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB) );
 
       response = readSALMsg(&outFdB);
 	
@@ -162,6 +160,13 @@ int main(int argc, char** argv){
     usleep(100);
     sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
   }
+
+  exit(EXIT_SUCCESS);
+
+EC_CLEANUP_BGN
+  exit(EXIT_FAILURE);
+EC_CLEANUP_END
+
 }
 
 
