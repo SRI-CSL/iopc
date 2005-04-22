@@ -22,9 +22,10 @@
 #include "ec.h"
 #include "macrostr.h"
 
-#ifndef _MAC
+#ifndef BSD_DERIVED
 #include <sys/msg.h>
 #endif
+
 #include <sys/sem.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
