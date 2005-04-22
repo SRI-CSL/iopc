@@ -28,7 +28,7 @@ msg* readSALMsg(fdBundle* fdB){
   restart: 
     if (SAL_ACTOR_DEBUG)fprintf(stderr, "readSALMsg blocking on read.\n");
 
-    if(fdB->exit){
+    if(*(fdB->exit)){
       if(select(fd+1, &rfds, NULL, NULL, &tv) == -1){
 	perror("select error:");
 	goto fail;

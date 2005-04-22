@@ -66,7 +66,7 @@ typedef struct _echofds {
 
 typedef struct _fdBundle {
   int fd;
-  volatile int exit;
+  int * volatile exit;
 } fdBundle;
 
 #endif
