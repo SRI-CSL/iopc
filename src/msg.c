@@ -648,16 +648,17 @@ char* readline(int fd){
 
 msg* acceptMsg(int fd){
   char buff[BUFFSZ];
-  int bytes, bytesIncoming, errcode;
+  int bytes, bytesIncoming, bytesRemaining, errcode;
   msg* retval;
   errcode = readInt(fd, &bytesIncoming);
   if((errcode < 0) || (bytesIncoming <= 0)) return NULL;
   mannounce("acceptMsg: expecting %d bytes\n", bytesIncoming);
   retval = makeMsg(bytesIncoming + 1);
   if(retval == NULL) goto fail;
+  bytesRemaining = bytesIncoming;
   while(1){
   restart:
-    if((bytes = read(fd, buff, (bytesIncoming < BUFFSZ ? bytesIncoming : BUFFSZ))) < 0){
+    if((bytes = read(fd, buff, (bytesRemaining < BUFFSZ ? bytesRemaining : BUFFSZ))) < 0){
       if(errno == EINTR){
 	mannounce("acceptMsg: restarting after being interrupted by a signal\n");
 	goto restart;
@@ -676,9 +677,11 @@ msg* acceptMsg(int fd){
       retval = NULL;
       goto fail;
     }
-    if(retval->bytesUsed >= bytesIncoming){
+    /* iam 05/04/22 hopefully stop message collisions */
+    bytesRemaining -= bytes;
+    if(bytesRemaining <= 0){
       mannounce("acceptMsg: retval->bytesUsed =  %d\n", retval->bytesUsed);
-      if(retval->bytesUsed > bytesIncoming){
+      if(bytesRemaining < 0){
 	fprintf(stderr, 
 		"acceptMsg: got %d more bytes than expected\n",
 		retval->bytesUsed - bytesIncoming);
@@ -693,7 +696,7 @@ msg* acceptMsg(int fd){
 
 msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
   char buff[BUFFSZ];
-  int bytes, bytesIncoming, errcode;
+  int bytes, bytesIncoming, bytesRemaining, errcode;
   msg* retval;
   mannounce("acceptMsgVolatile: calling readInt\n");
   errcode = readInt(fd, &bytesIncoming);
@@ -709,10 +712,11 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
   mannounce("acceptMsgVolatile: expecting %d bytes\n", bytesIncoming);
   retval = makeMsg(bytesIncoming + 1);
   if(retval == NULL) goto fail;
+  bytesRemaining = bytesIncoming;
   while(1){
   restart:
     if(*exitFlag) return NULL;
-    if((bytes = read(fd, buff, (bytesIncoming < BUFFSZ ? bytesIncoming : BUFFSZ))) < 0){
+    if((bytes = read(fd, buff, (bytesRemaining < BUFFSZ ? bytesRemaining : BUFFSZ))) < 0){
       if(errno == EINTR){
 	mannounce("acceptMsgVolatile: restarting after being interrupted by a signal\n");
 	goto restart;
@@ -724,9 +728,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
       fprintf(stderr, "acceptMsgVolatile: read  returned with nothing\n");
       return NULL;
     }
-
     mannounce("acceptMsgVolatile: got %d bytes\n", bytes);
-
     if(*exitFlag){
       mannounce("acceptMsgVolatile: bailing with NULL,  *exitFlag is true\n");
      return NULL;
@@ -737,8 +739,10 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
       retval = NULL;
       goto fail;
     }
-    if(retval->bytesUsed >= bytesIncoming){
-      if(retval->bytesUsed > bytesIncoming){
+    /* iam 05/04/22 hopefully stop message collisions */
+    bytesRemaining -= bytes;
+    if(bytesRemaining <= 0){
+      if(bytesRemaining < 0){
 	fprintf(stderr, 
 		"acceptMsgVolatile: got %d more bytes than expected\n",
 		retval->bytesUsed - bytesIncoming);

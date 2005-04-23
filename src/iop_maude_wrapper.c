@@ -32,6 +32,7 @@
 static char current_dir[PATH_MAX + 1];
 static char* maudebindir;
 static char* self;
+
 #ifdef _LINUX
 static char maude_exe[] = "maude.linux";
 #elif defined(_MAC)

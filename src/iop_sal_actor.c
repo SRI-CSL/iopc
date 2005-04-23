@@ -15,9 +15,9 @@
 #include "externs.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h"
-#include "sal_lib.h"
 #include "argv.h"
 #include "ec.h"
+#include "sal_lib.h"
 
 static int child_died = 0;
 
@@ -27,39 +27,21 @@ static char ** sal_argv;
 static int pin[2], pout[2], perr[2];
 static int sal_argc;
 
-static void sal_actor_sigint_handler(int sig){
+static void intr_handler(int sig){
   char sal_exit[] = "(exit)\n";
   if(child > 0){
     write(pin[1], sal_exit, strlen(sal_exit));
   }
   _exit(EXIT_FAILURE);
 }
-static void sal_actor_sigchild_handler(int sig){
-  if (SAL_ACTOR_DEBUG){
+
+static void chld_handler(int sig){
+  if(SAL_ACTOR_DEBUG){
     fprintf(stderr, "\nSAL died! Exiting\n"); 
   }
   child_died = 1;
 }
 
-static int sal_actor_installHandler(){
-  struct sigaction sigactchild;
-  struct sigaction sigactint;
-  sigactchild.sa_handler = sal_actor_sigchild_handler;
-  sigactchild.sa_flags = SA_NOCLDSTOP;
-  ec_neg1( sigfillset(&sigactchild.sa_mask) );
-  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
-
-  sigactint.sa_handler = sal_actor_sigint_handler;
-  sigactint.sa_flags = 0;
-  ec_neg1( sigfillset(&sigactint.sa_mask) );
-  ec_neg1( sigaction(SIGINT, &sigactint, NULL) );
-  return 0;
-
-EC_CLEANUP_BGN
-  return -1;
-EC_CLEANUP_END
-
-}
 
 int main(int argc, char** argv){
   msg *messageIn = NULL, *messageOut = NULL;
@@ -70,7 +52,7 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
-  ec_neg1( sal_actor_installHandler() );
+  ec_neg1( wrapper_installHandler(chld_handler, intr_handler) );
 
   myname = argv[0];
   while(1){
@@ -135,7 +117,7 @@ int main(int argc, char** argv){
       /* I am the boss */
       msg *response = NULL;
       pthread_t errThread;
-      fdBundle  errFdB, outFdB;
+      fdBundle errFdB, outFdB;
 
       /* for monitoring the error stream of SAL */
       errFdB.fd = perr[0];
@@ -144,7 +126,7 @@ int main(int argc, char** argv){
       /* for monitoring the output stream of SAL */
       outFdB.fd = pout[0];
       outFdB.exit = &child_died;
-    
+
       ec_neg1( close(pin[0]) );
       ec_neg1( close(perr[1]) );
       ec_neg1( close(pout[1]) );
@@ -152,7 +134,7 @@ int main(int argc, char** argv){
       ec_rv( pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB) );
 
       response = readSALMsg(&outFdB);
-	
+
       if((response != NULL) && (response->bytesUsed > 0)){
 	sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname, response->data);
       }

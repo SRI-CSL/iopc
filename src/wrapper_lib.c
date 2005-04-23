@@ -27,7 +27,7 @@
 #include "msg.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h"
-
+#include "ec.h"
 
 extern pid_t child;
 
@@ -40,22 +40,24 @@ void wrapper_sigint_handler(int sig){
   _exit(EXIT_FAILURE);
 }
 
-static void wrapper_sigchild_handler(int sig){
-  fprintf(stderr, "wrapper's child died! Exiting\n");
-  exit(EXIT_FAILURE);
-}
-
-void wrapper_installHandler(){
+int wrapper_installHandler(void (*chld_fun)(int), void (*intr_fun)(int)){
   struct sigaction sigactchild;
   struct sigaction sigactint;
-  sigactchild.sa_handler = wrapper_sigchild_handler;
-  sigactchild.sa_flags = 0;
-  sigfillset(&sigactchild.sa_mask);
-  sigaction(SIGCHLD, &sigactchild, NULL);
-  sigactint.sa_handler = wrapper_sigint_handler;
+  sigactchild.sa_handler = chld_fun;
+  sigactchild.sa_flags = SA_NOCLDSTOP;
+  ec_neg1( sigfillset(&sigactchild.sa_mask) );
+  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
+
+  sigactint.sa_handler = intr_fun;
   sigactint.sa_flags = 0;
-  sigfillset(&sigactint.sa_mask);
-  sigaction(SIGINT, &sigactint, NULL);
+  ec_neg1( sigfillset(&sigactint.sa_mask) );
+  ec_neg1( sigaction(SIGINT, &sigactint, NULL) );
+  return 0;
+
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
+
 }
 
 void parseMaudeThenEcho(int from, int to){
@@ -113,18 +115,20 @@ static int echoSilently(int from, int to){
 void *echoErrorsSilently(void *arg){
   fdBundle fdB;
   int errcode, failures = 0;
-  sigset_t mask;
+  /*  sigset_t mask; */
   if(arg == NULL){
     fprintf(stderr, "Bad arg to echoErrorsSilently\n");
     return NULL;
   }
   fdB = *((fdBundle *)arg);
+  /*
   if((sigemptyset(&mask) != 0) && (sigaddset(&mask, SIGCHLD) != 0)){
     fprintf(stderr, "futzing with sigsets failed in echoErrorsSilently\n");
   }
   if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
     fprintf(stderr, "pthread_sigmask failed in echoErrorsSilentlyn");
   }
+  */
   while(!(*(fdB.exit))){
     errcode = echoSilently(fdB.fd, STDERR_FILENO);
     if(errcode <= 0){
