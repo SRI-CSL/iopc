@@ -115,20 +115,18 @@ static int echoSilently(int from, int to){
 void *echoErrorsSilently(void *arg){
   fdBundle fdB;
   int errcode, failures = 0;
-  /*  sigset_t mask; */
+  sigset_t mask; 
   if(arg == NULL){
     fprintf(stderr, "Bad arg to echoErrorsSilently\n");
     return NULL;
   }
   fdB = *((fdBundle *)arg);
-  /*
   if((sigemptyset(&mask) != 0) && (sigaddset(&mask, SIGCHLD) != 0)){
     fprintf(stderr, "futzing with sigsets failed in echoErrorsSilently\n");
   }
   if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
     fprintf(stderr, "pthread_sigmask failed in echoErrorsSilentlyn");
   }
-  */
   while(!(*(fdB.exit))){
     errcode = echoSilently(fdB.fd, STDERR_FILENO);
     if(errcode <= 0){

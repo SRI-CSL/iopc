@@ -5,7 +5,7 @@ if(!defined($ENV{IOPBINDIR})){
     print "You must set envionment variable IOPBINDIR!\n";
 } else {
 
-    my $iop = "$ENV{IOPBINDIR}"; #/bin";
+    my $iop = "$ENV{IOPBINDIR}";
 
     if($ARGV[0]){
 	system "java -ea -cp ${iop}/iop.jar g2d/jlambda/ReadEvalPrintLoop $ARGV[0]";

@@ -84,6 +84,9 @@ msg* readSALMsgRomulus(fdBundle* fdB){
   }
   while(1){
   restart: 
+
+    /* The previous select call can change both tv and rfds */
+
     if (SAL_ACTOR_DEBUG)fprintf(stderr, "readSALMsg blocking on read.\n");
     if(*(fdB->exit)){
       if(1)fprintf(stderr, "sal is dead, blocking on select\n");
