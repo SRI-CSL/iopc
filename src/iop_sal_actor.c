@@ -42,7 +42,6 @@ static void chld_handler(int sig){
   child_died = 1;
 }
 
-
 int main(int argc, char** argv){
   msg *messageIn = NULL, *messageOut = NULL;
   char *sender, *body; 
