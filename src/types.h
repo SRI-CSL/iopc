@@ -46,10 +46,10 @@ typedef struct _actor_id {
   pthread_mutex_t mutex;
 } actor_id;
 
-/* must be kept in synch with RegCmds.java */
+/* must be kept in synch with GUI/RegCmds.java */
 typedef enum registry_cmds { SEND = 0,  KILL, REGISTER, UNREGISTER, DUMP, NAME, RSIZE } registry_cmd_t;
 
-/* must be kept in synch with RegCmds.java */
+/* must be kept in synch with GUI/RegCmds.java */
 typedef enum output_cmds { ERROR = 7,  OUTPUT = 8, UPDATE =  9, SELECT = 10} output_cmd_t;
 
 typedef struct _msg {
@@ -66,7 +66,7 @@ typedef struct _echofds {
 
 typedef struct _fdBundle {
   int fd;
-  int * volatile exit;
+  volatile int * exit;
 } fdBundle;
 
 #endif

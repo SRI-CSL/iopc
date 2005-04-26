@@ -14,9 +14,10 @@ static int    clientNo = 0;
 static char*  clientChildExe = "iop_sal_actor";
 static char*  clientChildArgv[4];
 static char   clientChildName[] = "SALActor";
+
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static void sal_spawner_announce(const char *format, ...){
+static void ssannounce(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   if(format == NULL){
@@ -36,10 +37,10 @@ static void SALspawner_sigchild_handler(int sig){
   /* for the prevention of zombies */
   pid_t child;
   int status;
+  child = waitpid(-1, &status, WNOHANG); 
   child = wait(&status);
-  if (SALSPAWNER_DEBUG)
-    sal_spawner_announce("SALspawner waited on child with pid %d with exit status %d\n", 
-	     child, status);
+  ssannounce("SALspawner waited on child with pid %d with exit status %d\n", 
+		       child, status);
 }
 
 static int SALspawner_installHandler(){
@@ -88,8 +89,7 @@ int main(int argc, char** argv){
       continue;
     }
     
-    if (SALSPAWNER_DEBUG)
-      sal_spawner_announce("Received message->data = \"%s\"\n", message->data);
+    ssannounce("Received message->data = \"%s\"\n", message->data);
     retval = parseActorMsg(message->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", message->data);
@@ -102,22 +102,16 @@ int main(int argc, char** argv){
     if(!strcmp(cmd, "opensalactor")){
       sprintf(childName, "%s%d", clientChildName, clientNo);
       clientChildArgv[0] = childName;
-      if (SALSPAWNER_DEBUG)
-	sal_spawner_announce("clientChildArgv[0] = %s\n", clientChildArgv[0]);
+      ssannounce("clientChildArgv[0] = %s\n", clientChildArgv[0]);
       clientChildArgv[1] = registry_fifo_in;
-      if (SALSPAWNER_DEBUG)
-	sal_spawner_announce("clientChildArgv[1] = %s\n", clientChildArgv[1]);
+      ssannounce("clientChildArgv[1] = %s\n", clientChildArgv[1]);
       clientChildArgv[2] = registry_fifo_out;
-      if (SALSPAWNER_DEBUG)
-	sal_spawner_announce("clientChildArgv[2] = %s\n", clientChildArgv[2]);
+      ssannounce("clientChildArgv[2] = %s\n", clientChildArgv[2]);
       clientChildArgv[3] = NULL;
-      if (SALSPAWNER_DEBUG){
-	sal_spawner_announce("clientChildArgv[3] = %s\n", clientChildArgv[3]);
-	sal_spawner_announce("Spawning SALactor\n");
-      }
-      if ( newActor(1, clientChildExe, clientChildArgv) == NULL) goto openclientfail;
-      sal_spawner_announce("%s\n%s\nopenClientOK\n%s\n", 
-                sender, myName, childName);
+      ssannounce("clientChildArgv[3] = %s\n", clientChildArgv[3]);
+      ssannounce("Spawning SALactor\n");
+      if(newActor(1, clientChildExe, clientChildArgv) == NULL) goto openclientfail;
+      ssannounce("%s\n%s\nopenClientOK\n%s\n", sender, myName, childName);
       sendFormattedMsgFP(stdout,
 			 "%s\n%s\nopenClientOK\n%s\n", 
 			 sender, myName, childName);
@@ -125,7 +119,7 @@ int main(int argc, char** argv){
       continue;
       
     openclientfail:
-      sal_spawner_announce("%s\n%s\nopenSALActorFailure\n", sender, myName);
+      ssannounce("%s\n%s\nopenSALActorFailure\n", sender, myName);
       sendFormattedMsgFP(stdout, "%s\n%s\nopenSALActorFailure\n", sender, myName);
       continue;
     }
