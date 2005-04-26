@@ -78,17 +78,13 @@ extern char* local_process_name;
 void announce(const char *format, ...){
   va_list arg;
   va_start(arg, format);
-  if(format == NULL){
-    va_end(arg);
-  } else {
-    if(local_debug_flag){
-      pthread_mutex_lock(&iop_err_mutex);
-      fprintf(stderr, "%s(%ld)\t:\t", local_process_name, (long)pthread_self());
-      vfprintf(stderr, format, arg);
-      pthread_mutex_unlock(&iop_err_mutex);
-    }
-    va_end(arg);
+  if(local_debug_flag  && (format != NULL)){
+    pthread_mutex_lock(&iop_err_mutex);
+    fprintf(stderr, "%s(%ld)\t:\t", local_process_name, (long)pthread_self());
+    vfprintf(stderr, format, arg);
+    pthread_mutex_unlock(&iop_err_mutex);
   }
+  va_end(arg);
   return;
 }
 

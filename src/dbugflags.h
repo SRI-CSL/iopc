@@ -36,8 +36,11 @@
 #define APPLETSERVER_DEBUG        1
 #define LOCKS_DEBUG               0
 #define MSG_DEBUG                 0
-#define REGISTRY_DEBUG            0
-#define REGISTRY_LIB_DEBUG        0
+/*
+ turning this on screws things up WHY?!?!?!
+ -- seems to work OK in iop -n mode
+*/
+#define REGISTRY_DEBUG            0  
 #define SOCKET_DEBUG              0
 #define SOCKETFACTORY_DEBUG       0
 #define SOCKET_LIB_DEBUG          0

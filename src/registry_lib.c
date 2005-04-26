@@ -170,15 +170,6 @@ int registryInit(int *fifo_in_fd, int *fifo_out_fd){
   announce("Opening %s\n", registry_fifo_out);  
   if((*fifo_out_fd = open(registry_fifo_out, O_RDWR)) < 0) 
     goto fail;
-  announce("Duping\n");  
-  /*
-    if(dup2(in,  STDIN_FILENO) < 0)
-    goto fail;
-    if(REGISTRY_LIB_DEBUG || iop_debug_flag)
-    fprintf(stderr, "Closing\n");  
-    if(close(in) !=  0)  
-    goto fail;
-  */
   announce("Callocing\n");  
   theRegistry = (actor_id**)calloc(theRegistrySize, sizeof(actor_id*));
   assert(theRegistry != NULL);
@@ -596,9 +587,10 @@ static void* errorLog(void *arg){
       fprintf(stderr, "%s\n", errmsg->data);
     }
     
-    log2File("\n%s wrote the following %d bytes:\n", act->spec->name, errmsg->bytesUsed);
+    log2File("\n%s wrote %d bytes to STDERR_FILENO\n", act->spec->name, errmsg->bytesUsed);
     freeMsg(errmsg);
-  }
+
+  } /* while(1) */
 
   pthread_exit(NULL);
 #ifdef _MAC
@@ -826,18 +818,7 @@ void processSendCommand(int inFd, int outFd){
     free(buffin);
     return;
   }
-  /*
-    if(write((target->fds)[IN], &cr, sizeof(char)) != sizeof(char)){
-    fprintf(stderr, "SEND clause, write of cr failed\n");
-    return;
-    }
-  */
-
   announce("SEND clause, send OK\n");
-  if(REGISTRY_LIB_DEBUG || iop_debug_flag){
-    write(STDOUT_FILENO, buffin, bytesin);
-    write(STDOUT_FILENO, &cr, sizeof(char));
-  }
   free(buffin);
   return;
 }
@@ -1228,13 +1209,11 @@ void  processRegistryStopMessage(char *sender, char *rest){
 	if(!iop_no_windows_flag){
 	  sendMsg2Input(NULL, UPDATE);
 	}
-	if(REGISTRY_DEBUG || iop_debug_flag)
-	  fprintf(stderr, "%s\n%s\nstopOK %s\n", sender, REGISTRY_ACTOR, name);
+	announce("%s\n%s\nstopOK %s\n", sender, REGISTRY_ACTOR, name);
 	sendFormattedMsgFP(stdout, "%s\n%s\nstopOK %s\n", sender, REGISTRY_ACTOR, name);
       } else {
 	fprintf(stderr, "processRegistryStopMessage: actid of %s is NULL\n", name);
-	if(REGISTRY_DEBUG || iop_debug_flag)
-	  fprintf(stderr,  "%s\n%s\nstopFAILED %s\n", sender, REGISTRY_ACTOR, name);
+	announce("%s\n%s\nstopFAILED %s\n", sender, REGISTRY_ACTOR, name);
 	sendFormattedMsgFP(stdout, "%s\n%s\nstopFAILED %s\n", sender, REGISTRY_ACTOR, name);
       }
     }
