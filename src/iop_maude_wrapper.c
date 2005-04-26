@@ -29,6 +29,9 @@
 #include "wrapper_lib.h" 
 #include "externs.h"
 
+int   local_debug_flag  = MAUDE_WRAPPER_DEBUG;
+char* local_process_name;
+
 static char current_dir[PATH_MAX + 1];
 static char* maudebindir;
 static char* self;
@@ -160,7 +163,7 @@ int main(int argc, char** argv){
   if((argc != 2)  && (argc != 3)){
     fprintf(stderr, "Usage: %s <maude bin dir>  [maude module]\n", argv[0]);
   }
-  self = argv[0];
+  local_process_name = self = argv[0];
   maudebindir = argv[1];
   maude_wrapper_installHandler();
   getcwd(current_dir, PATH_MAX);

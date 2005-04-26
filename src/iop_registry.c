@@ -33,6 +33,9 @@
 #include "options.h"
 #include "msg.h"
 
+int   local_debug_flag;
+char* local_process_name;
+
 static int fifoOut;
 static int fifoIn;
 
@@ -52,8 +55,14 @@ int main(int argc, char** argv){
 #elif defined(_MAC)
   parseOptions(argc, argv, short_options);
 #endif
-  
-  rannounce("optind = %d\n", optind);
+
+  local_debug_flag   = REGISTRY_DEBUG || iop_debug_flag;
+
+  local_process_name = argv[0];
+
+  //  fprintf(stderr, "%s local_debug_flag = %d\n", argv[0], local_debug_flag);
+
+  announce("optind = %d\n", optind);
 
 
   /* set externs */
@@ -77,20 +86,20 @@ int main(int argc, char** argv){
   }
 
 
-  rannounce("Calling registryInit\n");
+  announce("Calling registryInit\n");
 
   if(registryInit(&fifoIn, &fifoOut) < 0){
     fprintf(stderr, "registryInit failed\n");
     goto killIOP;
   }
   
-  rannounce("Calling errorsInit\n");
+  announce("Calling errorsInit\n");
   if(errorsInit() < 0){
     fprintf(stderr, "errorsInit failed\n");
     goto killIOP;
   }
  
-  rannounce("sending ready message to iop\n");
+  announce("sending ready message to iop\n");
   if(write(fifoOut, REGREADY, strlen(REGREADY)) != strlen(REGREADY)){
     fprintf(stderr, "ready message to iop failed\n");
     goto killIOP;
@@ -101,22 +110,22 @@ int main(int argc, char** argv){
   processRegistryCommand(fifoIn, fifoOut, 0);
 
 
-  rannounce("creating monitorInSocket thread\n");
+  announce("creating monitorInSocket thread\n");
   if(pthread_create(&inThread, NULL, monitorInSocket, &in2RegFd) != 0){
     fprintf(stderr, "thread creation failed\n");
     bail();
   }
 
-  rannounce("creating command thread\n");
+  announce("creating command thread\n");
   if(pthread_create(&commandThread, NULL, registryCommandThread, NULL) != 0){
     fprintf(stderr, " command thread creation failed\n");
     bail();
   }
 
   if(!iop_hardwired_actors_flag){
-    rannounce("reading configuration file\n");
+    announce("reading configuration file\n");
     if(registryProcessConfigFile() < 0){
-      rannounce("configuration file reading failed\n");
+      announce("configuration file reading failed\n");
     }
   }
 
@@ -134,7 +143,7 @@ int main(int argc, char** argv){
 	perror("registry readMsg failed");
 	continue;
       }
-      rannounce("received:\"%s\"\n", message->data);
+      announce("received:\"%s\"\n", message->data);
       retval = parseActorMsg(message->data, &sender, &body);
       if(!retval){
 	fprintf(stderr, "registry didn't understand: \n\t \"%s\" \n", message->data);

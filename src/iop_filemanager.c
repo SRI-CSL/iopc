@@ -31,6 +31,9 @@
 #include "externs.h"
 #include "dbugflags.h"
 
+int   local_debug_flag  = FILEMANAGER_DEBUG;
+char* local_process_name;
+
 static int interpretTildes(const char* filename, char **newfilenamep);
 
 static int requestNo = 0;
@@ -43,7 +46,7 @@ int main(int argc, char** argv){
   int retval;
   struct flock lock;
 
-  myname = argv[0];
+  local_process_name = myname = argv[0];
 
   while(1){
     requestNo++;

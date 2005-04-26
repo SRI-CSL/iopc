@@ -72,15 +72,18 @@ static int waitForRegistry();
 
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-void iannounce(const char *format, ...){
+extern int   local_debug_flag;
+extern char* local_process_name;
+
+void announce(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   if(format == NULL){
     va_end(arg);
   } else {
-    if(IOP_DEBUG || iop_debug_flag){
+    if(local_debug_flag){
       pthread_mutex_lock(&iop_err_mutex);
-      fprintf(stderr, "IOP(%ld)\t:\t" , (long)pthread_self());
+      fprintf(stderr, "%s(%ld)\t:\t", local_process_name, (long)pthread_self());
       vfprintf(stderr, format, arg);
       pthread_mutex_unlock(&iop_err_mutex);
     }
@@ -108,8 +111,8 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   char** registry_argv;
   actor_spec *registry_spec;
 
-  iannounce("commencing\n");
-  iannounce("optind = %d\n", optind);
+  announce("commencing\n");
+  announce("optind = %d\n", optind);
    
   if((argc - optind) < 1){
     fprintf(stderr, 
@@ -129,34 +132,34 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   }
   sprintf(in2RegFdString, "%d", in2RegFd);
   sprintf(in2RegPortString, "%d", in2RegPort);
-  iannounce("in2RegPort = %d\n", in2RegPort);
+  announce("in2RegPort = %d\n", in2RegPort);
 
 
-  iannounce("figuring out fifo names etc\n");
+  announce("figuring out fifo names etc\n");
   sprintf(iopPid, "%d", iop_pid);
   sprintf(reg_in,  "/tmp/iop_%d_registry_IN", iop_pid);
   sprintf(reg_out, "/tmp/iop_%d_registry_OUT", iop_pid);
   registry_fifo_in  = reg_in;
   registry_fifo_out = reg_out;
-  iannounce("setting fifo names etc\n");
+  announce("setting fifo names etc\n");
 
 
 
-  iannounce("installing signal handler\n");
+  announce("installing signal handler\n");
   if(iop_installHandler() != 0){
     perror("could not install signal handler");
     exit(EXIT_FAILURE);
   }
-  iannounce("installed signal handler\n");
+  announce("installed signal handler\n");
   
 
-  iannounce("making fifos for the registry\n");
+  announce("making fifos for the registry\n");
   if(makeRegistryFifos() < 0){
     fprintf(stderr, "makeRegistryFifos() failed, exiting\n");
     exit(EXIT_FAILURE);
   };
 
-  iannounce("made fifos\n");
+  announce("made fifos\n");
 
 
   registry_argv = 
@@ -165,7 +168,7 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 		   in2RegPortString, in2RegFdString,
 		   iop_bin_dir);
 
-  iannounce("spawning registry\n");
+  announce("spawning registry\n");
   
   {
     char* exe = registry_argv[0];
@@ -185,35 +188,35 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   }
   
 
-  iannounce("spawned registry\n");
+  announce("spawned registry\n");
 
-  iannounce("closing in2RegFd\n");
+  announce("closing in2RegFd\n");
   if(close(in2RegFd) != 0){
     fprintf(stderr, "closing in2RegFd failed, exiting\n");
     goto killReg;
   }
 
 
-  iannounce("waiting for the registry to be ready\n");
+  announce("waiting for the registry to be ready\n");
   if(waitForRegistry() != 1){
     fprintf(stderr, "waitForRegistry() failed, exiting\n");
     goto killReg;
   };
   
-  iannounce("notifying registry about itself!\n");
+  announce("notifying registry about itself!\n");
   if(notifyRegistry(registry_spec) < 0){
     goto killReg;
   }
-  iannounce("notified registry about itself!\n");
+  announce("notified registry about itself!\n");
 
-  iannounce("spawning GUI\n");
+  announce("spawning GUI\n");
   if(!iop_no_windows_flag){
     if(launchGUI(iop_bin_dir, iopPid, in2RegPortString) == NULL)
       goto bail;
   }
-  iannounce("spawned GUI\n");
+  announce("spawned GUI\n");
 
-  iannounce("spawning hardwired actors actors\n");
+  announce("spawning hardwired actors actors\n");
 
 
   if(iop_hardwired_actors_flag && launchMaude(argc, argv) == NULL) goto bail;
@@ -237,7 +240,7 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
      if(iop_hardwired_actors_flag && launchPVS() == NULL) goto bail;
   */
 
-  iannounce("spawned actors\n");
+  announce("spawned actors\n");
 
  
 
@@ -251,23 +254,23 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
       int retval = waitpid(registry_pid, &status, 0);
       /*      int retval = waitpid(0, &status, 0); */
       if((retval < 0) && (errno == EINTR)) continue;
-	iannounce("registry wait returned;\n");
-	iannounce("wait returned;\n");
-	iannounce("WIFEXITED(status) = %d\n", WIFEXITED(status)); 
-	iannounce("WIFSIGNALED(status) = %d\n", WIFSIGNALED(status)); 
+	announce("registry wait returned;\n");
+	announce("wait returned;\n");
+	announce("WIFEXITED(status) = %d\n", WIFEXITED(status)); 
+	announce("WIFSIGNALED(status) = %d\n", WIFSIGNALED(status)); 
 	if(WIFSIGNALED(status))
-	  iannounce("WTERMSIG(status) = %d\n", WTERMSIG(status)); 
+	  announce("WTERMSIG(status) = %d\n", WTERMSIG(status)); 
 	/*      if(retval == registry_pid)break; */
 	break;
     }
     exit(EXIT_SUCCESS);
   } else {
-    iannounce("doing a registryDump(stderr);\n");
+    announce("doing a registryDump(stderr);\n");
     registryDump(stderr);
     
-    iannounce("chattering\n");
+    announce("chattering\n");
     chatter();
-    iannounce("no longer chattering\n");
+    announce("no longer chattering\n");
   }
 
  bail:
@@ -283,12 +286,12 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
 static actor_spec *launchActor(int notify, char* name, char* exe, char** argv){
   actor_spec *retval = NULL;
-  iannounce("spawning %s\n", name);
+  announce("spawning %s\n", name);
   if((retval  = newActor(notify, exe, argv)) == NULL){
     fprintf(stderr, "spawning %s failed\n", name);
     return NULL;
   }
-  iannounce("spawned %s\n", name);
+  announce("spawned %s\n", name);
   return retval;
 }
 
@@ -532,7 +535,7 @@ void iop_sigint_handler(int sig){
 void iop_sigchld_handler(int sig){
   int status;
   pid_t child = waitpid(-1, &status, WNOHANG);
-  iannounce("waited on child with pid %d with exit status %d\n", 
+  announce("waited on child with pid %d with exit status %d\n", 
 	    child, status);
   return;
 }
@@ -717,7 +720,7 @@ void chatter(){
 	sendRequest(actorId, bytesin, buff);
       }
     } else {
-      iannounce("switching on %c\n", buff[0]);
+      announce("switching on %c\n", buff[0]);
       switch(buff[0]){
       case 'q': killActors();  return;
       case 'h': intructions();  continue;
@@ -733,22 +736,22 @@ void registryDump(FILE* targ){
   struct flock wr_lock, rd_lock;
   registry_cmd_t cmd = DUMP;
   
-  iannounce("opening Registry write fifo\n");  
+  announce("opening Registry write fifo\n");  
   if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
     goto fail;
-  iannounce("opened Registry write fifo\n");  
+  announce("opened Registry write fifo\n");  
 
   
-  iannounce("opening Registry read fifo\n");  
+  announce("opening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
     goto fail;
-  iannounce("opened Registry read fifo\n");  
+  announce("opened Registry read fifo\n");  
 
   lockFD(&wr_lock, reg_wr_fd, "IOP\tregistryDump:\tregistry write  fifo");
 
   lockFD(&rd_lock, reg_rd_fd, "IOP\tregistryDump:\tregistry read  fifo");
 
-  iannounce("writing cmd\n");  
+  announce("writing cmd\n");  
   if(writeInt(reg_wr_fd, cmd) < 0) goto unlock;
 
   {
@@ -788,15 +791,15 @@ void killActors(){
   int reg_fd;
   struct flock lock;
   registry_cmd_t cmd = KILL;
-  iannounce("opening Registry fifo\n");  
+  announce("opening Registry fifo\n");  
   if((reg_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
     goto fail;
-  iannounce("opened Registry fifo\n");  
-  iannounce("locking Registry fifo\n");  
+  announce("opened Registry fifo\n");  
+  announce("locking Registry fifo\n");  
 
   lockFD(&lock, reg_fd, "IOP\tkillActors:\tregistry fifo");
 
-  iannounce("writing cmd\n");  
+  announce("writing cmd\n");  
   if(writeInt(reg_fd, cmd) < 0) 
     goto unlock;
 
@@ -804,7 +807,7 @@ void killActors(){
 
   unlockFD(&lock, reg_fd, "IOP\tkillActors:\tregistry fifo");
 
-  iannounce("closing fifo\n");  
+  announce("closing fifo\n");  
   if(close(reg_fd) == -1)
     goto fail;
   return;
@@ -823,26 +826,26 @@ char* fetchActorName(int index){
   registry_cmd_t cmd = NAME;
   char *retval = (char*)calloc(SIZE + 1, sizeof(char));
   if(retval == NULL) goto fail;
-  iannounce("opening Registry write fifo\n");  
+  announce("opening Registry write fifo\n");  
   if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
     goto fail;
-  iannounce("opened Registry write fifo\n");  
+  announce("opened Registry write fifo\n");  
   
   
-  iannounce("opening Registry read fifo\n");  
+  announce("opening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
     goto fail;
-  iannounce("opened Registry read fifo\n");  
+  announce("opened Registry read fifo\n");  
 
 
   lockFD(&wr_lock, reg_wr_fd, "fetchActorName: Registry write  fifo");
 
   lockFD(&rd_lock, reg_rd_fd, "fetchActorName: Registry read  fifo");
 
-  iannounce("writing cmd\n");  
+  announce("writing cmd\n");  
   if(writeInt(reg_wr_fd, cmd) < 0) goto unlock;
 
-  iannounce("writing index\n");  
+  announce("writing index\n");  
   if(writeInt(reg_wr_fd, index) < 0) goto unlock;
 
   {
@@ -928,10 +931,10 @@ int waitForRegistry(void){
   struct flock rd_lock;
   char buff[SIZE];
 
-  iannounce("opening Registry read fifo\n");  
+  announce("opening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
     goto fail;
-  iannounce("opened Registry read fifo\n");  
+  announce("opened Registry read fifo\n");  
 
 
   lockFD(&rd_lock, reg_rd_fd, "waitForRegistry: Registry read  fifo");

@@ -32,6 +32,8 @@
 #include "externs.h"
 #include "dbugflags.h"
 
+int   local_debug_flag  = SOCKET_DEBUG;
+char* local_process_name;
 
 static int requestNo = 0;
 static char* myname;
@@ -70,7 +72,7 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
-  myname = argv[0];
+  local_process_name = myname = argv[0];
   sock = atoi(argv[1]);
   registry_fifo_in  = argv[2];
   registry_fifo_out = argv[3];

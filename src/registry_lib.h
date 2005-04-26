@@ -25,7 +25,6 @@
 #include "actor.h"
 #include "constants.h"
 
-void rannounce(const char *format, ...);
 int registry_installHandler();
 int makeRegistryFifos();
 int registryInit();

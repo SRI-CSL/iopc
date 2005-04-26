@@ -31,7 +31,10 @@
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
- 
+
+int   local_debug_flag  = LISTENER_DEBUG;
+char* local_process_name;
+
 static int    requestNo = 0;
 static char*  myName;
 static char*  myClient;
@@ -129,7 +132,8 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
-  myName   = argv[0];
+  local_process_name = myName   = argv[0];
+
   listenFd = atoi(argv[1]);
   myClient = argv[2];
   registry_fifo_in  = argv[3];

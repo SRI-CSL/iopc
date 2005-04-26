@@ -30,6 +30,9 @@
 #include "iop_lib.h"
 #include "externs.h"
 
+int   local_debug_flag  = G2D_ACTOR_DEBUG;
+char* local_process_name;
+
 static char* myName;
 static char  graphics_exe[] = "java";
 static char* graphics_argv[] = {"java", "-cp", NULL, "g2d.Main", NULL, NULL};
@@ -61,7 +64,7 @@ int main(int argc, char** argv){
     fprintf(stderr, "Usage: %s <iop bin directory>\n", argv[0]);
     exit(EXIT_FAILURE);
   }
-  myName = argv[0];
+  local_process_name = myName = argv[0];
 
   if((graphics_argv[2] = iop_alloc_jarpath(argv[1], myName)) == NULL){
     exit(EXIT_FAILURE);

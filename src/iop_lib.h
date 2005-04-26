@@ -22,7 +22,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-void iannounce(const char *format, ...);
+void announce(const char *format, ...);
 void spawnServer(int argc, char** argv);
 void iop_init(int argc, char** argv, int optind, int remoteFd);
 #ifdef _LINUX

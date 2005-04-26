@@ -30,9 +30,12 @@
 #include "iop_lib.h"
 #include "externs.h"
 
+int   local_debug_flag  = PVS_ACTOR_DEBUG;
+char* local_process_name;
+
 static char pvs_exe[] = "pvs";
 static char* pvs_argv[] = {"pvs", "-raw", NULL};
-static char* myname = "pvs";
+static char* myname;
 static int pin[2], pout[2], perr[2];
 
 static int child_died = 0;
@@ -69,6 +72,8 @@ int main(int argc, char** argv){
   if(argc != 1){
     fprintf(stderr, "Usage: %s\n", argv[0]);
   }
+
+  local_process_name = myname = argv[0];
 
   pvs_wrapper_installHandler();
 

@@ -4,9 +4,13 @@
 #include "actor.h"
 #include "msg.h"
 #include "iop_lib.h"
-#include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
+#include "wrapper_lib.h"
+#include "ec.h"
+
+int   local_debug_flag  = SALSPAWNER_DEBUG;
+char* local_process_name;
 
 static int    requestNo = 0;
 static char*  myName;
@@ -15,40 +19,14 @@ static char*  clientChildExe = "iop_sal_actor";
 static char*  clientChildArgv[4];
 static char   clientChildName[] = "SALActor";
 
-static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static void ssannounce(const char *format, ...){
-  va_list arg;
-  va_start(arg, format);
-  if(format == NULL){
-    va_end(arg);
-  } else {
-    if(SALSPAWNER_DEBUG){
-      pthread_mutex_lock(&iop_err_mutex);
-      vfprintf(stderr, format, arg);
-      pthread_mutex_unlock(&iop_err_mutex);
-    }
-    va_end(arg);
-  }
-  return;
-}
-
-static void SALspawner_sigchild_handler(int sig){
+static void child_handler(int sig){
   /* for the prevention of zombies */
   pid_t child;
   int status;
   child = waitpid(-1, &status, WNOHANG); 
-  child = wait(&status);
-  ssannounce("SALspawner waited on child with pid %d with exit status %d\n", 
-		       child, status);
-}
-
-static int SALspawner_installHandler(){
-  struct sigaction sigactchild;
-  sigactchild.sa_handler = SALspawner_sigchild_handler;
-  sigactchild.sa_flags = SA_NOCLDSTOP;
-  sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
+  announce("SALspawner waited on child with pid %d with exit status %d\n", 
+	   child, status);
 }
 
 int main(int argc, char** argv){
@@ -67,15 +45,13 @@ int main(int argc, char** argv){
   }
   
   iop_pid = getppid();
-  myName = argv[0];
+  local_process_name = myName = argv[0];
   registry_fifo_in  = argv[1];
   registry_fifo_out = argv[2];
+
   
-  if(SALspawner_installHandler() != 0){
-    perror("SALspawner could not install signal handler");
-    exit(EXIT_FAILURE);
-  }
-  
+  ec_neg1( wrapper_installHandler(child_handler, wrapper_sigint_handler) );
+
   while(1){
     requestNo++;
     if (message != NULL){
@@ -89,7 +65,7 @@ int main(int argc, char** argv){
       continue;
     }
     
-    ssannounce("Received message->data = \"%s\"\n", message->data);
+    announce("Received message->data = \"%s\"\n", message->data);
     retval = parseActorMsg(message->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", message->data);
@@ -102,16 +78,16 @@ int main(int argc, char** argv){
     if(!strcmp(cmd, "opensalactor")){
       sprintf(childName, "%s%d", clientChildName, clientNo);
       clientChildArgv[0] = childName;
-      ssannounce("clientChildArgv[0] = %s\n", clientChildArgv[0]);
+      announce("clientChildArgv[0] = %s\n", clientChildArgv[0]);
       clientChildArgv[1] = registry_fifo_in;
-      ssannounce("clientChildArgv[1] = %s\n", clientChildArgv[1]);
+      announce("clientChildArgv[1] = %s\n", clientChildArgv[1]);
       clientChildArgv[2] = registry_fifo_out;
-      ssannounce("clientChildArgv[2] = %s\n", clientChildArgv[2]);
+      announce("clientChildArgv[2] = %s\n", clientChildArgv[2]);
       clientChildArgv[3] = NULL;
-      ssannounce("clientChildArgv[3] = %s\n", clientChildArgv[3]);
-      ssannounce("Spawning SALactor\n");
+      announce("clientChildArgv[3] = %s\n", clientChildArgv[3]);
+      announce("Spawning SALactor\n");
       if(newActor(1, clientChildExe, clientChildArgv) == NULL) goto openclientfail;
-      ssannounce("%s\n%s\nopenClientOK\n%s\n", sender, myName, childName);
+      announce("%s\n%s\nopenClientOK\n%s\n", sender, myName, childName);
       sendFormattedMsgFP(stdout,
 			 "%s\n%s\nopenClientOK\n%s\n", 
 			 sender, myName, childName);
@@ -119,7 +95,7 @@ int main(int argc, char** argv){
       continue;
       
     openclientfail:
-      ssannounce("%s\n%s\nopenSALActorFailure\n", sender, myName);
+      announce("%s\n%s\nopenSALActorFailure\n", sender, myName);
       sendFormattedMsgFP(stdout, "%s\n%s\nopenSALActorFailure\n", sender, myName);
       continue;
     }
@@ -128,6 +104,13 @@ int main(int argc, char** argv){
       continue;
     }
   }
+  exit(EXIT_SUCCESS);
+
+EC_CLEANUP_BGN
+  exit(EXIT_FAILURE);
+EC_CLEANUP_END
+
+
 }
 
 

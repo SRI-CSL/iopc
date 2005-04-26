@@ -31,6 +31,10 @@
 #include "externs.h"
 #include "dbugflags.h"
 
+int   local_debug_flag = EXECUTOR_DEBUG;
+char* local_process_name;
+
+
 static int requestNo = 0;
 static char* myname;
 
@@ -57,7 +61,7 @@ int main(int argc, char** argv){
 
   executor_installHandler();
   
-  myname = argv[0];
+  local_process_name = myname = argv[0];
 
   while(1){
     requestNo++;

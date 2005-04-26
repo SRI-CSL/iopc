@@ -19,6 +19,9 @@
 #include "ec.h"
 #include "sal_lib.h"
 
+int   local_debug_flag  = SAL_ACTOR_DEBUG;
+char* local_process_name;
+
 static int child_died = 0;
 
 static int requestNo = 0;
@@ -53,7 +56,8 @@ int main(int argc, char** argv){
 
   ec_neg1( wrapper_installHandler(chld_handler, intr_handler) );
 
-  myname = argv[0];
+  local_process_name = myname = argv[0];
+
   while(1){
     requestNo++;
     if(messageIn  != NULL){ 

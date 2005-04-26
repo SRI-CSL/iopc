@@ -32,6 +32,8 @@
 #include "externs.h"
 #include "dbugflags.h"
 
+int   local_debug_flag  = SOCKETFACTORY_DEBUG;
+char* local_process_name;
 
 static int    requestNo = 0;
 static char*  myName;
@@ -45,31 +47,13 @@ static char*  listenerChildExe = "iop_listener";
 static char*  listenerChildArgv[7];
 static char   listenerChildName[] = "listener";
 static int    listenerFd;
-static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-static void announce(const char *format, ...){
-  va_list arg;
-  va_start(arg, format);
-  if(format == NULL){
-    va_end(arg);
-  } else {
-    if(SOCKETFACTORY_DEBUG){
-      pthread_mutex_lock(&iop_err_mutex);
-      vfprintf(stderr, format, arg);
-      pthread_mutex_unlock(&iop_err_mutex);
-    }
-    va_end(arg);
-  }
-  return;
-}
 
 static void socketfactory_sigchild_handler(int sig){
   /* for the prevention of zombies */
   pid_t child;
   int status;
   child = wait(&status);
-  announce("Socketfactory waited on child with pid %d with exit status %d\n", 
-	   child, status);
+  announce("Waited on child with pid %d with exit status %d\n", child, status);
 }
 
 static int socketfactory_installHandler(){
@@ -96,7 +80,7 @@ int main(int argc, char** argv){
   }
 
   iop_pid = getppid();
-  myName = argv[0];
+  local_process_name = myName = argv[0];
   registry_fifo_in  = argv[1];
   registry_fifo_out = argv[2];
 
