@@ -59,7 +59,7 @@ int main(int argc, char** argv){
   local_debug_flag  = (REGISTRY_DEBUG || iop_debug_flag);
   local_process_name = argv[0];
 
-  /*  fprintf(stderr, "%s local_debug_flag = %d\n", argv[0], local_debug_flag);  */
+  fprintf(stderr, "%s local_debug_flag = %d\n", argv[0], local_debug_flag);  
 
   announce("optind = %d\n", optind);
 
@@ -92,7 +92,9 @@ int main(int argc, char** argv){
     goto killIOP;
   }
   
+
   announce("Calling errorsInit\n");
+
   if(errorsInit() < 0){
     fprintf(stderr, "errorsInit failed\n");
     goto killIOP;

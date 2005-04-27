@@ -105,8 +105,7 @@ static void registry_sig_handler(int sig){
 static void registry_sigchld_handler(int sig){
   int status;
   pid_t child = waitpid(-1, &status, WNOHANG);
-  announce("waited on child with pid %d with exit status %d\n", 
-	    child, status);
+  announce("waited on child with pid %d with exit status %d\n",  child, status);
 }
 
 int registry_installHandler(){
@@ -878,8 +877,7 @@ void processUnregisterCommand(int inFd, int outFd){
   }
   if(unregisterActor(slotNumber) == -1)
     return;
-  announce("UNREGISTER clause, found actor %s in slotNumber = %d\n", 
-	    name, slotNumber);
+  announce("UNREGISTER clause, found actor %s in slotNumber = %d\n", name, slotNumber);
   if(writeInt(outFd, slotNumber) < 0){
     fprintf(stderr, "UNREGISTER clause, write of slotNumber failed\n");
     return;
@@ -1013,16 +1011,12 @@ static int wait4ReadyFromInputWindow(int in2regSocket){
   return atoi(buff);
 }
 
-
+/* 
+   WARNING: Putting active debug messages in this routine, and any routine
+   it calls can cause LOOPING. Better to log it out to the C errors file!
+*/
 static int sendMsg2Input(msg *message, output_cmd_t type){
   int socket, retval = 0;
-
-
-  announce("sendMsg2Input:(\ttype = %d\tmsg = %s%s)\n",
-	    type, 
-	    (message != NULL) ? "\n" : "",
-	    (message != NULL) ? message->data : "NULL");
-
   while(reg2InPort < 0) sleep(1);
   if(allocateSocket(reg2InPort, "localhost", &socket) != 1){
     fprintf(stderr, "sendMsg2Input: allocateSocket failed\n");
@@ -1047,9 +1041,7 @@ static int sendMsg2Input(msg *message, output_cmd_t type){
   }
   retval = 1;
  exit:
-  announce("sendMsg2Input: closing socket\n");
   closeSocket(socket);
-  announce("sendMsg2Input: closed socket\n");
   return retval;
 }
 
@@ -1416,8 +1408,7 @@ void  processRegistryUnenrollMessage(char *sender, char *rest){
 	  fprintf(stderr, "processRegistryUnenrollMessage: unregisterActor failed\n");
 	  goto exit;
 	}
-	announce("processRegistryUnenrollMessage: found actor %s in slotNumber = %d\n", 
-		  name, slot);
+	announce("processRegistryUnenrollMessage: found actor %s in slotNumber = %d\n", name, slot);
       }
     }
   }

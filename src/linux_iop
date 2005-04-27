@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 use File::Spec;
+#this next line is the only platform dependent aspect of this file.
 my $platform = 'linux';
 my $iop = $ENV{IOPBINDIR};
 if(!defined($iop)){

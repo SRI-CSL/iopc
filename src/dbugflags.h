@@ -35,11 +35,13 @@
 #define LISTEN2IOP_DEBUG          1
 #define APPLETSERVER_DEBUG        1
 #define LOCKS_DEBUG               0
-#define MSG_DEBUG                 0
 /*
- turning this on screws things up WHY?!?!?!
- -- seems to work OK in iop -n mode
+  WARNING: Turning on both MSG_DEBUG and
+  REGISTRY_DEBUG can cause error messages
+  to cause error messages, which results in
+  SILENCE!
 */
+#define MSG_DEBUG                 0
 #define REGISTRY_DEBUG            0  
 #define SOCKET_DEBUG              0
 #define SOCKETFACTORY_DEBUG       0
