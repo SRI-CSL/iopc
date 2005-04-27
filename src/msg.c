@@ -33,10 +33,8 @@
 /* statics */
 static int setFlag(int fd, int flags);
 static int clearFlag(int fd, int flags);
-
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-static void mannounce(const char *format, ...){
+static void eM(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   if(format == NULL){
@@ -83,7 +81,7 @@ int addToMsg(msg* m, int bytes, char* buff){
     fprintf(stderr, "Bad arguments to addToMsg (buff == NULL)\n");
     return -1;
   }
-  mannounce("addToMsg: bytes = %d m->bytesLeft = %d\n", bytes, m->bytesLeft);
+  eM("addToMsg: bytes = %d m->bytesLeft = %d\n", bytes, m->bytesLeft);
   if(bytes < m->bytesLeft){
     memcpy(&m->data[m->bytesUsed], buff, bytes);
     m->bytesUsed += bytes;
@@ -123,7 +121,7 @@ void echo(int from, int to){
     writeMsg(to, message);
     if(MSG_DEBUG){
       writeMsg(STDERR_FILENO, message);
-      mannounce("echo wrote %d bytes\n", message->bytesUsed);
+      eM("echo wrote %d bytes\n", message->bytesUsed);
     }
     freeMsg(message);
   }
@@ -157,7 +155,7 @@ int clearFlag(int fd, int flags){
   }
   val &= ~flags;
   if(fcntl(fd, F_SETFL, val) < 0){
-    mannounce("fcntl(fd, F F_SETFL, val) failed: %s\n", strerror(errno));
+    eM("fcntl(fd, F F_SETFL, val) failed: %s\n", strerror(errno));
     return -1;
   }
   return 0;
@@ -175,12 +173,12 @@ msg* readMaudeMsg(int fd){
 
   while(1){
     char buff[BUFFSZ];
-    mannounce("readMaudeMsg\t:\tcommencing a read\n");
+    eM("readMaudeMsg\t:\tcommencing a read\n");
   restart:
     if((bytes = read(fd, buff, BUFFSZ)) < 0){
-      mannounce("readMaudeMsg\t:\tread error read returned %d bytes\n", bytes);
+      eM("readMaudeMsg\t:\tread error read returned %d bytes\n", bytes);
       if(errno == EINTR){
-	mannounce("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
+	eM("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
 	goto restart;
       }
       if(errno == EBADF){
@@ -191,7 +189,7 @@ msg* readMaudeMsg(int fd){
       return retval;
     } /* if((bytes = read(fd, buff, BUFFSZ)) < 0) */
 
-    mannounce("readMaudeMsg\t:\tread read %d bytes\n", bytes);
+    eM("readMaudeMsg\t:\tread read %d bytes\n", bytes);
 
     /*
     if((iteration == 0) && 
@@ -213,7 +211,7 @@ msg* readMaudeMsg(int fd){
       fd_set readset;
       struct timeval delay;
       int sret;
-      mannounce("readMaudeMsg\t:\tsaw the prompt, making sure!\n");
+      eM("readMaudeMsg\t:\tsaw the prompt, making sure!\n");
       FD_ZERO(&readset);
       FD_SET(fd, &readset);
       delay.tv_sec = 0;
@@ -223,10 +221,10 @@ msg* readMaudeMsg(int fd){
 	fprintf(stderr, "readMaudeMsg\t:\tselect error\n");
 	goto fail;
       } else if(sret == 0){
-	mannounce("readMaudeMsg\t:\tdefinitely the prompt!\n");
+	eM("readMaudeMsg\t:\tdefinitely the prompt!\n");
 	break;
       } else {
-	mannounce("readMaudeMsg\t:\tsret = %d more coming! TOO CONFUSING\n", sret);
+	eM("readMaudeMsg\t:\tsret = %d more coming! TOO CONFUSING\n", sret);
 	goto fail;
       }
     }
@@ -234,18 +232,14 @@ msg* readMaudeMsg(int fd){
   }/* while */
 
   if(retval != NULL){
-    if(MSG_DEBUG){
-      mannounce("readMaudeMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
-      mannounce("readMaudeMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
-      mannounce("==================================================\n");
-    }
+    eM("readMaudeMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
+    eM("readMaudeMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
+    eM("==================================================\n");
     promptPointer[0] = '\0';                   /* chomp the prompt I           */
     retval->bytesUsed -= strlen(prompt)    ;   /* chomp the prompt II          */
-    if(MSG_DEBUG){
-      mannounce("readMaudeMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
-      mannounce("readMaudeMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
-      mannounce("==================================================\n");
-    }
+    eM("readMaudeMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
+    eM("readMaudeMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
+    eM("==================================================\n");
     if((retval->bytesUsed == 0) || 
        ((retval->bytesUsed == 1) && (retval->data[0] == '\n'))){
       sprintf(retval->data, "OK\n");
@@ -274,7 +268,7 @@ msg* readPVSMsg(char *prompt, int fd){
   restart:
     if((bytes = read(fd, buff, BUFFSZ)) < 0){
       if(errno == EINTR){
-	mannounce("readPVSMsg  in %d restarting after being interrupted by a signal\n", getpid());
+	eM("readPVSMsg  in %d restarting after being interrupted by a signal\n", getpid());
 	goto restart;
       }
       if(errno == EBADF){
@@ -308,10 +302,10 @@ msg* readMsg(int fd){
   char buff[BUFFSZ];
   msg* retval = NULL;
  restart:
-  mannounce("readMsg  in %d starting (or restarting)\n", getpid());
+  eM("readMsg  in %d starting (or restarting)\n", getpid());
   if((bytes = read(fd, buff, BUFFSZ)) < 0){
     if(errno == EINTR){
-      mannounce("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
+      eM("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
       goto restart;
     }
     if(errno == EBADF){
@@ -323,27 +317,27 @@ msg* readMsg(int fd){
   }
   if(MSG_DEBUG){
     int i;
-    mannounce("readMsg in %d going into non blocking mode (bytes = %d)\n", getpid(), bytes);
+    eM("readMsg in %d going into non blocking mode (bytes = %d)\n", getpid(), bytes);
     for(i = 0; i < bytes; i++)
       fprintf(stderr, "%c", buff[i]);
     fprintf(stderr, "\n\t%d\n", getpid());
   }
   if(setFlag(fd, O_NONBLOCK) < 0) goto fail;
-  mannounce("readMsg in %d setFlag to O_NONBLOCK\n", getpid());
+  eM("readMsg in %d setFlag to O_NONBLOCK\n", getpid());
   if((retval = makeMsg(BUFFSZ)) == NULL){
     fprintf(stderr, 
 	    "makeMsg in %d failed\n", getpid());
     goto exit;
   }
-  mannounce("readMsg in %d made Msg\n", getpid());
+  eM("readMsg in %d made Msg\n", getpid());
   if(addToMsg(retval, bytes, buff) != 0){
     fprintf(stderr, "addToMsg in %d failed\n", getpid());
     retval = NULL;
     goto exit;
   }
-  mannounce("readMsg in %d added  buff to Msg\n", getpid());
+  eM("readMsg in %d added  buff to Msg\n", getpid());
   while(usleep(1), (bytes = read(fd, buff, BUFFSZ)) > 0){
-    mannounce("readMsg in %d read in non-blocking mode (bytes = %d)\n", getpid(), bytes);
+    eM("readMsg in %d read in non-blocking mode (bytes = %d)\n", getpid(), bytes);
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg  in %d failed\n", getpid());
       retval = NULL;
@@ -352,9 +346,9 @@ msg* readMsg(int fd){
   }
  exit:
 
-  mannounce("readMsg in %d read exiting non-blocking mode (bytes = %d)\n", getpid(), bytes);
+  eM("readMsg in %d read exiting non-blocking mode (bytes = %d)\n", getpid(), bytes);
   clearFlag(fd, O_NONBLOCK);
-  mannounce("readMsg in %d cleared non-blocking flag\n", getpid());
+  eM("readMsg in %d cleared non-blocking flag\n", getpid());
   /* retval->data is a C string, and retval->bytesUsed is its C string length */
   if(retval != NULL){
     if(addToMsg(retval, 1, "\0") != 0){
@@ -364,7 +358,7 @@ msg* readMsg(int fd){
       return retval;
     }
     retval->bytesUsed--;
-    mannounce("readMsg in %d read exiting non-blocking mode (retval->bytesUsed = %d)\n", getpid(), retval->bytesUsed);
+    eM("readMsg in %d read exiting non-blocking mode (retval->bytesUsed = %d)\n", getpid(), retval->bytesUsed);
   }
   return retval;
  fail:
@@ -377,24 +371,24 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   msg* retval = NULL;
  restart:
   if(*exitFlag){
-    mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL;
   }
-  mannounce("readMsgVolatile  in %d (exitFlag = %d) starting (or restarting)\n", getpid(), *exitFlag);
+  eM("readMsgVolatile  in %d (exitFlag = %d) starting (or restarting)\n", getpid(), *exitFlag);
   if((bytes = read(fd, buff, BUFFSZ)) < 0){
     if(*exitFlag){ 
-      mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+      eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
       return NULL; 
     }
     if(errno == EINTR){
-      mannounce("readMsgVolatile  in %d (exitFlag = %d) restarting after being interrupted by a signal\n", getpid(), *exitFlag);
+      eM("readMsgVolatile  in %d (exitFlag = %d) restarting after being interrupted by a signal\n", getpid(), *exitFlag);
       goto restart;
     }
     if(errno == EBADF){
-      mannounce("readMsgVolatile  in %d  (exitFlag = %d) failing because of a bad file descriptor\n", getpid(), *exitFlag);
+      eM("readMsgVolatile  in %d  (exitFlag = %d) failing because of a bad file descriptor\n", getpid(), *exitFlag);
       goto fail;
     }
-    mannounce("Read in %d (exitFlag = %d) returned with nothing\n", getpid(), *exitFlag);
+    eM("Read in %d (exitFlag = %d) returned with nothing\n", getpid(), *exitFlag);
     return retval;
   }
   if(MSG_DEBUG){
@@ -407,23 +401,23 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     fprintf(stderr, "\n\t%d\n", getpid());
   }
   if(*exitFlag){ 
-    mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL; 
   }    
   if(setFlag(fd, O_NONBLOCK) < 0) goto fail;
-  mannounce("readMsgVolatile in %d (exitFlag = %d) setFlag to O_NONBLOCK\n", getpid(), *exitFlag);
+  eM("readMsgVolatile in %d (exitFlag = %d) setFlag to O_NONBLOCK\n", getpid(), *exitFlag);
 
   if(*exitFlag){ 
-    mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL; 
   }
   if((retval = makeMsg(BUFFSZ)) == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
     goto exit;
   }
-  mannounce("readMsgVolatile in %d (exitFlag = %d) made Msg\n", getpid(), *exitFlag);
+  eM("readMsgVolatile in %d (exitFlag = %d) made Msg\n", getpid(), *exitFlag);
   if(*exitFlag){ 
-    mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL; 
   }
   if(addToMsg(retval, bytes, buff) != 0){
@@ -431,21 +425,21 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     retval = NULL;
     goto exit;
   }
-  mannounce("readMsgVolatile in %d (exitFlag = %d) added  buff to Msg\n", getpid(), *exitFlag);
+  eM("readMsgVolatile in %d (exitFlag = %d) added  buff to Msg\n", getpid(), *exitFlag);
   if(*exitFlag){ 
-    mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL;
   }
   while(usleep(1), 
 	(bytes = read(fd, buff, BUFFSZ)) > 0){
     if(*exitFlag){ 
-      mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+      eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
       return NULL; 
     }
-    mannounce("readMsgVolatile in %d (exitFlag = %d) read in non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
+    eM("readMsgVolatile in %d (exitFlag = %d) read in non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
     
     if(*exitFlag){ 
-      mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+      eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
       return NULL; 
     }
     if(addToMsg(retval, bytes, buff) != 0){
@@ -455,14 +449,14 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     }
   }
  exit:
-  mannounce("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
+  eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
   if(*exitFlag){ 
-    mannounce("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL; 
   } 
   clearFlag(fd, O_NONBLOCK);
   
-  mannounce("readMsgVolatile in %d (exitFlag = %d) cleared non-blocking flag\n", getpid(), *exitFlag);
+  eM("readMsgVolatile in %d (exitFlag = %d) cleared non-blocking flag\n", getpid(), *exitFlag);
   /* retval->data is a C string, and retval->bytesUsed is its C string length */
   if(retval != NULL){
     if(addToMsg(retval, 1, "\0") != 0){
@@ -473,7 +467,7 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     }
     retval->bytesUsed--;
   }
-  mannounce("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (retval->bytesUsed = %d)\n", getpid(), *exitFlag, retval->bytesUsed);
+  eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (retval->bytesUsed = %d)\n", getpid(), *exitFlag, retval->bytesUsed);
   return retval;
   
  fail:
@@ -536,7 +530,7 @@ int readInt(int fd, int* nump){
 	  break;
 	} else {
 	  if(errno == EINTR){
-	    mannounce("readInt: restarting (errno == EINTR)\n");
+	    eM("readInt: restarting (errno == EINTR)\n");
 	    goto restart;
 	  }
 	  fprintf(stderr, "readInt: read failed: %s\n", strerror(errno));
@@ -649,7 +643,7 @@ msg* acceptMsg(int fd){
   msg* retval;
   errcode = readInt(fd, &bytesIncoming);
   if((errcode < 0) || (bytesIncoming <= 0)) return NULL;
-  mannounce("acceptMsg: expecting %d bytes\n", bytesIncoming);
+  eM("acceptMsg: expecting %d bytes\n", bytesIncoming);
   retval = makeMsg(bytesIncoming + 1);
   if(retval == NULL) goto fail;
   bytesRemaining = bytesIncoming;
@@ -657,7 +651,7 @@ msg* acceptMsg(int fd){
   restart:
     if((bytes = read(fd, buff, (bytesRemaining < BUFFSZ ? bytesRemaining : BUFFSZ))) < 0){
       if(errno == EINTR){
-	mannounce("acceptMsg: restarting after being interrupted by a signal\n");
+	eM("acceptMsg: restarting after being interrupted by a signal\n");
 	goto restart;
       }
       if(errno == EBADF){
@@ -667,7 +661,7 @@ msg* acceptMsg(int fd){
       fprintf(stderr, "acceptMsg: read  returned with nothing\n");
       return NULL;
     }
-    mannounce("acceptMsg: got %d bytes\n", bytes);
+    eM("acceptMsg: got %d bytes\n", bytes);
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "acceptMsg: addToMsg failed\n");
       freeMsg(retval);
@@ -677,7 +671,7 @@ msg* acceptMsg(int fd){
     /* iam 05/04/22 hopefully stop message collisions */
     bytesRemaining -= bytes;
     if(bytesRemaining <= 0){
-      mannounce("acceptMsg: retval->bytesUsed =  %d\n", retval->bytesUsed);
+      eM("acceptMsg: retval->bytesUsed =  %d\n", retval->bytesUsed);
       if(bytesRemaining < 0){
 	fprintf(stderr, 
 		"acceptMsg: got %d more bytes than expected\n",
@@ -695,18 +689,16 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
   char buff[BUFFSZ];
   int bytes, bytesIncoming, bytesRemaining, errcode;
   msg* retval;
-  mannounce("acceptMsgVolatile: calling readInt\n");
+  eM("acceptMsgVolatile: calling readInt\n");
   errcode = readInt(fd, &bytesIncoming);
   if(*exitFlag || (errcode < 0) || (bytesIncoming <= 0)){
-    if(MSG_DEBUG){   
-      mannounce("acceptMsgVolatile: (*exitFlag||(errcode < 0)||(bytesIncoming <= 0)) is true!\n");
-      mannounce("\t*exitFlag = %d\n", *exitFlag);
-      mannounce("\t*errcode = %d\n", errcode);
-      mannounce("\t*bytesIncoming = %d\n", bytesIncoming);
-    }
+    eM("acceptMsgVolatile: (*exitFlag||(errcode < 0)||(bytesIncoming <= 0)) is true!\n");
+    eM("\t*exitFlag = %d\n", *exitFlag);
+    eM("\t*errcode = %d\n", errcode);
+    eM("\t*bytesIncoming = %d\n", bytesIncoming);
     return NULL;
   }
-  mannounce("acceptMsgVolatile: expecting %d bytes\n", bytesIncoming);
+  eM("acceptMsgVolatile: expecting %d bytes\n", bytesIncoming);
   retval = makeMsg(bytesIncoming + 1);
   if(retval == NULL) goto fail;
   bytesRemaining = bytesIncoming;
@@ -715,7 +707,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
     if(*exitFlag) return NULL;
     if((bytes = read(fd, buff, (bytesRemaining < BUFFSZ ? bytesRemaining : BUFFSZ))) < 0){
       if(errno == EINTR){
-	mannounce("acceptMsgVolatile: restarting after being interrupted by a signal\n");
+	eM("acceptMsgVolatile: restarting after being interrupted by a signal\n");
 	goto restart;
       }
       if(errno == EBADF){
@@ -725,9 +717,9 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
       fprintf(stderr, "acceptMsgVolatile: read  returned with nothing\n");
       return NULL;
     }
-    mannounce("acceptMsgVolatile: got %d bytes\n", bytes);
+    eM("acceptMsgVolatile: got %d bytes\n", bytes);
     if(*exitFlag){
-      mannounce("acceptMsgVolatile: bailing with NULL,  *exitFlag is true\n");
+      eM("acceptMsgVolatile: bailing with NULL,  *exitFlag is true\n");
      return NULL;
     }
     if(addToMsg(retval, bytes, buff) != 0){
@@ -902,7 +894,7 @@ void* echoLoop(void* args){
       sendMsg(to, message);
       if(MSG_DEBUG){
 	sendMsg(STDERR_FILENO, message);
-	mannounce("echoMsg: echo wrote %d bytes\n", message->bytesUsed);
+	eM("echoMsg: echo wrote %d bytes\n", message->bytesUsed);
       }
       freeMsg(message);
     }
@@ -919,7 +911,7 @@ void echo2Maude(int from, int to){
     writeMsg(to, message);
     if(MSG_DEBUG){
       writeMsg(STDERR_FILENO, message);
-      mannounce("echo2Maude: wrote %d bytes\n", message->bytesUsed);
+      eM("echo2Maude: wrote %d bytes\n", message->bytesUsed);
     }
     freeMsg(message);
   }
@@ -932,7 +924,7 @@ void echo2PVS(int from, int to){
     writeMsg(to, message);
     if(MSG_DEBUG){
       writeMsg(STDERR_FILENO, message);
-      mannounce("echo2Pvs: wrote %d bytes\n", message->bytesUsed);
+      eM("echo2Pvs: wrote %d bytes\n", message->bytesUsed);
     }
     freeMsg(message);
   }
