@@ -26,7 +26,9 @@
 #include "constants.h"
 #include "actor.h"
 #include "msg.h"
+#include "iop_lib.h"
 #include "dbugflags.h"
+#include "ec.h"
 
 static mode_t mode[3] = { S_IRWXU,  S_IRWXU, S_IRWXU };
 
@@ -44,11 +46,11 @@ actor_spec* newActor(int notify, char* executable, char** argv){
     goto fail;
   } else {
     actor_spec *retval;
-    if(ACTOR_DEBUG)fprintf(stderr, "newActor\t:\tMaking actor_spec\n");
+    announce("newActor\t:\tMaking actor_spec\n");
     retval = makeActorSpec(argv[0]);
-    if(ACTOR_DEBUG)fprintf(stderr, "newActor\t:\tCalling spawnActor\n");
+    announce("newActor\t:\tCalling spawnActor\n");
     if(spawnActor(retval, executable, argv) < 0) goto fail;
-    if(ACTOR_DEBUG)fprintf(stderr, "newActor\t:\tCalling notifyRegistry\n");
+    announce("newActor\t:\tCalling notifyRegistry\n");
     if(notify){
       if(notifyRegistry(retval) < 0) goto fail;
     }
@@ -63,68 +65,61 @@ actor_spec* newActor(int notify, char* executable, char** argv){
 }
 
 /* 
-   We don't want to inherit the registry's handlers, on the of chance
+   We don't want to inherit the registry's handlers, on the off chance
    that we get created by it.
 */
 
-void nullifyHandler(){
+static int nullifyHandler(){
   sigset_t sigmask;
   struct sigaction sigact;
-  sigfillset(&sigmask);
-  sigprocmask(SIG_UNBLOCK, &sigmask, NULL);
+  ec_neg1( sigfillset(&sigmask) );
+  ec_neg1( sigprocmask(SIG_UNBLOCK, &sigmask, NULL) );
   sigact.sa_handler = SIG_DFL;
   sigact.sa_flags = 0;
-  sigemptyset(&sigact.sa_mask);
-  sigaction(SIGCHLD, &sigact, NULL);
-  sigaction(SIGINT, &sigact, NULL);
-  sigaction(SIGUSR1, &sigact, NULL);
+  ec_neg1( sigemptyset(&sigact.sa_mask)      );
+  ec_neg1( sigaction(SIGCHLD, &sigact, NULL) );
+  ec_neg1( sigaction(SIGINT, &sigact, NULL)  );
+  ec_neg1( sigaction(SIGUSR1, &sigact, NULL) );
+  return 0;
+
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 pid_t spawnActor(actor_spec *act, char* executable, char** argv){
-  pid_t retval;
+  pid_t retval = -1;
   int i, fds[3], flags[3] = { O_RDWR, O_RDWR,  O_RDWR };
   char* self = argv[0];
-  if(ACTOR_DEBUG)fprintf(stderr, "spawnActor\t:\tOpening fifos\n");  
+  announce("spawnActor\t:\tOpening fifos\n");  
   for(i = 0; i < 3; i++){
-    if(ACTOR_DEBUG)fprintf(stderr, "spawnActor\t:\tOpening %s\n", act->fifos[i]);
-    if((fds[i] = open(act->fifos[i], flags[i])) == -1){
-      if(ACTOR_DEBUG)fprintf(stderr, "spawnActor\t:\tCan't open fifo: %s\n", act->fifos[i]);
-      goto fail;
-    }
-    if(ACTOR_DEBUG)fprintf(stderr, "spawnActor\t:\tOpened %s\n", act->fifos[i]);
+    announce("spawnActor\t:\tOpening %s\n", act->fifos[i]);
+    ec_neg1( fds[i] = open(act->fifos[i], flags[i]) );
+    announce("spawnActor\t:\tOpened %s\n", act->fifos[i]);
   }
-  if(ACTOR_DEBUG)fprintf(stderr, "spawnActor\t:\tCalling fork\n");  
-  retval = fork();
-  if(retval < 0){
-    goto fail;
-  } else if(retval == 0){
+  announce("spawnActor\t:\tCalling fork\n");  
+
+  ec_neg1( retval = fork() );
+  
+  if(retval == 0){
     /* child process, destined to be new actor */
-    nullifyHandler();
+    if( nullifyHandler() < 0){ goto fail;  }
     if(iop_debug_flag || iop_no_windows_flag){
       /* better not rely on the registry to handles its errors */
       if(strcmp(act->name, REGISTRY_ACTOR)){
-	if(dup2(fds[2], STDERR_FILENO) < 0){
-	  goto fail;
-	}
+	ec_neg1( dup2(fds[2], STDERR_FILENO) );
       }
-      if((dup2(fds[0], STDIN_FILENO) < 0)  ||
-	 (dup2(fds[1], STDOUT_FILENO) < 0)){
-	goto fail;
-      } 
+      ec_neg1( dup2(fds[0], STDIN_FILENO)  );
+      ec_neg1( dup2(fds[1], STDOUT_FILENO) );
     } else {
       /* normal mode */
-      if((dup2(fds[0], STDIN_FILENO) < 0)  ||
-      	 (dup2(fds[1], STDOUT_FILENO) < 0) ||
-      	 (dup2(fds[2], STDERR_FILENO) < 0)
-      	 ){
-      	goto fail;
-      }
+      ec_neg1( dup2(fds[0], STDIN_FILENO)  );
+      ec_neg1( dup2(fds[1], STDOUT_FILENO) );
+      ec_neg1( dup2(fds[2], STDERR_FILENO) );
     }
-    if((close(fds[0]) !=  0) ||
-       (close(fds[1]) !=  0) ||
-       (close(fds[2]) !=  0)){
-      goto fail;
-    } 
+    ec_neg1( close(fds[0]) );
+    ec_neg1( close(fds[1]) );
+    ec_neg1( close(fds[2]) );
     /* stupid hack to keep java happy! */
     if(!strcmp(executable, "java")){
       argv[0] = "java";
@@ -132,64 +127,52 @@ pid_t spawnActor(actor_spec *act, char* executable, char** argv){
     } else {
       execvp(executable, argv);
     }
-    fprintf(stderr, "WARNING: Failure of execvp in actor creation: %s executable:%s \n",strerror(errno), executable);
+    fprintf(stderr, 
+	    "WARNING: Failure of execvp in actor creation: %s executable:%s \n",
+	    strerror(errno), executable);
     sleep(1);  /* give the registry time to see this error message */
     sendFormattedMsgFP(stdout, "system\n%s\nunenroll %s\n", self, self);
     sleep(1);  /* give the registry time to see this request */
     exit(EXIT_FAILURE);
   } else {
     /* calling process */
-    if(ACTOR_DEBUG)fprintf(stderr, "spawnActor\t:\tForked OK\n");  
+    announce("spawnActor\t:\tForked OK\n");  
     act->pid = retval;
-    if(ACTOR_DEBUG)fprintf(stderr, "spawnActor\t:\tClosing fifos\n");  
-    if((close(fds[0]) !=  0) ||
-       (close(fds[1]) !=  0) ||
-       (close(fds[2]) !=  0)){
-      perror("spawnActor\t:\tCouldn't close fifos");
-      kill(retval, SIGKILL);
-      return -1;
-    } else {
-      return retval;
-    }
+    announce("spawnActor\t:\tClosing fifos\n");  
+    ec_neg1( close(fds[0]) );
+    ec_neg1( close(fds[1]) );
+    ec_neg1( close(fds[2]) );
+    return retval;
   }
 
-  
-  
  fail:
-  
-  fprintf(stderr, "spawnActor\t:\tFailure in spawnActor: %s\n", strerror(errno));
+
+EC_CLEANUP_BGN
+if(retval > 0){ kill(retval, SIGKILL); }
   return -1;
+EC_CLEANUP_END
   
 }
 
 actor_spec* makeActorSpec(char *name){
+  int i;
   actor_spec *retval = NULL;
-  if(name == NULL){
-    goto fail;
-  } else {
-    int i;
-    retval = (actor_spec *)calloc(1, sizeof(actor_spec));
-    if(retval == NULL) goto fail;
+  if(name != NULL){
+    ec_null( retval = calloc(1, sizeof(actor_spec)) );
     sprintf(retval->name, name);
     for(i = 0; i < 3; i++){
-      sprintf(retval->fifos[i],
-	      "/tmp/iop_%d_%s_%s",
-	      iop_pid,
-	      name,
-	      ((i == 0) ? "IN" : ((i == 1) ? "OUT" : "ERR")));
-      /* try and clean up old copies */
+      char *stream = ((i == 0) ? "IN" : ((i == 1) ? "OUT" : "ERR"));
+      sprintf(retval->fifos[i], "/tmp/iop_%d_%s_%s", iop_pid, name, stream);
+      /* try and clean up old copies, ignore failure */
       (void)unlink(retval->fifos[i]);
       /* make new ones               */
-      if(mkfifo(retval->fifos[i], mode[i]) == -1) goto fail;
+      ec_neg1( mkfifo(retval->fifos[i], mode[i]) );
     }
+    return retval;
   }
-  
-  return retval;
-
- fail:
-  
-  fprintf(stderr, "makeActorSpec\t:\tFailure in makeActorSpec: %s\n", strerror(errno));
+EC_CLEANUP_BGN
   return NULL;
+EC_CLEANUP_END
 }
 
 
@@ -231,42 +214,39 @@ int notifyRegistry(actor_spec *acts){
   registry_cmd_t cmd = REGISTER;
   if(acts == NULL) 
     goto fail;
-  if(ACTOR_DEBUG){fprintf(stderr, "notifyRegistry\t:\tOpening Registry  write fifo\n");  
-  fprintf(stderr,"Registry write fifo is: %s \n",registry_fifo_in);
-  }
+  announce("notifyRegistry\t:\tOpening Registry  write fifo\n");  
+  announce("Registry write fifo is: %s \n", registry_fifo_in);
   if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
     goto fail;
 
-  if(ACTOR_DEBUG)fprintf(stderr, "notifyRegistry\t:\tOpened Registry write fifo\n");  
+  announce("notifyRegistry\t:\tOpened Registry write fifo\n");  
     
-  if(ACTOR_DEBUG)fprintf(stderr, "notifyRegistry\t:\tOpening Registry read fifo\n");  
+  announce("notifyRegistry\t:\tOpening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
     goto fail;
-  if(ACTOR_DEBUG)fprintf(stderr, "notifyRegistry\t:\tOpened Registry read fifo\n");  
+  announce("notifyRegistry\t:\tOpened Registry read fifo\n");  
 
-  if(ACTOR_DEBUG) fprintf(stderr,"notifyRegistry\t:\t registry_fifo_out: %s\n",registry_fifo_out);
+  announce("notifyRegistry\t:\t registry_fifo_out: %s\n",registry_fifo_out);
 
   lockFD(&wr_lock, reg_wr_fd, "notifyRegistry: Registry write fifo");
 
   lockFD(&rd_lock, reg_rd_fd, "notifyRegistry: Registry read  fifo");
 
-  if(ACTOR_DEBUG)fprintf(stderr, "notifyRegistry\t:\tWriting cmd\n");  
+  announce("notifyRegistry\t:\tWriting cmd\n");  
   if(writeInt(reg_wr_fd, cmd) < 0) 
     goto unlock;
 
-  if(ACTOR_DEBUG)fprintf(stderr, "notifyRegistry\t:\tWriting actor spec\n");  
+  announce("notifyRegistry\t:\tWriting actor spec\n");  
   if(writeActorSpec(reg_wr_fd, acts) < 0) goto unlock;
 
   retval = 0;
 
   {
     int slotNumber;
-    if(ACTOR_DEBUG)
-      fprintf(stderr, "notifyRegistry\t:\tWaiting for registry slotNumber ACK\n");
+    announce("notifyRegistry\t:\tWaiting for registry slotNumber ACK\n");
     if(readInt(reg_rd_fd, &slotNumber) < 0)
       goto fail;
-    if(ACTOR_DEBUG)
-      fprintf(stderr, "notifyRegistry\t:\tRead %d from registry\n", slotNumber);
+    announce("notifyRegistry\t:\tRead %d from registry\n", slotNumber);
 
   }
 
@@ -276,7 +256,7 @@ int notifyRegistry(actor_spec *acts){
 
   unlockFD(&rd_lock, reg_rd_fd, "notifyRegistry: Registry read fifo");
   
-  if(ACTOR_DEBUG)fprintf(stderr, "notifyRegistry\t:\tClosing read and write fifo\n");  
+  announce("notifyRegistry\t:\tClosing read and write fifo\n");  
 
   if((close(reg_wr_fd) == -1) || (close(reg_rd_fd) == -1)) 
     goto fail;
@@ -299,42 +279,38 @@ int deleteFromRegistry(char *name){
   if(name == NULL) 
     goto fail;
   len = strlen(name);
-  if(ACTOR_DEBUG){
-    fprintf(stderr, "deleteFromRegistry\t:\tOpening Registry  write fifo\n");  
-    fprintf(stderr,"deleteFrom Registry\t:\t FIFO is: %s\n",registry_fifo_in);
-  }
+  announce("deleteFromRegistry\t:\tOpening Registry  write fifo\n");  
+  announce("deleteFrom Registry\t:\t FIFO is: %s\n",registry_fifo_in);
   if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
     goto fail;
 
-  if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tOpened Registry write fifo\n");  
+  announce("deleteFromRegistry\t:\tOpened Registry write fifo\n");  
     
-  if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tOpening Registry read fifo\n");  
+  announce("deleteFromRegistry\t:\tOpening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
     goto fail;
-  if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tOpened Registry read fifo\n");  
+  announce("deleteFromRegistry\t:\tOpened Registry read fifo\n");  
 
 
   lockFD(&wr_lock, reg_wr_fd, "deleteFromRegistry: Registry write fifo");
 
   lockFD(&rd_lock, reg_rd_fd, "deleteFromRegistry: Registry read  fifo");
 
-  if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tWriting cmd\n");  
+  announce("deleteFromRegistry\t:\tWriting cmd\n");  
   if(writeInt(reg_wr_fd, cmd) < 0) goto unlock;
 
-  if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tWriting actor name\n");  
+  announce("deleteFromRegistry\t:\tWriting actor name\n");  
   if(write(reg_wr_fd, name, len) != len)
     goto unlock;
 
 
   {
     int slotNumber;
-    if(ACTOR_DEBUG)
-      fprintf(stderr, "deleteFromRegistry\t:\tWaiting for registry slotNumber ACK\n");
+    announce("deleteFromRegistry\t:\tWaiting for registry slotNumber ACK\n");
     if(readInt(reg_rd_fd, &slotNumber) < 0)
       goto fail;
     retval = slotNumber;
-    if(ACTOR_DEBUG)
-      fprintf(stderr, "deleteFromRegistry\t:\tRead %d from registry\n", slotNumber);
+    announce("deleteFromRegistry\t:\tRead %d from registry\n", slotNumber);
 
   }
 
@@ -344,7 +320,7 @@ int deleteFromRegistry(char *name){
 
   unlockFD(&rd_lock, reg_rd_fd, "deleteFromRegistry: Registry read fifo");
   
-  if(ACTOR_DEBUG)fprintf(stderr, "deleteFromRegistry\t:\tClosing read and write fifo\n");  
+  announce("deleteFromRegistry\t:\tClosing read and write fifo\n");  
 
   if((close(reg_wr_fd) == -1) || (close(reg_rd_fd) == -1)) 
     goto fail;
@@ -364,24 +340,24 @@ void sendRequest(int index, int bytes, char* buff){
   struct flock lock;
   registry_cmd_t cmd = SEND;
   
-  if(ACTOR_DEBUG)fprintf(stderr, "sendRequest\t:\tOpening Registry fifo\n");  
+  announce("sendRequest\t:\tOpening Registry fifo\n");  
   if((reg_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
     goto fail;
-  if(ACTOR_DEBUG)fprintf(stderr, "sendRequest\t:\tOpened Registry fifo\n");  
+  announce("sendRequest\t:\tOpened Registry fifo\n");  
 
   lockFD(&lock, reg_fd, "sendRequest: Registry fifo");
 
-  if(ACTOR_DEBUG)fprintf(stderr, "sendRequest\t:\tWriting cmd\n");  
+  announce("sendRequest\t:\tWriting cmd\n");  
   if(writeInt(reg_fd, cmd) < 0) goto unlock;
 
-  if(ACTOR_DEBUG)fprintf(stderr, "sendRequest\t:\tWriting index\n");  
+  announce("sendRequest\t:\tWriting index\n");  
   if(writeInt(reg_fd, index) < 0) goto unlock;
 
-  if(ACTOR_DEBUG)fprintf(stderr, "sendRequest\t:\tWriting bytes\n");  
+  announce("sendRequest\t:\tWriting bytes\n");  
   if(writeInt(reg_fd, bytes) < 0) goto unlock;
 
   
-  if(ACTOR_DEBUG)fprintf(stderr, "sendRequest\t:\tWriting buff\n");  
+  announce("sendRequest\t:\tWriting buff\n");  
   if(write(reg_fd, buff, bytes) != bytes) 
     goto unlock;
 
@@ -389,7 +365,7 @@ void sendRequest(int index, int bytes, char* buff){
  unlock:
   unlockFD(&lock, reg_fd, "sendRequest: Registry fifo");
   
-  if(ACTOR_DEBUG)fprintf(stderr, "sendRequest\t:\tClosing fifo\n");  
+  announce("sendRequest\t:\tClosing fifo\n");  
   if(close(reg_fd) == -1)
     goto fail;
   return;
@@ -407,20 +383,20 @@ void terminateIOP(void){
   struct flock lock;
   registry_cmd_t cmd = KILL;
   
-  if(ACTOR_DEBUG)fprintf(stderr, "Opening Registry fifo\n");  
+  announce("Opening Registry fifo\n");  
   if((reg_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
     goto fail;
-  if(ACTOR_DEBUG)fprintf(stderr, "Opened Registry fifo\n");  
+  announce("Opened Registry fifo\n");  
 
   lockFD(&lock, reg_fd, "terminateIOP: Registry fifo");
 
-  if(ACTOR_DEBUG)fprintf(stderr, "Writing cmd\n");  
+  announce("Writing cmd\n");  
   if(writeInt(reg_fd, cmd) < 0) goto unlock;
 
  unlock:
   unlockFD(&lock, reg_fd, "terminateIOP: Registry fifo");
 
-  if(ACTOR_DEBUG)fprintf(stderr, "Closing fifo\n");  
+  announce("Closing fifo\n");  
   if(close(reg_fd) == -1)
     goto fail;
   return;

@@ -24,8 +24,6 @@
 
 #define CHATTER                   0
 
-#define ACTOR_DEBUG               0
-#define DOT_DEBUG                 0
 #define EXECUTOR_DEBUG            0
 #define FILEMANAGER_DEBUG         0
 #define HTTPLISTEN_DEBUG          0
@@ -45,7 +43,6 @@
 #define REGISTRY_DEBUG            0  
 #define SOCKET_DEBUG              0
 #define SOCKETFACTORY_DEBUG       0
-#define SOCKET_LIB_DEBUG          0
 #define WRAPPER_DEBUG             0
 #define MAUDE_WRAPPER_DEBUG       0
 #define SAL_ACTOR_DEBUG           0

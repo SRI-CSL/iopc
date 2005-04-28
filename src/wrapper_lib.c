@@ -27,6 +27,7 @@
 #include "msg.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h"
+#include "iop_lib.h"
 #include "ec.h"
 
 extern pid_t child;
@@ -63,19 +64,15 @@ EC_CLEANUP_END
 void parseMaudeThenEcho(int from, int to){
   msg* message;
   int length;
-  if(MAUDE_WRAPPER_DEBUG)
-    fprintf(stderr, "parseMaudeThenEcho\t:\tCalling readMaudeMsg\n");
+  announce("parseMaudeThenEcho\t:\tCalling readMaudeMsg\n");
   message = readMaudeMsg(from);
-  if(MAUDE_WRAPPER_DEBUG)
-    fprintf(stderr, "parseMaudeThenEcho\t:\treadMaudeMsg returned %d bytes\n", message->bytesUsed);
+  announce("parseMaudeThenEcho\t:\treadMaudeMsg returned %d bytes\n", message->bytesUsed);
   if(message != NULL){
     length = parseString(message->data, message->bytesUsed);
     message->bytesUsed = length;
     sendMsg(to, message);
-    if(MAUDE_WRAPPER_DEBUG){
-      writeMsg(STDERR_FILENO, message);
-      fprintf(stderr, "\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
-    }
+    if(MAUDE_WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
+    announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     freeMsg(message);
   }
 }
@@ -88,10 +85,8 @@ void parsePVSThenEcho(char *prompt, int from, int to){
     length = parseString(message->data, message->bytesUsed);
     message->bytesUsed = length;
     sendMsg(to, message);
-    if(WRAPPER_DEBUG){
-      writeMsg(STDERR_FILENO, message);
-      fprintf(stderr, "\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
-    }
+    if(WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
+    announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     freeMsg(message);
   }
 }
@@ -159,8 +154,7 @@ int parseString(char* inBytes, int bytesIn){
     if(*pin == '\0'){
       *pout = '\n';
       retval++;
-      if(WRAPPER_DEBUG)
-	fprintf(stderr, "parseString saw a NULL, wasn't expecting it!\n");
+      announce("parseString saw a NULL, wasn't expecting it!\n");
       return retval;
     }
     if(*pin == '"'){

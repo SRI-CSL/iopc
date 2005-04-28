@@ -1,25 +1,25 @@
 /*
-    The InterOperability Platform: IOP
-    Copyright (C) 2004 Ian A. Mason
-    School of Mathematics, Statistics, and Computer Science   
-    University of New England, Armidale, NSW 2351, Australia
-    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
-    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+  The InterOperability Platform: IOP
+  Copyright (C) 2004 Ian A. Mason
+  School of Mathematics, Statistics, and Computer Science   
+  University of New England, Armidale, NSW 2351, Australia
+  iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
+  http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
 
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include "cheaders.h"
@@ -50,8 +50,7 @@ int main(int argc, char** argv){
 
   while(1){
     requestNo++;
-    if(FILEMANAGER_DEBUG)
-      fprintf(stderr, "filemanager at top of loop\n");
+    announce("filemanager at top of loop\n");
     if(messageIn  != NULL){ 
       freeMsg(messageIn);
       messageIn = NULL;
@@ -60,43 +59,36 @@ int main(int argc, char** argv){
       freeMsg(messageOut);
       messageOut = NULL;
     }
-    if(FILEMANAGER_DEBUG)
-      fprintf(stderr, "filemanager readMsg-ing\n");
+    announce("filemanager readMsg-ing\n");
     messageIn = acceptMsg(STDIN_FILENO);
     if(messageIn == NULL){
       perror("filemanager readMsg failed");
       continue;
     }
-    if(FILEMANAGER_DEBUG)
-      fprintf(stderr, "filemanager readMsg-ed\n");
+    announce("filemanager readMsg-ed\n");
     retval = parseActorMsg(messageIn->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", messageIn->data);
       continue;
     }
-    if(FILEMANAGER_DEBUG)
-      fprintf(stderr, "filemanager parseActorMsg-ed\n");
+    announce("filemanager parseActorMsg-ed\n");
     if(getNextToken(body, &cmd, &rest) != 1){
       fprintf(stderr, "didn't understand: (cmd)\n\t \"%s\" \n", body);
       continue;
     }
-    if(FILEMANAGER_DEBUG)
-      fprintf(stderr, "filemanager getNextToken-ed of cmd\n");
+    announce("filemanager getNextToken-ed of cmd\n");
     if(getNextToken(rest, &filename, &rest) != 1){
       fprintf(stderr, "didn't understand: (filename)\n\t \"%s\" \n", rest);
       continue;
     }
-    if(FILEMANAGER_DEBUG)
-      fprintf(stderr, "filemanager getNextToken-ed of filename\n");
+    announce("filemanager getNextToken-ed of filename\n");
     if(!strcmp(cmd, "read")){
       char *newfilename = NULL;
       char *oldfilename = filename;
       int fd, tilde;
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager entering a read command\n");
+      announce("filemanager entering a read command\n");
       tilde = interpretTildes(filename, &newfilename);
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager interpretTildes-ed\n");
+      announce("filemanager interpretTildes-ed\n");
       if(tilde) filename = newfilename;
       fd = open(filename, O_RDONLY, 0);
       if(fd < 0){
@@ -104,22 +96,18 @@ int main(int argc, char** argv){
         perror("couldn't open file for reading");
 	goto rfail;
       }
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager file opened\n");
+      announce("filemanager file opened\n");
 
       lockFD(&lock, fd, filename);
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager file locked\n");
+      announce("filemanager file locked\n");
 
       if((messageOut = readMsg(fd)) == NULL){
         perror("filemanager read from file failed");
 	close(fd);
 	goto urfail;
       }
-      if(FILEMANAGER_DEBUG)
-        fprintf(stderr, 
-		"%s\n%s\ncontents %s\n%s\n", 
-		sender, myname, oldfilename, messageOut->data);
+      if(FILEMANAGER_DEBUG)fprintf(stderr,"%s\n%s\ncontents %s\n%s\n", 
+				   sender, myname, oldfilename, messageOut->data);
       sendFormattedMsgFP(stdout, "%s\n%s\ncontents %s\n%s\n", 
 			 sender, myname, oldfilename, messageOut->data);
       close(fd);
@@ -130,8 +118,7 @@ int main(int argc, char** argv){
       unlockFD(&lock, fd, filename);
       
     rfail:
-      if(FILEMANAGER_DEBUG)
-        fprintf(stderr, "%s\n%s\nreadFailure\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nreadFailure\n%s\n", sender, myname, oldfilename);
       sendFormattedMsgFP(stdout, "%s\n%s\nreadFailure\n%s\n", sender, myname, oldfilename);
       free(newfilename);
       continue;
@@ -140,24 +127,20 @@ int main(int argc, char** argv){
       char *newfilename = NULL;
       char *oldfilename = filename;
       int fd, tilde;
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager entering write command\n");
+      announce("filemanager entering write command\n");
       tilde = interpretTildes(filename, &newfilename);
       if(tilde) filename = newfilename;
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager interpretTildes-ed\n");
+      announce("filemanager interpretTildes-ed\n");
       fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC, mode); 
       if(fd < 0){
         fprintf(stderr, "file = \"%s\"\n", filename);
         perror("couldn't open file for writing");
 	goto wfail;
       }
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager opened file\n");
+      announce("filemanager opened file\n");
      
       lockFD(&lock, fd, filename);
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager locked file\n");
+      announce("filemanager locked file\n");
       
       while(isspace(*rest))rest++;
 
@@ -167,8 +150,7 @@ int main(int argc, char** argv){
 	goto uwfail;
       }
 
-      if(FILEMANAGER_DEBUG)
-        fprintf(stderr, "%s\n%s\nwriteOK\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nwriteOK\n%s\n", sender, myname, oldfilename);
       sendFormattedMsgFP(stdout, "%s\n%s\nwriteOK\n%s\n", sender, myname, oldfilename);
       close(fd);
       free(newfilename);
@@ -178,8 +160,7 @@ int main(int argc, char** argv){
       unlockFD(&lock, fd, filename);
 
     wfail:
-      if(FILEMANAGER_DEBUG)
-        fprintf(stderr, "%s\n%s\nwriteFailure\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nwriteFailure\n%s\n", sender, myname, oldfilename);
       sendFormattedMsgFP(stdout, "%s\n%s\nwriteFailure\n%s\n", sender, myname, oldfilename);
       free(newfilename);
       continue;
@@ -188,11 +169,9 @@ int main(int argc, char** argv){
       char *newfilename = NULL;
       char *oldfilename = filename;
       int fd, tilde;
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager entering a append clause\n");
+      announce("filemanager entering a append clause\n");
       tilde = interpretTildes(filename, &newfilename);
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager interpretTildes-ed\n");
+      announce("filemanager interpretTildes-ed\n");
       if(tilde) filename = newfilename;
       fd = open(filename, O_WRONLY|O_CREAT|O_APPEND, mode); 
       if(fd < 0){
@@ -201,21 +180,18 @@ int main(int argc, char** argv){
 	goto afail;
       }
 
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager opened file\n");
+      announce("filemanager opened file\n");
 
       lockFD(&lock, fd, filename);
 
-      if(FILEMANAGER_DEBUG)
-	fprintf(stderr, "filemanager locked file\n");
+      announce("filemanager locked file\n");
 
       if((byteswritten = write(fd, rest, strlen(rest))) < 0){
         perror("filemanager append to file failed");
 	close(fd);
 	goto uafail;
       }
-      if(FILEMANAGER_DEBUG)
-        fprintf(stderr, "%s\n%s\nappendOK\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nappendOK\n%s\n", sender, myname, oldfilename);
       sendFormattedMsgFP(stdout, "%s\n%s\nappendOK\n%s\n", sender, myname, oldfilename);
       close(fd);
       free(newfilename);
@@ -225,14 +201,13 @@ int main(int argc, char** argv){
       unlockFD(&lock, fd, filename);
 
     afail:
-      if(FILEMANAGER_DEBUG)
-        fprintf(stderr, "%s\n%s\nappendFailure\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nappendFailure\n%s\n", sender, myname, oldfilename);
       sendFormattedMsgFP(stdout, "%s\n%s\nappendFailure\n%s\n", sender, myname, oldfilename);
       free(newfilename);
     } else {
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", messageIn->data);
     }
-      continue;
+    continue;
   }
 }
 
@@ -241,8 +216,7 @@ static int interpretTildes(const char* filename, char **newfilenamep){
   if((filename == NULL) || 
      (strchr(filename, '~') != filename) || 
      (newfilenamep == NULL)){
-    if(FILEMANAGER_DEBUG)
-      fprintf(stderr, "Didn't interpret any tildes\n");
+    announce("Didn't interpret any tildes\n");
     return 0;
   } else {
     uid_t me = getuid();

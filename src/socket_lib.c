@@ -26,6 +26,7 @@
 #include "constants.h"
 #include "types.h"
 #include "socket_lib.h"
+#include "iop_lib.h"
 #include "dbugflags.h"
 
 
@@ -141,8 +142,7 @@ void* in2socket(void *sp){
       socketCleanUp();
       return NULL;
     }
-    if(SOCKET_LIB_DEBUG)
-      fprintf(stderr, "sent %d chars to socket\n", retval);
+    announce("sent %d chars to socket\n", retval);
   }
   return NULL;
 }
@@ -152,8 +152,7 @@ void* socket2outGentle(void *sp){
   char buff[BUFFSZ];
   int i, retval, gots = 0;
   while(1){
-    if(SOCKET_LIB_DEBUG)
-      fprintf(stderr, "socket2outGentle commencing recv on %d\n", (int)socket);
+    announce("socket2outGentle commencing recv on %d\n", (int)socket);
     gots++;
     retval = recv(socket, buff, BUFFSZ, 0);
     if(retval == 0){
@@ -166,8 +165,7 @@ void* socket2outGentle(void *sp){
       closeSocket(socket);
       return  NULL;
     } else {
-      if(SOCKET_LIB_DEBUG)
-        fprintf(stderr, "sending %d chars to stdout\n", retval);
+      announce("sending %d chars to stdout\n", retval);
       for(i = 0; i < retval; i++) putc(buff[i], stdout);
       fprintf(stdout, "\n");
       fflush(stdout);
@@ -182,8 +180,7 @@ void* socket2outGentleWithHttpAck(void *sp){
   int i, retval, gots = 0;
   char ack204[] = "HTTP/1.1 204 OK\r\n\r\n";
   while(1){
-    if(SOCKET_LIB_DEBUG)
-      fprintf(stderr, "socket2outGentle commencing recv on %d\n", (int)socket);
+    announce("socket2outGentle commencing recv on %d\n", (int)socket);
     gots++;
     retval = recv(socket, buff, BUFFSZ, 0);
     if(retval == 0){
@@ -196,8 +193,7 @@ void* socket2outGentleWithHttpAck(void *sp){
       closeSocket(socket);
       return  NULL;
     } else {
-      if(SOCKET_LIB_DEBUG)
-        fprintf(stderr, "sending %d chars to stdout\n", retval);
+      announce("sending %d chars to stdout\n", retval);
       for(i = 0; i < retval; i++) putc(buff[i], stdout);
       fprintf(stdout, "\n");
       fflush(stdout);

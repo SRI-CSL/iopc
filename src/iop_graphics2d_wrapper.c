@@ -28,6 +28,7 @@
 #include "dbugflags.h"
 #include "wrapper_lib.h"
 #include "iop_lib.h"
+#include "ec.h"
 #include "externs.h"
 
 int   local_debug_flag  = G2D_ACTOR_DEBUG;
@@ -39,23 +40,10 @@ static char* graphics_argv[] = {"java", "-cp", NULL, "g2d.Main", NULL, NULL};
 
 static int child_died = 0;
 
-static void graphics_wrapper_sigchild_handler(int sig){
+static void chld_handler(int sig){
   fprintf(stderr, "%s died! Exiting\n", graphics_argv[3]);
   child_died = 1;
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myName, myName);
-}
-
-static void graphics_wrapper_installHandler(){
-  struct sigaction sigactchild;
-  struct sigaction sigactint;
-  sigactchild.sa_handler = graphics_wrapper_sigchild_handler;
-  sigactchild.sa_flags = SA_NOCLDSTOP;
-  sigfillset(&sigactchild.sa_mask);
-  sigaction(SIGCHLD, &sigactchild, NULL);
-  sigactint.sa_handler = wrapper_sigint_handler;
-  sigactint.sa_flags = 0;
-  sigfillset(&sigactint.sa_mask);
-  sigaction(SIGINT, &sigactint, NULL);
 }
 
 int main(int argc, char** argv){
@@ -71,35 +59,28 @@ int main(int argc, char** argv){
   }
 
   graphics_argv[4] = myName;
-  graphics_wrapper_installHandler();
 
-  if((pipe(pin)  != 0) || 
-     (pipe(perr) != 0) ||
-     (pipe(pout) != 0)){
-    perror("couldn't make pipes");
-    exit(EXIT_FAILURE);
-  }
-  child = fork();
-  if(child < 0){
-    perror("couldn't fork");
-    exit(EXIT_FAILURE);
-  } else if(child == 0){
-      /* i'm destined to be the java graphics program */
-    if((dup2(pin[0],  STDIN_FILENO) < 0)  ||
-       (dup2(perr[1], STDERR_FILENO) < 0) ||
-       (dup2(pout[1], STDOUT_FILENO) < 0)){
-      perror("couldn't dup fd's");
-      exit(EXIT_FAILURE);
-    }
-    if((close(pin[0])  !=  0) ||
-       (close(perr[1]) !=  0) ||
-       (close(pout[1]) !=  0)){
-      perror("couldn't close fd's");
-      exit(EXIT_FAILURE);
-    } 
-    execvp(graphics_exe, graphics_argv);
-    perror("couldn't execvp");
-    exit(EXIT_FAILURE);
+  ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
+
+  ec_neg1( pipe(pin) );
+  ec_neg1( pipe(perr) );
+  ec_neg1( pipe(pout) );
+
+  /*it's time to fork */
+  ec_neg1( child = fork() );
+
+  if(child == 0){
+    /* i'm destined to be the java graphics program */
+    ec_neg1( dup2(pin[0],  STDIN_FILENO) );
+    ec_neg1( dup2(perr[1], STDERR_FILENO) );
+    ec_neg1( dup2(pout[1], STDOUT_FILENO) );
+
+    ec_neg1( close(pin[0])  );
+    ec_neg1( close(perr[1]) );
+    ec_neg1( close(pout[1]) );
+
+    ec_neg1( execvp(graphics_exe, graphics_argv) );
+
     /* end of child code */
   } else {
     /* i'm the boss */
@@ -116,22 +97,14 @@ int main(int argc, char** argv){
     outFdB.fd = pout[0];
     outFdB.exit = &child_died;
 
-    if((close(pin[0])  !=  0) ||
-       (close(perr[1]) !=  0) ||
-       (close(pout[1]) !=  0)){
-      perror("couldn't close fd's");
-      exit(EXIT_FAILURE);
-    }
+    ec_neg1( close(pin[0])  );
+    ec_neg1( close(perr[1]) );
+    ec_neg1( close(pout[1]) );
 
-    if(pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB)){
-      fprintf(stderr, "Could not spawn echoErrorsSilently thread\n");
-      exit(EXIT_FAILURE);
-    }
+    ec_rv( pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB) );
 
-    if(pthread_create(&outThread, NULL, wrapper_echoOutSilently, &outFdB)){
-      fprintf(stderr, "Could not spawn wrapper_echoOut thread\n");
-      exit(EXIT_FAILURE);
-    }
+    ec_rv( pthread_create(&outThread, NULL, wrapper_echoOutSilently, &outFdB) );
+
       
     while(1){
       int size;
@@ -147,5 +120,12 @@ int main(int argc, char** argv){
     }
     /* end of boss code */
   }
+
+  exit(EXIT_SUCCESS);
+
+EC_CLEANUP_BGN
+  exit(EXIT_FAILURE);
+EC_CLEANUP_END
+
 }
 

@@ -1,25 +1,25 @@
 /*
-    The InterOperability Platform: IOP
-    Copyright (C) 2004 Ian A. Mason
-    School of Mathematics, Statistics, and Computer Science   
-    University of New England, Armidale, NSW 2351, Australia
-    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
-    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+  The InterOperability Platform: IOP
+  Copyright (C) 2004 Ian A. Mason
+  School of Mathematics, Statistics, and Computer Science   
+  University of New England, Armidale, NSW 2351, Australia
+  iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
+  http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
 
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include "cheaders.h"
@@ -52,15 +52,13 @@ static void *listener_cmd_thread(void *arg){
   while(1){
     requestNo++;
     freeMsg(message);
-    if(LISTENER_DEBUG)
-      fprintf(stderr, "%s waiting to process request number %d\n", myName, requestNo);
+    announce("%s waiting to process request number %d\n", myName, requestNo);
     message = acceptMsg(STDIN_FILENO);
     if(message == NULL){
       perror("listener readMsg failed");
       continue;
     }
-    if(LISTENER_DEBUG)
-      fprintf(stderr, "%s processing request:\n\"%s\"\n", myName, message->data);
+    announce("%s processing request:\n\"%s\"\n", myName, message->data);
     retval = parseActorMsg(message->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", message->data);
@@ -75,20 +73,14 @@ static void *listener_cmd_thread(void *arg){
       if(!closed){
         closed = 1;
         closeSocket(listenFd);
-        if(LISTENER_DEBUG)
-          fprintf(stderr, "%s\n%s\ncloseOK\n", sender, myName);
+        announce("%s\n%s\ncloseOK\n", sender, myName);
         sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, myName);
-        if(LISTENER_DEBUG)
-	  fprintf(stderr, "Listener called %s unregistering\n", myName);
+        announce("Listener called %s unregistering\n", myName);
 	slotNumber = deleteFromRegistry(myName);
-        if(LISTENER_DEBUG)
-	  fprintf(stderr, 
-		  "Listener called %s removed from slot %d, now exiting\n", 
-		  myName, slotNumber);
+        announce("Listener called %s removed from slot %d, now exiting\n", myName, slotNumber);
 	exit(EXIT_SUCCESS);
       } else {
-        if(DEBUG)
-          fprintf(stderr, "%s\n%s\ncloseFailure\n", sender, myName);
+        if(DEBUG)fprintf(stderr, "%s\n%s\ncloseFailure\n", sender, myName);
         sendFormattedMsgFP(stdout, "%s\n%s\ncloseFailure\n", sender, myName);
       }
     } else {
@@ -104,10 +96,7 @@ static void listener_sigchild_handler(int sig){
   pid_t child;
   int status;
   child = wait(&status);
-  if(LISTENER_DEBUG)
-    fprintf(stderr, 
-	    "Listener waited on child with pid %d with exit status %d\n", 
-	    child, status);
+  announce("Listener waited on child with pid %d with exit status %d\n", child, status);
 }
 
 static int listener_installHandler(){
@@ -151,16 +140,14 @@ int main(int argc, char** argv){
   };
 
   while(1){
-    if(LISTENER_DEBUG)
-      fprintf(stderr, "Blocking on acceptSocket\n");
+    announce("Blocking on acceptSocket\n");
     msgsock = acceptSocket(listenFd, &description);
     if (*msgsock == INVALID_SOCKET) {
       fprintf(stderr, description);
       free(description);
       continue;
     }
-    if(LISTENER_DEBUG)
-      printf(description);
+    announce(description);
     sprintf(socketName, "%s.%d.%d", childName, myPid, connectionNo);
     sprintf(fdName, "%d", *msgsock);
     childArgv[0] = socketName;
@@ -169,10 +156,7 @@ int main(int argc, char** argv){
     childArgv[3] = registry_fifo_out;
     childArgv[4] = NULL;
     newActor(1, childExe, childArgv);
-    if(LISTENER_DEBUG)
-      fprintf(stderr, 
-              "%s\n%s\nnewConnection\n%s\n", 
-              myClient, myName, socketName);
+    announce("%s\n%s\nnewConnection\n%s\n", myClient, myName, socketName);
     sendFormattedMsgFP(stdout,
 		       "%s\n%s\nnewConnection\n%s\n", 
 		       myClient, myName, socketName);

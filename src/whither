@@ -10,7 +10,6 @@ if(!defined($exe)){
 if(!defined($path)){
     die "Your PATH is not set, I know not whither ${exe} lies!\n";
 }
-
 my ($found, $location) = &whither($exe);
 if($found){
     if(-d $location){
@@ -20,7 +19,6 @@ if($found){
 	print "dir = ${dir}  exe = ${file}\n";
     }
 }
-
 sub whither {
     my $exe  = $_[0];
     my @PATH = File::Spec->path();
@@ -43,8 +41,6 @@ sub whither {
     }
     return (0, undef);
 }
-
-
 sub resolve {
     my ($exe, $node) = @_;
     if(-d $node){
@@ -59,8 +55,6 @@ sub resolve {
     }
     return undef;
 }
-
-
 sub cdDotDot {
     my $file = $_[0];
     if(${file} =~ m|(.*/)([^/]+?)/?$|){
@@ -69,7 +63,6 @@ sub cdDotDot {
 	return ($file, undef);
     } 
 }
-
 sub blend {
     my ($base, $link) = @_;
     while($link =~ m|^\.\./(.*)$|){

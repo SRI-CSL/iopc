@@ -39,9 +39,7 @@ static void intr_handler(int sig){
 }
 
 static void chld_handler(int sig){
-  if(SAL_ACTOR_DEBUG){
-    fprintf(stderr, "\nSAL died! Exiting\n"); 
-  }
+  announce("\nSAL died! Exiting\n"); 
   child_died = 1;
 }
 
@@ -68,8 +66,7 @@ int main(int argc, char** argv){
       freeMsg(messageOut);
       messageOut = NULL;
     }
-    if(SAL_ACTOR_DEBUG)
-      fprintf(stderr, "%s waiting to process request number %d\n", myname, requestNo);
+    announce("%s waiting to process request number %d\n", myname, requestNo);
     messageIn = acceptMsg(STDIN_FILENO);
     if(messageIn == NULL){
       perror("sal_actor: acceptMsg failed");
@@ -103,7 +100,6 @@ int main(int argc, char** argv){
 
     if(child == 0){
       /* i'm destined to be sal */
-
       ec_neg1( dup2(pin[0],  STDIN_FILENO) );
       ec_neg1( dup2(perr[1], STDERR_FILENO) );
       ec_neg1( dup2(pout[1], STDOUT_FILENO) );
@@ -112,9 +108,7 @@ int main(int argc, char** argv){
       ec_neg1( close(perr[1]) );
       ec_neg1( close(pout[1]) );
 
-      execvp(sal_argv[0], sal_argv);
-      perror("couldn't execvp");
-      exit(EXIT_FAILURE);
+      ec_neg1( execvp(sal_argv[0], sal_argv) );
 
     } else { 
       /* I am the boss */

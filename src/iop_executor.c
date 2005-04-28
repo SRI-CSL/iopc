@@ -42,7 +42,7 @@ static void executor_sigchild_handler(int sig){
   /* for the prevention of zombies */
   pid_t child;
   int status;
-  child = wait(&status);
+  child = waitpid(-1, &status, WNOHANG); 
 }
 
 static int executor_installHandler(){
@@ -71,8 +71,7 @@ int main(int argc, char** argv){
       perror("executor readMsg failed");
       continue;
     }
-    if(EXECUTOR_DEBUG)
-      fprintf(stderr, "received:\"%s\"\n", message->data);
+    announce("received:\"%s\"\n", message->data);
     retval = parseActorMsg(message->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "executor didn't understand: \n\t \"%s\" \n", message->data);
@@ -92,8 +91,7 @@ int main(int argc, char** argv){
 	errcode = system(body);
       }
     }
-    if(EXECUTOR_DEBUG)
-      fprintf(stderr, "%s\n%s\nexecuteOK\n%d\n", sender, myname, errcode);
+    announce("%s\n%s\nexecuteOK\n%d\n", sender, myname, errcode);
     sendFormattedMsgFP(stdout, "%s\n%s\nexecuteOK\n%d\n", sender, myname, errcode);
     break;
   }
