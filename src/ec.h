@@ -1,6 +1,11 @@
 /*
   Copyright 2003 by Marc J. Rochkind. All rights reserved.
   See: www.basepath.com/aup/copyright.htm.
+   &
+       "Advanced UNIX Programming" 
+       Marc J. Rochkind
+       2nd Edition 2004
+       Addison Wesley.
   Munged by Ian A. Mason to be as self contained as possible.
 */
 #ifndef _EC_H_

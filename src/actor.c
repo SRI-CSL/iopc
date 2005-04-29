@@ -56,12 +56,9 @@ actor_spec* newActor(int notify, char* executable, char** argv){
     }
     return retval;
   }
-
  fail:
-  
   fprintf(stderr, "newActor\t:\tFailure in newActor: %s\n", strerror(errno));
   return NULL;
-  
 }
 
 /* 
@@ -81,7 +78,6 @@ static int nullifyHandler(){
   ec_neg1( sigaction(SIGINT, &sigact, NULL)  );
   ec_neg1( sigaction(SIGUSR1, &sigact, NULL) );
   return 0;
-
 EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
@@ -98,9 +94,7 @@ pid_t spawnActor(actor_spec *act, char* executable, char** argv){
     announce("spawnActor\t:\tOpened %s\n", act->fifos[i]);
   }
   announce("spawnActor\t:\tCalling fork\n");  
-
   ec_neg1( retval = fork() );
-  
   if(retval == 0){
     /* child process, destined to be new actor */
     if( nullifyHandler() < 0){ goto fail;  }
@@ -144,14 +138,11 @@ pid_t spawnActor(actor_spec *act, char* executable, char** argv){
     ec_neg1( close(fds[2]) );
     return retval;
   }
-
  fail:
-
 EC_CLEANUP_BGN
 if(retval > 0){ kill(retval, SIGKILL); }
   return -1;
 EC_CLEANUP_END
-  
 }
 
 actor_spec* makeActorSpec(char *name){
@@ -177,98 +168,77 @@ EC_CLEANUP_END
 
 
 
-void lockFD(struct flock* lock, int fd, char* comment){
+int lockFD(struct flock* lock, int fd, char* comment){
   if(LOCKS_DEBUG)fprintf(stderr, "Locking %s\n", comment);  
 #ifdef _MAC
   /* cannot fcntl fifos on Mac OS X */
-  flock(fd, LOCK_EX);
+  ec_neg1( flock(fd, LOCK_EX) );
 #else
   memset(lock, 0, sizeof(struct flock));
   lock->l_type = F_WRLCK;
-  if(fcntl(fd, F_SETLKW, lock) == -1){
-    fprintf(stderr, "lockFD(%s)\t:\tFailure in fcntl: %s\n", comment, strerror(errno));
-    return;
-  }
+  ec_neg1( fcntl(fd, F_SETLKW, lock) );
 #endif
   if(LOCKS_DEBUG)fprintf(stderr, "Locked %s\n", comment);  
+  return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
-void unlockFD(struct flock* lock, int fd, char* comment){
+int unlockFD(struct flock* lock, int fd, char* comment){
   if(LOCKS_DEBUG)fprintf(stderr, "Unlocking %s\n", comment);  
 #ifdef _MAC
   /* cannot fcntl fifos on Mac OS X */
-  flock(fd, LOCK_UN);
+  ec_neg1( flock(fd, LOCK_UN) );
 #else
   lock->l_type = F_UNLCK;
-  if(fcntl(fd, F_SETLKW, lock) == -1){
-    fprintf(stderr, "unlockFD(%s)\t:\tFailure in fcntl: %s\n", comment, strerror(errno));
-    return;
-  }
+  ec_neg1( fcntl(fd, F_SETLKW, lock) ); 
 #endif
   if(LOCKS_DEBUG)fprintf(stderr, "Unlocked %s\n", comment);  
+  return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 int notifyRegistry(actor_spec *acts){
   int reg_wr_fd, reg_rd_fd, retval = -1;
   struct flock wr_lock, rd_lock;
   registry_cmd_t cmd = REGISTER;
-  if(acts == NULL) 
-    goto fail;
+  if(acts == NULL){ goto fail; }
   announce("notifyRegistry\t:\tOpening Registry  write fifo\n");  
   announce("Registry write fifo is: %s \n", registry_fifo_in);
-  if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
-    goto fail;
-
+  ec_neg1( reg_wr_fd = open(registry_fifo_in,  O_RDWR) );
   announce("notifyRegistry\t:\tOpened Registry write fifo\n");  
-    
   announce("notifyRegistry\t:\tOpening Registry read fifo\n");  
-  if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
-    goto fail;
+  ec_neg1( reg_rd_fd = open(registry_fifo_out,  O_RDWR) );
   announce("notifyRegistry\t:\tOpened Registry read fifo\n");  
-
   announce("notifyRegistry\t:\t registry_fifo_out: %s\n",registry_fifo_out);
-
-  lockFD(&wr_lock, reg_wr_fd, "notifyRegistry: Registry write fifo");
-
-  lockFD(&rd_lock, reg_rd_fd, "notifyRegistry: Registry read  fifo");
-
+  if(lockFD(&wr_lock, reg_wr_fd, "notifyRegistry: Registry write fifo") < 0){ goto fail; }
+  if(lockFD(&rd_lock, reg_rd_fd, "notifyRegistry: Registry read  fifo") < 0){ goto fail; }
   announce("notifyRegistry\t:\tWriting cmd\n");  
-  if(writeInt(reg_wr_fd, cmd) < 0) 
-    goto unlock;
-
+  if(writeInt(reg_wr_fd, cmd) < 0){ goto unlock; }
   announce("notifyRegistry\t:\tWriting actor spec\n");  
-  if(writeActorSpec(reg_wr_fd, acts) < 0) goto unlock;
-
+  if(writeActorSpec(reg_wr_fd, acts) < 0){ goto unlock; }
   retval = 0;
-
   {
     int slotNumber;
     announce("notifyRegistry\t:\tWaiting for registry slotNumber ACK\n");
-    if(readInt(reg_rd_fd, &slotNumber) < 0)
-      goto fail;
+    if(readInt(reg_rd_fd, &slotNumber) < 0){ goto fail; }
     announce("notifyRegistry\t:\tRead %d from registry\n", slotNumber);
-
   }
-
  unlock:
-
-  unlockFD(&wr_lock, reg_wr_fd, "notifyRegistry: Registry write fifo");
-
-  unlockFD(&rd_lock, reg_rd_fd, "notifyRegistry: Registry read fifo");
-  
+  if(unlockFD(&wr_lock, reg_wr_fd, "notifyRegistry: Registry write fifo") < 0){ goto fail; }
+  if(unlockFD(&rd_lock, reg_rd_fd, "notifyRegistry: Registry read fifo") < 0){ goto fail; }
   announce("notifyRegistry\t:\tClosing read and write fifo\n");  
-
-  if((close(reg_wr_fd) == -1) || (close(reg_rd_fd) == -1)) 
-    goto fail;
-
+  ec_neg1( close(reg_wr_fd) );
+  ec_neg1( close(reg_rd_fd) ); 
   return retval;
-
  fail:
-  
-  fprintf(stderr, "notifyRegistry\t:\tFailure in notifyRegistry: %s\n", strerror(errno));
-  return retval;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 
-  
 }
 
 
@@ -276,34 +246,21 @@ int deleteFromRegistry(char *name){
   int len, reg_wr_fd, reg_rd_fd, retval = -1;
   struct flock wr_lock, rd_lock;
   registry_cmd_t cmd = UNREGISTER;
-  if(name == NULL) 
-    goto fail;
+  if(name == NULL){ goto fail; }
   len = strlen(name);
   announce("deleteFromRegistry\t:\tOpening Registry  write fifo\n");  
   announce("deleteFrom Registry\t:\t FIFO is: %s\n",registry_fifo_in);
-  if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
-    goto fail;
-
+  ec_neg1( reg_wr_fd = open(registry_fifo_in,  O_RDWR) );
   announce("deleteFromRegistry\t:\tOpened Registry write fifo\n");  
-    
   announce("deleteFromRegistry\t:\tOpening Registry read fifo\n");  
-  if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
-    goto fail;
+  ec_neg1( reg_rd_fd = open(registry_fifo_out,  O_RDWR) );
   announce("deleteFromRegistry\t:\tOpened Registry read fifo\n");  
-
-
-  lockFD(&wr_lock, reg_wr_fd, "deleteFromRegistry: Registry write fifo");
-
-  lockFD(&rd_lock, reg_rd_fd, "deleteFromRegistry: Registry read  fifo");
-
+  if(lockFD(&wr_lock, reg_wr_fd, "deleteFromRegistry: Registry write fifo") < 0){ goto fail; }
+  if(lockFD(&rd_lock, reg_rd_fd, "deleteFromRegistry: Registry read  fifo") < 0){ goto fail; }
   announce("deleteFromRegistry\t:\tWriting cmd\n");  
-  if(writeInt(reg_wr_fd, cmd) < 0) goto unlock;
-
+  if(writeInt(reg_wr_fd, cmd) < 0){ goto unlock; }
   announce("deleteFromRegistry\t:\tWriting actor name\n");  
-  if(write(reg_wr_fd, name, len) != len)
-    goto unlock;
-
-
+  if(write(reg_wr_fd, name, len) != len){ goto unlock; }
   {
     int slotNumber;
     announce("deleteFromRegistry\t:\tWaiting for registry slotNumber ACK\n");
@@ -313,96 +270,67 @@ int deleteFromRegistry(char *name){
     announce("deleteFromRegistry\t:\tRead %d from registry\n", slotNumber);
 
   }
-
  unlock:
-
-  unlockFD(&wr_lock, reg_wr_fd, "deleteFromRegistry: Registry write fifo");
-
-  unlockFD(&rd_lock, reg_rd_fd, "deleteFromRegistry: Registry read fifo");
-  
+  if(unlockFD(&wr_lock, reg_wr_fd, "deleteFromRegistry: Registry write fifo") < 0){ goto fail; }
+  if(unlockFD(&rd_lock, reg_rd_fd, "deleteFromRegistry: Registry read fifo") < 0){ goto fail; }
   announce("deleteFromRegistry\t:\tClosing read and write fifo\n");  
-
-  if((close(reg_wr_fd) == -1) || (close(reg_rd_fd) == -1)) 
-    goto fail;
-
+  ec_neg1( close(reg_wr_fd) );
+  ec_neg1( close(reg_rd_fd) ); 
   return retval;
-
  fail:
-  
-  fprintf(stderr, "deleteFromRegistry\t:\tFailure %s\n", strerror(errno));
-  return retval;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 
-  
 }
 
-void sendRequest(int index, int bytes, char* buff){
+int sendRequest(int index, int bytes, char* buff){
   int reg_fd;
   struct flock lock;
   registry_cmd_t cmd = SEND;
-  
   announce("sendRequest\t:\tOpening Registry fifo\n");  
-  if((reg_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
-    goto fail;
+  ec_neg1( reg_fd = open(registry_fifo_in,  O_RDWR) );
   announce("sendRequest\t:\tOpened Registry fifo\n");  
-
-  lockFD(&lock, reg_fd, "sendRequest: Registry fifo");
-
+  if(lockFD(&lock, reg_fd, "sendRequest: Registry fifo") < 0){ goto fail; }
   announce("sendRequest\t:\tWriting cmd\n");  
-  if(writeInt(reg_fd, cmd) < 0) goto unlock;
-
+  if(writeInt(reg_fd, cmd) < 0){ goto unlock; }
   announce("sendRequest\t:\tWriting index\n");  
-  if(writeInt(reg_fd, index) < 0) goto unlock;
-
+  if(writeInt(reg_fd, index) < 0){ goto unlock; }
   announce("sendRequest\t:\tWriting bytes\n");  
-  if(writeInt(reg_fd, bytes) < 0) goto unlock;
-
-  
+  if(writeInt(reg_fd, bytes) < 0){ goto unlock; }
   announce("sendRequest\t:\tWriting buff\n");  
-  if(write(reg_fd, buff, bytes) != bytes) 
-    goto unlock;
-
-
+  if(write(reg_fd, buff, bytes) != bytes){ goto unlock; }
  unlock:
-  unlockFD(&lock, reg_fd, "sendRequest: Registry fifo");
-  
+  if(unlockFD(&lock, reg_fd, "sendRequest: Registry fifo") <0){ goto fail; }
   announce("sendRequest\t:\tClosing fifo\n");  
-  if(close(reg_fd) == -1)
-    goto fail;
-  return;
-
+  ec_neg1( close(reg_fd) );
+  return 0;
  fail:
-  
-  fprintf(stderr, "sendRequest\t:\tFailure: %s\n", strerror(errno));
-  return;
-
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 
 }
 
-void terminateIOP(void){
+int terminateIOP(void){
   int reg_fd;
   struct flock lock;
   registry_cmd_t cmd = KILL;
-  
   announce("Opening Registry fifo\n");  
-  if((reg_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
-    goto fail;
+  ec_neg1(reg_fd = open(registry_fifo_in,  O_RDWR) );
   announce("Opened Registry fifo\n");  
-
-  lockFD(&lock, reg_fd, "terminateIOP: Registry fifo");
-
+  if(lockFD(&lock, reg_fd, "terminateIOP: Registry fifo") < 0){ goto fail; }
   announce("Writing cmd\n");  
-  if(writeInt(reg_fd, cmd) < 0) goto unlock;
-
+  if(writeInt(reg_fd, cmd) < 0){ goto unlock; }
  unlock:
-  unlockFD(&lock, reg_fd, "terminateIOP: Registry fifo");
-
+  if(unlockFD(&lock, reg_fd, "terminateIOP: Registry fifo") < 0){ goto fail; }
   announce("Closing fifo\n");  
-  if(close(reg_fd) == -1)
-    goto fail;
-  return;
-
+  ec_neg1( close(reg_fd) );
+  return 0;
  fail:
-  fprintf(stderr, "Failure in terminateIOP: %s\n", strerror(errno));
-  return;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
+
 }
 

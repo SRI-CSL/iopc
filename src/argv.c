@@ -21,13 +21,14 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-#include <string.h>
-#include <stdlib.h>
+#include "cheaders.h"
 #include "types.h"
 #include "argv.h"
+#include "ec.h"
 
 int makeArgv(const char *s, const char *delimiters, char ***argvp){
   int max;
+  char **argv = NULL;
   if(argvp == NULL)    
     return 0;
   if(s == NULL){
@@ -40,8 +41,7 @@ int makeArgv(const char *s, const char *delimiters, char ***argvp){
       return 1;
     } else {
       int start = 0, end = 0;
-      char **argv = (char **)calloc(len, sizeof(char *));
-      if(argv == NULL) return 0;
+      ec_null( argv = calloc(len, sizeof(char *)) );
       while(s[start] != '\0'){
 	while((s[start] != '\0') &&
 	      (strchr(delimiters, s[start]) != NULL))
@@ -62,11 +62,7 @@ int makeArgv(const char *s, const char *delimiters, char ***argvp){
 	      strchr(delimiters, s[end]) == NULL)
 	  end++;
 	max = (PATH_MAX < (end - start) + 1) ? (end - start) + 1 : PATH_MAX;
-	argv[argc] = (char *)calloc(max, sizeof(char));
-	if(argv[argc] == NULL){
-	  free(argv);
-	  return 0;
-	}
+	ec_null( argv[argc] = calloc(max, sizeof(char)) );
 	strncpy(argv[argc], &s[start], end - start);
 	argv[argc][end - start] = '\0';
 	argc++;
@@ -77,13 +73,19 @@ int makeArgv(const char *s, const char *delimiters, char ***argvp){
       return argc;
     }
   }
+
+EC_CLEANUP_BGN
+  (void)free(argv);
+  return 0;
+EC_CLEANUP_END
 }
 
 void freeArgv(int argc, char** argv){
   int i;
-  for(i = 0; i < argc; i++)
-    free(argv[i]);
-  free(argv);
+  for(i = 0; i < argc; i++){
+    (void)free(argv[i]);
+  }
+  (void)free(argv);
 }
 
 void printArgv(FILE* file, int argc, char** argv){

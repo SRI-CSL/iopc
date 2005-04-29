@@ -29,8 +29,8 @@ pid_t spawnActor(actor_spec *, char* executable, char** argv);
 actor_spec* newActor(int, char*, char**);
 int notifyRegistry(actor_spec *);
 
-void lockFD(struct flock*, int, char*);
-void unlockFD(struct flock*, int, char*);
+int lockFD(struct flock*, int, char*);
+int unlockFD(struct flock*, int, char*);
 int deleteFromRegistry(char *);
-void sendRequest(int, int, char*);
-void terminateIOP(void);
+int sendRequest(int, int, char*);
+int terminateIOP(void);

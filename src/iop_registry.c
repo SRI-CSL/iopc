@@ -32,13 +32,13 @@
 #include "dbugflags.h"
 #include "options.h"
 #include "msg.h"
+#include "ec.h"
 
 int   local_debug_flag;
 char* local_process_name;
 
 static int fifoOut;
 static int fifoIn;
-
 
 void *registryCommandThread(void* arg){
   while(1){
@@ -47,22 +47,17 @@ void *registryCommandThread(void* arg){
 }
 
 int main(int argc, char** argv){
-  pthread_t inThread;
-  pthread_t commandThread;
-
+  pthread_t inThread, commandThread;
 #ifdef _LINUX
   parseOptions(argc, argv, short_options, long_options);
 #elif defined(_MAC)
   parseOptions(argc, argv, short_options);
 #endif
-
   local_debug_flag  = (REGISTRY_DEBUG || iop_debug_flag);
   local_process_name = argv[0];
-
   /* fprintf(stderr, "%s local_debug_flag = %d\n", argv[0], local_debug_flag); */
 
   announce("optind = %d\n", optind);
-
 
   /* set externs */
   iop_pid           = getppid();
@@ -77,13 +72,11 @@ int main(int argc, char** argv){
   assert(strlen(registry_fifo_out) < PATH_MAX);
   assert(strlen(iop_bin_dir)       < PATH_MAX);
   
-
   /* install signal handlers */
   if(registry_installHandler() != 0){
     perror("could not install signal handler");
     goto killIOP;
   }
-
 
   announce("Calling registryInit\n");
 
@@ -91,7 +84,6 @@ int main(int argc, char** argv){
     fprintf(stderr, "registryInit failed\n");
     goto killIOP;
   }
-  
 
   announce("Calling errorsInit\n");
 
@@ -101,7 +93,7 @@ int main(int argc, char** argv){
   }
  
   announce("sending ready message to iop\n");
-  if(write(fifoOut, REGREADY, strlen(REGREADY)) != strlen(REGREADY)){
+  if(mywrite(fifoOut, REGREADY, strlen(REGREADY), 1) != strlen(REGREADY)){
     fprintf(stderr, "ready message to iop failed\n");
     goto killIOP;
   }
@@ -110,18 +102,11 @@ int main(int argc, char** argv){
   processRegistryCommand(fifoIn, fifoOut, 0);
   processRegistryCommand(fifoIn, fifoOut, 0);
 
-
   announce("creating monitorInSocket thread\n");
-  if(pthread_create(&inThread, NULL, monitorInSocket, &in2RegFd) != 0){
-    fprintf(stderr, "thread creation failed\n");
-    bail();
-  }
+  ec_rv( pthread_create(&inThread, NULL, monitorInSocket, &in2RegFd) );
 
   announce("creating command thread\n");
-  if(pthread_create(&commandThread, NULL, registryCommandThread, NULL) != 0){
-    fprintf(stderr, " command thread creation failed\n");
-    bail();
-  }
+  ec_rv( pthread_create(&commandThread, NULL, registryCommandThread, NULL) );
 
   if(!iop_hardwired_actors_flag){
     announce("reading configuration file\n");
@@ -129,7 +114,6 @@ int main(int argc, char** argv){
       announce("configuration file reading failed\n");
     }
   }
-
   {
     int requestNo = 0;
     msg* message = NULL;
@@ -158,15 +142,17 @@ int main(int argc, char** argv){
     }
   }
 
-
-
-  if(pthread_join(commandThread, NULL) != 0){
-    fprintf(stderr, "command thread creation failed\n");
-    bail();
-  }
+  ec_rv( pthread_join(commandThread, NULL) );
   
  killIOP:
-  kill(iop_pid, SIGKILL);
+  /* kill iop, ignore failure */
+  (void)kill(iop_pid, SIGKILL);
   exit(EXIT_SUCCESS);
+
+EC_CLEANUP_BGN
+  bail();
+  exit(EXIT_FAILURE);
+EC_CLEANUP_END
+
 }
 

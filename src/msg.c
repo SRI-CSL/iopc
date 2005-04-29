@@ -52,6 +52,26 @@ static void eM(const char *format, ...){
 }
 
 
+int mywrite(int fd, char *buff, int count, int verbose){
+  int bytesLeft = 0, bytesWritten = 0, index = 0;
+  bytesLeft = count;
+  while(bytesLeft > 0){
+    bytesWritten = write(fd, buff + index, bytesLeft);
+    if(bytesWritten < 0){
+      if(errno != EINTR){ 
+	if(verbose)perror("write in mywrite failed:");
+	return -1; 
+      } else { 
+	continue;
+      }
+    }
+    bytesLeft -= bytesWritten;
+    index += bytesWritten;
+  }
+  return count;
+}
+
+
 msg* makeMsg(int bytes){
   msg* retval = (msg *)calloc(1, sizeof(msg));
   if(retval == NULL)  goto fail;

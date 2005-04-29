@@ -91,20 +91,14 @@ void parsePVSThenEcho(char *prompt, int from, int to){
   }
 }
 
+
 static int echoSilently(int from, int to){
   char buff[BUFFSZ];
-  int bytesRead = 0, bytesLeft = 0, bytesWritten = 0;
-  bytesRead = read(from, buff, BUFFSZ);
-  if(bytesRead <= 0){ return bytesRead; }
-  bytesLeft = bytesRead;
-  while(bytesLeft > 0){
-    bytesWritten = write(to, buff, bytesLeft);
-    if(bytesWritten < 0){
-      if(errno != EINTR){ return -1; } else { continue; }
-    }
-    bytesLeft -= bytesWritten;
-  }
-  return bytesRead;
+  int bytesIn = 0, bytesOut = 0;
+  bytesIn = read(from, buff, BUFFSZ);
+  if(bytesIn <= 0){ return bytesIn; }
+  bytesOut = mywrite(to, buff, bytesIn, 0);
+  return bytesOut;
 }
 
 void *echoErrorsSilently(void *arg){

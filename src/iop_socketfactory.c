@@ -52,7 +52,7 @@ static void socketfactory_sigchild_handler(int sig){
   /* for the prevention of zombies */
   pid_t child;
   int status;
-  child = wait(&status);
+  child = waitpid(-1, &status, WNOHANG);
   announce("Waited on child with pid %d with exit status %d\n", child, status);
 }
 

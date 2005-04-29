@@ -30,6 +30,7 @@
 #include "msg.h"
 #include "externs.h"
 #include "dbugflags.h"
+#include "ec.h"
 
 int   local_debug_flag = EXECUTOR_DEBUG;
 char* local_process_name;
@@ -49,8 +50,12 @@ static int executor_installHandler(){
   struct sigaction sigactchild;
   sigactchild.sa_handler = executor_sigchild_handler;
   sigactchild.sa_flags = 0;
-  sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
+  ec_neg1( sigfillset(&sigactchild.sa_mask) );
+  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
+  return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 
@@ -59,7 +64,10 @@ int main(int argc, char** argv){
   char *sender, *body;
   int retval, errcode;
 
-  executor_installHandler();
+  if(executor_installHandler() < 0){
+    fprintf(stderr, "couldn't install handler\n");
+    exit(EXIT_FAILURE);
+  }
   
   local_process_name = myname = argv[0];
 

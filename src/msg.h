@@ -24,6 +24,8 @@
 
 #include "types.h"
 
+int mywrite(int fd, char *buff, int count, int verbose);
+
 
 msg* makeMsg(int bytes);
 int addToMsg(msg* m, int bytes, char* buff);

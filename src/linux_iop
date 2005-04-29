@@ -4,6 +4,7 @@ use strict;
 use File::Spec;
 #this next line is the only platform dependent aspect of this file.
 my $platform = 'linux';
+#though there is some ugly UNIX specific futzing with paths down below.
 my $iop = $ENV{IOPBINDIR};
 if(!defined($iop)){
     print "Environment variable IOPBINDIR not set, searching PATH\n";

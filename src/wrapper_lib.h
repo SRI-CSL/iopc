@@ -22,10 +22,10 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-void wrapper_sigint_handler(int sig);
+void  wrapper_sigint_handler(int sig);
 void *echoErrorsSilently(void *arg);
 void *wrapper_echoOutSilently(void *);
-void parseMaudeThenEcho(int, int);
-void parsePVSThenEcho(char* prompt, int from, int to);
-int parseString(char*, int);
-int wrapper_installHandler(void (*chld_fun)(int), void (*intr_fun)(int));
+void  parseMaudeThenEcho(int, int);
+void  parsePVSThenEcho(char* prompt, int from, int to);
+int   parseString(char*, int);
+int   wrapper_installHandler(void (*chld_fun)(int), void (*intr_fun)(int));

@@ -126,15 +126,17 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
     fprintf(stderr, "couldn't find an open port!\n");
     exit(EXIT_FAILURE);
   }
-  sprintf(in2RegFdString, "%d", in2RegFd);
-  sprintf(in2RegPortString, "%d", in2RegPort);
+
+  snprintf(in2RegFdString, SIZE, "%d", in2RegFd);
+  snprintf(in2RegPortString, SIZE, "%d", in2RegPort);
+
   announce("in2RegPort = %d\n", in2RegPort);
 
 
   announce("figuring out fifo names etc\n");
-  sprintf(iopPid, "%d", iop_pid);
-  sprintf(reg_in,  "/tmp/iop_%d_registry_IN", iop_pid);
-  sprintf(reg_out, "/tmp/iop_%d_registry_OUT", iop_pid);
+  snprintf(iopPid, SIZE, "%d", iop_pid);
+  snprintf(reg_in,  SIZE, "/tmp/iop_%d_registry_IN", iop_pid);
+  snprintf(reg_out, SIZE, "/tmp/iop_%d_registry_OUT", iop_pid);
   registry_fifo_in  = reg_in;
   registry_fifo_out = reg_out;
   announce("setting fifo names etc\n");
@@ -153,7 +155,7 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   if(makeRegistryFifos() < 0){
     fprintf(stderr, "makeRegistryFifos() failed, exiting\n");
     exit(EXIT_FAILURE);
-  };
+  }
 
   announce("made fifos\n");
 

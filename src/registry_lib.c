@@ -31,6 +31,7 @@
 #include "msg.h"
 #include "dbugflags.h"
 #include "argv.h"
+#include "ec.h"
 
 static char javaErrorsFileName[PATH_MAX];
 static char errorsFileName[PATH_MAX];
@@ -42,7 +43,7 @@ static int  selected = 0;
 static pthread_mutex_t theRegistryMutex = PTHREAD_MUTEX_INITIALIZER;
 static actor_id  **theRegistry;
 static int theRegistrySize = REGISTRYSZ;
-static pthread_mutex_t iop_errlog__mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t iop_errlog_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 extern int iop_no_windows_flag;
 extern int iop_hardwired_actors_flag;
@@ -78,20 +79,20 @@ static void freeActor(actor_id*);
 void log2File(const char *format, ...){
   va_list arg;
   va_start(arg, format);
-  if(format == NULL){
-    va_end(arg);
-  } else {
-    pthread_mutex_lock(&iop_errlog__mutex);
-    errorsFile = fopen(errorsFileName, "a");
-    if(errorsFile != NULL){
-      vfprintf(errorsFile, format, arg);
-      fflush(errorsFile);
-      fclose(errorsFile);
-    }
-    pthread_mutex_unlock(&iop_errlog__mutex);
-    va_end(arg);
+  if(format != NULL){
+    ec_rv( pthread_mutex_lock(&iop_errlog_mutex) );
+    ec_null( errorsFile = fopen(errorsFileName, "a") );
+    vfprintf(errorsFile, format, arg);
+    fflush(errorsFile);
+    fclose(errorsFile);
+    ec_rv( pthread_mutex_unlock(&iop_errlog_mutex) );
   }
+  va_end(arg);
   return;
+EC_CLEANUP_BGN
+  va_end(arg);
+  return;
+EC_CLEANUP_END
 }
 
 static void registry_sig_handler(int sig){
@@ -113,155 +114,125 @@ int registry_installHandler(){
   struct sigaction sigactSegv;
   struct sigaction sigactChld;
   sigset_t sigmask;
-  sigemptyset(&sigmask);
-  sigaddset(&sigmask, SIGINT);
-  sigprocmask(SIG_BLOCK, &sigmask, NULL);
+  ec_neg1( sigemptyset(&sigmask) );
+  ec_neg1( sigaddset(&sigmask, SIGINT) );
+  ec_neg1( sigprocmask(SIG_BLOCK, &sigmask, NULL) );
   sigactInt.sa_handler = registry_sig_handler;
   sigactInt.sa_flags = 0;
-  sigfillset(&sigactInt.sa_mask);
-  sigaddset(&sigactInt.sa_mask, SIGINT);
-  if(sigaction(SIGUSR1, &sigactInt, NULL) != 0)
-    return -1;
+  ec_neg1( sigfillset(&sigactInt.sa_mask) );
+  ec_neg1( sigaddset(&sigactInt.sa_mask, SIGINT) );
+  ec_neg1( sigaction(SIGUSR1, &sigactInt, NULL) );
   sigactSegv.sa_handler = registry_sig_handler;
   sigactSegv.sa_flags = 0;
-  sigfillset(&sigactSegv.sa_mask);
-  if(sigaction(SIGSEGV, &sigactSegv, NULL) != 0)
-    return -1;
+  ec_neg1( sigfillset(&sigactSegv.sa_mask) );
+  ec_neg1( sigaction(SIGSEGV, &sigactSegv, NULL) );
   sigactChld.sa_handler = registry_sigchld_handler;
   sigactChld.sa_flags = 0;
-  sigfillset(&sigactChld.sa_mask);
-  return sigaction(SIGCHLD, &sigactChld, NULL);
+  ec_neg1( sigfillset(&sigactChld.sa_mask) );
+  ec_neg1( sigaction(SIGCHLD, &sigactChld, NULL) );
+  return 0; 
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 
 int makeRegistryFifos(){
   announce("Unlinking %s\n", registry_fifo_in);  
-  /* try and clean up old copies */
-  unlink(registry_fifo_in);
+  /* try and clean up old copies, ignore failure */
+  (void)unlink(registry_fifo_in);
   announce("Creating %s\n", registry_fifo_in);  
   /* make new ones               */
-  if(mkfifo(registry_fifo_in,  S_IRWXU) < 0)    
-    goto fail;
+  ec_neg1( mkfifo(registry_fifo_in,  S_IRWXU) );
   announce("Unlinking %s\n", registry_fifo_out);  
-  /* try and clean up old copies */
-  unlink(registry_fifo_out);
+  /* try and clean up old copies, ignore failure */
+  (void)unlink(registry_fifo_out);
   announce("Creating %s\n", registry_fifo_out);  
   /* make new ones               */
-  if(mkfifo(registry_fifo_out, S_IRWXU) < 0)    
-    goto fail;
-  
+  ec_neg1( mkfifo(registry_fifo_out, S_IRWXU) );    
   return 0;
-  
- fail:
-  
-  fprintf(stderr, "Failure in makeRegistryFifos: %s\n", strerror(errno));
+EC_CLEANUP_BGN
   return -1;
+EC_CLEANUP_END
 }
 
 int registryInit(int *fifo_in_fd, int *fifo_out_fd){
-
   announce("registryInit locking mutex\n");
-  pthread_mutex_lock(&theRegistryMutex);
+  ec_rv( pthread_mutex_lock(&theRegistryMutex) );
   announce("registryInit locked mutex\n");  
   announce("Opening %s\n", registry_fifo_in);  
-  if((*fifo_in_fd = open(registry_fifo_in, O_RDWR)) < 0)  
-    goto fail;
+  ec_neg1( *fifo_in_fd = open(registry_fifo_in, O_RDWR) );
   announce("Opening %s\n", registry_fifo_out);  
-  if((*fifo_out_fd = open(registry_fifo_out, O_RDWR)) < 0) 
-    goto fail;
+  ec_neg1( *fifo_out_fd = open(registry_fifo_out, O_RDWR) );
   announce("Callocing\n");  
-  theRegistry = (actor_id**)calloc(theRegistrySize, sizeof(actor_id*));
-  assert(theRegistry != NULL);
+  ec_null( theRegistry = calloc(theRegistrySize, sizeof(actor_id*)) );
   announce("registryInit unlocking mutex\n");  
-  pthread_mutex_unlock(&theRegistryMutex);
+  ec_rv( pthread_mutex_unlock(&theRegistryMutex) );
   announce("registryInit unlocked mutex\n");  
-  if(theRegistry == NULL) goto fail;
   announce("Registry successfully initialized\n");  
   return 0;
-
- fail:
-
-  fprintf(stderr, "Failure in registryInit: %s\n", strerror(errno));
+EC_CLEANUP_BGN
   return -1;
+EC_CLEANUP_END
 }
 
 
 int errorsInit(){
-  sprintf(errorsFileName, "/tmp/iop_%d_c_errors", iop_pid);
-  sprintf(javaErrorsFileName, "/tmp/iop_%d_java_errors", iop_pid);
+  snprintf(errorsFileName, PATH_MAX, "/tmp/iop_%d_c_errors", iop_pid);
+  snprintf(javaErrorsFileName, PATH_MAX, "/tmp/iop_%d_java_errors", iop_pid);
   announce("IOP's error file is: %s\n", errorsFileName);
-  errorsFile = fopen(errorsFileName, "w");
-  if(errorsFile == NULL){
-    perror("Error file couldn't be initialized");
-    return -1;
-  }
-  fclose(errorsFile);
+  ec_null( errorsFile = fopen(errorsFileName, "w") );
+  ec_cmp( fclose(errorsFile), EOF );
   return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 
 static actor_id *makeActorId(actor_spec *acts){
   int i;
-  actor_id *retval;
-  char *reason;
-  if(acts == NULL){  
-    reason = "acts == NULL";
-    goto fail;
+  actor_id *retval = NULL;
+  if(acts != NULL){  
+    announce("makeActorId commencing for %s\n", acts->name);
+    ec_null( retval = calloc(1, sizeof(actor_id)) );
+    retval->spec = acts;
+    retval->exitFlag = 0;
+    for(i = 0; i < 3; i++){ retval->fds[i] = -1; }
+    announce("makeActorId finished  %s\n", acts->name);
+  } else {
+    fprintf(stderr, "Failure in makeActorId: acts == NULL\n");
   }
-  announce("makeActorId commencing for %s\n", acts->name);
-  retval = (actor_id *)calloc(1, sizeof(actor_id));
-  if(retval == NULL){  
-    reason = "calloc failed";
-    goto fail; 
-  }
-
-  retval->spec = acts;
-  retval->exitFlag = 0;
-  for(i = 0; i < 3; i++)
-    retval->fds[i] = -1;
-  
-  announce("makeActorId finished  %s\n", acts->name);
-
   return retval;
-
- fail:
-  fprintf(stderr, "Failure in makeActorId: %s\n", reason);
-  if(acts != NULL)
-    fprintf(stderr, "Actor name = %s\n", acts->name);
+EC_CLEANUP_BGN
   return NULL;
+EC_CLEANUP_END
 
 }
 
 static int initActorId(actor_id *actid){
   int i, flags[3] = { O_RDWR, O_RDWR,  O_RDWR };
   actor_spec *aspec = NULL;
-  if(actid == NULL){  
-    goto fail;
+  if(actid != NULL){  
+    aspec = actid->spec;
+    announce("initActorId commencing for %s\n", aspec->name);
+    ec_rv( pthread_mutex_init(&(actid->mutex), NULL) );
+    for(i = 0; i < 3; i++){
+      ec_neg1( actid->fds[i] = open(aspec->fifos[i], flags[i]) );
+    }
+    announce("initActorId launching errorLog thread  for %s\n", aspec->name);
+    ec_rv( pthread_create(&(actid->tids[0]), NULL, errorLog, actid) );
+    announce("initActorId launching echoOut thread  for %s\n", aspec->name);
+    ec_rv( pthread_create(&(actid->tids[1]), NULL, echoOut, actid) );
+    announce("initActorId finished  %s\n", aspec->name);
+    return 0;
+  } else {
+    fprintf(stderr, "Failure in initActorId: actid == NULL\n");
+    return -1;
   }
-  aspec = actid->spec;
-  announce("initActorId commencing for %s\n", aspec->name);
-  pthread_mutex_init(&(actid->mutex), NULL);
-  for(i = 0; i < 3; i++){
-    actid->fds[i] = open(aspec->fifos[i], flags[i]);
-    if(actid->fds[i] == -1) goto fail;
-  }
-  announce("initActorId launching errorLog thread  for %s\n", aspec->name);
-  if((pthread_create(&(actid->tids[0]), NULL, errorLog, actid) != 0)){
-    goto fail;
-  }
-  announce("initActorId launching echoOut thread  for %s\n", aspec->name);
-  if((pthread_create(&(actid->tids[1]), NULL, echoOut, actid) != 0)){
-    goto fail;
-  }
-  announce("initActorId finished  %s\n", aspec->name);
-
-  return 1;
-
- fail:
-  fprintf(stderr, "Failure in initActorId: %s\n", strerror(errno));
-  fprintf(stderr, "Actor name = %s\n", aspec->name);
+EC_CLEANUP_BGN
   return -1;
-
+EC_CLEANUP_END
 }
 
 static void outputRegistry(int fd){
@@ -357,7 +328,7 @@ static int _allocateUniqueName(actor_spec *acts){
     if(len + SIZE > PATH_MAX){ return -1; }
     while(found == 1){
       index++;
-      sprintf(newName, "%s%d", oldName, index);
+      snprintf(newName, len + SIZE, "%s%d", oldName, index);
       found = 0;
       for(i = 0; i < theRegistrySize; i++){
 	if((theRegistry[i] != NULL) && (strcmp(theRegistry[i]->spec->name, newName) == 0)){
@@ -366,7 +337,7 @@ static int _allocateUniqueName(actor_spec *acts){
 	}
       }
     }/* while(found == 1) */
-    strcpy(acts->name, newName);
+    strncpy(acts->name, newName, PATH_MAX);
     announce("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, newName);
     free(newName);
     return 1;
@@ -637,7 +608,7 @@ static void parseOut(msg* outmsg){
   announce("commencing parseOut\n");
   if((copy = (char *)calloc(outmsg->bytesUsed + 1, sizeof(char))) == NULL)
     goto fail;
-  strcpy(copy, outmsg->data);
+  strncpy(copy, outmsg->data, outmsg->bytesUsed + 1);
   if(getNextToken(copy, &target, &rest) != 1)
     goto echo;
   announce("target = \"%s\"\n", target);
@@ -656,7 +627,7 @@ static void parseOut(msg* outmsg){
   if((parsedmsg = (char *)calloc((outmsg->bytesUsed + 4), sizeof(char))) == NULL)
     goto fail;
 
-  sprintf(parsedmsg, "(%s %s)", sender, rest);
+  snprintf(parsedmsg, outmsg->bytesUsed + 4, "(%s %s)", sender, rest);
 
 
   announce("parsedmsg = \"%s\"\n", parsedmsg);
@@ -1081,11 +1052,11 @@ char* registryLaunchActor(char* name, int argc, char** argv){
 
   for(i = 0; i < argc; i++){
     if(!strcmp(argv[i], FIFO_IN)){
-      strcpy(argv[i], registry_fifo_in);
+      strncpy(argv[i], registry_fifo_in, PATH_MAX);
     } else if(!strcmp(argv[i], FIFO_OUT)){
-      strcpy(argv[i], registry_fifo_out);
+      strncpy(argv[i], registry_fifo_out, PATH_MAX);
     } else if(!strcmp(argv[i], IOP_BIN_DIR)){
-      strcpy(argv[i], iop_bin_dir);
+      strncpy(argv[i], iop_bin_dir, PATH_MAX);
     }
   }
 
@@ -1252,7 +1223,7 @@ void  processRegistryNameMessage(char *sender, char *rest){
 	  fprintf(stderr, "processRegistryNameMessage: callocing aspec failed!\n");
 	  goto exit; 
 	}  
-	strcpy(aspec->name, name);
+	strncpy(aspec->name, name, PATH_MAX);
 	aspec->pid = 0;
 	announce("processRegistryNameMessage: calling makeActorId\n");
 	actid = makeActorId(aspec);
