@@ -15,7 +15,7 @@ java:
 javaclean:
 	ant clean
 
-zip:
+src-zip:
 	ant zip
 
 doc: 
@@ -26,3 +26,6 @@ clean: javaclean
 
 install:
 	ant install
+
+dist: all
+	ant distributable
