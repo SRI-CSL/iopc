@@ -958,7 +958,7 @@ void *monitorInSocket(void *arg){
     announce("%s -- *msgsock = %d\n", description, *msgsock);
     processRegistryCommand(*msgsock, *msgsock, 1);
     free(description); 
-    closeSocket(*msgsock);
+    close(*msgsock);
   }
 }
 
@@ -1012,7 +1012,7 @@ static int sendMsg2Input(msg *message, output_cmd_t type){
   }
   retval = 1;
  exit:
-  closeSocket(socket);
+  close(socket);
   return retval;
 }
 

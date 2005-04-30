@@ -31,6 +31,7 @@
 #include "ec.h"
 #include "externs.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag  = G2D_ACTOR_DEBUG;
 char* local_process_name;
 

@@ -29,26 +29,31 @@
 #include "iop_lib.h"
 #include "actor.h"
 #include "dbugflags.h"
+#include "ec.h"
 
 /* statics */
 static int setFlag(int fd, int flags);
 static int clearFlag(int fd, int flags);
+
+/* local error logging */
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 static void eM(const char *format, ...){
   va_list arg;
   va_start(arg, format);
-  if(format == NULL){
-    va_end(arg);
-  } else {
+  if(format != NULL){
     if(MSG_DEBUG){
-      pthread_mutex_lock(&iop_err_mutex);
+      ec_rv( pthread_mutex_lock(&iop_err_mutex) );
       fprintf(stderr, "MSG(%ld)\t:\t", (long)pthread_self());
       vfprintf(stderr, format, arg);
-      pthread_mutex_unlock(&iop_err_mutex);
+      ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
     }
-    va_end(arg);
   }
+  va_end(arg);
   return;
+EC_CLEANUP_BGN
+  va_end(arg);
+  return;
+EC_CLEANUP_END
 }
 
 
@@ -73,21 +78,20 @@ int mywrite(int fd, char *buff, int count, int verbose){
 
 
 msg* makeMsg(int bytes){
-  msg* retval = (msg *)calloc(1, sizeof(msg));
-  if(retval == NULL)  goto fail;
-  retval->data = (char *)calloc(bytes, sizeof(char));
-  if(retval->data == NULL) goto fail;
+  msg* retval = NULL;
+  ec_null( retval = calloc(1, sizeof(msg)) );
+  ec_null( retval->data = calloc(bytes, sizeof(char)) );
   retval->bytesUsed = 0;
   retval->bytesLeft = bytes;
   return retval;
- fail:
-  fprintf(stderr, "makeMsg failed\n");
+EC_CLEANUP_BGN
   free(retval);
   return NULL;
-}
+EC_CLEANUP_END
+}  
 
 void freeMsg(msg* m){
-  if(m == NULL) return;
+  if(m == NULL){ return; }
   free(m->data);
   free(m);
 }
@@ -134,51 +138,26 @@ int addToMsg(msg* m, int bytes, char* buff){
   }
 } 
 
-void echo(int from, int to){
-  msg* message;
-  message = readMsg(from);
-  if(message != NULL){
-    writeMsg(to, message);
-    if(MSG_DEBUG){
-      writeMsg(STDERR_FILENO, message);
-      eM("echo wrote %d bytes\n", message->bytesUsed);
-    }
-    freeMsg(message);
-  }
-}
-
 int setFlag(int fd, int flags){
   int val;
-  if((val = fcntl(fd, F_GETFL, 0)) < 0){
-    if(MSG_DEBUG){
-      perror("fcntl(fd, F_GETFL, 0) failed");
-      fprintf(stderr, "pid = %d fd = %d\n", getpid(), fd);
-    }
-    return -1;
-  }
+  ec_neg1( val = fcntl(fd, F_GETFL, 0) );
   val |= flags;
-  if(fcntl(fd, F_SETFL, val) < 0){
-    perror("fcntl(fd, F F_SETFL, val) failed");
-    return -1;
-  }
+  ec_neg1( fcntl(fd, F_SETFL, val) );
   return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 int clearFlag(int fd, int flags){
   int val;
-  if((val = fcntl(fd, F_GETFL, 0)) < 0){
-    if(MSG_DEBUG){
-      perror("fcntl(fd, F_GETFL, 0) failed");
-      fprintf(stderr, "pid = %d fd = %d\n", getpid(), fd);
-    }
-    return -1;
-  }
+  ec_neg1( val = fcntl(fd, F_GETFL, 0) );
   val &= ~flags;
-  if(fcntl(fd, F_SETFL, val) < 0){
-    eM("fcntl(fd, F F_SETFL, val) failed: %s\n", strerror(errno));
-    return -1;
-  }
+  ec_neg1( fcntl(fd, F_SETFL, val) );
   return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 msg* readMaudeMsg(int fd){

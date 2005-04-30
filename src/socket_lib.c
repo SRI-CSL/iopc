@@ -34,10 +34,6 @@ void socketCleanUp(){
   return;
 }
 
-int closeSocket(int s){
-  return close(s);
-}
-
 int socketStartUp(){
   return 1;
 }
@@ -157,12 +153,12 @@ void* socket2outGentle(void *sp){
     retval = recv(socket, buff, BUFFSZ, 0);
     if(retval == 0){
       fprintf(stderr, "Closed connection\n");
-      closeSocket(socket);
+      close(socket);
       return  NULL;
     } 
     else if (retval == SOCKET_ERROR) {
       perror("Closing socket");
-      closeSocket(socket);
+      close(socket);
       return  NULL;
     } else {
       announce("sending %d chars to stdout\n", retval);
@@ -185,12 +181,12 @@ void* socket2outGentleWithHttpAck(void *sp){
     retval = recv(socket, buff, BUFFSZ, 0);
     if(retval == 0){
       fprintf(stderr, "Closed connection\n");
-      closeSocket(socket);
+      close(socket);
       return  NULL;
     } 
     else if (retval == SOCKET_ERROR) {
       perror("Closing socket");
-      closeSocket(socket);
+      close(socket);
       return  NULL;
     } else {
       announce("sending %d chars to stdout\n", retval);
@@ -198,7 +194,7 @@ void* socket2outGentleWithHttpAck(void *sp){
       fprintf(stdout, "\n");
       fflush(stdout);
       send(socket, ack204, strlen(ack204), 0);  
-      /*      closeSocket(socket);    */
+      /*      close(socket);    */
     }
   };
   return NULL;
@@ -212,14 +208,14 @@ void* socket2outViolent(void *sp){
     gots++;
     if(retval == 0){
       fprintf(stderr, "Closed connection\n");
-      closeSocket(socket);
+      close(socket);
       exit(EXIT_SUCCESS);
     } 
     else
       for(i = 0; i < retval; i++) putc(buff[i], stdout);
   }
   if (retval == SOCKET_ERROR) {
-    closeSocket(socket);
+    close(socket);
     socketCleanUp();
     return NULL;
   }

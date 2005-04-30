@@ -9,6 +9,7 @@
 #include "wrapper_lib.h"
 #include "ec.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag  = SALSPAWNER_DEBUG;
 char* local_process_name;
 

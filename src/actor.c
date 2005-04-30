@@ -32,6 +32,7 @@
 
 static mode_t mode[3] = { S_IRWXU,  S_IRWXU, S_IRWXU };
 
+/* externs used in the announce routine */
 extern int iop_debug_flag;
 extern int iop_no_windows_flag;
 
@@ -171,8 +172,8 @@ EC_CLEANUP_END
 int lockFD(struct flock* lock, int fd, char* comment){
   if(LOCKS_DEBUG)fprintf(stderr, "Locking %s\n", comment);  
 #ifdef _MAC
-  /* cannot fcntl fifos on Mac OS X */
-  ec_neg1( flock(fd, LOCK_EX) );
+  /* cannot fcntl fifos on Mac OS X, what does this actually return?  */
+  flock(fd, LOCK_EX) ;
 #else
   memset(lock, 0, sizeof(struct flock));
   lock->l_type = F_WRLCK;
@@ -188,8 +189,8 @@ EC_CLEANUP_END
 int unlockFD(struct flock* lock, int fd, char* comment){
   if(LOCKS_DEBUG)fprintf(stderr, "Unlocking %s\n", comment);  
 #ifdef _MAC
-  /* cannot fcntl fifos on Mac OS X */
-  ec_neg1( flock(fd, LOCK_UN) );
+  /* cannot fcntl fifos on Mac OS X, what does this actually return? */
+  flock(fd, LOCK_UN);
 #else
   lock->l_type = F_UNLCK;
   ec_neg1( fcntl(fd, F_SETLKW, lock) ); 

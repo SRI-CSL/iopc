@@ -30,6 +30,7 @@
 #include "msg.h"
 #include "socket_lib.h"
 #include "dbugflags.h"
+#include "ec.h"
 
 
 extern int   iop_debug_flag;
@@ -72,6 +73,7 @@ static int waitForRegistry();
 
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+/* externs used in the announce routine */
 extern int   local_debug_flag;
 extern char* local_process_name;
 
@@ -79,13 +81,17 @@ void announce(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   if(local_debug_flag  && (format != NULL)){
-    pthread_mutex_lock(&iop_err_mutex);
+    ec_rv( pthread_mutex_lock(&iop_err_mutex) );
     fprintf(stderr, "%s(%ld)\t:\t", local_process_name, (long)pthread_self());
     vfprintf(stderr, format, arg);
-    pthread_mutex_unlock(&iop_err_mutex);
+    ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
   }
   va_end(arg);
   return;
+EC_CLEANUP_BGN
+  va_end(arg);
+  return;
+EC_CLEANUP_END
 }
 
 void spawnServer(int argc, char** argv){

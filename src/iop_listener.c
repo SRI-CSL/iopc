@@ -31,7 +31,9 @@
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
+#include "ec.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag  = LISTENER_DEBUG;
 char* local_process_name;
 
@@ -72,7 +74,9 @@ static void *listener_cmd_thread(void *arg){
       int slotNumber = -1;
       if(!closed){
         closed = 1;
-        closeSocket(listenFd);
+	if(close(listenFd) < 0){
+	  fprintf(stderr, "close failed in listener close case\n");
+	}
         announce("%s\n%s\ncloseOK\n", sender, myName);
         sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, myName);
         announce("Listener called %s unregistering\n", myName);
@@ -95,7 +99,7 @@ static void listener_sigchild_handler(int sig){
   /* for the prevention of zombies */
   pid_t child;
   int status;
-  child = wait(&status);
+  child = waitpid(-1, &status, WNOHANG); 
   announce("Listener waited on child with pid %d with exit status %d\n", child, status);
 }
 
@@ -103,8 +107,12 @@ static int listener_installHandler(){
   struct sigaction sigactchild;
   sigactchild.sa_handler = listener_sigchild_handler;
   sigactchild.sa_flags = 0;
-  sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
+  ec_neg1( sigfillset(&sigactchild.sa_mask) );
+  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
+  return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 int main(int argc, char** argv){
@@ -134,10 +142,7 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
-  if(pthread_create(&cmdTid, NULL, listener_cmd_thread, NULL) != 0){
-    fprintf(stderr, "couldn't create listener_cmd_thread\n");
-    exit(EXIT_FAILURE);
-  };
+  ec_rv( pthread_create(&cmdTid, NULL, listener_cmd_thread, NULL) );
 
   while(1){
     announce("Blocking on acceptSocket\n");
@@ -148,8 +153,8 @@ int main(int argc, char** argv){
       continue;
     }
     announce(description);
-    sprintf(socketName, "%s.%d.%d", childName, myPid, connectionNo);
-    sprintf(fdName, "%d", *msgsock);
+    snprintf(socketName, SIZE, "%s.%d.%d", childName, myPid, connectionNo);
+    snprintf(fdName, SIZE, "%d", *msgsock);
     childArgv[0] = socketName;
     childArgv[1] = fdName;
     childArgv[2] = registry_fifo_in;
@@ -161,9 +166,15 @@ int main(int argc, char** argv){
 		       "%s\n%s\nnewConnection\n%s\n", 
 		       myClient, myName, socketName);
     connectionNo++;
-    closeSocket(*msgsock);
-    free(description);
-    free(msgsock);
+    if(close(*msgsock) < 0){
+      fprintf(stderr, "close failed in listener\n");
+    }
+    
+    (void)free(description);
+    (void)free(msgsock);
   }
-  return 0;
+  exit(EXIT_SUCCESS);
+EC_CLEANUP_BGN
+  exit(EXIT_FAILURE);
+EC_CLEANUP_END
 }

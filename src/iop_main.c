@@ -32,6 +32,7 @@
 #include "dbugflags.h"
 #include "options.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag = 0;
 char* local_process_name;
 

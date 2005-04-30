@@ -31,7 +31,9 @@
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
+#include "ec.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag  = SOCKETFACTORY_DEBUG;
 char* local_process_name;
 
@@ -60,8 +62,12 @@ static int socketfactory_installHandler(){
   struct sigaction sigactchild;
   sigactchild.sa_handler = socketfactory_sigchild_handler;
   sigactchild.sa_flags = 0;
-  sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
+  ec_neg1( sigfillset(&sigactchild.sa_mask) );
+  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
+  return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 int main(int argc, char** argv){
@@ -126,10 +132,9 @@ int main(int argc, char** argv){
 
       announce("port = %d\n", portNo);
 
-      if(allocateSocket(portNo, host, &clientFd) != 1)
-        goto openclientfail;
-      sprintf(childName, "%s%d", clientChildName, clientNo);
-      sprintf(fdName, "%d", clientFd);
+      if(allocateSocket(portNo, host, &clientFd) != 1){ goto openclientfail; }
+      snprintf(childName, SIZE, "%s%d", clientChildName, clientNo);
+      snprintf(fdName, SIZE, "%d", clientFd);
       clientChildArgv[0] = childName;
       announce("clientChildArgv[0] = %s\n", clientChildArgv[0]);
       clientChildArgv[1] = fdName;
@@ -142,13 +147,14 @@ int main(int argc, char** argv){
       announce("clientChildArgv[4] = %s\n", clientChildArgv[4]);
       announce("Spawning actor\n");
       newActor(1, clientChildExe, clientChildArgv);
-      announce("%s\n%s\nopenClientOK\n%s\n", 
-                sender, myName, childName);
+      announce("%s\n%s\nopenClientOK\n%s\n", sender, myName, childName);
       sendFormattedMsgFP(stdout,
 			 "%s\n%s\nopenClientOK\n%s\n", 
 			 sender, myName, childName);
       clientNo++;
-      closeSocket(clientFd);
+      if(close(clientFd) < 0){
+	fprintf(stderr, "close failed in openclient case\n");
+      }
       continue;
       
     openclientfail:
@@ -169,9 +175,9 @@ int main(int argc, char** argv){
         fprintf(stderr, "Couldn't listen on port\n");
         goto openlistenerfail;
       }
-      sprintf(childName, "%s%d", listenerChildName, listenerNo);
-      sprintf(fdName, "%d", listenerFd);
-      sprintf(iopPid, "%d", iop_pid);
+      snprintf(childName, SIZE, "%s%d", listenerChildName, listenerNo);
+      snprintf(fdName, SIZE, "%d", listenerFd);
+      snprintf(iopPid, SIZE, "%d", iop_pid);
       listenerChildArgv[0] = childName;
       announce("listenerChildArgv[0] = %s\n", listenerChildArgv[0]);
       listenerChildArgv[1] = fdName;
@@ -195,7 +201,9 @@ int main(int argc, char** argv){
 			 "%s\n%s\nopenListenerOK\n%s\n", 
 			 sender, myName, childName);
       listenerNo++;
-      closeSocket(listenerFd);
+      if(close(listenerFd) < 0){
+	fprintf(stderr, "close failed in openlistener case\n");
+      }
       continue;
 
     openlistenerfail:

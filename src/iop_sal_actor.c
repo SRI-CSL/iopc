@@ -19,6 +19,7 @@
 #include "ec.h"
 #include "sal_lib.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag  = SAL_ACTOR_DEBUG;
 char* local_process_name;
 

@@ -31,6 +31,7 @@
 #include "externs.h"
 #include "ec.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag  = PVS_ACTOR_DEBUG;
 char* local_process_name;
 

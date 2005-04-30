@@ -34,13 +34,14 @@
 #include "msg.h"
 #include "ec.h"
 
+/* flags used in the announce routine */
 int   local_debug_flag;
 char* local_process_name;
 
 static int fifoOut;
 static int fifoIn;
 
-void *registryCommandThread(void* arg){
+static void *registryCommandThread(void* arg){
   while(1){
     processRegistryCommand(fifoIn, fifoOut, 1);
   }
@@ -68,6 +69,7 @@ int main(int argc, char** argv){
   iop_bin_dir       = argv[argc - 1];
   registry_pid      = getpid();
 
+  /* rethink this if they ever fail */
   assert(strlen(registry_fifo_in)  < PATH_MAX);
   assert(strlen(registry_fifo_out) < PATH_MAX);
   assert(strlen(iop_bin_dir)       < PATH_MAX);

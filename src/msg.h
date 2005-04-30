@@ -35,7 +35,7 @@ msg* readMaudeMsg(int fd);
 msg* readPVSMsg(char* prompt, int fd);
 msg* readMsg(int fd);
 int writeMsg(int fd, msg* m);
-void echo(int from, int to);
+
 int writeInt(int fd, int number);
 int readInt(int fd, int* nump);
 int readIntVolatile(int fd, int* nump, volatile int* exitFlag);

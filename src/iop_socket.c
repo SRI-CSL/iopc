@@ -31,20 +31,21 @@
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
+#include "ec.h"
 
+/* externs used in the announce routine */
 int   local_debug_flag  = SOCKET_DEBUG;
 char* local_process_name;
 
 static int requestNo = 0;
 static char* myname;
-static int sock;
+static int sock = -1;
 static int closed = 0;
 
 static void socket_sigpipe_handler(int sig){
-  announce("Socket %s got a signal %d\n", 
-	   myname, sig);	
+  announce("Socket %s got a signal %d\n", myname, sig);	
   deleteFromRegistry(myname);
-  close(sock);
+  if(sock > 0){ (void)close(sock); }
   exit(EXIT_FAILURE);
 }
 
@@ -52,9 +53,12 @@ static int socket_installHandler(){
   struct sigaction sigactpipe;
   sigactpipe.sa_handler = socket_sigpipe_handler;
   sigactpipe.sa_flags = 0;
-  /*  sigfillset(&sigactpipe.sa_mask); */
-  sigemptyset(&sigactpipe.sa_mask);
-  return sigaction(SIGPIPE, &sigactpipe, NULL);
+  ec_neg1( sigemptyset(&sigactpipe.sa_mask) );
+  ec_neg1( sigaction(SIGPIPE, &sigactpipe, NULL) );
+  return 0;
+EC_CLEANUP_BGN
+  return -1;
+EC_CLEANUP_END
 }
 
 int main(int argc, char** argv){
@@ -195,7 +199,9 @@ int main(int argc, char** argv){
       int slotNumber = -1;
       if(!closed){
         closed = 1;
-        closeSocket(sock);
+	if(close(sock) < 0){
+	  fprintf(stderr, "close failed in socket close case\n");
+	}
         announce("%s\n%s\ncloseOK\n", sender, myname);
         sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, myname);
 	usleep(1);

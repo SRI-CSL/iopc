@@ -70,7 +70,10 @@ void parseMaudeThenEcho(int from, int to){
   if(message != NULL){
     length = parseString(message->data, message->bytesUsed);
     message->bytesUsed = length;
-    sendMsg(to, message);
+    if(sendMsg(to, message) < 0){
+      fprintf(stderr, "sendMsg in parseMaudeThenEcho failed\n");
+      return;
+    }
     if(MAUDE_WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
     announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     freeMsg(message);
@@ -84,7 +87,10 @@ void parsePVSThenEcho(char *prompt, int from, int to){
   if(message != NULL){
     length = parseString(message->data, message->bytesUsed);
     message->bytesUsed = length;
-    sendMsg(to, message);
+    if(sendMsg(to, message) < 0){
+      fprintf(stderr, "sendMsg in parsePVSThenEcho failed\n");
+      return;
+    }
     if(WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
     announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     freeMsg(message);
@@ -110,12 +116,11 @@ void *echoErrorsSilently(void *arg){
     return NULL;
   }
   fdB = *((fdBundle *)arg);
-  if((sigemptyset(&mask) != 0) && (sigaddset(&mask, SIGCHLD) != 0)){
-    fprintf(stderr, "futzing with sigsets failed in echoErrorsSilently\n");
-  }
-  if(pthread_sigmask(SIG_BLOCK, &mask, NULL) != 0){
-    fprintf(stderr, "pthread_sigmask failed in echoErrorsSilentlyn");
-  }
+
+  ec_neg1( sigemptyset(&mask) );
+  ec_neg1( sigaddset(&mask, SIGCHLD) );
+  ec_rv( pthread_sigmask(SIG_BLOCK, &mask, NULL) );
+
   while(!(*(fdB.exit))){
     errcode = echoSilently(fdB.fd, STDERR_FILENO);
     if(errcode <= 0){
@@ -125,6 +130,9 @@ void *echoErrorsSilently(void *arg){
     }
   }
   return NULL;
+EC_CLEANUP_BGN
+  return NULL;
+EC_CLEANUP_END
 }
 
 void *wrapper_echoOutSilently(void *arg){
