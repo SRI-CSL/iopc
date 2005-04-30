@@ -178,12 +178,13 @@ int lockFD(struct flock* lock, int fd, char* comment){
   memset(lock, 0, sizeof(struct flock));
   lock->l_type = F_WRLCK;
   ec_neg1( fcntl(fd, F_SETLKW, lock) );
-#endif
   if(LOCKS_DEBUG)fprintf(stderr, "Locked %s\n", comment);  
   return 0;
 EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
+#endif
+  if(LOCKS_DEBUG)fprintf(stderr, "Locked %s\n", comment);  
 }
 
 int unlockFD(struct flock* lock, int fd, char* comment){
@@ -194,12 +195,13 @@ int unlockFD(struct flock* lock, int fd, char* comment){
 #else
   lock->l_type = F_UNLCK;
   ec_neg1( fcntl(fd, F_SETLKW, lock) ); 
-#endif
   if(LOCKS_DEBUG)fprintf(stderr, "Unlocked %s\n", comment);  
   return 0;
 EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
+#endif
+  if(LOCKS_DEBUG)fprintf(stderr, "Unlocked %s\n", comment);  
 }
 
 int notifyRegistry(actor_spec *acts){
