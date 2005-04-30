@@ -174,6 +174,8 @@ int lockFD(struct flock* lock, int fd, char* comment){
 #ifdef _MAC
   /* cannot fcntl fifos on Mac OS X, what does this actually return?  */
   flock(fd, LOCK_EX) ;
+  if(LOCKS_DEBUG)fprintf(stderr, "Locked %s\n", comment);  
+  return 0;
 #else
   memset(lock, 0, sizeof(struct flock));
   lock->l_type = F_WRLCK;
@@ -184,7 +186,6 @@ EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
 #endif
-  if(LOCKS_DEBUG)fprintf(stderr, "Locked %s\n", comment);  
 }
 
 int unlockFD(struct flock* lock, int fd, char* comment){
@@ -192,6 +193,8 @@ int unlockFD(struct flock* lock, int fd, char* comment){
 #ifdef _MAC
   /* cannot fcntl fifos on Mac OS X, what does this actually return? */
   flock(fd, LOCK_UN);
+  if(LOCKS_DEBUG)fprintf(stderr, "Unlocked %s\n", comment);  
+  return 0;
 #else
   lock->l_type = F_UNLCK;
   ec_neg1( fcntl(fd, F_SETLKW, lock) ); 
@@ -201,7 +204,6 @@ EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
 #endif
-  if(LOCKS_DEBUG)fprintf(stderr, "Unlocked %s\n", comment);  
 }
 
 int notifyRegistry(actor_spec *acts){
