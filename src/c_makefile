@@ -27,7 +27,8 @@ EXE = iop_executor\
       iop_pvs_wrapper\
       iop_maude_wrapper\
       iop_sal_actor\
-      iop_sal_spawner
+      iop_sal_spawner\
+      iop_sal_wrapper
 
 SCRIPTS = iop jlambda  
 HEADERS = cheaders.h constants.h types.h dbugflags.h externs.h options.h sal_lib.h

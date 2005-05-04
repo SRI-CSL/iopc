@@ -47,6 +47,7 @@
 #define MAUDE_WRAPPER_DEBUG       0
 #define SAL_ACTOR_DEBUG           0
 #define SALSPAWNER_DEBUG          0
+#define SALWRAPPER_DEBUG          0
 #define PVS_ACTOR_DEBUG           0
 #define G2D_ACTOR_DEBUG           0
 
