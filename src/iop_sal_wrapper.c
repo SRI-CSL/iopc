@@ -72,15 +72,12 @@ static void wait4Sal(int fdout, int fderr){
   fd_set readset;
   int retval;
   announce("entering wait4Sal(pout[0], perr[0]);\n"); 
-  fprintf(stderr,"entering wait4Sal(pout[0], perr[0]);\n");
   FD_ZERO(&readset);
   FD_SET(fdout, &readset);
   FD_SET(fderr, &readset);
   retval = select(maxfd, &readset, NULL, NULL, NULL);
   announce("wait4Sal\t:\tselect returned %d (out: %d) (err: %d)\n", 
 	   retval, FD_ISSET(fdout, &readset), FD_ISSET(fderr, &readset));
-  fprintf(stderr,"wait4Sal\t:\tselect returned %d (out: %d) (err: %d)\n", 
-	  retval, FD_ISSET(fdout, &readset), FD_ISSET(fderr, &readset));
   if(retval < 0){
     fprintf(stderr, "wait4Sal\t:\tselect error\n");
   } else if(retval == 0){
@@ -88,7 +85,6 @@ static void wait4Sal(int fdout, int fderr){
   } else {
     if(FD_ISSET(fderr, &readset)){
       struct timeval delay;
-      fprintf(stderr,"\n\n\n\n\n\nSTDERR_FILENO is ready \n\n\n\n\n\n");
       reverberate(fderr, STDERR_FILENO);
       FD_ZERO(&readset);
       FD_SET(fdout, &readset);
@@ -107,7 +103,6 @@ static void wait4Sal(int fdout, int fderr){
       }
     }
     if(FD_ISSET(fdout, &readset)){
-      fprintf(stderr,"\n\n\n\n\nSTDOUT_FILENO is ready \n\n\n\n\n\n\n\n");
       parseSalThenEcho(fdout, STDOUT_FILENO);
     }
   }
@@ -121,7 +116,7 @@ int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
   local_process_name = self = argv[0];
   
-  /*  ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );*/
+  ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
   
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );
@@ -154,9 +149,7 @@ int main(int argc, char** argv){
     
     while(1){
       announce("Listening to IO\n");
-      fprintf(stderr,"\nListening to IO\n");
-      echo2Maude(STDIN_FILENO, pin[1]);
-      fprintf(stderr,"Listening to Sal\n");
+      echo2Sal(STDIN_FILENO, pin[1]);
       announce("Listening to Sal\n");
       wait4Sal(pout[0], perr[0]);
     }

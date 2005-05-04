@@ -13,7 +13,7 @@ static void eM(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   if(format != NULL){
-    if(MSG_DEBUG){
+    if(SALWRAPPER_DEBUG){
       ec_rv( pthread_mutex_lock(&iop_err_mutex) );
       fprintf(stderr, "MSG(%ld)\t:\t", (long)pthread_self());
       vfprintf(stderr, format, arg);
@@ -87,7 +87,6 @@ void parseSalThenEcho(int from, int to){
   msg* message;
   int length;
   announce("parseSalThenEcho\t:\tCalling wrapper_readSalMsg\n");
-  fprintf(stderr,"\nBlocking on wrapper_readSalMsg \n");
   message = wrapper_readSalMsg(from);
   announce("parseSalThenEcho\t:\twrapper_readSalMsg returned %d bytes\n", message->bytesUsed);
   if(message != NULL){
@@ -116,11 +115,9 @@ msg* wrapper_readSalMsg(int fd){
   while(1){
     char buff[BUFFSZ];
     eM("wrapper_readSalMsg\t:\tcommencing a read\n");
-    fprintf(stderr,"\nwrapper_readSalMsg\t:\tcommencing a read\n");
   restart:
     if((bytes = read(fd, buff, BUFFSZ)) < 0){
       eM("wrapper_readSalMsg\t:\tread error read returned %d bytes\n", bytes);
-      fprintf(stderr,"wrapper_readSalMsg\t:\tread error read returned %d bytes\n", bytes);
       if(errno == EINTR){
 	eM("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
 	goto restart;
@@ -131,11 +128,10 @@ msg* wrapper_readSalMsg(int fd){
       }
       fprintf(stderr, "Read  in %d returned with nothing\n", getpid());
       return retval;
-    } /* if((bytes = read(fd, buff, BUFFSZ)) < 0) */
+    } 
 
     eM("wrapper_readSalMsg\t:\tread read %d bytes\n", bytes);
-    fprintf(stderr,"wrapper_readSalMsg\t:\tread read %d bytes\n", bytes);
-    fprintf(stderr,"Read the following buff \t = \t %s",buff);
+    eM("Read the following: buff \t = \t %s",buff);
 
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg (wrapper_readSalMsg) in %d failed\n", getpid());
@@ -149,7 +145,6 @@ msg* wrapper_readSalMsg(int fd){
       struct timeval delay;
       int sret;
       eM("wrapper_readSalMsg\t:\tsaw the prompt, making sure!\n");
-      fprintf(stderr,"wrapper_readSalMsg\t:\tsaw the prompt, making sure!\n");
       FD_ZERO(&readset);
       FD_SET(fd, &readset);
       delay.tv_sec = 0;
@@ -184,11 +179,24 @@ msg* wrapper_readSalMsg(int fd){
       retval->bytesUsed = strlen("OK\n");
     }
   }
-  fprintf(stderr,"\nwrapper_readSalMsg\t:\tfinishing a read\n");
+  eM("\nwrapper_readSalMsg\t:\tfinishing a read\n");
   return retval;
 
  fail:
   freeMsg(retval);
   retval = NULL;
   return retval;
+}
+
+void echo2Sal(int from, int to){
+  msg* message;
+  message = acceptMsg(from);
+  if(message != NULL){
+    writeMsg(to, message);
+    if(SALWRAPPER_DEBUG){
+      writeMsg(STDERR_FILENO, message);
+      eM("echo2Maude: wrote %d bytes\n", message->bytesUsed);
+    }
+    freeMsg(message);
+  }
 }
