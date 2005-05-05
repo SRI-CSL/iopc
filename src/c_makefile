@@ -42,9 +42,6 @@ COBJS = actor.o\
         socket_lib.o\
         msg.o argv.o wrapper_lib.o sal_lib.o\
 	ec.o macrostr.o
-#Linda: comment out the above line if it still fails
-#Though it compiles on my 1.2 snail box, so it should on whiz-bang 1.3
-#machines.
 
 
 all:  scripts ${EXE}

@@ -190,15 +190,6 @@ msg* readMaudeMsg(int fd){
 
     eM("readMaudeMsg\t:\tread read %d bytes\n", bytes);
 
-    /*
-    if((iteration == 0) && 
-       (bytes == 2) &&
-       (strcmp(buff, "> ") == 0)){
-      fprintf(stderr, "Warning: maude is in multiline mode\n");
-      goto fail;
-    }
-    */
-
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg in %d failed\n", getpid());
       goto fail;
@@ -224,6 +215,7 @@ msg* readMaudeMsg(int fd){
 	break;
       } else {
 	eM("readMaudeMsg\t:\tsret = %d more coming! TOO CONFUSING\n", sret);
+	fprintf(stderr, "readMaudeMsg getting swamped, bailing out\n");
 	goto fail;
       }
     }

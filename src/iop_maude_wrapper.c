@@ -31,11 +31,17 @@
 #include "externs.h"
 #include "ec.h"
 
+/* temporary flag for isolating the code Linda says is not needed */
+#define CD_AT_START   1
+
 /* externs used in the announce routine */
 int   local_debug_flag  = MAUDE_WRAPPER_DEBUG;
 char* local_process_name;
 
+#if (CD_AT_START == 1)
 static char current_dir[PATH_MAX + 1];
+#endif
+
 static char* maudebindir;
 static char* self;
 
@@ -64,14 +70,20 @@ static void echoChunk(int from, int to){
   char buff[BUFFSZ];
   int bytesI, bytesO;
   if((bytesI = read(from, buff, BUFFSZ)) <= 0){
+    announce("echo(%d,%d)\t:\terror bytesI = %d\n", from, to, bytesI);
+    /*
     fprintf(stderr, "echo(%d,%d)\t:\terror bytesI = %d\n", 
 	    from, to, bytesI);
+    */
     return;
   }
   if(MAUDE_WRAPPER_DEBUG)errDump(buff, bytesI);
   if((bytesO = write(to, buff, bytesI)) != bytesI){
+    announce("echo(%d,%d)\t:\terror bytes0 != bytesI (%d != %d)\n", from, to, bytesO, bytesI);
+    /*
     fprintf(stderr, "echo(%d,%d)\t:\terror bytes0 != bytesI (%d != %d)\n", 
 	    from, to, bytesO, bytesI);
+    */
     return;
   }
 }
@@ -87,7 +99,7 @@ static void reverberate(int from, int to){
     delay.tv_usec = 0;
     retval = select(from + 1, &readset, NULL, NULL, &delay);
     if(retval <= 0){
-      announce("reverberate(%d,%d)\t:\tbreaking retval = %d\n",from, to, retval);
+      announce("reverberate(%d,%d)\t:\tbreaking retval = %d\n", from, to, retval);
       break;
     } else {
       announce("reverberate(%d,%d)\t:\titeration = %d\n", from, to, iteration);
@@ -151,7 +163,9 @@ int main(int argc, char** argv){
 
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
-  ec_null( getcwd(current_dir, PATH_MAX) );
+#if (CD_AT_START == 1)
+    ec_null( getcwd(current_dir, PATH_MAX) );
+#endif
 
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );
@@ -170,10 +184,13 @@ int main(int argc, char** argv){
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
 
+#if (CD_AT_START == 1)
     /* source of problem on the Mac?!?   */
     /*    ec_neg1( chdir(maudebindir) ); */
     if(chdir(maudebindir) != 0)
       fprintf(stderr, "Couldn't change to %s\n", maudebindir);
+#endif
+
 
 
     ec_neg1( execvp(maude_exe, maude_argv) );
@@ -188,6 +205,7 @@ int main(int argc, char** argv){
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
     
+#if (CD_AT_START == 1)
     wait4Maude(pout[0], perr[0]);
     
     announce("%s\t:\tcding to %s\n", argv[0], current_dir); 
@@ -200,6 +218,8 @@ int main(int argc, char** argv){
       exit(EXIT_FAILURE);
     };
     announce(cmdBuff); 
+#endif
+
     wait4Maude(pout[0], perr[0]);
     
     if(argc == 3){

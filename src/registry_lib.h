@@ -29,6 +29,7 @@ int registry_installHandler();
 int makeRegistryFifos();
 int registryInit();
 int errorsInit();
+void log2File(const char *format, ...);
 void bail();
 void processRegistryCommand(int, int, int);
 void *monitorInSocket(void *);

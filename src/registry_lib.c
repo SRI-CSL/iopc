@@ -34,8 +34,8 @@
 #include "ec.h"
 
 static char javaErrorsFileName[PATH_MAX];
-static char errorsFileName[PATH_MAX];
-static FILE *errorsFile;
+static char *errorsFileName = NULL;
+static FILE *errorsFile = NULL;
 static char cr = '\n';
 static char selectedActor[SIZE];
 static int  selected = 0;
@@ -76,12 +76,17 @@ static void deleteActor(actor_id*);
 static void shutdownRegistry();
 static void freeActor(actor_id*);
 
+/* externs used in the log2File routine */
+extern int   local_debug_flag;
+extern char* local_process_name;
+
 void log2File(const char *format, ...){
   va_list arg;
   va_start(arg, format);
-  if(format != NULL){
+  if(local_debug_flag && (format != NULL) && (errorsFileName != NULL)){
     ec_rv( pthread_mutex_lock(&iop_errlog_mutex) );
     ec_null( errorsFile = fopen(errorsFileName, "a") );
+    fprintf(errorsFile, "%s(%ld)\t:\t", local_process_name, (long)pthread_self());
     vfprintf(errorsFile, format, arg);
     fflush(errorsFile);
     fclose(errorsFile);
@@ -96,7 +101,7 @@ EC_CLEANUP_END
 }
 
 static void registry_sig_handler(int sig){
-  announce("Got signal %d\n", sig);
+  log2File("Got signal %d\n", sig);
   if((sig == SIGUSR1) || (sig == SIGSEGV)) {
     bail();
     exit(EXIT_FAILURE);
@@ -106,7 +111,7 @@ static void registry_sig_handler(int sig){
 static void registry_sigchld_handler(int sig){
   int status;
   pid_t child = waitpid(-1, &status, WNOHANG);
-  announce("waited on child with pid %d with exit status %d\n",  child, status);
+  log2File("waited on child with pid %d with exit status %d\n",  child, status);
 }
 
 int registry_installHandler(){
@@ -138,16 +143,16 @@ EC_CLEANUP_END
 
 
 int makeRegistryFifos(){
-  announce("Unlinking %s\n", registry_fifo_in);  
+  log2File("Unlinking %s\n", registry_fifo_in);  
   /* try and clean up old copies, ignore failure */
   (void)unlink(registry_fifo_in);
-  announce("Creating %s\n", registry_fifo_in);  
+  log2File("Creating %s\n", registry_fifo_in);  
   /* make new ones               */
   ec_neg1( mkfifo(registry_fifo_in,  S_IRWXU) );
-  announce("Unlinking %s\n", registry_fifo_out);  
+  log2File("Unlinking %s\n", registry_fifo_out);  
   /* try and clean up old copies, ignore failure */
   (void)unlink(registry_fifo_out);
-  announce("Creating %s\n", registry_fifo_out);  
+  log2File("Creating %s\n", registry_fifo_out);  
   /* make new ones               */
   ec_neg1( mkfifo(registry_fifo_out, S_IRWXU) );    
   return 0;
@@ -157,19 +162,19 @@ EC_CLEANUP_END
 }
 
 int registryInit(int *fifo_in_fd, int *fifo_out_fd){
-  announce("registryInit locking mutex\n");
+  log2File("registryInit locking mutex\n");
   ec_rv( pthread_mutex_lock(&theRegistryMutex) );
-  announce("registryInit locked mutex\n");  
-  announce("Opening %s\n", registry_fifo_in);  
+  log2File("registryInit locked mutex\n");  
+  log2File("Opening %s\n", registry_fifo_in);  
   ec_neg1( *fifo_in_fd = open(registry_fifo_in, O_RDWR) );
-  announce("Opening %s\n", registry_fifo_out);  
+  log2File("Opening %s\n", registry_fifo_out);  
   ec_neg1( *fifo_out_fd = open(registry_fifo_out, O_RDWR) );
-  announce("Callocing\n");  
+  log2File("Callocing\n");  
   ec_null( theRegistry = calloc(theRegistrySize, sizeof(actor_id*)) );
-  announce("registryInit unlocking mutex\n");  
+  log2File("registryInit unlocking mutex\n");  
   ec_rv( pthread_mutex_unlock(&theRegistryMutex) );
-  announce("registryInit unlocked mutex\n");  
-  announce("Registry successfully initialized\n");  
+  log2File("registryInit unlocked mutex\n");  
+  log2File("Registry successfully initialized\n");  
   return 0;
 EC_CLEANUP_BGN
   return -1;
@@ -178,9 +183,9 @@ EC_CLEANUP_END
 
 
 int errorsInit(){
+  ec_null( errorsFileName = calloc(PATH_MAX, sizeof(char)) );
   snprintf(errorsFileName, PATH_MAX, "/tmp/iop_%d_c_errors", iop_pid);
   snprintf(javaErrorsFileName, PATH_MAX, "/tmp/iop_%d_java_errors", iop_pid);
-  announce("IOP's error file is: %s\n", errorsFileName);
   ec_null( errorsFile = fopen(errorsFileName, "w") );
   ec_cmp( fclose(errorsFile), EOF );
   return 0;
@@ -194,12 +199,12 @@ static actor_id *makeActorId(actor_spec *acts){
   int i;
   actor_id *retval = NULL;
   if(acts != NULL){  
-    announce("makeActorId commencing for %s\n", acts->name);
+    log2File("makeActorId commencing for %s\n", acts->name);
     ec_null( retval = calloc(1, sizeof(actor_id)) );
     retval->spec = acts;
     retval->exitFlag = 0;
     for(i = 0; i < 3; i++){ retval->fds[i] = -1; }
-    announce("makeActorId finished  %s\n", acts->name);
+    log2File("makeActorId finished  %s\n", acts->name);
   } else {
     fprintf(stderr, "Failure in makeActorId: acts == NULL\n");
   }
@@ -215,16 +220,16 @@ static int initActorId(actor_id *actid){
   actor_spec *aspec = NULL;
   if(actid != NULL){  
     aspec = actid->spec;
-    announce("initActorId commencing for %s\n", aspec->name);
+    log2File("initActorId commencing for %s\n", aspec->name);
     ec_rv( pthread_mutex_init(&(actid->mutex), NULL) );
     for(i = 0; i < 3; i++){
       ec_neg1( actid->fds[i] = open(aspec->fifos[i], flags[i]) );
     }
-    announce("initActorId launching errorLog thread  for %s\n", aspec->name);
+    log2File("initActorId launching errorLog thread  for %s\n", aspec->name);
     ec_rv( pthread_create(&(actid->tids[0]), NULL, errorLog, actid) );
-    announce("initActorId launching echoOut thread  for %s\n", aspec->name);
+    log2File("initActorId launching echoOut thread  for %s\n", aspec->name);
     ec_rv( pthread_create(&(actid->tids[1]), NULL, echoOut, actid) );
-    announce("initActorId finished  %s\n", aspec->name);
+    log2File("initActorId finished  %s\n", aspec->name);
     return 0;
   } else {
     fprintf(stderr, "Failure in initActorId: actid == NULL\n");
@@ -237,9 +242,9 @@ EC_CLEANUP_END
 
 static void outputRegistry(int fd){
   int i, count = 0;
-  announce("outputRegistry locking mutex\n");
+  log2File("outputRegistry locking mutex\n");
   pthread_mutex_lock(&theRegistryMutex);
-  announce("outputRegistry locked mutex\n");
+  log2File("outputRegistry locked mutex\n");
 
 
   for(i = 0; i < theRegistrySize; i++)
@@ -250,7 +255,7 @@ static void outputRegistry(int fd){
   if(writeInt(fd, count) < 0){
     goto exit;
   }
-  announce("sent the count %d\n", count);
+  log2File("sent the count %d\n", count);
 
   for(i = 0; i < theRegistrySize; i++)
     if(theRegistry[i] != NULL){
@@ -258,28 +263,28 @@ static void outputRegistry(int fd){
 	char *name = theRegistry[i]->spec->name;
 	int lenN = strlen(name);
 	if(writeInt(fd, i) < 0) goto exit;
-	announce("sent i =  %d\n", i);
+	log2File("sent i =  %d\n", i);
 	if(write(fd, name, lenN) != lenN)
 	  goto exit;
 	if(write(fd, &cr, sizeof(char)) != sizeof(char))
 	  goto exit;
-	announce("sent name =  %s\n", name);
+	log2File("sent name =  %s\n", name);
       }
     }
 
  exit:
   
-  announce("outputRegistry unlocking mutex\n");
+  log2File("outputRegistry unlocking mutex\n");
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("outputRegistry unlocked mutex\n");
+  log2File("outputRegistry unlocked mutex\n");
   return;
 }
 
 static void outputRegistrySize(int fd){
   int i, count = 0;
-  announce("outputRegistrySize locking mutex\n");
+  log2File("outputRegistrySize locking mutex\n");
   pthread_mutex_lock(&theRegistryMutex);
-  announce("outputRegistrySize locked mutex\n");  
+  log2File("outputRegistrySize locked mutex\n");  
 
   for(i = 0; i < theRegistrySize; i++)
     if(theRegistry[i] != NULL){
@@ -292,9 +297,9 @@ static void outputRegistrySize(int fd){
   
  exit:
   
-  announce("outputRegistrySize unlocking mutex\n");
+  log2File("outputRegistrySize unlocking mutex\n");
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("outputRegistrySize unlocked mutex\n");
+  log2File("outputRegistrySize unlocked mutex\n");
   return;
 }
 
@@ -309,7 +314,7 @@ static int _allocateUniqueName(actor_spec *acts){
   char *oldName = acts->name;
   int i, found = 0;
   requestNo++;
-  announce("_allocateUniqueName(%d): nameIn  = %s\n", requestNo, oldName);
+  log2File("_allocateUniqueName(%d): nameIn  = %s\n", requestNo, oldName);
 
   for(i = 0; i < theRegistrySize; i++){
     if((theRegistry[i] != NULL) && (strcmp(theRegistry[i]->spec->name, oldName) == 0)){
@@ -318,7 +323,7 @@ static int _allocateUniqueName(actor_spec *acts){
     }
   }
   if(!found){ 
-    announce("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, oldName);
+    log2File("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, oldName);
     return 1;
   } else {
     int len = strlen(oldName) + 1;
@@ -338,7 +343,7 @@ static int _allocateUniqueName(actor_spec *acts){
       }
     }/* while(found == 1) */
     strncpy(acts->name, newName, PATH_MAX);
-    announce("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, newName);
+    log2File("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, newName);
     free(newName);
     return 1;
   }
@@ -370,20 +375,20 @@ static int registerActor(actor_spec *acts){
   int retval = -1, slot, errcode;
   actor_id* actid;
   
-  announce("Inside registerActor\n");
+  log2File("Inside registerActor\n");
 
-  announce("Calling makeActorId\n");
+  log2File("Calling makeActorId\n");
   actid = makeActorId(acts);
-  announce("Called makeActorId\n");
+  log2File("Called makeActorId\n");
 
   if(actid == NULL){
     fprintf(stderr, "registerActor failed,  makeActorId returned NULL\n");
     return retval;
   }
 
-  announce("Calling initActorId\n");
+  log2File("Calling initActorId\n");
   errcode = initActorId(actid);
-  announce("Called initActorId\n");
+  log2File("Called initActorId\n");
 
   if(errcode == -1){
     fprintf(stderr, "registerActor failed,  initActorId returned -1\n");
@@ -391,21 +396,21 @@ static int registerActor(actor_spec *acts){
   }
   
 
-  announce("registerActor locking mutex\n");
+  log2File("registerActor locking mutex\n");
   pthread_mutex_lock(&theRegistryMutex);
-  announce("registerActor locked mutex\n");
+  log2File("registerActor locked mutex\n");
   
-  announce("allocating unique name\n");
+  log2File("allocating unique name\n");
   
   if(_allocateUniqueName(acts) < 0){
     fprintf(stderr, "_allocateUniqueName failed (name = %s)!\n", acts->name);
     goto exit;
   }
-  announce("allocated unique name\n");
+  log2File("allocated unique name\n");
 
   slot = _getEmptyRegistrySlot();
 
-  announce("got empty slot\n");
+  log2File("got empty slot\n");
   
   if(slot < 0){ 
     goto exit;    
@@ -417,9 +422,9 @@ static int registerActor(actor_spec *acts){
 
  exit:
   
-  announce("registerActor unlocking mutex\n");
+  log2File("registerActor unlocking mutex\n");
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("registerActor unlocked mutex\n");
+  log2File("registerActor unlocked mutex\n");
   return retval;
 }
 
@@ -429,29 +434,29 @@ static int unregisterActor(int slot){
   int retval = -1;
   actor_id *act = NULL;
   if((slot < 0) || (slot >= theRegistrySize)) return retval;
-  announce("unregisterActor locking mutex\n");  
+  log2File("unregisterActor locking mutex\n");  
   pthread_mutex_lock(&theRegistryMutex);
-  announce("unregisterActor locked mutex\n");  
+  log2File("unregisterActor locked mutex\n");  
   
   act = theRegistry[slot];
   theRegistry[slot] = NULL;
   retval = slot;
-  announce("unregisterActor unlocking mutex\n");  
+  log2File("unregisterActor unlocking mutex\n");  
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("unregisterActor unlocked mutex\n");  
+  log2File("unregisterActor unlocked mutex\n");  
   return retval;
 }
 
 
 static actor_id *getActorBySlot(int slot){
   actor_id *retval = NULL;
-  announce("getActorBySlot locking mutex\n");  
+  log2File("getActorBySlot locking mutex\n");  
   pthread_mutex_lock(&theRegistryMutex);
-  announce("getActorBySlot locked mutex\n");  
+  log2File("getActorBySlot locked mutex\n");  
   retval = theRegistry[slot];
-  announce("getActorBySlot unlocking mutex\n");  
+  log2File("getActorBySlot unlocking mutex\n");  
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("getActorBySlot unlocked mutex\n");  
+  log2File("getActorBySlot unlocked mutex\n");  
   return retval;
 }
 
@@ -459,9 +464,9 @@ static actor_id *getActorByName(char *name){
   actor_id *retval = NULL;
   int i;
   if(name == NULL) return NULL;
-  announce("getActorByName locking mutex\n");  
+  log2File("getActorByName locking mutex\n");  
   pthread_mutex_lock(&theRegistryMutex);
-  announce("getActorByName locked mutex\n");  
+  log2File("getActorByName locked mutex\n");  
   for(i = 0; i < theRegistrySize; i++){
     if(theRegistry[i] == NULL) continue;
     if(theRegistry[i]->spec->name == NULL) continue;
@@ -472,18 +477,18 @@ static actor_id *getActorByName(char *name){
   }
 
  exit:
-  announce("getActorByName unlocking mutex\n");  
+  log2File("getActorByName unlocking mutex\n");  
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("getActorByName unlocked mutex\n");  
+  log2File("getActorByName unlocked mutex\n");  
   return retval;
 }
 
 static int getActorsSlotByName(char *name){
   int retval = -1, i;
   if(name == NULL) return retval;
-  announce("getActorsSlotByName locking mutex\n");  
+  log2File("getActorsSlotByName locking mutex\n");  
   pthread_mutex_lock(&theRegistryMutex);
-  announce("getActorsSlotByName locked mutex\n");  
+  log2File("getActorsSlotByName locked mutex\n");  
   for(i = 0; i < theRegistrySize; i++){
     if(theRegistry[i] == NULL) continue;
     if(theRegistry[i]->spec->name == NULL) continue;
@@ -494,9 +499,9 @@ static int getActorsSlotByName(char *name){
   }
 
  exit:
-  announce("getActorsSlotByName unlocking mutex\n");  
+  log2File("getActorsSlotByName unlocking mutex\n");  
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("getActorsSlotByName unlocked mutex\n");  
+  log2File("getActorsSlotByName unlocked mutex\n");  
 
   return retval;
   
@@ -536,14 +541,14 @@ static void* errorLog(void *arg){
   while(1){
 
     if(act->exitFlag){
-      announce("errorLog thread of %s exiting gracefully\n", act->spec->name);
+      log2File("errorLog thread of %s exiting gracefully\n", act->spec->name);
       pthread_exit(NULL);
     }
  
     if((errmsg = readMsgVolatile(fd, &act->exitFlag)) == NULL){
-      announce("readMsgVolatile in errorLog returned NULL\n");
+      log2File("readMsgVolatile in errorLog returned NULL\n");
       if(++failures > 5){
-	announce("errorLog giving up!\n");
+	log2File("errorLog giving up!\n");
 	pthread_exit(NULL); 
       };
       continue;
@@ -558,6 +563,7 @@ static void* errorLog(void *arg){
     }
     
     log2File("\n%s wrote %d bytes to STDERR_FILENO\n", act->spec->name, errmsg->bytesUsed);
+    log2File("\n%s those  %d bytes were:%s\n", act->spec->name, errmsg->bytesUsed, errmsg->data);
     freeMsg(errmsg);
 
   } /* while(1) */
@@ -576,27 +582,27 @@ static void* echoOut(void *arg){
   int fd = (act->fds)[OUT];  
   int buffno = 1;
   
-  announce("echoOut for %s commencing\n", act->spec->name);
+  log2File("echoOut for %s commencing\n", act->spec->name);
 
 
   while(1){
     if(act->exitFlag){
-      announce("echoOut thread of %s exiting gracefully\n", act->spec->name);
+      log2File("echoOut thread of %s exiting gracefully\n", act->spec->name);
       pthread_exit(NULL);
     }
-    announce("echoOut for %s waiting\n", act->spec->name);
+    log2File("echoOut for %s waiting\n", act->spec->name);
 
     if((outmsg = acceptMsgVolatile(fd, &act->exitFlag)) == NULL){
-      announce("acceptMsgVolatile in echoOut for %s returned NULL\n", act->spec->name);
+      log2File("acceptMsgVolatile in echoOut for %s returned NULL\n", act->spec->name);
       continue;
     }
-    announce("\nbuffer no of %s: %d\n", act->spec->name, buffno++);
-    announce("calling parseOut outmsg size = %d\n", outmsg->bytesUsed);
-    announce("calling parseOut outmsg = %s\n", outmsg->data);
+    log2File("\nbuffer no of %s: %d\n", act->spec->name, buffno++);
+    log2File("calling parseOut outmsg size = %d\n", outmsg->bytesUsed);
+    log2File("calling parseOut outmsg = %s\n", outmsg->data);
     parseOut(outmsg);
-    announce("called parseOut\n");
+    log2File("called parseOut\n");
     freeMsg(outmsg);
-    announce("freed outmsg\n");
+    log2File("freed outmsg\n");
   }
 }
 
@@ -605,23 +611,23 @@ static void parseOut(msg* outmsg){
   char *parsedmsg = NULL;
   char *target, *sender, *rest;
   actor_id *recipient;
-  announce("commencing parseOut\n");
+  log2File("commencing parseOut\n");
   if((copy = (char *)calloc(outmsg->bytesUsed + 1, sizeof(char))) == NULL)
     goto fail;
   strncpy(copy, outmsg->data, outmsg->bytesUsed + 1);
   if(getNextToken(copy, &target, &rest) != 1)
     goto echo;
-  announce("target = \"%s\"\n", target);
-  announce("calling getActorByName\n");
+  log2File("target = \"%s\"\n", target);
+  log2File("calling getActorByName\n");
   recipient = getActorByName(target);
-  announce("recipient == NULL: %d\n", recipient == NULL);
+  log2File("recipient == NULL: %d\n", recipient == NULL);
   if(recipient == NULL)
     goto echo;
   if(recipient->spec->pid <= 0)
     goto echo;
   if(getNextToken(rest, &sender, &rest) != 1)
     goto echo;
-  announce("sender = \"%s\"\n", sender);
+  log2File("sender = \"%s\"\n", sender);
   if(rest == NULL)
     goto echo;
   if((parsedmsg = (char *)calloc((outmsg->bytesUsed + 4), sizeof(char))) == NULL)
@@ -630,7 +636,7 @@ static void parseOut(msg* outmsg){
   snprintf(parsedmsg, outmsg->bytesUsed + 4, "(%s %s)", sender, rest);
 
 
-  announce("parsedmsg = \"%s\"\n", parsedmsg);
+  log2File("parsedmsg = \"%s\"\n", parsedmsg);
   sendActor(recipient, parsedmsg);
   free(copy);
   free(parsedmsg);
@@ -705,14 +711,9 @@ void deleteActor(actor_id *act){
 }
 
 static void shutdownRegistry(){
-  announce("shutdownRegistry locking mutex\n");  
   pthread_mutex_lock(&theRegistryMutex);
-  announce("shutdownRegistry locked mutex\n");  
-
   bail();
-  announce("shutdownRegistry unlocking mutex\n");  
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("shutdownRegistry unlocked mutex\n");  
   exit(EXIT_SUCCESS);
 }
 
@@ -756,10 +757,10 @@ void processSendCommand(int inFd, int outFd){
   actor_id* target;
   if(readInt(inFd, &actorId) < 0)
     return;
-  announce("SEND clause, actorId = %d\n", actorId);
+  log2File("SEND clause, actorId = %d\n", actorId);
   if(readInt(inFd, &bytesin) < 0)
     return;
-  announce("SEND clause, bytesin = %d\n", bytesin);
+  log2File("SEND clause, bytesin = %d\n", bytesin);
   if((buffin = (char *)calloc(bytesin + 1, sizeof(char))) == NULL){
     fprintf(stderr, "SEND clause, calloc of buffin failed\n");
     return;
@@ -769,15 +770,15 @@ void processSendCommand(int inFd, int outFd){
     free(buffin);
     return;
   }
-  announce("buffin[bytesin - 1] == NULL : %d\n", buffin[bytesin - 1] == '\0');
+  log2File("buffin[bytesin - 1] == NULL : %d\n", buffin[bytesin - 1] == '\0');
   buffin[bytesin] = '\0';
-  announce("SEND clause, buffin = \"%s\"\n", buffin);
+  log2File("SEND clause, buffin = \"%s\"\n", buffin);
   if((target = getActorBySlot(actorId)) == NULL){
     fprintf(stderr, "SEND clause, getActorBySlot failed\n");
     free(buffin);
     return;
   }
-  announce("SEND clause, target = %s\n", target->spec->name);
+  log2File("SEND clause, target = %s\n", target->spec->name);
   if((writeInt((target->fds)[IN], bytesin)) != 1){
     fprintf(stderr, "SEND clause, writeInt failed\n");
     free(buffin);
@@ -788,7 +789,7 @@ void processSendCommand(int inFd, int outFd){
     free(buffin);
     return;
   }
-  announce("SEND clause, send OK\n");
+  log2File("SEND clause, send OK\n");
   free(buffin);
   return;
 }
@@ -796,22 +797,22 @@ void processSendCommand(int inFd, int outFd){
 void processRegisterCommand(int inFd, int outFd, int notifyGUI){
   int slotNumber;
   actor_spec *acts = NULL;
-  announce("Reading actor spec\n");
+  log2File("Reading actor spec\n");
   if((acts =  readActorSpec(inFd)) == NULL){
     fprintf(stderr, "Reading actor spec failed\n");
     return; 
   }
-  announce("Registering actor spec\n");
+  log2File("Registering actor spec\n");
   if((slotNumber = registerActor(acts)) == -1)
     return;
   
-  announce("Replying with slot %d\n", slotNumber);
+  log2File("Replying with slot %d\n", slotNumber);
 
   if(writeInt(outFd, slotNumber) < 0){
     fprintf(stderr, "REGISTER clause, write of slotNumber failed\n");
     return;
   }
-  announce("sent slotNumber = %d\n", slotNumber);
+  log2File("sent slotNumber = %d\n", slotNumber);
   
   if(notifyGUI){
     /* 
@@ -820,14 +821,14 @@ void processRegisterCommand(int inFd, int outFd, int notifyGUI){
        first, and not try and notify the no-existent GUI.
     */
     if(!iop_no_windows_flag){
-      announce("notifying GUI\n");
+      log2File("notifying GUI\n");
       sendMsg2Input(NULL, UPDATE);
-      announce("notified GUI\n");
+      log2File("notified GUI\n");
     }
   }
 
 
-  announce("breaking\n");
+  log2File("breaking\n");
   return;
 }
 
@@ -835,11 +836,11 @@ void processUnregisterCommand(int inFd, int outFd){
   char name[PATH_MAX + 1];
   int len, slotNumber;
   actor_id* victim;
-  announce("UNREGISTER clause, Reading actor name\n");
+  log2File("UNREGISTER clause, Reading actor name\n");
   if((len = read(inFd, name, PATH_MAX)) <= 0)
     return; 
   name[len] ='\0';
-  announce("UNREGISTER clause, Registering actor name: %s\n", name);
+  log2File("UNREGISTER clause, Registering actor name: %s\n", name);
   if((slotNumber = getActorsSlotByName(name)) == -1)
     return;
   if((victim = getActorBySlot(slotNumber)) == NULL){
@@ -848,12 +849,12 @@ void processUnregisterCommand(int inFd, int outFd){
   }
   if(unregisterActor(slotNumber) == -1)
     return;
-  announce("UNREGISTER clause, found actor %s in slotNumber = %d\n", name, slotNumber);
+  log2File("UNREGISTER clause, found actor %s in slotNumber = %d\n", name, slotNumber);
   if(writeInt(outFd, slotNumber) < 0){
     fprintf(stderr, "UNREGISTER clause, write of slotNumber failed\n");
     return;
   }
-  announce("UNREGISTER clause, sent slotNumber = %d\n", slotNumber);
+  log2File("UNREGISTER clause, sent slotNumber = %d\n", slotNumber);
   /* give victim time to exit by relinquishing CPU */
   usleep(1);
   if(victim != NULL){
@@ -862,11 +863,11 @@ void processUnregisterCommand(int inFd, int outFd){
   }
 
   if(!iop_no_windows_flag){
-    announce("notifying GUI\n");
+    log2File("notifying GUI\n");
     sendMsg2Input(NULL, UPDATE);
-    announce("notified GUI\n");
+    log2File("notified GUI\n");
   }
-  announce("UNREGISTER clause, breaking\n");
+  log2File("UNREGISTER clause, breaking\n");
   return;
 
 }
@@ -877,7 +878,7 @@ void processNameCommand(int cmd, int inFd, int outFd){
   char unk[] = UNKNOWNNAME;
   if(readInt(inFd, &actorId) < 0) goto fail;
   if((target = getActorBySlot(actorId)) == NULL){
-    announce("NAME clause, getActorBySlot failed\n");
+    log2File("NAME clause, getActorBySlot failed\n");
     goto fail;
   }
   write(outFd, target->spec->name, strlen(target->spec->name));
@@ -888,18 +889,18 @@ void processNameCommand(int cmd, int inFd, int outFd){
   if(write(outFd, unk, len) != len){
     fprintf(stderr, "write(outFd, unk, strlen(unk)) failed\n");
   };
-  announce("command index = %d\n", cmd);
+  log2File("command index = %d\n", cmd);
   return;
 }
 
 void processRegistryCommand(int inFd, int outFd, int notifyGUI){
   int cmd = -1;
-  announce("Awaiting a command \n");
+  log2File("Awaiting a command \n");
   if(readInt(inFd, &cmd) < 0){
     fprintf(stderr, "Read of cmd failed\n");
     return;
   }
-  announce("Processing %s command (cmd = %d)\n", cmd2str(cmd), cmd);
+  log2File("Processing %s command (cmd = %d)\n", cmd2str(cmd), cmd);
   switch(cmd){
   case SEND : {
     processSendCommand(inFd, outFd);
@@ -936,18 +937,18 @@ void processRegistryCommand(int inFd, int outFd, int notifyGUI){
 void *monitorInSocket(void *arg){
   int listeningSocket = *((int *)arg);
 
-  announce("Waiting notification of reg2InPort\n");
+  log2File("Waiting notification of reg2InPort\n");
   if((reg2InPort = wait4ReadyFromInputWindow(listeningSocket)) < 0){
     fprintf(stderr, "wait4ReadyFromInputWindow failed\n");
     bail();
   }
-  announce("reg2InPort = %d\n", reg2InPort);
+  log2File("reg2InPort = %d\n", reg2InPort);
 
 
   while(1){
     int  *msgsock;
     char *description = NULL;
-    announce("monitorInSocket blocking on acceptSocket\n");
+    log2File("monitorInSocket blocking on acceptSocket\n");
     msgsock = acceptSocket(listeningSocket, &description);
     if (*msgsock == INVALID_SOCKET){
       fprintf(stderr, description);
@@ -955,7 +956,7 @@ void *monitorInSocket(void *arg){
       free(description); 
       pthread_exit(NULL);
 }
-    announce("%s -- *msgsock = %d\n", description, *msgsock);
+    log2File("%s -- *msgsock = %d\n", description, *msgsock);
     processRegistryCommand(*msgsock, *msgsock, 1);
     free(description); 
     close(*msgsock);
@@ -965,7 +966,7 @@ void *monitorInSocket(void *arg){
 static int wait4ReadyFromInputWindow(int in2regSocket){
   int  *msgsock, bytesread;
   char *description = NULL, buff[SIZE];
-  announce("wait4ReadyFromInputWindow blocking on acceptSocket\n");
+  log2File("wait4ReadyFromInputWindow blocking on acceptSocket\n");
   msgsock = acceptSocket(in2regSocket, &description);
   if (*msgsock == INVALID_SOCKET){
     fprintf(stderr, description);
@@ -1023,14 +1024,14 @@ char* registryLaunchActor(char* name, int argc, char** argv){
   char* executable;
   actor_id* actid;
   actor_spec *spec;
-  announce("registryLaunchActor calling makeActorSpec for %s\n", name);  
+  log2File("registryLaunchActor calling makeActorSpec for %s\n", name);  
   spec = makeActorSpec(name);
-  announce("registryLaunchActor called makeActorSpec for %s\n", name);  
-  announce("registryLaunchActor locking mutex\n");  
+  log2File("registryLaunchActor called makeActorSpec for %s\n", name);  
+  log2File("registryLaunchActor locking mutex\n");  
   pthread_mutex_lock(&theRegistryMutex);
-  announce("registryLaunchActor locked mutex\n");  
+  log2File("registryLaunchActor locked mutex\n");  
 
-  announce("registryLaunchActor calling _allocateUniqueName\n");  
+  log2File("registryLaunchActor calling _allocateUniqueName\n");  
 
 
   if(_allocateUniqueName(spec) < 0){
@@ -1038,7 +1039,7 @@ char* registryLaunchActor(char* name, int argc, char** argv){
     goto exit;
   }
 
-  announce("registryLaunchActor calling _getEmptyRegistrySlot\n");  
+  log2File("registryLaunchActor calling _getEmptyRegistrySlot\n");  
 
 
   if((slot = _getEmptyRegistrySlot()) < 0){
@@ -1060,7 +1061,7 @@ char* registryLaunchActor(char* name, int argc, char** argv){
     }
   }
 
-  announce("registryLaunchActor calling newActor\n");  
+  log2File("registryLaunchActor calling newActor\n");  
   
   spec = newActor(0, executable,  argv);
   argv[0] = executable;
@@ -1073,18 +1074,18 @@ char* registryLaunchActor(char* name, int argc, char** argv){
     fprintf(stderr, "%s had pid_t %d\n", spec->name, spec->pid);
   */
 
-  announce("registryLaunchActor calling makeActorId\n");  
+  log2File("registryLaunchActor calling makeActorId\n");  
   actid = makeActorId(spec);
-  announce("registryLaunchActor called makeActorId\n");  
+  log2File("registryLaunchActor called makeActorId\n");  
 
   if(actid == NULL){
     fprintf(stderr, "registryLaunchActor: makeActorId failed (name = %s)!\n", name);
     goto exit;
   }
 
-  announce("Calling initActorId\n");
+  log2File("Calling initActorId\n");
   errcode = initActorId(actid);
-  announce("Called initActorId\n");
+  log2File("Called initActorId\n");
 
   if(errcode == -1){
     fprintf(stderr, "registryLaunchActor: initActorId returned -1\n");
@@ -1096,10 +1097,10 @@ char* registryLaunchActor(char* name, int argc, char** argv){
 
  exit:
 
-  announce("registryLaunchActor unlocking mutex\n");  
+  log2File("registryLaunchActor unlocking mutex\n");  
   pthread_mutex_unlock(&theRegistryMutex);
-  announce("registryLaunchActor unlocked mutex\n");  
-  announce("registryLaunchActor complete!\n");  
+  log2File("registryLaunchActor unlocked mutex\n");  
+  log2File("registryLaunchActor complete!\n");  
   return retval;
 
 }
@@ -1123,21 +1124,21 @@ void  processRegistryStartMessage(char *sender, char *rest, int notify){
       actorName = registryLaunchActor(name, argc, argv);
       if(actorName != NULL){
 	if(sender != NULL){
-	  announce("%s\n%s\nstartOK %s\n", sender, REGISTRY_ACTOR, actorName);
+	  log2File("%s\n%s\nstartOK %s\n", sender, REGISTRY_ACTOR, actorName);
 	  sendFormattedMsgFP(stdout, "%s\n%s\nstartOK %s\n", sender, REGISTRY_ACTOR, actorName);
 	}
       } else {
 	if(sender != NULL){
-	  announce("%s\n%s\nstartFAILED %s\n", sender, REGISTRY_ACTOR, name);
+	  log2File("%s\n%s\nstartFAILED %s\n", sender, REGISTRY_ACTOR, name);
 	  sendFormattedMsgFP(stdout, "%s\n%s\nstartFAILED %s\n", sender, REGISTRY_ACTOR, name);
 	}
       }
       freeArgv(argc, argv);
 
       if(notify && !iop_no_windows_flag){
-	announce("processRegistryStartMessage notifying GUI\n");  
+	log2File("processRegistryStartMessage notifying GUI\n");  
 	sendMsg2Input(NULL, UPDATE);
-	announce("processRegistryStartMessage notified GUI\n");  
+	log2File("processRegistryStartMessage notified GUI\n");  
       }
 
     }
@@ -1146,6 +1147,7 @@ void  processRegistryStartMessage(char *sender, char *rest, int notify){
 
 void  processRegistryStopMessage(char *sender, char *rest){
   char *name, *args;
+  log2File("Stopping %s\n", sender);
   if(getNextToken(rest, &name, &args) != 1){
     fprintf(stderr, "processRegistryStopMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     return;
@@ -1160,23 +1162,23 @@ void  processRegistryStopMessage(char *sender, char *rest){
       if(actid != NULL){
 	int slot = getActorsSlotByName(name);
 	if(slot >= 0){
-	  announce("processRegistryStopMessage locking mutex\n");  
+	  log2File("processRegistryStopMessage locking mutex\n");  
 	  pthread_mutex_lock(&theRegistryMutex);
-	  announce("processRegistryStopMessage locked mutex\n");  
+	  log2File("processRegistryStopMessage locked mutex\n");  
 	  theRegistry[slot] = NULL;
-	  announce("processRegistryStopMessage unlocking mutex\n");  
+	  log2File("processRegistryStopMessage unlocking mutex\n");  
 	  pthread_mutex_unlock(&theRegistryMutex);
-	  announce("processRegistryStopMessage unlocked mutex\n");  
+	  log2File("processRegistryStopMessage unlocked mutex\n");  
 	}
 	shutdownActor(actid);  
 	if(!iop_no_windows_flag){
 	  sendMsg2Input(NULL, UPDATE);
 	}
-	announce("%s\n%s\nstopOK %s\n", sender, REGISTRY_ACTOR, name);
+	log2File("%s\n%s\nstopOK %s\n", sender, REGISTRY_ACTOR, name);
 	sendFormattedMsgFP(stdout, "%s\n%s\nstopOK %s\n", sender, REGISTRY_ACTOR, name);
       } else {
 	fprintf(stderr, "processRegistryStopMessage: actid of %s is NULL\n", name);
-	announce("%s\n%s\nstopFAILED %s\n", sender, REGISTRY_ACTOR, name);
+	log2File("%s\n%s\nstopFAILED %s\n", sender, REGISTRY_ACTOR, name);
 	sendFormattedMsgFP(stdout, "%s\n%s\nstopFAILED %s\n", sender, REGISTRY_ACTOR, name);
       }
     }
@@ -1225,30 +1227,30 @@ void  processRegistryNameMessage(char *sender, char *rest){
 	}  
 	strncpy(aspec->name, name, PATH_MAX);
 	aspec->pid = 0;
-	announce("processRegistryNameMessage: calling makeActorId\n");
+	log2File("processRegistryNameMessage: calling makeActorId\n");
 	actid = makeActorId(aspec);
-	announce("processRegistryNameMessage: called makeActorId\n");
+	log2File("processRegistryNameMessage: called makeActorId\n");
 	
 	if(actid == NULL){
 	  fprintf(stderr, "processRegistryNameMessage:  makeActorId returned NULL\n");
 	  goto exit;
 	}
 	
-        announce("processRegistryNameMessage: locking mutex\n");
+        log2File("processRegistryNameMessage: locking mutex\n");
 	pthread_mutex_lock(&theRegistryMutex);
-	announce("processRegistryNameMessage: locked mutex\n");
+	log2File("processRegistryNameMessage: locked mutex\n");
 	
-	announce("processRegistryNameMessage: allocating unique name\n");
+	log2File("processRegistryNameMessage: allocating unique name\n");
 	
 	if(_allocateUniqueName(aspec) < 0){
 	  fprintf(stderr, "_allocateUniqueName failed (name = %s)!\n", aspec->name);
 	  goto unlock;
 	}
-	announce("allocated unique name\n");
+	log2File("allocated unique name\n");
 	
 	slot = _getEmptyRegistrySlot();
 	
-	announce("got empty slot\n");
+	log2File("got empty slot\n");
 	
 	if(slot >= 0){ 
 	  theRegistry[slot] = actid;
@@ -1257,9 +1259,9 @@ void  processRegistryNameMessage(char *sender, char *rest){
 	
       unlock:
 	
-	announce("processRegistryNameMessage: unlocking mutex\n");
+	log2File("processRegistryNameMessage: unlocking mutex\n");
 	pthread_mutex_unlock(&theRegistryMutex);
-	announce("processRegistryNameMessage: unlocked mutex\n");
+	log2File("processRegistryNameMessage: unlocked mutex\n");
 	
       exit:
 
@@ -1379,7 +1381,7 @@ void  processRegistryUnenrollMessage(char *sender, char *rest){
 	  fprintf(stderr, "processRegistryUnenrollMessage: unregisterActor failed\n");
 	  goto exit;
 	}
-	announce("processRegistryUnenrollMessage: found actor %s in slotNumber = %d\n", name, slot);
+	log2File("processRegistryUnenrollMessage: found actor %s in slotNumber = %d\n", name, slot);
       }
     }
   }
@@ -1445,7 +1447,7 @@ int registryProcessConfigFile(){
     strncat(ioprc, IOPRC, BUFFSZ - len - 3);
     rcfile = fopen(ioprc, "r");
     if(rcfile == NULL){
-      announce("Configuration file not opened: %s", strerror(errno));
+      log2File("Configuration file not opened: %s", strerror(errno));
       return -1;
     } else {
       char line[BUFFSZ];
@@ -1483,14 +1485,14 @@ int registryProcessConfigFile(){
 	    fprintf(stderr, "registryProcessConfigFile: parsing %s failed\n", line);
 	    continue;
 	  }
-	  announce("registryProcessConfigFile: selected actor = %s\n", name);
+	  log2File("registryProcessConfigFile: selected actor = %s\n", name);
 	  strncpy(selectedActor, name, SIZE);
 	  selected = 1;
 	}
       }
       
       if(!iop_no_windows_flag){
-	announce("registryProcessConfigFile notifying GUI\n");  
+	log2File("registryProcessConfigFile notifying GUI\n");  
 	if(selected){
 	  int alen = strlen(selectedActor);
 	  msg *amsg = makeMsg(alen);
@@ -1501,7 +1503,7 @@ int registryProcessConfigFile(){
 	} else {
 	  sendMsg2Input(NULL, UPDATE);
 	}
-	announce("registryProcessConfigFile notified GUI\n");  
+	log2File("registryProcessConfigFile notified GUI\n");  
       }
       return counter;
     }

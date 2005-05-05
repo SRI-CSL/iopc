@@ -97,10 +97,14 @@ int allocateSocket(unsigned short port, char *host, int* sockp){
     fprintf(stderr, "Error Opening socket\n");
     return retval;
   }
-  if (connect(conn_socket, (struct sockaddr*)&server, sizeof(server))
-      == -1 ) {
-    fprintf(stderr, "connect() failed\n");
-    return retval;
+  while(connect(conn_socket, (struct sockaddr*)&server, sizeof(server))
+	== -1){
+    if(errno == EINTR){ 
+      continue; 
+    } else {
+      perror("allocateSocket: connect() failed:");
+      return retval;
+    }
   }
   retval = 1;
   *sockp = conn_socket;

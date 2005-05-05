@@ -34,14 +34,20 @@ static void echoChunk(int from, int to){
   char buff[BUFFSZ];
   int bytesI, bytesO;
   if((bytesI = read(from, buff, BUFFSZ)) <= 0){
+    announce("echo(%d,%d)\t:\terror bytesI = %d\n", from, to, bytesI);
+    /*
     fprintf(stderr, "echo(%d,%d)\t:\terror bytesI = %d\n", 
 	    from, to, bytesI);
+    */
     return;
   }
   if(SALWRAPPER_DEBUG)errDump(buff, bytesI);
   if((bytesO = write(to, buff, bytesI)) != bytesI){
+    announce("echo(%d,%d)\t:\terror bytesI = %d\n", from, to, bytesI);
+    /*
     fprintf(stderr, "echo(%d,%d)\t:\terror bytes0 != bytesI (%d != %d)\n", 
 	    from, to, bytesO, bytesI);
+    */
     return;
   }
 }
