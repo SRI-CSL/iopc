@@ -30,14 +30,6 @@
 #include "dbugflags.h"
 
 
-void socketCleanUp(){
-  return;
-}
-
-int socketStartUp(){
-  return 1;
-}
-
 int *acceptSocket(int listenSocket, char **comments){
   int *retval = (int*)calloc(1, sizeof(int));
   char *buff = (char *)calloc(BUFFSZ,sizeof(char));
@@ -58,7 +50,7 @@ int *acceptSocket(int listenSocket, char **comments){
 
   *retval = accept(listenSocket, (struct sockaddr*)&from, &fromlen);
 
-  if((*retval == -1) && (errno == EINTR)) goto restart;
+  if((*retval == -1) && (errno == EINTR)){  goto restart; }
 
   if (*retval == INVALID_SOCKET)
     sprintf(buff, "acceptSocket: accept() error %d\n", errno);
@@ -122,13 +114,28 @@ int allocateListeningSocket(unsigned short port, int* sockp){
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = INADDR_ANY; 
   server.sin_port = htons(port);
-  if((listen_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-    return retval;
 
+  while((listen_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
+    if(errno == EINTR){ 
+      continue; 
+    } else {
+      perror("socket failed in allocateListeningSocket:");
+      return retval;
+    }
   }
-  if((bind(listen_socket, (struct sockaddr*)&server, sizeof(server)) < 0) ||
-     (listen(listen_socket, MAXBACKLOG) < 0)){
+
+  if(bind(listen_socket, (struct sockaddr*)&server, sizeof(server)) < 0){
+    perror("bind failed in allocateListeningSocket:");
     return retval;
+  }
+  
+  while(listen(listen_socket, MAXBACKLOG) < 0){
+    if(errno == EINTR){ 
+      continue; 
+    } else {
+      perror("listen failed in allocateListeningSocket:");
+      return retval;
+    }
   }
   retval = 1;
   *sockp = listen_socket;
@@ -143,7 +150,6 @@ void* in2socket(void *sp){
     retval = send(socket, buff, strlen(buff), 0);
     if (retval == SOCKET_ERROR) {
       fprintf(stderr, "send to socket failed\n");
-      socketCleanUp();
       return NULL;
     }
     announce("sent %d chars to socket\n", retval);
@@ -224,7 +230,6 @@ void* socket2outViolent(void *sp){
   }
   if (retval == SOCKET_ERROR) {
     close(socket);
-    socketCleanUp();
     return NULL;
   }
   return NULL;

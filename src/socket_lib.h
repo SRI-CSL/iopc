@@ -25,7 +25,7 @@
 int *acceptSocket(int, char **);
 int allocateSocket(unsigned short, char *, int*);
 int allocateListeningSocket(unsigned short, int*);
-void socketCleanUp();
+
 void *in2socket(void *);
 void *socket2outGentle(void *);
 void* socket2outGentleWithHttpAck(void *sp);

@@ -952,7 +952,6 @@ void *monitorInSocket(void *arg){
     msgsock = acceptSocket(listeningSocket, &description);
     if (*msgsock == INVALID_SOCKET){
       fprintf(stderr, description);
-      socketCleanUp();
       free(description); 
       pthread_exit(NULL);
 }
@@ -970,7 +969,6 @@ static int wait4ReadyFromInputWindow(int in2regSocket){
   msgsock = acceptSocket(in2regSocket, &description);
   if (*msgsock == INVALID_SOCKET){
     fprintf(stderr, description);
-    socketCleanUp();
     free(description);
     return -1;
   }
