@@ -8,26 +8,6 @@
 #include "iop_lib.h"
 #include "wrapper_lib.h"
 
-static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
-static void eM(const char *format, ...){
-  va_list arg;
-  va_start(arg, format);
-  if(format != NULL){
-    if(SALWRAPPER_DEBUG){
-      ec_rv( pthread_mutex_lock(&iop_err_mutex) );
-      fprintf(stderr, "MSG(%ld)\t:\t", (long)pthread_self());
-      vfprintf(stderr, format, arg);
-      ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
-    }
-  }
-  va_end(arg);
-  return;
-EC_CLEANUP_BGN
-  va_end(arg);
-  return;
-EC_CLEANUP_END
-}
-
 msg* readSALMsg(fdBundle* fdB){
   fd_set set;
   struct timeval tv;
@@ -114,12 +94,12 @@ msg* wrapper_readSalMsg(int fd){
 
   while(1){
     char buff[BUFFSZ];
-    eM("wrapper_readSalMsg\t:\tcommencing a read\n");
+    announce("wrapper_readSalMsg\t:\tcommencing a read\n");
   restart:
     if((bytes = read(fd, buff, BUFFSZ)) < 0){
-      eM("wrapper_readSalMsg\t:\tread error read returned %d bytes\n", bytes);
+      announce("wrapper_readSalMsg\t:\tread error read returned %d bytes\n", bytes);
       if(errno == EINTR){
-	eM("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
+	announce("readMsg  in %d restarting after being interrupted by a signal\n", getpid());
 	goto restart;
       }
       if(errno == EBADF){
@@ -130,8 +110,8 @@ msg* wrapper_readSalMsg(int fd){
       return retval;
     } 
 
-    eM("wrapper_readSalMsg\t:\tread read %d bytes\n", bytes);
-    eM("Read the following: buff \t = \t %s",buff);
+    announce("wrapper_readSalMsg\t:\tread read %d bytes\n", bytes);
+    announce("Read the following: buff \t = \t %s",buff);
 
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg (wrapper_readSalMsg) in %d failed\n", getpid());
@@ -144,7 +124,7 @@ msg* wrapper_readSalMsg(int fd){
       fd_set readset;
       struct timeval delay;
       int sret;
-      eM("wrapper_readSalMsg\t:\tsaw the prompt, making sure!\n");
+      announce("wrapper_readSalMsg\t:\tsaw the prompt, making sure!\n");
       FD_ZERO(&readset);
       FD_SET(fd, &readset);
       delay.tv_sec = 0;
@@ -154,10 +134,10 @@ msg* wrapper_readSalMsg(int fd){
 	fprintf(stderr, "wrapper_readSalMsg\t:\tselect error\n");
 	goto fail;
       } else if(sret == 0){
-	eM("wrapper_readSalMsg\t:\tdefinitely the prompt!\n");
+	announce("wrapper_readSalMsg\t:\tdefinitely the prompt!\n");
 	break;
       } else {
-	eM("wrapper_readSalMsg\t:\tsret = %d more coming! TOO CONFUSING\n", sret);
+	announce("wrapper_readSalMsg\t:\tsret = %d more coming! TOO CONFUSING\n", sret);
 	goto fail;
       }
     }
@@ -165,21 +145,21 @@ msg* wrapper_readSalMsg(int fd){
   }/* while */
 
   if(retval != NULL){
-    eM("wrapper_readSalMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
-    eM("wrapper_readSalMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
-    eM("==================================================\n");
+    announce("wrapper_readSalMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
+    announce("wrapper_readSalMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
+    announce("==================================================\n");
     promptPointer[0] = '\0';                   /* chomp the prompt I           */
     retval->bytesUsed -= strlen(prompt)    ;   /* chomp the prompt II          */
-    eM("wrapper_readSalMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
-    eM("wrapper_readSalMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
-    eM("==================================================\n");
+    announce("wrapper_readSalMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
+    announce("wrapper_readSalMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
+    announce("==================================================\n");
     if((retval->bytesUsed == 0) || 
        ((retval->bytesUsed == 1) && (retval->data[0] == '\n'))){
       sprintf(retval->data, "OK\n");
       retval->bytesUsed = strlen("OK\n");
     }
   }
-  eM("\nwrapper_readSalMsg\t:\tfinishing a read\n");
+  announce("\nwrapper_readSalMsg\t:\tfinishing a read\n");
   return retval;
 
  fail:
@@ -187,5 +167,3 @@ msg* wrapper_readSalMsg(int fd){
   retval = NULL;
   return retval;
 }
-
-
