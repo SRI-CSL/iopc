@@ -188,15 +188,4 @@ msg* wrapper_readSalMsg(int fd){
   return retval;
 }
 
-void echo2Sal(int from, int to){
-  msg* message;
-  message = acceptMsg(from);
-  if(message != NULL){
-    writeMsg(to, message);
-    if(SALWRAPPER_DEBUG){
-      writeMsg(STDERR_FILENO, message);
-      eM("echo2Maude: wrote %d bytes\n", message->bytesUsed);
-    }
-    freeMsg(message);
-  }
-}
+

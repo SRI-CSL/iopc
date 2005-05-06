@@ -54,3 +54,5 @@ void echo2Maude(int from, int to);
 void echo2PVS(int from, int to);
 void* echoLoopDieOnFail(void* args);
 void* echoLoop(void* args);
+void wait4IO(int fdout, int fderr,void (*fp)(int ,int ));
+void echo2Input(int from, int to);

@@ -35,6 +35,9 @@
 static int setFlag(int fd, int flags);
 static int clearFlag(int fd, int flags);
 
+/*externs debug flags */
+extern int local_debug_flag;
+
 /* local error logging */
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 static void eM(const char *format, ...){
@@ -921,4 +924,102 @@ void echo2PVS(int from, int to){
   }
 }
 
+static void errDump(char* buff, int bytes){
+  int i;
+  fprintf(stderr, "errDump\t:\t %d bytes read:\n", bytes);
+  for(i = 0; i < bytes; i++)
+    fprintf(stderr, "[%d]", buff[i]);
+  fprintf(stderr, "\n");
+}
 
+static void echoChunk(int from, int to){
+  char buff[BUFFSZ];
+  int bytesI, bytesO;
+  if((bytesI = read(from, buff, BUFFSZ)) <= 0){
+    announce("echo(%d,%d)\t:\terror bytesI = %d\n", from, to, bytesI);
+    return;
+  }
+  if(local_debug_flag)errDump(buff, bytesI);
+  if((bytesO = write(to, buff, bytesI)) != bytesI){
+    announce("echo(%d,%d)\t:\terror bytes0 != bytesI (%d != %d)\n", from, to, bytesO, bytesI);
+    return;
+  }
+}
+
+static void reverberate(int from, int to){
+  fd_set readset;
+  struct timeval delay;
+  int retval, iteration = 0;
+  while(1){
+    FD_ZERO(&readset);
+    FD_SET(from, &readset);
+    delay.tv_sec = 1;
+    delay.tv_usec = 0;
+    retval = select(from + 1, &readset, NULL, NULL, &delay);
+    if(retval <= 0){
+      announce("reverberate(%d,%d)\t:\tbreaking retval = %d\n", from, to, retval);
+      break;
+    } else {
+      announce("reverberate(%d,%d)\t:\titeration = %d\n", from, to, iteration);
+      echoChunk(from, to);
+      iteration++;
+    }
+  }/* while */
+}
+
+void wait4IO(int fdout, int fderr,void (*fp)(int ,int )){
+  int maxfd = (fderr < fdout) ? fdout + 1 : fderr + 1;
+  fd_set readset;
+  int retval;
+  announce("entering wait4IO(pout[0], perr[0],fp(fdout,STDOUT_FILENO));\n"); 
+  FD_ZERO(&readset);
+  FD_SET(fdout, &readset);
+  FD_SET(fderr, &readset);
+  retval = select(maxfd, &readset, NULL, NULL, NULL);
+  announce("wait4IO\t:\tselect returned %d (out: %d) (err: %d)\n", 
+	   retval, FD_ISSET(fdout, &readset), FD_ISSET(fderr, &readset));
+  if(retval < 0){
+    fprintf(stderr, "wait4IO\t:\tselect error\n");
+  } else if(retval == 0){
+    fprintf(stderr, "wait4IO\t:\tselect returned 0\n");
+  } else {
+    if(FD_ISSET(fderr, &readset)){
+      struct timeval delay;
+      reverberate(fderr, STDERR_FILENO);
+      FD_ZERO(&readset);
+      FD_SET(fdout, &readset);
+      FD_SET(fderr, &readset);
+      delay.tv_sec = 1;
+      delay.tv_usec = 0;
+      retval = select(maxfd, &readset, NULL, NULL, &delay);
+      if(retval <= 0) 
+	goto exit;
+      else if((retval == 2) || FD_ISSET(fderr, &readset)){
+	fprintf(stderr, "wait4IO\t:\tthis shouldn't happen\n");
+	wait4IO(fdout, fderr,fp);
+	goto exit;
+      } else {
+	/* OK */
+      }
+    }
+    if(FD_ISSET(fdout, &readset))
+      fp(fdout,STDOUT_FILENO);
+  }
+
+ exit:
+  announce("exiting wait4IO(pout[0], perr[0],fp(fdout,STDOUT_FILENO));\n"); 
+  return;
+}
+
+void echo2Input(int from, int to){
+  msg* message;
+  message = acceptMsg(from);
+  if(message != NULL){
+    writeMsg(to, message);
+    if(local_debug_flag){
+      writeMsg(STDERR_FILENO, message);
+      announce("echo2Input: wrote %d bytes\n", message->bytesUsed);
+    }
+    freeMsg(message);
+  }
+}
