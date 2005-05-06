@@ -33,18 +33,14 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = SOCKET_DEBUG;
-char* local_process_name;
 
 static int requestNo = 0;
-static char* myname;
 static int sock = -1;
 static int closed = 0;
 
 static void socket_sigpipe_handler(int sig){
-  announce("Socket %s got a signal %d\n", myname, sig);	
-  deleteFromRegistry(myname);
+  announce("Socket %s got a signal %d\n", self, sig);	
+  deleteFromRegistry(self);
   if(sock > 0){ (void)close(sock); }
   exit(EXIT_FAILURE);
 }
@@ -74,7 +70,8 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
-  local_process_name = myname = argv[0];
+  self_debug_flag  = SOCKET_DEBUG;
+  self = argv[0];
   sock = atoi(argv[1]);
   registry_fifo_in  = argv[2];
   registry_fifo_out = argv[3];
@@ -94,13 +91,13 @@ int main(int argc, char** argv){
       freeMsg(messageOut);
       messageOut = NULL;
     }
-    announce("%s waiting to process request number %d\n", myname, requestNo);
+    announce("%s waiting to process request number %d\n", self, requestNo);
     messageIn = acceptMsg(STDIN_FILENO);
     if(messageIn == NULL){
       perror("socket acceptMsg failed");
       continue;
     }
-    announce("%s processing request:\n\"%s\"\n", myname, messageIn->data);
+    announce("%s processing request:\n\"%s\"\n", self, messageIn->data);
     retval = parseActorMsg(messageIn->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", messageIn->data);
@@ -133,13 +130,13 @@ int main(int argc, char** argv){
 	  }
 	  announce("%s\n%s\nreadOK\n%d\n%s\n", 
 		   sender, 
-		   myname,
+		   self,
 		   messageOut->bytesUsed,
 		   messageOut->data);
 	  sendFormattedMsgFP(stdout, 
 			     "%s\n%s\nreadOK\n%d\n%s\n", 
 			     sender, 
-			     myname,
+			     self,
 			     messageOut->bytesUsed,
 			     messageOut->data);
 	}
@@ -147,8 +144,8 @@ int main(int argc, char** argv){
 	continue;
       
       readfail:
-	announce("%s\n%s\nreadFailure\n", sender, myname);
-	sendFormattedMsgFP(stdout, "%s\n%s\nreadFailure\n", sender, myname);
+	announce("%s\n%s\nreadFailure\n", sender, self);
+	sendFormattedMsgFP(stdout, "%s\n%s\nreadFailure\n", sender, self);
 	continue;
 
       }
@@ -179,12 +176,12 @@ int main(int argc, char** argv){
           } else {
             announce("%s\n%s\nwriteOK\n%d\n", 
 		     sender, 
-		     myname,
+		     self,
 		     bytesSent);
             sendFormattedMsgFP(stdout, 
 			       "%s\n%s\nwriteOK\n%d\n", 
 			       sender, 
-			       myname,
+			       self,
 			       bytesSent);
           }
         }
@@ -193,8 +190,8 @@ int main(int argc, char** argv){
       continue;
       
     writefail:
-      announce("%s\n%s\nwriteFailure\n", sender, myname);
-      sendFormattedMsgFP(stdout, "%s\n%s\nwriteFailure\n", sender, myname);
+      announce("%s\n%s\nwriteFailure\n", sender, self);
+      sendFormattedMsgFP(stdout, "%s\n%s\nwriteFailure\n", sender, self);
     } else if(!strcmp(cmd, "close")){
       int slotNumber = -1;
       if(!closed){
@@ -202,17 +199,17 @@ int main(int argc, char** argv){
 	if(close(sock) < 0){
 	  fprintf(stderr, "close failed in socket close case\n");
 	}
-        announce("%s\n%s\ncloseOK\n", sender, myname);
-        sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, myname);
+        announce("%s\n%s\ncloseOK\n", sender, self);
+        sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, self);
 	usleep(1);
-        announce("Socket called %s unregistering\n", myname);
-	slotNumber = deleteFromRegistry(myname);
+        announce("Socket called %s unregistering\n", self);
+	slotNumber = deleteFromRegistry(self);
         announce("Socket called %s removed from slot %d, now exiting\n", 
-		 myname, slotNumber);
+		 self, slotNumber);
 	exit(EXIT_SUCCESS);
       } else {
-        announce("%s\n%s\ncloseFailure\n", sender, myname);
-        sendFormattedMsgFP(stdout, "%s\n%s\ncloseFailure\n", sender, myname);
+        announce("%s\n%s\ncloseFailure\n", sender, self);
+        sendFormattedMsgFP(stdout, "%s\n%s\ncloseFailure\n", sender, self);
       }
     } else {
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", messageIn->data);

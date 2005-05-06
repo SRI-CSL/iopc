@@ -43,6 +43,7 @@ int writeActorSpec(int fd, actor_spec *act);
 actor_spec *readActorSpec(int fd);
 char* readline(int fd);
 msg* readMsgVolatile(int fd, volatile int* exitFlag);
+
 /* new forms that send/recieve the length first */
 msg* acceptMsg(int fd);
 msg* acceptMsgVolatile(int fd, volatile int* exitFlag);

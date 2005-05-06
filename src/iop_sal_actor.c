@@ -19,14 +19,10 @@
 #include "ec.h"
 #include "sal_lib.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = SAL_ACTOR_DEBUG;
-char* local_process_name;
 
 static int child_died = 0;
 
 static int requestNo = 0;
-static char* myname;
 static char ** sal_argv;
 static int pin[2], pout[2], perr[2];
 static int sal_argc;
@@ -53,9 +49,11 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
+  self_debug_flag  = SAL_ACTOR_DEBUG;
+  self = argv[0];
+
   ec_neg1( wrapper_installHandler(chld_handler, intr_handler) );
 
-  local_process_name = myname = argv[0];
 
   while(1){
     requestNo++;
@@ -67,7 +65,7 @@ int main(int argc, char** argv){
       freeMsg(messageOut);
       messageOut = NULL;
     }
-    announce("%s waiting to process request number %d\n", myname, requestNo);
+    announce("%s waiting to process request number %d\n", self, requestNo);
     messageIn = acceptMsg(STDIN_FILENO);
     if(messageIn == NULL){
       perror("sal_actor: acceptMsg failed");
@@ -134,11 +132,11 @@ int main(int argc, char** argv){
       response = readSALMsg(&outFdB);
 
       if((response != NULL) && (response->bytesUsed > 0)){
-	sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, myname, response->data);
+	sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, self, response->data);
       }
     }
     usleep(100);
-    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
+    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
   }
 
   exit(EXIT_SUCCESS);

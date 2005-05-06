@@ -32,10 +32,6 @@
 #include "dbugflags.h"
 #include "options.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag = 0;
-char* local_process_name;
-
 int main(int argc, char** argv){
 #ifdef _LINUX
   parseOptions(argc, argv, short_options, long_options);
@@ -43,8 +39,8 @@ int main(int argc, char** argv){
   parseOptions(argc, argv, short_options);
 #endif
 
-  local_debug_flag   = IOP_DEBUG || iop_debug_flag;
-  local_process_name = argv[0];
+  self_debug_flag   = IOP_DEBUG || iop_debug_flag;
+  self = argv[0];
 
   announce("iop_debug_flag            = %d\n", iop_debug_flag);
   announce("iop_no_windows_flag       = %d\n", iop_no_windows_flag);

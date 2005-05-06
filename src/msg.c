@@ -35,8 +35,9 @@
 static int setFlag(int fd, int flags);
 static int clearFlag(int fd, int flags);
 
-/*externs debug flags */
-extern int local_debug_flag;
+/* externs  */
+extern int   self_debug_flag;
+extern char* self;
 
 /* local error logging */
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -939,7 +940,7 @@ static void echoChunk(int from, int to){
     announce("echo(%d,%d)\t:\terror bytesI = %d\n", from, to, bytesI);
     return;
   }
-  if(local_debug_flag)errDump(buff, bytesI);
+  if(self_debug_flag)errDump(buff, bytesI);
   if((bytesO = write(to, buff, bytesI)) != bytesI){
     announce("echo(%d,%d)\t:\terror bytes0 != bytesI (%d != %d)\n", from, to, bytesO, bytesI);
     return;
@@ -967,11 +968,11 @@ static void reverberate(int from, int to){
   }/* while */
 }
 
-void wait4IO(int fdout, int fderr,void (*fp)(int ,int )){
+void wait4IO(int fdout, int fderr, void (*fp)(int , int)){
   int maxfd = (fderr < fdout) ? fdout + 1 : fderr + 1;
   fd_set readset;
   int retval;
-  announce("entering wait4IO(pout[0], perr[0],fp(fdout,STDOUT_FILENO));\n"); 
+  announce("entering wait4IO\n"); 
   FD_ZERO(&readset);
   FD_SET(fdout, &readset);
   FD_SET(fderr, &readset);
@@ -996,14 +997,13 @@ void wait4IO(int fdout, int fderr,void (*fp)(int ,int )){
 	goto exit;
       else if((retval == 2) || FD_ISSET(fderr, &readset)){
 	fprintf(stderr, "wait4IO\t:\tthis shouldn't happen\n");
-	wait4IO(fdout, fderr,fp);
+	wait4IO(fdout, fderr, fp);
 	goto exit;
       } else {
 	/* OK */
       }
     }
-    if(FD_ISSET(fdout, &readset))
-      fp(fdout,STDOUT_FILENO);
+    if(FD_ISSET(fdout, &readset)){ fp(fdout, STDOUT_FILENO); }
   }
 
  exit:
@@ -1016,7 +1016,7 @@ void echo2Input(int from, int to){
   message = acceptMsg(from);
   if(message != NULL){
     writeMsg(to, message);
-    if(local_debug_flag){
+    if(self_debug_flag){
       writeMsg(STDERR_FILENO, message);
       announce("echo2Input: wrote %d bytes\n", message->bytesUsed);
     }

@@ -34,10 +34,6 @@
 #include "msg.h"
 #include "ec.h"
 
-/* flags used in the announce routine */
-int   local_debug_flag;
-char* local_process_name;
-
 static int fifoOut;
 static int fifoIn;
 
@@ -54,8 +50,8 @@ int main(int argc, char** argv){
 #elif defined(_MAC)
   parseOptions(argc, argv, short_options);
 #endif
-  local_debug_flag  = (REGISTRY_DEBUG || iop_debug_flag);
-  local_process_name = argv[0];
+  self_debug_flag  = (REGISTRY_DEBUG || iop_debug_flag);
+  self = argv[0];
   /* fprintf(stderr, "%s local_debug_flag = %d\n", argv[0], local_debug_flag); */
 
   /* set externs */

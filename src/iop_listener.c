@@ -33,12 +33,8 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = LISTENER_DEBUG;
-char* local_process_name;
 
 static int    requestNo = 0;
-static char*  myName;
 static char*  myClient;
 static int    connectionNo = 0;
 static char*  childExe = "iop_socket";
@@ -54,13 +50,13 @@ static void *listener_cmd_thread(void *arg){
   while(1){
     requestNo++;
     freeMsg(message);
-    announce("%s waiting to process request number %d\n", myName, requestNo);
+    announce("%s waiting to process request number %d\n", self, requestNo);
     message = acceptMsg(STDIN_FILENO);
     if(message == NULL){
       perror("listener readMsg failed");
       continue;
     }
-    announce("%s processing request:\n\"%s\"\n", myName, message->data);
+    announce("%s processing request:\n\"%s\"\n", self, message->data);
     retval = parseActorMsg(message->data, &sender, &body);
     if(!retval){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", message->data);
@@ -77,15 +73,15 @@ static void *listener_cmd_thread(void *arg){
 	if(close(listenFd) < 0){
 	  fprintf(stderr, "close failed in listener close case\n");
 	}
-        announce("%s\n%s\ncloseOK\n", sender, myName);
-        sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, myName);
-        announce("Listener called %s unregistering\n", myName);
-	slotNumber = deleteFromRegistry(myName);
-        announce("Listener called %s removed from slot %d, now exiting\n", myName, slotNumber);
+        announce("%s\n%s\ncloseOK\n", sender, self);
+        sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, self);
+        announce("Listener called %s unregistering\n", self);
+	slotNumber = deleteFromRegistry(self);
+        announce("Listener called %s removed from slot %d, now exiting\n", self, slotNumber);
 	exit(EXIT_SUCCESS);
       } else {
-        if(DEBUG)fprintf(stderr, "%s\n%s\ncloseFailure\n", sender, myName);
-        sendFormattedMsgFP(stdout, "%s\n%s\ncloseFailure\n", sender, myName);
+        if(DEBUG)fprintf(stderr, "%s\n%s\ncloseFailure\n", sender, self);
+        sendFormattedMsgFP(stdout, "%s\n%s\ncloseFailure\n", sender, self);
       }
     } else {
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", message->data);
@@ -129,7 +125,8 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
-  local_process_name = myName   = argv[0];
+  self_debug_flag  = LISTENER_DEBUG;
+  self = argv[0];
 
   listenFd = atoi(argv[1]);
   myClient = argv[2];
@@ -161,10 +158,10 @@ int main(int argc, char** argv){
     childArgv[3] = registry_fifo_out;
     childArgv[4] = NULL;
     newActor(1, childExe, childArgv);
-    announce("%s\n%s\nnewConnection\n%s\n", myClient, myName, socketName);
+    announce("%s\n%s\nnewConnection\n%s\n", myClient, self, socketName);
     sendFormattedMsgFP(stdout,
 		       "%s\n%s\nnewConnection\n%s\n", 
-		       myClient, myName, socketName);
+		       myClient, self, socketName);
     connectionNo++;
     if(close(*msgsock) < 0){
       fprintf(stderr, "close failed in listener\n");

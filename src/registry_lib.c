@@ -77,16 +77,16 @@ static void shutdownRegistry();
 static void freeActor(actor_id*);
 
 /* externs used in the log2File routine */
-extern int   local_debug_flag;
-extern char* local_process_name;
+extern int   self_debug_flag;
+extern char* self;
 
 void log2File(const char *format, ...){
   va_list arg;
   va_start(arg, format);
-  if(local_debug_flag && (format != NULL) && (errorsFileName != NULL)){
+  if(self_debug_flag && (format != NULL) && (errorsFileName != NULL)){
     ec_rv( pthread_mutex_lock(&iop_errlog_mutex) );
     ec_null( errorsFile = fopen(errorsFileName, "a") );
-    fprintf(errorsFile, "%s(%ld)\t:\t", local_process_name, (long)pthread_self());
+    fprintf(errorsFile, "%s(%ld)\t:\t", self, (long)pthread_self());
     vfprintf(errorsFile, format, arg);
     fflush(errorsFile);
     fclose(errorsFile);

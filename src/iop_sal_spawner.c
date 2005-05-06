@@ -9,12 +9,7 @@
 #include "wrapper_lib.h"
 #include "ec.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = SALSPAWNER_DEBUG;
-char* local_process_name;
-
 static int    requestNo = 0;
-static char*  myName;
 static int    clientNo = 0;
 static char*  clientChildExe = "iop_sal_actor";
 static char*  clientChildArgv[4];
@@ -44,9 +39,10 @@ int main(int argc, char** argv){
     fprintf(stderr, "didn't understand: (argc != 3)\n");
     exit(EXIT_FAILURE);
   }
-  
+
   iop_pid = getppid();
-  local_process_name = myName = argv[0];
+  self_debug_flag  = SALSPAWNER_DEBUG;
+  self = argv[0];
   registry_fifo_in  = argv[1];
   registry_fifo_out = argv[2];
 
@@ -88,16 +84,16 @@ int main(int argc, char** argv){
       announce("clientChildArgv[3] = %s\n", clientChildArgv[3]);
       announce("Spawning SALactor\n");
       if(newActor(1, clientChildExe, clientChildArgv) == NULL) goto openclientfail;
-      announce("%s\n%s\nopenClientOK\n%s\n", sender, myName, childName);
+      announce("%s\n%s\nopenClientOK\n%s\n", sender, self, childName);
       sendFormattedMsgFP(stdout,
 			 "%s\n%s\nopenClientOK\n%s\n", 
-			 sender, myName, childName);
+			 sender, self, childName);
       clientNo++;
       continue;
       
     openclientfail:
-      announce("%s\n%s\nopenSALActorFailure\n", sender, myName);
-      sendFormattedMsgFP(stdout, "%s\n%s\nopenSALActorFailure\n", sender, myName);
+      announce("%s\n%s\nopenSALActorFailure\n", sender, self);
+      sendFormattedMsgFP(stdout, "%s\n%s\nopenSALActorFailure\n", sender, self);
       continue;
     }
     else {

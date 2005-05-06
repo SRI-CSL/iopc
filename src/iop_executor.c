@@ -32,13 +32,7 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag = EXECUTOR_DEBUG;
-char* local_process_name;
-
-
 static int requestNo = 0;
-static char* myname;
 
 static void executor_sigchild_handler(int sig){
   /* for the prevention of zombies */
@@ -65,12 +59,13 @@ int main(int argc, char** argv){
   char *sender, *body;
   int retval, errcode;
 
+  self = argv[0];
+  self_debug_flag = EXECUTOR_DEBUG;
+
   if(executor_installHandler() < 0){
     fprintf(stderr, "couldn't install handler\n");
     exit(EXIT_FAILURE);
   }
-  
-  local_process_name = myname = argv[0];
 
   while(1){
     requestNo++;
@@ -100,8 +95,8 @@ int main(int argc, char** argv){
 	errcode = system(body);
       }
     }
-    announce("%s\n%s\nexecuteOK\n%d\n", sender, myname, errcode);
-    sendFormattedMsgFP(stdout, "%s\n%s\nexecuteOK\n%d\n", sender, myname, errcode);
+    announce("%s\n%s\nexecuteOK\n%d\n", sender, self, errcode);
+    sendFormattedMsgFP(stdout, "%s\n%s\nexecuteOK\n%d\n", sender, self, errcode);
     break;
   }
   return EXIT_SUCCESS;

@@ -92,13 +92,17 @@ int allocateSocket(unsigned short port, char *host, int* sockp){
   memcpy(&(server.sin_addr), hp->h_addr, hp->h_length);
   server.sin_family = hp->h_addrtype;
   server.sin_port = htons(port);
-  conn_socket = socket(AF_INET, SOCK_STREAM, 0); /* Open a socket */
-  if (conn_socket < 0 ) {
-    fprintf(stderr, "Error Opening socket\n");
-    return retval;
+  /* Open a socket */
+  while((conn_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1){
+    if(errno == EINTR){ 
+      continue; 
+    } else {
+      perror("Opening a socket failed in allocateSocket:");
+      return retval;
+    }
   }
-  while(connect(conn_socket, (struct sockaddr*)&server, sizeof(server))
-	== -1){
+  /* Now connect with it */
+  while(connect(conn_socket, (struct sockaddr*)&server, sizeof(server))	== -1){
     if(errno == EINTR){ 
       continue; 
     } else {

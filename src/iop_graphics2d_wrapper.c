@@ -31,11 +31,7 @@
 #include "ec.h"
 #include "externs.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = G2D_ACTOR_DEBUG;
-char* local_process_name;
 
-static char* myName;
 static char  graphics_exe[] = "java";
 static char* graphics_argv[] = {"java", "-cp", NULL, "g2d.Main", NULL, NULL};
 
@@ -44,7 +40,7 @@ static int child_died = 0;
 static void chld_handler(int sig){
   fprintf(stderr, "%s died! Exiting\n", graphics_argv[3]);
   child_died = 1;
-  sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myName, myName);
+  sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }
 
 int main(int argc, char** argv){
@@ -53,13 +49,14 @@ int main(int argc, char** argv){
     fprintf(stderr, "Usage: %s <iop bin directory>\n", argv[0]);
     exit(EXIT_FAILURE);
   }
-  local_process_name = myName = argv[0];
+  self_debug_flag  = G2D_ACTOR_DEBUG;
+  self = argv[0];
 
-  if((graphics_argv[2] = iop_alloc_jarpath(argv[1], myName)) == NULL){
+  if((graphics_argv[2] = iop_alloc_jarpath(argv[1], self)) == NULL){
     exit(EXIT_FAILURE);
   }
 
-  graphics_argv[4] = myName;
+  graphics_argv[4] = self;
 
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 

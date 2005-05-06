@@ -31,13 +31,8 @@
 #include "externs.h"
 #include "ec.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = PVS_ACTOR_DEBUG;
-char* local_process_name;
-
 static char pvs_exe[] = "pvs";
 static char* pvs_argv[] = {"pvs", "-raw", NULL};
-static char* myname;
 static int pin[2], pout[2], perr[2];
 
 static int child_died = 0;
@@ -53,7 +48,7 @@ static void intr_handler(int sig){
 static void chld_handler(int sig){
   fprintf(stderr, "PVS died! Exiting\n");
   child_died = 1;
-  sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", myname, myname);
+  sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }
 
 int main(int argc, char** argv){
@@ -61,7 +56,8 @@ int main(int argc, char** argv){
     fprintf(stderr, "Usage: %s\n", argv[0]);
   }
 
-  local_process_name = myname = argv[0];
+  self_debug_flag  = PVS_ACTOR_DEBUG;
+  self = argv[0];
 
   ec_neg1( wrapper_installHandler(chld_handler, intr_handler) );
 
@@ -130,9 +126,9 @@ int main(int argc, char** argv){
 	length = parseString(response->data, response->bytesUsed);
 	response->bytesUsed = length;
 	
-	sendFormattedMsgFP(stdout, "%s\n%s\n%s\n", sender, myname, response->data);
+	sendFormattedMsgFP(stdout, "%s\n%s\n%s\n", sender, self, response->data);
 	
-	if(local_debug_flag)writeMsg(STDERR_FILENO, response);
+	if(self_debug_flag)writeMsg(STDERR_FILENO, response);
 	announce("\nparseThenEcho wrote %d bytes\n", response->bytesUsed);
       }
       

@@ -40,3 +40,9 @@ char *iop_port                   =  NULL;
 
 
 pid_t child                      = -1;
+
+
+/* externs used in: announce, signal handlers etc */
+int   self_debug_flag = 0;
+char* self;
+

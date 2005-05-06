@@ -8,12 +8,6 @@
 #include "ec.h"
 #include "sal_lib.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = SALWRAPPER_DEBUG;
-char* local_process_name;
-
-static char* self;
-
 static char sal_exe[] = "salenv";
 static char* sal_argv[] = {"salenv", NULL};
 
@@ -24,7 +18,9 @@ static void chld_handler(int sig){
 
 int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
-  local_process_name = self = argv[0];
+  
+  self_debug_flag  = SALWRAPPER_DEBUG;
+  self = argv[0];
   
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
   
@@ -61,7 +57,7 @@ int main(int argc, char** argv){
       announce("Listening to IO and then echoing to the salenv's input\n");
       echo2Input(STDIN_FILENO, pin[1]);
       announce("Listening to salenv\n");
-      wait4IO(pout[0], perr[0],parseSalThenEcho);
+      wait4IO(pout[0], perr[0], parseSalThenEcho);
     }
   } /* end of boss code */
 

@@ -33,12 +33,7 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = SOCKETFACTORY_DEBUG;
-char* local_process_name;
-
 static int    requestNo = 0;
-static char*  myName;
 static int    clientNo = 0;
 static char*  clientChildExe = "iop_socket";
 static char*  clientChildArgv[5];
@@ -86,7 +81,8 @@ int main(int argc, char** argv){
   }
 
   iop_pid = getppid();
-  local_process_name = myName = argv[0];
+  self_debug_flag  = SOCKETFACTORY_DEBUG;
+  self = argv[0];
   registry_fifo_in  = argv[1];
   registry_fifo_out = argv[2];
 
@@ -147,10 +143,10 @@ int main(int argc, char** argv){
       announce("clientChildArgv[4] = %s\n", clientChildArgv[4]);
       announce("Spawning actor\n");
       newActor(1, clientChildExe, clientChildArgv);
-      announce("%s\n%s\nopenClientOK\n%s\n", sender, myName, childName);
+      announce("%s\n%s\nopenClientOK\n%s\n", sender, self, childName);
       sendFormattedMsgFP(stdout,
 			 "%s\n%s\nopenClientOK\n%s\n", 
-			 sender, myName, childName);
+			 sender, self, childName);
       clientNo++;
       if(close(clientFd) < 0){
 	fprintf(stderr, "close failed in openclient case\n");
@@ -158,8 +154,8 @@ int main(int argc, char** argv){
       continue;
       
     openclientfail:
-      announce("%s\n%s\nopenClientFailure\n", sender, myName);
-      sendFormattedMsgFP(stdout, "%s\n%s\nopenClientFailure\n", sender, myName);
+      announce("%s\n%s\nopenClientFailure\n", sender, self);
+      sendFormattedMsgFP(stdout, "%s\n%s\nopenClientFailure\n", sender, self);
       continue;
     } else if(!strcmp(cmd, "openlistener")){
       announce("openlistener case\n");
@@ -196,10 +192,10 @@ int main(int argc, char** argv){
       newActor(1, listenerChildExe, listenerChildArgv);
       announce("Spawned actor\n");
       announce("%s\n%s\nopenListenerOK\n%s\n", 
-                sender, myName, childName);
+                sender, self, childName);
       sendFormattedMsgFP(stdout,
 			 "%s\n%s\nopenListenerOK\n%s\n", 
-			 sender, myName, childName);
+			 sender, self, childName);
       listenerNo++;
       if(close(listenerFd) < 0){
 	fprintf(stderr, "close failed in openlistener case\n");
@@ -207,8 +203,8 @@ int main(int argc, char** argv){
       continue;
 
     openlistenerfail:
-      announce("%s\n%s\nopenListenerFailure\n", sender, myName);
-      sendFormattedMsgFP(stdout, "%s\n%s\nopenListenerFailure\n", sender, myName);
+      announce("%s\n%s\nopenListenerFailure\n", sender, self);
+      sendFormattedMsgFP(stdout, "%s\n%s\nopenListenerFailure\n", sender, self);
       continue;
     } else {
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", message->data);

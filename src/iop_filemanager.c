@@ -31,14 +31,11 @@
 #include "externs.h"
 #include "dbugflags.h"
 
-/* externs used in the announce routine */
-int   local_debug_flag  = FILEMANAGER_DEBUG;
-char* local_process_name;
 
 static int interpretTildes(const char* filename, char **newfilenamep);
 
 static int requestNo = 0;
-static char* myname;
+
 static mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 int main(int argc, char** argv){
   msg *messageIn = NULL, *messageOut = NULL;
@@ -47,7 +44,8 @@ int main(int argc, char** argv){
   int retval;
   struct flock lock;
 
-  local_process_name = myname = argv[0];
+  self_debug_flag  = FILEMANAGER_DEBUG;
+  self = argv[0];
 
   while(1){
     requestNo++;
@@ -108,9 +106,9 @@ int main(int argc, char** argv){
 	goto urfail;
       }
       if(FILEMANAGER_DEBUG)fprintf(stderr,"%s\n%s\ncontents %s\n%s\n", 
-				   sender, myname, oldfilename, messageOut->data);
+				   sender, self, oldfilename, messageOut->data);
       sendFormattedMsgFP(stdout, "%s\n%s\ncontents %s\n%s\n", 
-			 sender, myname, oldfilename, messageOut->data);
+			 sender, self, oldfilename, messageOut->data);
       close(fd);
       free(newfilename);
       continue;
@@ -119,8 +117,8 @@ int main(int argc, char** argv){
       unlockFD(&lock, fd, filename);
       
     rfail:
-      announce("%s\n%s\nreadFailure\n%s\n", sender, myname, oldfilename);
-      sendFormattedMsgFP(stdout, "%s\n%s\nreadFailure\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nreadFailure\n%s\n", sender, self, oldfilename);
+      sendFormattedMsgFP(stdout, "%s\n%s\nreadFailure\n%s\n", sender, self, oldfilename);
       free(newfilename);
       continue;
       
@@ -151,8 +149,8 @@ int main(int argc, char** argv){
 	goto uwfail;
       }
 
-      announce("%s\n%s\nwriteOK\n%s\n", sender, myname, oldfilename);
-      sendFormattedMsgFP(stdout, "%s\n%s\nwriteOK\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nwriteOK\n%s\n", sender, self, oldfilename);
+      sendFormattedMsgFP(stdout, "%s\n%s\nwriteOK\n%s\n", sender, self, oldfilename);
       close(fd);
       free(newfilename);
       continue;
@@ -161,8 +159,8 @@ int main(int argc, char** argv){
       unlockFD(&lock, fd, filename);
 
     wfail:
-      announce("%s\n%s\nwriteFailure\n%s\n", sender, myname, oldfilename);
-      sendFormattedMsgFP(stdout, "%s\n%s\nwriteFailure\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nwriteFailure\n%s\n", sender, self, oldfilename);
+      sendFormattedMsgFP(stdout, "%s\n%s\nwriteFailure\n%s\n", sender, self, oldfilename);
       free(newfilename);
       continue;
 
@@ -192,8 +190,8 @@ int main(int argc, char** argv){
 	close(fd);
 	goto uafail;
       }
-      announce("%s\n%s\nappendOK\n%s\n", sender, myname, oldfilename);
-      sendFormattedMsgFP(stdout, "%s\n%s\nappendOK\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nappendOK\n%s\n", sender, self, oldfilename);
+      sendFormattedMsgFP(stdout, "%s\n%s\nappendOK\n%s\n", sender, self, oldfilename);
       close(fd);
       free(newfilename);
       continue;
@@ -202,8 +200,8 @@ int main(int argc, char** argv){
       unlockFD(&lock, fd, filename);
 
     afail:
-      announce("%s\n%s\nappendFailure\n%s\n", sender, myname, oldfilename);
-      sendFormattedMsgFP(stdout, "%s\n%s\nappendFailure\n%s\n", sender, myname, oldfilename);
+      announce("%s\n%s\nappendFailure\n%s\n", sender, self, oldfilename);
+      sendFormattedMsgFP(stdout, "%s\n%s\nappendFailure\n%s\n", sender, self, oldfilename);
       free(newfilename);
     } else {
       fprintf(stderr, "didn't understand: (command)\n\t \"%s\" \n", messageIn->data);
