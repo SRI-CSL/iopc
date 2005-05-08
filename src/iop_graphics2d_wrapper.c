@@ -31,9 +31,14 @@
 #include "ec.h"
 #include "externs.h"
 
-
+#ifdef _LINUX
+static char  graphics_exe[] = "java";
+static char* graphics_argv[] = 
+  {"java", "-cp", NULL, "-Dawt.toolkit=sun.awt.motif.MToolkit", "g2d.Main", NULL, NULL};
+#else
 static char  graphics_exe[] = "java";
 static char* graphics_argv[] = {"java", "-cp", NULL, "g2d.Main", NULL, NULL};
+#endif
 
 static int child_died = 0;
 
@@ -56,7 +61,11 @@ int main(int argc, char** argv){
     exit(EXIT_FAILURE);
   }
 
+#ifdef _LINUX
+  graphics_argv[5] = self;
+#else
   graphics_argv[4] = self;
+#endif
 
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
