@@ -119,13 +119,13 @@ int allocateListeningSocket(unsigned short port, int* sockp){
     if(errno == EINTR){ 
       continue; 
     } else {
-      perror("socket failed in allocateListeningSocket:");
+      announce("socket failed in allocateListeningSocket:");
       return retval;
     }
   }
 
   if(bind(listen_socket, (struct sockaddr*)&server, sizeof(server)) < 0){
-    perror("bind failed in allocateListeningSocket:");
+    announce("bind failed in allocateListeningSocket:");
     return retval;
   }
   
@@ -133,7 +133,7 @@ int allocateListeningSocket(unsigned short port, int* sockp){
     if(errno == EINTR){ 
       continue; 
     } else {
-      perror("listen failed in allocateListeningSocket:");
+      announce("listen failed in allocateListeningSocket:");
       return retval;
     }
   }
