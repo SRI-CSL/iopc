@@ -8,6 +8,7 @@
 
 #ifdef _MAC
 #define BSD_DERIVED
+#define DARWIN
 #endif
 
 #ifdef _LINUX

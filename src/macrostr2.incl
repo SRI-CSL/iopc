@@ -180,7 +180,7 @@ macrostr_db[166].ms_code = (intptr_t)SIGTTOU;
 macrostr_db[167].ms_code = (intptr_t)SIGUSR1;
 macrostr_db[168].ms_code = (intptr_t)SIGUSR2;
 #ifdef _XOPEN_UNIX
-#ifndef _TIGER /* should be defined in OS X 10.4 (Darwin 8.0) but isn't */
+#ifndef DARWIN /* should be defined in OS X 10.4 (Darwin 8.0) but isn't */
 macrostr_db[169].ms_code = (intptr_t)SIGPOLL;
 #endif
 #endif
