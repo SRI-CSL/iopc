@@ -21,16 +21,9 @@ static struct {
   char *ms_macro;
   char *ms_desc;
 } macrostr_db[] = {
-#include "macrostr1.incl"
+#include "macrostr.incl"
   { NULL, 0, NULL, NULL}
 };
-
-void macrostr_init(void){
-  if (macrostr_db[0].ms_code == 0) {
-#include "macrostr2.incl"
-  }
-}
-
 
 char *get_macrostr(const char *cat, int code, char **desc){
   int i;

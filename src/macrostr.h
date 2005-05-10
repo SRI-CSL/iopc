@@ -10,6 +10,11 @@
 #define BSD_DERIVED
 #endif
 
+#ifdef _LINUX
+#define LINUX
+#endif
+
+
 char *get_macrostr(const char *cat, int code, char **desc);
 
 #endif /* _MACROSTR_H_ */
