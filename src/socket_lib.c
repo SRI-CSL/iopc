@@ -35,7 +35,7 @@ int *acceptSocket(int listenSocket, char **comments){
   char *buff = (char *)calloc(BUFFSZ,sizeof(char));
   char *hostname;
   struct sockaddr_in from;
-#ifdef	_LINUX    
+#if defined(_LINUX) || defined(_TIGER)
   socklen_t fromlen = sizeof(from);
 #else
   int fromlen = sizeof(from);
