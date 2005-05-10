@@ -15,6 +15,8 @@
 #include <sys/shm.h>
 #include <sys/mman.h>
 
+static int initialized = 0;
+
 static struct {
   char *ms_cat;
   intptr_t ms_code;
@@ -34,6 +36,11 @@ void macrostr_init(void){
 
 char *get_macrostr(const char *cat, int code, char **desc){
   int i;
+  /* iam's attempt at self initialization (probably not thread safe!) */
+  if(!initialized){
+    macrostr_init();
+    initialized = 1;
+  }
   for (i = 0; macrostr_db[i].ms_cat != NULL; i++)
     if (strcmp(macrostr_db[i].ms_cat, cat) == 0 &&
 	macrostr_db[i].ms_code == code) {
