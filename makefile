@@ -7,7 +7,7 @@ endif
 all: java c
 
 c:
-	cd src; make -f c_makefile
+	cd src; make 
 
 java:
 	ant
@@ -22,7 +22,7 @@ doc:
 	ant api-g2d
 
 clean: javaclean
-	cd src; make -f c_makefile clean
+	cd src; make clean
 
 install:
 	ant install

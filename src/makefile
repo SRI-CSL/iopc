@@ -37,7 +37,7 @@ EXE = iop_executor\
 
 SCRIPTS = iop jlambda  
 HEADERS = cheaders.h constants.h types.h dbugflags.h externs.h options.h sal_lib.h
-MISC    = c_makefile 
+MISC    = makefile 
 
 vpath % ${BUILDDIR}
 
