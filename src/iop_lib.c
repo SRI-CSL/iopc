@@ -535,15 +535,15 @@ void parseOptions(int argc, char** argv, const char* options){
       break;
     }
     case 'g': {
-      iop_gui_debug_port = atoi(optarg); 
+      iop_gui_debug_port = optarg; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tgui port = %d\n", caller, iop_gui_debug_port);
+	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
       break;
     }
     case 'j': {
-      iop_jlambda_debug_port = atoi(optarg); 
+      iop_jlambda_debug_port = optarg; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tjlambda port = %d\n", caller, iop_jlambda_debug_port);
+	fprintf(stderr, "%s\t:\tjlambda port = %s\n", caller, iop_jlambda_debug_port);
       break;
     }
     case '?': {
