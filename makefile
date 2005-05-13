@@ -7,7 +7,7 @@ endif
 all: java c
 
 c:
-	cd src; make 
+	cd src; make
 
 java:
 	ant

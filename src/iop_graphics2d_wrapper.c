@@ -33,39 +33,81 @@
 
 #ifdef _LINUX
 static char  graphics_exe[] = "java";
-static char* graphics_argv[] = 
-  {"java", "-cp", NULL, "-Dawt.toolkit=sun.awt.motif.MToolkit", "g2d.Main", NULL, NULL};
+/* N is for normal */
+static char* graphics_argvN[] = 
+  {"java", 
+   "-cp", 
+   NULL, 
+   "-Dawt.toolkit=sun.awt.motif.MToolkit", 
+   "g2d.Main", NULL, NULL};
+/* D is for remote JMV debugging enabled */
+static char* graphics_argvD[] =
+  {"java", 
+   "-cp",
+   NULL, 
+   "-Xdebug",
+   "-Xnoagent",
+   "-Djava.compiler=NONE",
+   NULL,
+   "-Dawt.toolkit=sun.awt.motif.MToolkit",
+   "g2d.Main", NULL, NULL};
 #else
 static char  graphics_exe[] = "java";
-static char* graphics_argv[] = {"java", "-cp", NULL, "g2d.Main", NULL, NULL};
+/* N is for normal */
+static char* graphics_argvN[] = 
+  {"java", 
+   "-cp", 
+   NULL, 
+   "g2d.Main", NULL, NULL};
+/* D is for remote JMV debugging enabled */
+static char* graphics_argvD[] =
+  {"java", 
+   "-cp", 
+   NULL, 
+   "-Xdebug",
+   "-Xnoagent",
+   "-Djava.compiler=NONE",
+   NULL,
+   "g2d.Main", NULL, NULL};
+
 #endif
 
-static int child_died = 0;
+static  int child_died = 0;
 
 static void chld_handler(int sig){
-  fprintf(stderr, "%s died! Exiting\n", graphics_argv[3]);
+  fprintf(stderr, "%s died! Exiting\n", self);
   child_died = 1;
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }
 
 int main(int argc, char** argv){
+  char buff[BUFFSZ];
   int pin[2], pout[2], perr[2];
-  if((argc != 2)){
-    fprintf(stderr, "Usage: %s <iop bin directory>\n", argv[0]);
+  char **graphics_argv;
+  if((argc != 2) && (argc != 3)){
+    fprintf(stderr, "Usage: %s <iop bin directory> [remote debugging port]\n", argv[0]);
     exit(EXIT_FAILURE);
   }
   self_debug_flag  = G2D_ACTOR_DEBUG;
   self = argv[0];
+  if(argc == 3){
+    graphics_argv = graphics_argvD;
+    snprintf(buff, BUFFSZ,
+	     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
+	     argv[2]); 
+    graphics_argv[6] = buff;
+  } else {
+    graphics_argv = graphics_argvN;
+#ifdef _LINUX
+    graphics_argv[5] = self;
+#else
+    graphics_argv[4] = self;
+#endif
+  }
 
   if((graphics_argv[2] = iop_alloc_jarpath(argv[1], self)) == NULL){
     exit(EXIT_FAILURE);
   }
-
-#ifdef _LINUX
-  graphics_argv[5] = self;
-#else
-  graphics_argv[4] = self;
-#endif
 
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 

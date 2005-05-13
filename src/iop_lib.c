@@ -28,6 +28,7 @@
 #include "registry_lib.h"
 #include "iop_lib.h"
 #include "msg.h"
+#include "argv.h"
 #include "socket_lib.h"
 #include "dbugflags.h"
 #include "ec.h"
@@ -39,6 +40,8 @@ extern int   iop_hardwired_actors_flag;
 extern int   iop_remote_fd;
 extern int   iop_server_mode;
 extern char *iop_port;
+extern char *iop_gui_debug_port;
+extern char *iop_jlambda_debug_port;
 
 extern pid_t registry_pid;
 extern char* registry_fifo_in;
@@ -326,22 +329,38 @@ char* iop_alloc_jarpath(char* code_dir, char* who){
 }
 
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
-  char  input_exe[] = "java";
-  char* input_argv[] = {INWINDOW, "-cp", NULL, "GUI.Editor", NULL, NULL, NULL};
-
-  if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI")) == NULL){
-    exit(EXIT_FAILURE);
+  char   input_exe[] = "java";
+  if(iop_gui_debug_port == NULL){
+    char* input_argv[] = {INWINDOW, "-cp", NULL, "GUI.Editor", NULL, NULL, NULL};
+    if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI")) == NULL){
+      exit(EXIT_FAILURE);
+    }
+    input_argv[4] = pid_str;
+    input_argv[5] = port_str;
+    if(IOP_DEBUG)printArgv(stderr, 6, input_argv);
+    return launchActor(1, "input", input_exe, input_argv);
+  } else {
+    char buff[BUFFSZ];
+    char* input_argv[] = {INWINDOW, 
+			  "-cp", 
+			  NULL, 
+			  "-Xdebug",
+			  "-Xnoagent",
+			  "-Djava.compiler=NONE",
+			  NULL,
+			  "GUI.Editor", NULL, NULL, NULL};
+    if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI")) == NULL){
+      exit(EXIT_FAILURE);
+    }
+    snprintf(buff, BUFFSZ,
+	     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
+	     iop_gui_debug_port); 
+    input_argv[6] = buff;
+    input_argv[8] = pid_str;
+    input_argv[9] = port_str;
+    if(IOP_DEBUG)printArgv(stderr, 10, input_argv);
+    return launchActor(1, "input", input_exe, input_argv);
   }
-
-  input_argv[4] = pid_str;
-  input_argv[5] = port_str;
-  return launchActor(1, "input", input_exe, input_argv);
-  /*
-  input_argv[0] = "java";
-  spawnProcess(input_exe, input_argv);
-  return NULL;
-  */
-
 }
 
 /*
@@ -355,8 +374,11 @@ static actor_spec *launchGraphics(char* code_dir){
 
 static actor_spec *launchGraphics2d(char* code_dir){
   char  graphics2d_exe[] = "iop_graphics2d_wrapper";
-  char* graphics2d_argv[] = {"graphics2d", NULL, NULL};
+  char* graphics2d_argv[] = {"graphics2d", NULL, NULL, NULL};
   graphics2d_argv[1]  = code_dir;
+  if(iop_jlambda_debug_port != NULL){
+    graphics2d_argv[2] = iop_jlambda_debug_port;
+  }
   return launchActor(1, "graphics2d", graphics2d_exe, graphics2d_argv);
 }
 
@@ -443,7 +465,19 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
       }
       break;
     }
-    case '?': {
+    case 'g': {
+      iop_gui_debug_port = optarg; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
+      break;
+    }
+    case 'j': {
+      iop_jlambda_debug_port = optarg; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tjlambda port = %s\n", caller, iop_jlambda_debug_port);
+      break;
+    }
+     case '?': {
       fprintf(stderr, IOP_USAGE); 
       exit(EXIT_SUCCESS);
     }
@@ -490,6 +524,18 @@ void parseOptions(int argc, char** argv, const char* options){
 	fprintf(stderr, "%s\t:\tserver mode selected\n", caller);
 	fprintf(stderr, "%s\t:\tserver port = %s\n", caller, iop_port);
       }
+      break;
+    }
+    case 'g': {
+      iop_gui_debug_port = atoi(optarg); 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tgui port = %d\n", caller, iop_gui_debug_port);
+      break;
+    }
+    case 'j': {
+      iop_jlambda_debug_port = atoi(optarg); 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tjlambda port = %d\n", caller, iop_jlambda_debug_port);
       break;
     }
     case '?': {

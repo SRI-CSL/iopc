@@ -82,10 +82,12 @@
 
 #define IOP_USAGE \
 "\
-\n\tUsage: iop options [inputfile]\
-\n\t\t-d     --debug           Debug mode\
-\n\t\t-a     --actors          Hardwired actors mode\
-\n\t\t-s <n> --server <n>      Server mode on port <n>\
-\n\t\t-r <n> --remote <n>      Slave to remote applet on socket fd: <n>\
-\n\t\t-n     --nowin           Don't launch any windows\n\n"
+\nUsage: iop options:\
+\n\t-d     --debug       Debug mode\
+\n\t-a     --actors      Hardwired actors mode\
+\n\t-s <n> --server  <n> Server mode on port: <n>\
+\n\t-r <n> --remote  <n> Slave to remote applet on socket fd: <n>\
+\n\t-g <n> --gui     <n> Enable remote debugging of GUI JVM on port: <n>\
+\n\t-j <n> --jlambda <n> Enable remote debugging of JLambda JVM on port: <n>\
+\n\t-n     --nowin       Don't launch any windows\n\n"
 
