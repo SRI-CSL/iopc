@@ -96,6 +96,11 @@ int main(int argc, char** argv){
 	     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
 	     argv[2]); 
     graphics_argv[6] = buff;
+#ifdef _LINUX
+    graphics_argv[9] = self;
+#else
+    graphics_argv[8] = self;
+#endif
   } else {
     graphics_argv = graphics_argvN;
 #ifdef _LINUX
