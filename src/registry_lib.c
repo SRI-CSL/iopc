@@ -1115,7 +1115,7 @@ void  processRegistryStartMessage(char *sender, char *rest, int notify){
     char* actorName;
     argc = makeArgv(args, " \t\n", &argv);
     /*
-      printArgv(stderr, argc, argv);
+      printArgv(stderr, argc, argv, sender);
     */
 
     if(argc > 0){

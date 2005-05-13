@@ -329,38 +329,46 @@ char* iop_alloc_jarpath(char* code_dir, char* who){
 }
 
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
+  int    input_argc  = 0;
   char   input_exe[] = "java";
+  char** input_argv  = NULL;
+  /* N is for normal */
+  char* input_argvN[] = {INWINDOW, 
+			 "-cp", 
+			 NULL,
+			 "GUI.Editor", NULL, NULL, NULL};
+  /* D is for debug  */
+  char* input_argvD[] = {INWINDOW, 
+			 "-cp", 
+			 NULL, 
+			 "-Xdebug", 
+			 "-Xnoagent",
+			 "-Djava.compiler=NONE",
+			 NULL,
+			 "GUI.Editor", NULL, NULL, NULL};
   if(iop_gui_debug_port == NULL){
-    char* input_argv[] = {INWINDOW, "-cp", NULL, "GUI.Editor", NULL, NULL, NULL};
-    if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI")) == NULL){
-      exit(EXIT_FAILURE);
-    }
+    /* normal mode */
+    input_argv = input_argvN;
+    input_argc = 6;
     input_argv[4] = pid_str;
     input_argv[5] = port_str;
-    if(IOP_DEBUG)printArgv(stderr, 6, input_argv);
-    return launchActor(1, "input", input_exe, input_argv);
   } else {
+    /* debug mode */
     char buff[BUFFSZ];
-    char* input_argv[] = {INWINDOW, 
-			  "-cp", 
-			  NULL, 
-			  "-Xdebug",
-			  "-Xnoagent",
-			  "-Djava.compiler=NONE",
-			  NULL,
-			  "GUI.Editor", NULL, NULL, NULL};
-    if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI")) == NULL){
-      exit(EXIT_FAILURE);
-    }
+    input_argv = input_argvD;
+    input_argc = 10;
     snprintf(buff, BUFFSZ,
 	     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
 	     iop_gui_debug_port); 
     input_argv[6] = buff;
     input_argv[8] = pid_str;
     input_argv[9] = port_str;
-    if(IOP_DEBUG)printArgv(stderr, 10, input_argv);
-    return launchActor(1, "input", input_exe, input_argv);
   }
+  if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI")) == NULL){
+    exit(EXIT_FAILURE);
+  }
+  if(self_debug_flag)printArgv(stderr, input_argc, input_argv, "input_argv");
+  return launchActor(1, "input", input_exe, input_argv);
 }
 
 /*

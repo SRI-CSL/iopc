@@ -25,5 +25,5 @@
 
 int makeArgv(const char *s, const char *delimiters, char ***argvp);
 void freeArgv(int argc, char** argv);
-void printArgv(FILE* file, int argc, char** argv);
+void printArgv(FILE* file, int argc, char** argv, char*);
 

@@ -88,9 +88,9 @@ void freeArgv(int argc, char** argv){
   (void)free(argv);
 }
 
-void printArgv(FILE* file, int argc, char** argv){
+void printArgv(FILE* file, int argc, char** argv, char* prefix){
   int i;
   for(i = 0; i < argc; i++){
-    fprintf(file, "\targv[%d] = %s\n", i, argv[i]);
+    fprintf(file, "\t%s[%d] = %s\n", prefix, i, argv[i]);
   }
 }
