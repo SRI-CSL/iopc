@@ -27,5 +27,11 @@ clean: javaclean
 install:
 	ant install
 
+install-PLA:
+	ant install-PLA
+
+run-PLA:
+	ant run-PLA
+
 dist: all
 	ant distributable
