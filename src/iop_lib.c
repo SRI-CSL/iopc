@@ -36,6 +36,7 @@
 
 extern int   iop_debug_flag;
 extern int   iop_no_windows_flag;
+extern int   iop_chatter_flag;
 extern int   iop_hardwired_actors_flag;
 extern int   iop_remote_fd;
 extern int   iop_server_mode;
@@ -52,6 +53,7 @@ extern pid_t iop_pid;
 extern char* iop_bin_dir;
 
 /* statics */
+static void wait4shutdown();
 static actor_spec *launchActor(int notify, char* name, char* exe, char** argv);
 static actor_spec *launchMaude(int argc, char** argv);
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str);
@@ -256,28 +258,21 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
       registryDump(stderr);
       chatter();
     }
-    while(1){
-      int status;
-      int retval = waitpid(registry_pid, &status, 0);
-      /*      int retval = waitpid(0, &status, 0); */
-      if((retval < 0) && (errno == EINTR)) continue;
-	announce("registry wait returned;\n");
-	announce("wait returned;\n");
-	announce("WIFEXITED(status) = %d\n", WIFEXITED(status)); 
-	announce("WIFSIGNALED(status) = %d\n", WIFSIGNALED(status)); 
-	if(WIFSIGNALED(status))
-	  announce("WTERMSIG(status) = %d\n", WTERMSIG(status)); 
-	/*      if(retval == registry_pid)break; */
-	break;
-    }
+    wait4shutdown();
     exit(EXIT_SUCCESS);
   } else {
-    announce("doing a registryDump(stderr);\n");
-    registryDump(stderr);
-    
-    announce("chattering\n");
-    chatter();
-    announce("no longer chattering\n");
+    if(iop_chatter_flag){
+      announce("doing a registryDump(stderr);\n");
+      registryDump(stderr);
+      announce("chattering\n");
+      chatter();
+      announce("no longer chattering\n");
+    } else {
+      announce("waiting 4 shutdown\n");
+      wait4shutdown();
+      announce("waited 4 shutdown\n");
+      exit(EXIT_SUCCESS);
+    }
   }
 
  bail:
@@ -290,6 +285,22 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
 }
 
+static void wait4shutdown(){
+  while(1){
+    int status;
+    int retval = waitpid(registry_pid, &status, 0);
+    /*      int retval = waitpid(0, &status, 0); */
+    if((retval < 0) && (errno == EINTR)) continue;
+    announce("registry wait returned;\n");
+    announce("wait returned;\n");
+    announce("WIFEXITED(status) = %d\n", WIFEXITED(status)); 
+    announce("WIFSIGNALED(status) = %d\n", WIFSIGNALED(status)); 
+    if(WIFSIGNALED(status))
+      announce("WTERMSIG(status) = %d\n", WTERMSIG(status)); 
+    /*      if(retval == registry_pid)break; */
+    break;
+  }
+}
 
 static actor_spec *launchActor(int notify, char* name, char* exe, char** argv){
   actor_spec *retval = NULL;
@@ -455,6 +466,12 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
 	fprintf(stderr, "%s\t:\tno windows option selected\n", caller);
       break;
     }
+    case 'c': {
+      iop_chatter_flag = 1; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tchatter option selected\n", caller);
+      break;
+    }
     case 'r': {
       iop_remote_fd = atoi(optarg); 
       if(IOP_LIB_DEBUG)
@@ -517,6 +534,12 @@ void parseOptions(int argc, char** argv, const char* options){
       iop_no_windows_flag = 1; 
       if(IOP_LIB_DEBUG)
 	fprintf(stderr, "%s\t:\tno windows option selected\n", caller);
+      break;
+    }
+    case 'c': {
+      iop_chatter_flag = 1; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tchatter option selected\n", caller);
       break;
     }
     case 'r': {

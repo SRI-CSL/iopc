@@ -51,6 +51,7 @@
 #define MAXPORT           9000
 #define HOME              "HOME"
 #define JARPATH           "/iop.jar"
+#define STARTUP           "startup.txt"
 
 /* name of configuration file, must be keep in synch with GUI/Constants.java */
 #define IOPRC             ".ioprc"
@@ -89,5 +90,6 @@
 \n\t-r <n> --remote  <n> Slave to remote applet on socket fd: <n>\
 \n\t-g <n> --gui     <n> Enable remote debugging of GUI JVM on port: <n>\
 \n\t-j <n> --jlambda <n> Enable remote debugging of JLambda JVM on port: <n>\
-\n\t-n     --nowin       Don't launch any windows\n\n"
+\n\t-n     --nowin       Don't launch any windows\
+\n\t-c     --chatter     Prove commandline when in no windows mode\n\n"
 

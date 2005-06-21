@@ -44,6 +44,7 @@ int main(int argc, char** argv){
 
   announce("iop_debug_flag            = %d\n", iop_debug_flag);
   announce("iop_no_windows_flag       = %d\n", iop_no_windows_flag);
+  announce("iop_chatter_flag          = %d\n", iop_chatter_flag);
   announce("iop_hardwired_actors_flag = %d\n", iop_hardwired_actors_flag);
   announce("iop_remote_fd             = %d\n", iop_remote_fd);
   announce("iop_server_mode           = %d\n", iop_server_mode);

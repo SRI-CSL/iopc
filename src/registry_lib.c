@@ -1430,6 +1430,64 @@ void processRegistryMessage(char *sender, char *body){
 }
 
 
+static int registryProcessFile(FILE* filep){
+  char line[BUFFSZ];
+  int counter = 0;
+  while(fgets(line, BUFFSZ, filep) != NULL){
+    int len;
+    counter++;
+    if((len = strlen(line)) == 0) continue;
+    if(line[0] == '#') continue;
+    if(line[len - 1] == '\n'){ line[len - 1] = '\0'; }
+    if(strncmp(line, REGISTRY_START, strlen(REGISTRY_START)) == 0){
+      /* its probably a start command */
+      char *cmd, *rest;
+      if(getNextToken(line, &cmd, &rest) != 1){
+	fprintf(stderr, "registryProcessFile: parsing %s failed\n", line);
+	continue;
+      }
+      if(!(strcmp(cmd, REGISTRY_START) == 0)){ 
+	fprintf(stderr, "registryProcessFile: cmd %s not recognized\n", cmd);
+	continue;
+      } 
+      processRegistryStartMessage(NULL, rest, 0);
+    } else if(strncmp(line, REGISTRY_SELECT, strlen(REGISTRY_SELECT)) == 0){
+      /* its probably a select command */
+      char *cmd, *name, *rest;
+      if(getNextToken(line, &cmd, &rest) != 1){
+	fprintf(stderr, "registryProcessFile: parsing %s failed\n", line);
+	continue;
+      }
+      if(!(strcmp(cmd, REGISTRY_SELECT) == 0)){ 
+	fprintf(stderr, "registryProcessFile: cmd %s not recognized\n", cmd);
+	continue;
+      } 
+      if(getNextToken(rest, &name, &rest) != 1){
+	fprintf(stderr, "registryProcessFile: parsing %s failed\n", line);
+	continue;
+      }
+      log2File("registryProcessFile: selected actor = %s\n", name);
+      strncpy(selectedActor, name, SIZE);
+      selected = 1;
+    }
+  }
+  
+  if(!iop_no_windows_flag){
+    log2File("registryProcessStartupFile notifying GUI\n");  
+    if(selected){
+      int alen = strlen(selectedActor);
+      msg *amsg = makeMsg(alen);
+      addToMsg(amsg, alen, selectedActor);
+      sendMsg2Input(amsg, SELECT);
+      freeMsg(amsg);
+      selected = 0;
+    } else {
+      sendMsg2Input(NULL, UPDATE);
+    }
+    log2File("registryProcessFile notified GUI\n");  
+  }
+  return counter;
+}
 
 int registryProcessConfigFile(){
   char ioprc[BUFFSZ];
@@ -1445,65 +1503,22 @@ int registryProcessConfigFile(){
     strncat(ioprc, IOPRC, BUFFSZ - len - 3);
     rcfile = fopen(ioprc, "r");
     if(rcfile == NULL){
-      log2File("Configuration file not opened: %s", strerror(errno));
+      log2File("Configuration file not opened: %s\n", strerror(errno));
       return -1;
     } else {
-      char line[BUFFSZ];
-      int counter = 0;
-      while(fgets(line, BUFFSZ, rcfile) != NULL){
-	int len;
-	counter++;
-	if((len = strlen(line)) == 0) continue;
-	if(line[0] == '#') continue;
-	if(line[len - 1] == '\n'){ line[len - 1] = '\0'; }
-	if(strncmp(line, REGISTRY_START, strlen(REGISTRY_START)) == 0){
-	  /* its probably a start command */
-	  char *cmd, *rest;
-	  if(getNextToken(line, &cmd, &rest) != 1){
-	    fprintf(stderr, "registryProcessConfigFile: parsing %s failed\n", line);
-	    continue;
-	  }
-	  if(!(strcmp(cmd, REGISTRY_START) == 0)){ 
-	    fprintf(stderr, "registryProcessConfigFile: cmd %s not recognized\n", cmd);
-	    continue;
-	  } 
-	  processRegistryStartMessage(NULL, rest, 0);
-	} else if(strncmp(line, REGISTRY_SELECT, strlen(REGISTRY_SELECT)) == 0){
-	  /* its probably a select command */
-	  char *cmd, *name, *rest;
-	  if(getNextToken(line, &cmd, &rest) != 1){
-	    fprintf(stderr, "registryProcessConfigFile: parsing %s failed\n", line);
-	    continue;
-	  }
-	  if(!(strcmp(cmd, REGISTRY_SELECT) == 0)){ 
-	    fprintf(stderr, "registryProcessConfigFile: cmd %s not recognized\n", cmd);
-	    continue;
-	  } 
-	  if(getNextToken(rest, &name, &rest) != 1){
-	    fprintf(stderr, "registryProcessConfigFile: parsing %s failed\n", line);
-	    continue;
-	  }
-	  log2File("registryProcessConfigFile: selected actor = %s\n", name);
-	  strncpy(selectedActor, name, SIZE);
-	  selected = 1;
-	}
-      }
-      
-      if(!iop_no_windows_flag){
-	log2File("registryProcessConfigFile notifying GUI\n");  
-	if(selected){
-	  int alen = strlen(selectedActor);
-	  msg *amsg = makeMsg(alen);
-	  addToMsg(amsg, alen, selectedActor);
-	  sendMsg2Input(amsg, SELECT);
-	  freeMsg(amsg);
-	  selected = 0;
-	} else {
-	  sendMsg2Input(NULL, UPDATE);
-	}
-	log2File("registryProcessConfigFile notified GUI\n");  
-      }
-      return counter;
+      return registryProcessFile(rcfile);
     }
   }
 }
+
+int registryProcessStartupFile(){
+  FILE* startup;
+  startup = fopen(STARTUP, "r");
+  if(startup == NULL){
+    log2File("Startup file not opened: %s\n", strerror(errno));
+    return -1;
+  } else {
+    return registryProcessFile(startup);
+  }
+}
+

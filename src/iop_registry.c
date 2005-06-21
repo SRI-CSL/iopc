@@ -93,9 +93,14 @@ int main(int argc, char** argv){
     goto killIOP;
   }
  
-  /* iop will send two notifications, one for the system, and one for the GUI */
+  /* 
+     iop will send at least one notification, one for the system, 
+     and one for the GUI, if not in "no windows mode". 
+  */
   processRegistryCommand(fifoIn, fifoOut, 0);
-  processRegistryCommand(fifoIn, fifoOut, 0);
+  if(!iop_no_windows_flag){
+    processRegistryCommand(fifoIn, fifoOut, 0);
+  }
 
   log2File("creating monitorInSocket thread\n");
   ec_rv( pthread_create(&inThread, NULL, monitorInSocket, &in2RegFd) );
@@ -104,11 +109,16 @@ int main(int argc, char** argv){
   ec_rv( pthread_create(&commandThread, NULL, registryCommandThread, NULL) );
 
   if(!iop_hardwired_actors_flag){
-    log2File("reading configuration file\n");
-    if(registryProcessConfigFile() < 0){
-      log2File("configuration file reading failed\n");
-    }
+    if(registryProcessStartupFile() < 0){
+      log2File("startup file reading failed\n");
+      log2File("reading configuration file\n");
+      if(registryProcessConfigFile() < 0){
+	log2File("configuration file reading failed\n");
+      }
+      log2File("reading startup file\n");
+    } 
   }
+
   {
     int requestNo = 0;
     msg* message = NULL;
