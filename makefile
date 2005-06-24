@@ -35,3 +35,8 @@ run-PLA:
 
 dist: all
 	ant distributable
+
+webdoc:
+	ant api-g2d
+	cp -r /home/iop/IOP/doc/api-g2d/*  ~iop/public_html/GraphicsActor2D/doc/
+

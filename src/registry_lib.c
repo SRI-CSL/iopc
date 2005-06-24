@@ -941,6 +941,7 @@ void *monitorInSocket(void *arg){
   if((reg2InPort = wait4ReadyFromInputWindow(listeningSocket)) < 0){
     fprintf(stderr, "wait4ReadyFromInputWindow failed\n");
     bail();
+    exit(EXIT_FAILURE);
   }
   log2File("reg2InPort = %d\n", reg2InPort);
 

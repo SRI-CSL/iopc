@@ -63,6 +63,13 @@ int main(int argc, char** argv){
   iop_bin_dir       = argv[argc - 1];
   registry_pid      = getpid();
 
+  /*
+  if(atexit(bail) != 0){
+    fprintf(stderr, "atexit(bail) failed\n");
+    goto killIOP;
+  }
+  */
+
   if(errorsInit() < 0){
     fprintf(stderr, "errorsInit failed\n");
     goto killIOP;
