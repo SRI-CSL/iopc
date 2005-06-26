@@ -27,6 +27,10 @@ clean: javaclean
 install:
 	ant install
 
+ianstall:
+	ant install
+	chown -R iop:iop /usr/local/iop
+
 install-PLA:
 	ant install-PLA
 
