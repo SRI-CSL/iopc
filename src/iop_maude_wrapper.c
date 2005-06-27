@@ -31,13 +31,6 @@
 #include "externs.h"
 #include "ec.h"
 
-/* temporary flag for isolating the code Linda says is not needed */
-#define CD_AT_START   1
-
-#if (CD_AT_START == 1)
-static char current_dir[PATH_MAX + 1];
-#endif
-
 static char* maudebindir;
 
 #ifdef _LINUX
@@ -65,10 +58,6 @@ int main(int argc, char** argv){
 
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
-#if (CD_AT_START == 1)
-    ec_null( getcwd(current_dir, PATH_MAX) );
-#endif
-
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );
   ec_neg1( pipe(pout) );
@@ -86,15 +75,6 @@ int main(int argc, char** argv){
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
 
-#if (CD_AT_START == 1)
-    /* source of problem on the Mac?!?   */
-    /*    ec_neg1( chdir(maudebindir) ); */
-    if(chdir(maudebindir) != 0)
-      fprintf(stderr, "Couldn't change to %s\n", maudebindir);
-#endif
-
-
-
     ec_neg1( execvp(maude_exe, maude_argv) );
 
     /* end of child code */
@@ -107,21 +87,6 @@ int main(int argc, char** argv){
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
     
-#if (CD_AT_START == 1)
-    wait4IO(pout[0], perr[0], parseMaudeThenEcho);
-    
-    announce("%s\t:\tcding to %s\n", argv[0], current_dir); 
-    
-    sprintf(cmdBuff, "cd %s\n", current_dir);
-    len = strlen(cmdBuff);
-    if(write(pin[1], cmdBuff, len) != len){
-      fprintf(stderr, "write failed of \"%s\" command", cmdBuff);
-      /* forge on, notify registry, die calmly? */
-      exit(EXIT_FAILURE);
-    };
-    announce(cmdBuff); 
-#endif
-
     wait4IO(pout[0], perr[0], parseMaudeThenEcho);
     
     if(argc == 3){
