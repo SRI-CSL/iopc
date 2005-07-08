@@ -6,10 +6,12 @@ endif
 
 all: java c
 
+
 c:
 	cd src; make
 
 java:
+	./version
 	ant
 
 javaclean:

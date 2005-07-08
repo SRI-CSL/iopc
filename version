@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+# inplace editing with emacs style backups
+$^I = "~";
+@ARGV = (
+	 "src/GUI/Constants.java",
+	 );
+my $version = undef;
+my @status = `svn info`;
+foreach my $line (@status){
+    if($line =~ /^Revision:\s+(\d+)/){
+	$version = $1;
+    }
+}
+while(my $line = <>){ 
+    if($line =~ /public\s+static\s+final\s+int\s+versionNumber\s+ =\s+(\d+)/){
+	$line =~ s/$1/$version/g;
+    }
+    print $line;
+}
