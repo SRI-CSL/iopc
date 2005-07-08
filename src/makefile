@@ -6,7 +6,8 @@ BUILDDIR = ../build
 ifneq (,$(findstring Darwin,$(shell uname )))
 #Mac flags
 SCRIPT = mac_iop
-CFLAGS =  -Wall -D_MAC -D_TIGER
+CFLAGS =  -Wall -D_MAC
+# -D_TIGER
 #tiger users need to uncomment out the above line, adding it to the line above it
 #so that it looks like:
 #CFLAGS =  -Wall -D_MAC -D_TIGER
