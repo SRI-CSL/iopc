@@ -5,6 +5,7 @@ use strict;
 $^I = "~";
 @ARGV = (
 	 "src/GUI/Constants.java",
+	 "src/g2d/swing/IOPConstants.java"
 	 );
 my $version = undef;
 my @status = `svn info`;
