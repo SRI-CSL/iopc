@@ -26,6 +26,92 @@
 #include "argv.h"
 #include "ec.h"
 
+static char quotes = '"';
+
+int makeArgv(const char *s, const char *delimiters, char ***argvp){
+  int max;
+  char **argv = NULL;
+  if(strchr(delimiters, quotes) != NULL){
+    fprintf(stderr, "makeArgv warning: bad args -- delimiters contains quotes\n");
+    *argvp = NULL;
+    return 0;
+  }
+  if(argvp == NULL)    
+    return 0;
+  if(s == NULL){
+    *argvp = NULL;
+    return 1;
+  } else {
+    int argc = 0, len = strlen(s);
+    if(len == 0){
+      *argvp = NULL;
+      return 1;
+    } else {
+      int start = 0, end = 0;
+      ec_null( argv = calloc(len, sizeof(char *)) );
+      while(s[start] != '\0'){
+	int insideQuotes = 0;
+	while((s[start] != '\0') &&  (strchr(delimiters, s[start]) != NULL))
+	  start++;
+	if(s[start] == '\0'){
+	  if(argc == 0){
+	    free(argv);
+	    *argvp = NULL;
+	    return argc;
+	  } else {
+	    argv[argc] = NULL;
+	    *argvp = argv;
+	    return argc;
+	  }
+	}
+	if(s[start] == quotes){ insideQuotes = 1; }
+	end = start;
+	while((s[end] != '\0') &&
+	      (insideQuotes || strchr(delimiters, s[end]) == NULL)){
+	  if(s[end] == quotes){ insideQuotes = !insideQuotes; }
+	  end++;
+	}
+	max = (PATH_MAX < (end - start) + 1) ? (end - start) + 1 : PATH_MAX;
+	ec_null( argv[argc] = calloc(max, sizeof(char)) );
+	strncpy(argv[argc], &s[start], end - start);
+	argv[argc][end - start] = '\0';
+	if(insideQuotes){
+	  fprintf(stderr, "makeArgv warning: matching quote not found: %s!\n", argv[argc]);
+	}
+	argc++;
+	start = end;
+      }
+      argv[argc] = NULL;
+      *argvp = argv;
+      return argc;
+    }
+  }
+
+EC_CLEANUP_BGN
+  (void)free(argv);
+  return 0;
+EC_CLEANUP_END
+}
+
+void freeArgv(int argc, char** argv){
+  int i;
+  for(i = 0; i < argc; i++){
+    (void)free(argv[i]);
+  }
+  (void)free(argv);
+}
+
+void printArgv(FILE* file, int argc, char** argv, char* prefix){
+  int i;
+  for(i = 0; i < argc; i++){
+    fprintf(file, "\t%s[%d] = %s\n", prefix, i, argv[i]);
+  }
+}
+
+
+/*
+//pre-quotes version 05/07/16.
+
 int makeArgv(const char *s, const char *delimiters, char ***argvp){
   int max;
   char **argv = NULL;
@@ -80,17 +166,4 @@ EC_CLEANUP_BGN
 EC_CLEANUP_END
 }
 
-void freeArgv(int argc, char** argv){
-  int i;
-  for(i = 0; i < argc; i++){
-    (void)free(argv[i]);
-  }
-  (void)free(argv);
-}
-
-void printArgv(FILE* file, int argc, char** argv, char* prefix){
-  int i;
-  for(i = 0; i < argc; i++){
-    fprintf(file, "\t%s[%d] = %s\n", prefix, i, argv[i]);
-  }
-}
+*/

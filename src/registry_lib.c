@@ -1115,10 +1115,8 @@ void  processRegistryStartMessage(char *sender, char *rest, int notify){
     char**argv;
     char* actorName;
     argc = makeArgv(args, " \t\n", &argv);
-    /*
-      printArgv(stderr, argc, argv, sender);
-    */
-
+    /* printArgv(stderr, argc, argv, sender); */
+    
     if(argc > 0){
       actorName = registryLaunchActor(name, argc, argv);
       if(actorName != NULL){
@@ -1474,7 +1472,7 @@ static int registryProcessFile(FILE* filep){
   }
   
   if(!iop_no_windows_flag){
-    log2File("registryProcessStartupFile notifying GUI\n");  
+    log2File("registryProcessFile notifying GUI\n");  
     if(selected){
       int alen = strlen(selectedActor);
       msg *amsg = makeMsg(alen);
