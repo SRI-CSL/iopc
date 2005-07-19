@@ -25,54 +25,16 @@
 #include "cheaders.h"
 #include "constants.h"
 #include "msg.h"
+#include "argv.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h"
 #include "iop_lib.h"
 #include "ec.h"
 #include "externs.h"
 
-#ifdef _LINUX
-static char  graphics_exe[] = "java";
-/* N is for normal */
-static char* graphics_argvN[] = 
-  {"java", 
-   "-cp", 
-   NULL, 
-   "-Dawt.toolkit=sun.awt.motif.MToolkit", 
-   "g2d.Main", NULL, NULL};
-/* D is for remote JMV debugging enabled */
-static char* graphics_argvD[] =
-  {"java", 
-   "-cp",
-   NULL, 
-   "-Xdebug",
-   "-Xnoagent",
-   "-Djava.compiler=NONE",
-   NULL,
-   "-Dawt.toolkit=sun.awt.motif.MToolkit",
-   "g2d.Main", NULL, NULL};
-#else
-static char  graphics_exe[] = "java";
-/* N is for normal */
-static char* graphics_argvN[] = 
-  {"java", 
-   "-cp", 
-   NULL, 
-   "g2d.Main", NULL, NULL};
-/* D is for remote JMV debugging enabled */
-static char* graphics_argvD[] =
-  {"java", 
-   "-cp", 
-   NULL, 
-   "-Xdebug",
-   "-Xnoagent",
-   "-Djava.compiler=NONE",
-   NULL,
-   "g2d.Main", NULL, NULL};
-
-#endif
-
 static  int child_died = 0;
+
+static char  g2dexe[] = "java";
 
 static void chld_handler(int sig){
   fprintf(stderr, "%s died! Exiting\n", self);
@@ -81,38 +43,29 @@ static void chld_handler(int sig){
 }
 
 int main(int argc, char** argv){
-  char buff[BUFFSZ];
-  int pin[2], pout[2], perr[2];
-  char **graphics_argv;
-  if((argc != 2) && (argc != 3)){
-    fprintf(stderr, "Usage: %s <iop bin directory> [remote debugging port]\n", argv[0]);
+  int i, pin[2], pout[2], perr[2];
+  char **g2dargv;
+  if(argc < 2){
+    fprintf(stderr, "Usage: %s <iop bin directory> [jvm options]\n", argv[0]);
     exit(EXIT_FAILURE);
-  }
-  self_debug_flag  = G2D_ACTOR_DEBUG;
-  self = argv[0];
-  if(argc == 3){
-    graphics_argv = graphics_argvD;
-    snprintf(buff, BUFFSZ,
-	     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
-	     argv[2]); 
-    graphics_argv[6] = buff;
-#ifdef _LINUX
-    graphics_argv[9] = self;
-#else
-    graphics_argv[8] = self;
-#endif
-  } else {
-    graphics_argv = graphics_argvN;
-#ifdef _LINUX
-    graphics_argv[5] = self;
-#else
-    graphics_argv[4] = self;
-#endif
   }
 
-  if((graphics_argv[2] = iop_alloc_jarpath(argv[1], self)) == NULL){
+  self_debug_flag  = G2D_ACTOR_DEBUG;
+  self = argv[0];
+
+  ec_null( g2dargv = calloc(argc + 4, sizeof(char*)) );
+  
+  g2dargv[0] = "java";
+  g2dargv[1] = "-cp";
+  if((g2dargv[2] = iop_alloc_jarpath(argv[1], self)) == NULL){
     exit(EXIT_FAILURE);
   }
+  for(i = 2; i < argc; i++){
+    g2dargv[i + 1] = argv[i];
+  }
+  g2dargv[argc + 1] = "g2d.Main";
+  g2dargv[argc + 2] = self;
+  g2dargv[argc + 3] = NULL;
 
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
@@ -133,7 +86,7 @@ int main(int argc, char** argv){
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
 
-    ec_neg1( execvp(graphics_exe, graphics_argv) );
+    ec_neg1( execvp(g2dexe, g2dargv) );
 
     /* end of child code */
   } else {
