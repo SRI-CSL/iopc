@@ -49,14 +49,8 @@ int main(int argc, char** argv){
   announce("iop_remote_fd             = %d\n", iop_remote_fd);
   announce("iop_server_mode           = %d\n", iop_server_mode);
   announce("iop_gui_debug_port        = %s\n", iop_gui_debug_port);
-  announce("iop_jlambda_debug_port    = %s\n", iop_jlambda_debug_port);
   announce("iop_port                  = %s\n", iop_port);
   
-  if((iop_jlambda_debug_port != NULL) && !iop_hardwired_actors_flag){
-    fprintf(stderr, "Must use -a flag in conjunction with -j <port number>\n");
-    exit(EXIT_FAILURE);
-  }
-
   if(iop_server_mode){
     if(iop_port == NULL){
       fprintf(stderr, "Usage: iop -sp <portno>\n");

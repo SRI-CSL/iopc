@@ -54,7 +54,6 @@ int main(int argc, char** argv){
   self = argv[0];
 
   ec_null( g2dargv = calloc(argc + 4, sizeof(char*)) );
-  
   g2dargv[0] = "java";
   g2dargv[1] = "-cp";
   if((g2dargv[2] = iop_alloc_jarpath(argv[1], self)) == NULL){

@@ -42,7 +42,6 @@ extern int   iop_remote_fd;
 extern int   iop_server_mode;
 extern char *iop_port;
 extern char *iop_gui_debug_port;
-extern char *iop_jlambda_debug_port;
 
 extern pid_t registry_pid;
 extern char* registry_fifo_in;
@@ -393,11 +392,8 @@ static actor_spec *launchGraphics(char* code_dir){
 
 static actor_spec *launchGraphics2d(char* code_dir){
   char  graphics2d_exe[] = "iop_graphics2d_wrapper";
-  char* graphics2d_argv[] = {"graphics2d", NULL, NULL, NULL};
+  char* graphics2d_argv[] = {"graphics2d", NULL, NULL};
   graphics2d_argv[1]  = code_dir;
-  if(iop_jlambda_debug_port != NULL){
-    graphics2d_argv[2] = iop_jlambda_debug_port;
-  }
   return launchActor(1, "graphics2d", graphics2d_exe, graphics2d_argv);
 }
 
@@ -496,12 +492,6 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
 	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
       break;
     }
-    case 'j': {
-      iop_jlambda_debug_port = optarg; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tjlambda port = %s\n", caller, iop_jlambda_debug_port);
-      break;
-    }
      case '?': {
       fprintf(stderr, IOP_USAGE); 
       exit(EXIT_SUCCESS);
@@ -561,12 +551,6 @@ void parseOptions(int argc, char** argv, const char* options){
       iop_gui_debug_port = optarg; 
       if(IOP_LIB_DEBUG)
 	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
-      break;
-    }
-    case 'j': {
-      iop_jlambda_debug_port = optarg; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tjlambda port = %s\n", caller, iop_jlambda_debug_port);
       break;
     }
     case '?': {

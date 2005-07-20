@@ -38,7 +38,6 @@ int   iop_remote_fd              =  0;
 int   iop_server_mode            =  0;
 char *iop_port                   =  NULL;
 char *iop_gui_debug_port         =  NULL;
-char *iop_jlambda_debug_port     =  NULL;
 int   iop_chatter_flag           =  0;
 
 pid_t child                      = -1;
