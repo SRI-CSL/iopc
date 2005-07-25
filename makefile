@@ -11,7 +11,6 @@ c:
 	cd src; make
 
 java:
-	./version
 	ant
 
 javaclean:
