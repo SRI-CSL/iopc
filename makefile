@@ -33,7 +33,7 @@ ianstall:
 	chown -R iop:iop /usr/local/iop
 
 install-PLA:
-	ant install-PLA
+	@echo -e "OBSOLETE! Please run instead:\n  > ant install-PLA [-DGUI={old,new}]"
 
 run-PLA:
 	ant run-PLA
