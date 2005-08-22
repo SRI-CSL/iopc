@@ -33,10 +33,12 @@ ianstall:
 	chown -R iop:iop /usr/local/iop
 
 install-PLA:
-	@echo -e "OBSOLETE! Please run instead:\n  > ant install-PLA [-DGUI={old,new}]"
+	@echo -e "OBSOLETE! Please run instead: (see README.txt)"
+	@echo -e "  > ant install-PLA [-DGUI={old,new}] [-DPLdir=<PL dir>]"
 
 run-PLA:
-	ant run-PLA
+	@echo -e "OBSOLETE! Please run instead: (see README.txt)"
+	@echo -e "  > ant run-PLA [-DPLdir=<PL dir>]"
 
 dist: all
 	ant distributable
