@@ -21,6 +21,8 @@ src-zip:
 
 doc: 
 	ant api-g2d
+	ant api-GUI
+	ant api-pla
 
 clean: javaclean
 	cd src; make clean
@@ -45,5 +47,5 @@ dist: all
 
 webdoc:
 	ant api-g2d
-	cp -r /home/iop/IOP/doc/api-g2d/*  ~iop/public_html/GraphicsActor2D/doc/
+	cp -r doc/api-g2d/*  ~iop/public_html/GraphicsActor2D/doc/
 
