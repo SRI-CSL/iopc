@@ -42,9 +42,6 @@ run-PLA:
 	@echo -e "OBSOLETE! Please run instead: (see README.txt)"
 	@echo -e "  > ant run-PLA [-DPLdir=<PL dir>]"
 
-dist: all
-	ant distributable
-
 webdoc:
 	ant api-g2d
 	cp -r doc/api-g2d/*  ~iop/public_html/GraphicsActor2D/doc/
