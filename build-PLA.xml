@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ******************** 80 columns **************************************** -->
+<!-- This is an ant project file. For more info about ant see: -->
+<!-- http://ant.apache.org/ -->
+
+<project default="" name="PLA">
+
+    <!-- ******************************************************************** -->
+    <!-- global properties:                                                   -->
+    <!-- ******************************************************************** -->
+
+    <!-- obtain installation location from environment -->
+    <property environment="env"/>
+    <property name="install.dir" location="${env.IOPBINDIR}"/>
+
+    <!-- properties for building PLA application bundle -->
+    <property name="appname" value="PLA"/>
+    <property name="appversion" value="1.0"/> <!-- TODO: store this somewhere central -->
+    <property name="version" value="${appversion}"/>
+    <property name="exename" value="pla.command"/>
+
+    <property name="app.dir" value="installer/mac/${appname}.app"/>
+
+    <property name="name" value="${appname}-macosx"/>
+    <property name="image-name" value="${name}.dmg"/>
+    <property name="tarball-name" value="${name}.tar.gz"/>
+
+
+    <!-- Installing with custom locations? -->
+
+    <!-- =========================================================== -->
+    <!--  CREATE-APP                                                 -->
+    <!-- =========================================================== -->
+    <!--  Creates file tree of dashboard build into a Mac OS X       -->
+    <!--  application layout.  Can be run with any Unix-like shell.  -->
+    <!-- =========================================================== -->
+    <target name="create-app"
+        description="Organize PLA into a Mac OS X application layout">
+
+        <echo>
+Creating ${app.dir} bundle using
+ ${install.dir} as master
+(make sure you install IOP first)
+================================================================
+        </echo>
+
+        <delete dir="${app.dir}"/>
+
+        <mkdir dir="${app.dir}/Contents"/>
+        <mkdir dir="${app.dir}/Contents/MacOS"/>
+        <mkdir dir="${app.dir}/Contents/Resources/IOP"/>
+
+        <!-- need to do this in shell rather than ant because links needs to be preserved -->
+        <echo message="Copying iop bin dir to ${app.dir}/Contents/Resources/IOP"/>
+        <exec executable="sh" failonerror="yes">
+            <arg value="-c"/>
+            <arg value="cp ${install.dir}/* '${app.dir}/Contents/Resources/IOP'"/>
+        </exec>
+
+        <!-- Copying the icon into the correct place -->
+        <!-- TODO: find some nicer icns -->
+        <copy file="iop.icns" todir="${app.dir}/Contents/Resources"/>
+
+        <!-- Generating Info.plist -->
+        <copy file="Info.plist" filtering="true" tofile="${app.dir}/Contents/Info.plist">
+            <filterset>
+                <filter token="APPNAME" value="${appname}"/>
+                <filter token="APPVERSION" value="${appversion}"/>
+                <filter token="VERSION" value="${version}"/>
+                <filter token="EXENAME" value="${exename}"/>
+                <filter token="ICONFILENAME" value="iop.icns"/>
+            </filterset>
+        </copy>
+
+<!--        <echo message="Creating launch script symlink ${app.dir}/Contents/MacOS/${exename}"/>-->
+<!--        <exec executable="sh" failonerror="yes">-->
+<!--            <arg value="-c"/>-->
+<!--            <arg value="ln -s ../Resources/IOP/bin/iop '${app.dir}/Contents/MacOS/${exename}'"/>-->
+<!--        </exec>-->
+    </target>
+
+
+    <!-- =========================================================== -->
+    <!--  TARBALL                                                    -->
+    <!-- =========================================================== -->
+    <!--  Make tar ball from Apple application bundle for            -->
+    <!--  distribution.  Can be run with any Unix-like shell.  This  -->
+    <!--  is an alternative for target "IMAGE" below, which needs    -->
+    <!--  to be run on a Mac.                                        -->
+    <!-- =========================================================== -->
+    <target name="tarball"
+        depends="create-app"
+        description="Build a gzipped tarball containing PLA.app">
+
+        <echo message="Creating tarball ${tarball-name}"/>
+        <exec executable="sh" failonerror="yes">
+            <arg value="-c"/>
+            <arg value="tar cf - '${app.dir}' | gzip > ${tarball-name}"/>
+        </exec>
+
+        <!-- clean up the application bundle -->
+<!--        <delete dir="${app.dir}"/>-->
+    </target>
+
+
+    <!-- =========================================================== -->
+    <!--  IMAGE                                                      -->
+    <!-- =========================================================== -->
+    <!--  Make mountable disk image from Apple application bundle    -->
+    <!--  for distribution.  Must be run on a Mac.  Use target       -->
+    <!--  "TARBALL" above if you don't have a Mac.                   -->
+    <!-- =========================================================== -->
+    <target name="image"
+        depends="create-app"
+        description="Build a disk image containing PLA.app">
+
+        <delete file="${image-name}"/>
+
+        <!-- create disk image from application bundle -->
+        <exec executable="hdiutil"
+            os="Mac OS X"
+            failonerror="true">
+            <arg line="create
+            -srcfolder ${app.dir}
+            -volname &quot;${appname} Install&quot;
+            ${image-name}"/>
+        </exec>
+
+        <!-- clean up the application bundle -->
+<!--        <delete dir="${app.dir}"/>-->
+    </target>
+
+    <!-- ******************************************************************** -->
+    <!-- clean targets:                                                       -->
+    <!-- ******************************************************************** -->
+
+    <!-- remove any build products generated by other targets -->
+    <target name="clean"
+        description="Clean all intermediate products">
+
+        <delete dir="${app.dir}"/>
+    </target>
+
+</project>
