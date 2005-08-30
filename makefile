@@ -15,6 +15,7 @@ java:
 
 javaclean:
 	ant clean
+	ant -f build-PLA.xml clean
 
 src-zip:
 	ant zip
@@ -22,7 +23,7 @@ src-zip:
 doc: 
 	ant api-g2d
 	ant api-GUI
-	ant api-pla
+	ant -f build-PLA.xml api-pla
 
 clean: javaclean
 	cd src; make clean
@@ -36,11 +37,11 @@ ianstall:
 
 install-PLA:
 	@echo -e "OBSOLETE! Please run instead: (see README.txt)"
-	@echo -e "  > ant install-PLA [-DGUI={old,new}] [-DPLdir=<PL dir>]"
+	@echo -e "  > ant -f build-PLA.xml install [-DGUI={old,new}] [-DPLdir=<PL dir>]"
 
 run-PLA:
 	@echo -e "OBSOLETE! Please run instead: (see README.txt)"
-	@echo -e "  > ant run-PLA [-DPLdir=<PL dir>]"
+	@echo -e "  > ant -f build-PLA.xml run [-DPLdir=<PL dir>]"
 
 webdoc:
 	ant api-g2d
