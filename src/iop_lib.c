@@ -325,8 +325,9 @@ static actor_spec *launchMaude(int argc, char** argv){
   return launchActor(1, "maude", maude_exe, maude_argv);
 }
 
-char* iop_alloc_jarpath(char* code_dir, char* who){
-  char *retval = calloc(strlen(code_dir) + strlen(JARPATH) + 1, sizeof(char));
+char* iop_alloc_jarpath(char* code_dir, char* who, char* classpath){
+  int len = (classpath == NULL) ? 0 : strlen(classpath) + 1;
+  char *retval = calloc(len + strlen(code_dir) + strlen(JARPATH) + 1, sizeof(char));
   if(retval == NULL){
     fprintf(stderr, 
 	    "calloc failed in iop_alloc_jarpath called by %s: %s\n",
@@ -334,6 +335,10 @@ char* iop_alloc_jarpath(char* code_dir, char* who){
   } else {
     strcpy(retval, code_dir);
     strcat(retval, JARPATH);
+    if(len > 0){
+      strcat(retval, ":");
+      strcat(retval, classpath);
+    }
   }
   return retval;
 }
@@ -374,7 +379,7 @@ static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
     input_argv[8] = pid_str;
     input_argv[9] = port_str;
   }
-  if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI")) == NULL){
+  if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI", NULL)) == NULL){
     exit(EXIT_FAILURE);
   }
   if(self_debug_flag)printArgv(stderr, input_argc, input_argv, "input_argv");
