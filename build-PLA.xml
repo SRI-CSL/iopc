@@ -232,7 +232,7 @@
             <filterset>
                 <filter token="GUI" value="${load.cmd}"/>
                 <filter token="IOPBINDIR" value="${install.dir}"/>
-                <filter token="CLASSPATH" value="${maude.lib}/IPLA/pla.jar"/>
+                <filter token="CLASSPATH" value="-cp ${maude.lib}/IPLA/pla.jar"/>
                 <filter token="DEBUG" value="${debug.options}"/>
                 <filter token="MACOPTIONS" value="${mac.options}"/>
             </filterset>
