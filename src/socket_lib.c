@@ -35,11 +35,7 @@ int *acceptSocket(int listenSocket, char **comments){
   char *buff = (char *)calloc(BUFFSZ,sizeof(char));
   char *hostname;
   struct sockaddr_in from;
-#if defined(_LINUX) || defined(_TIGER)
   socklen_t fromlen = sizeof(from);
-#else
-  int fromlen = sizeof(from);
-#endif
   struct hostent *hostptr;
   if((retval == NULL) || (buff == NULL)){
     fprintf(stderr, "calloc failed in acceptSocket\n");
