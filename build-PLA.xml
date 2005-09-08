@@ -269,6 +269,73 @@
     </target>
 
     <!-- ******************************************************************** -->
+    <!-- distributable targets:                                                  -->
+    <!-- ******************************************************************** -->
+
+    <!-- targets to retrieve and update version number from svn -->
+    <target name="retrieve.version" >
+        <exec executable="svn"
+            failifexecutionfails="false"
+            output="rev.properties">
+            <arg line="info"/>
+        </exec>
+        <available file="rev.properties"
+            property="rev.properties.present"/>
+    </target>
+    <target name="extract.version"
+        depends="retrieve.version"
+        if="rev.properties.present" >
+        <loadproperties srcFile="rev.properties">
+            <filterchain>
+                <linecontains>
+                    <contains value="Revision: "/>
+                </linecontains>
+            </filterchain>
+        </loadproperties>
+        <delete file="rev.properties"/>
+    </target>
+    <target name="substitute.version"
+        depends="extract.version"
+        unless="Revision">
+        <property name="Revision" value="0"/>
+    </target>
+
+    <!-- build a distributable from a clean installation of new GUI PLA -->
+    <target name="distributable"
+        depends="substitute.version"
+        description="Zip up installation for distribution (from clean install)">
+
+        <!-- clean first -->
+        <antcall target="clean"/>
+
+        <!-- run install target with proper flags -->
+        <antcall target="install">
+            <param name="GUI" value="new"/>
+            <param name="DEBUG" value="off"/>
+        </antcall>
+
+        <!-- eliminate unused files from installation -->
+        <delete>
+            <fileset dir="${maude.lib}/PL">
+                <include name="load-ipla.maude"/>
+            </fileset>
+            <fileset dir="${maude.lib}/IPLA">
+                <include name="PlaLib.lsp"/>
+                <include name="*bnet*"/>
+                <include name="HOWTO-lsp.txt"/> 
+            </fileset>
+        </delete>
+
+        <!-- zip up PLA files -->
+        <zip destfile="PLA-v${Revision}.zip">
+            <zipfileset dir="${maude.lib}">
+                <include name="PL/**"/>
+                <include name="IPLA/**"/>
+            </zipfileset>
+        </zip>
+    </target>
+
+    <!-- ******************************************************************** -->
     <!-- deployment targets:                                                  -->
     <!-- ******************************************************************** -->
 
@@ -384,10 +451,17 @@ Creating ${app.dir} bundle using
     <target name="clean"
         description="Clean all intermediate products">
 
+        <!-- compilation and javadoc products -->
         <delete dir="${classes}/pla"/>
         <delete file="${build}/iop.jar"/>
         <delete dir="${doccheck}"/>
         <delete dir="${api-pla}"/>
+
+        <!-- distributable products -->
+        <delete>
+            <fileset dir="." includes="PLA-v*.zip"/>
+        </delete>
+
         <delete dir="${app.dir}"/>
     </target>
 
