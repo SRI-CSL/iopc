@@ -10,6 +10,9 @@ all: java c
 c:
 	cd src; make
 
+debug: c
+	ant -DDEBUG=on
+
 java:
 	ant
 

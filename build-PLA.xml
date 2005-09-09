@@ -20,7 +20,7 @@
     <property name="api-pla" location="${doc}/api-pla"/>
 
     <!-- some global properties for Java compiler -->
-    <property name="DEBUG" value="on"/>
+    <property name="DEBUG" value="off"/>
     <property name="DEPRECATION" value="on"/>
 
     <!-- obtain installation location from environment -->
