@@ -15,7 +15,7 @@ if(!$zipfile){
     die "Sorry but I can't find my zip file!\n";
 }
 
-if(defined $iopbindir){
+if(defined($iopbindir) && $iopbindir){
 print <<END_OF_INTROA;
 Welcome to the IOP installer. 
 
