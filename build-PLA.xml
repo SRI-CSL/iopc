@@ -327,10 +327,14 @@
         </delete>
 
         <!-- zip up PLA files -->
-        <zip destfile="PLA-v${Revision}.zip">
+        <zip destfile="IPLA-v${Revision}.zip">
+            <zipfileset dir="${maude.lib}">
+                <include name="IPLA/**"/>
+            </zipfileset>
+        </zip>
+        <zip destfile="PL-v${Revision}.zip">
             <zipfileset dir="${maude.lib}">
                 <include name="PL/**"/>
-                <include name="IPLA/**"/>
             </zipfileset>
         </zip>
     </target>
