@@ -41,7 +41,7 @@ if(!defined $path){ $path = ""; }
 my @path = split /:/, $path;
 my $OK = 0;
 foreach my $dir (@path){
-    if($dir eq $dir){ $OK = 1; last; }
+    if($dir eq $iopbindir){ $OK = 1; last; }
 }
 
 if(!$OK){
