@@ -159,6 +159,7 @@
             <equals arg1="${GUI}" arg2="old" casesensitive="false"/>
         </condition>
         <!-- debug.options -->
+        <property name="debug.options" value="" /> <!-- default is empty -->
         <condition property="debug.options"
             value="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8888">
             <and>
@@ -166,25 +167,14 @@
                 <equals arg1="${DEBUG}" arg2="on" casesensitive="false"/>
             </and>
         </condition>
-        <condition property="debug.options"
-            value="">
-            <not>
-                <and>
-                    <os family="mac"/>
-                    <equals arg1="${DEBUG}" arg2="on" casesensitive="false"/>
-                </and>
-            </not>
-        </condition>
         <!-- mac.options -->
+        <property name="mac.options" value="" /> <!-- default is empty -->
         <condition property="mac.options"
             value="-Xdock:name=PLA -Dcom.apple.mrj.application.growbox.intrudes=false">
-            <os family="mac"/>
-        </condition>
-        <condition property="mac.options"
-            value="">
-            <not>
+            <and>
                 <os family="mac"/>
-            </not>
+                <equals arg1="${DEBUG}" arg2="on" casesensitive="false"/>
+            </and>
         </condition>
     </target>
 
@@ -232,7 +222,7 @@
             <filterset>
                 <filter token="GUI" value="${load.cmd}"/>
                 <filter token="IOPBINDIR" value="${install.dir}"/>
-                <filter token="CLASSPATH" value="-cp ${maude.lib}/IPLA/pla.jar"/>
+                <filter token="CLASSPATH" value="-cp ~/Maude/Lib/IPLA/pla.jar"/> <!-- TODO: use ${maude.lib} or...? -->
                 <filter token="DEBUG" value="${debug.options}"/>
                 <filter token="MACOPTIONS" value="${mac.options}"/>
             </filterset>
@@ -308,10 +298,18 @@
         <!-- clean first -->
         <antcall target="clean"/>
 
+        <!-- define and copy example model to directory -->
+        <property name="example.model" value="PL-05Aug30Demo" />
+        <property name="example.PLdir" location="${maude.lib}/${example.model}" />
+        <copy todir="${example.PLdir}">
+            <fileset dir="${pla.dir}/${example.model}"/>
+        </copy>
+
         <!-- run install target with proper flags -->
         <antcall target="install">
             <param name="GUI" value="new"/>
             <param name="DEBUG" value="off"/>
+            <param name="PLdir" value="${example.PLdir}" />
         </antcall>
 
         <!-- zip up IPLA files -->
@@ -325,10 +323,9 @@
             </zipfileset>
         </zip>
         <!-- zip up example model files -->
-        <zip destfile="PL.zip">
-            <zipfileset dir="${maude.lib}">
-                <include name="PL/**"/>
-                <exclude name="PL/load-ipla.maude"/>
+        <zip destfile="${example.model}.zip">
+            <zipfileset dir="${example.PLdir}">
+                <exclude name="load-ipla.maude"/>
             </zipfileset>
         </zip>
     </target>
