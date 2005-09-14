@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use warnings;
 use strict;
+use File::Path;
 
 my $DMODE = 0755;
 my $FMODE = 0777;
@@ -78,7 +79,8 @@ if(-e $iopbindir){
 	die "This choice conflicts with an already exiting file!\n";
     }
 } else {
-    mkdir($iopbindir, $DMODE) or
+#    mkdir($iopbindir, $DMODE) or
+    mkpath($iopbindir, 1, $DMODE) or
 	die "I couldn't create the desired directory ${iopbindir}: $!\n";
 }
 
