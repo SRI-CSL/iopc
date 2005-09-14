@@ -108,62 +108,24 @@ void printArgv(FILE* file, int argc, char** argv, char* prefix){
   }
 }
 
-
-/*
-//pre-quotes version 05/07/16.
-
-int makeArgv(const char *s, const char *delimiters, char ***argvp){
-  int max;
-  char **argv = NULL;
-  if(argvp == NULL)    
+/* returns 0 if it didn't do something, and 1 if it did */
+int interpretTildes(const char* filename, char **newfilenamep){
+  if((filename == NULL) || 
+     (strchr(filename, '~') != filename) || 
+     (newfilenamep == NULL)){
     return 0;
-  if(s == NULL){
-    *argvp = NULL;
-    return 1;
   } else {
-    int argc = 0, len = strlen(s);
-    if(len == 0){
-      *argvp = NULL;
-      return 1;
-    } else {
-      int start = 0, end = 0;
-      ec_null( argv = calloc(len, sizeof(char *)) );
-      while(s[start] != '\0'){
-	while((s[start] != '\0') &&
-	      (strchr(delimiters, s[start]) != NULL))
-	  start++;
-	if(s[start] == '\0'){
-	  if(argc == 0){
-	    free(argv);
-	    *argvp = NULL;
-	    return argc;
-	  } else {
-	    argv[argc] = NULL;
-	    *argvp = argv;
-	    return argc;
-	  }
-	}
-	end = start;
-	while((s[end] != '\0') &&
-	      strchr(delimiters, s[end]) == NULL)
-	  end++;
-	max = (PATH_MAX < (end - start) + 1) ? (end - start) + 1 : PATH_MAX;
-	ec_null( argv[argc] = calloc(max, sizeof(char)) );
-	strncpy(argv[argc], &s[start], end - start);
-	argv[argc][end - start] = '\0';
-	argc++;
-	start = end;
-      }
-      argv[argc] = NULL;
-      *argvp = argv;
-      return argc;
+    uid_t me = getuid();
+    char *newfilename = (char *)calloc(PATH_MAX, sizeof(char));
+    struct passwd *myEntry = getpwuid(me);
+    if((newfilename == NULL) || (myEntry == NULL)){
+      fprintf(stderr, 
+	      "Failure in interpretTildes: (newfilename == NULL) || (myEntry == NULL) -- %s\n",
+	      strerror(errno));
+      return 0;
     }
+    snprintf(newfilename, PATH_MAX, "%s%s", myEntry->pw_dir, filename + 1);
+    *newfilenamep = newfilename;
+    return 1;
   }
-
-EC_CLEANUP_BGN
-  (void)free(argv);
-  return 0;
-EC_CLEANUP_END
 }
-
-*/

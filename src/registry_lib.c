@@ -1051,11 +1051,23 @@ char* registryLaunchActor(char* name, int argc, char** argv){
   argv[0] = spec->name;
 
   for(i = 0; i < argc; i++){
+    char* newarg;
+    int tilde = interpretTildes(argv[i], &newarg);
+    if(tilde){
+      strncpy(argv[i], newarg, PATH_MAX);
+      free(newarg);
+      continue;
+    }
     if(!strcmp(argv[i], FIFO_IN)){
       strncpy(argv[i], registry_fifo_in, PATH_MAX);
     } else if(!strcmp(argv[i], FIFO_OUT)){
       strncpy(argv[i], registry_fifo_out, PATH_MAX);
-    } else if(!strcmp(argv[i], IOP_BIN_DIR)){
+    } else if(
+	      !strcmp(argv[i], IOP_DENV_VAR)  ||
+	      !strcmp(argv[i], IOP_DBENV_VAR) ||
+	      !strcmp(argv[i], IOP_DPENV_VAR) ||
+	      !strcmp(argv[i], IOP_BIN_DIR)
+	      ){
       strncpy(argv[i], iop_bin_dir, PATH_MAX);
     }
   }

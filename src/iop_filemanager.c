@@ -30,9 +30,9 @@
 #include "iop_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
+#include "argv.h"
 
 
-static int interpretTildes(const char* filename, char **newfilenamep);
 
 static int requestNo = 0;
 
@@ -210,25 +210,3 @@ int main(int argc, char** argv){
   }
 }
 
-/* returns 0 if it didn't do something, and 1 if it did */
-static int interpretTildes(const char* filename, char **newfilenamep){
-  if((filename == NULL) || 
-     (strchr(filename, '~') != filename) || 
-     (newfilenamep == NULL)){
-    announce("Didn't interpret any tildes\n");
-    return 0;
-  } else {
-    uid_t me = getuid();
-    char *newfilename = (char *)calloc(PATH_MAX, sizeof(char));
-    struct passwd *myEntry = getpwuid(me);
-    if((newfilename == NULL) || (myEntry == NULL)){
-      fprintf(stderr, 
-	      "Failure in interpretTildes: (newfilename == NULL) || (myEntry == NULL) -- %s\n",
-	      strerror(errno));
-      return 0;
-    }
-    sprintf(newfilename, "%s%s", myEntry->pw_dir, filename + 1);
-    *newfilenamep = newfilename;
-    return 1;
-  }
-}
