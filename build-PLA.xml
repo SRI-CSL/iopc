@@ -314,27 +314,21 @@
             <param name="DEBUG" value="off"/>
         </antcall>
 
-        <!-- eliminate unused files from installation -->
-        <delete>
-            <fileset dir="${maude.lib}/PL">
-                <include name="load-ipla.maude"/>
-            </fileset>
-            <fileset dir="${maude.lib}/IPLA">
-                <include name="PlaLib.lsp"/>
-                <include name="*bnet*"/>
-                <include name="HOWTO-lsp.txt"/> 
-            </fileset>
-        </delete>
-
-        <!-- zip up PLA files -->
+        <!-- zip up IPLA files -->
         <zip destfile="IPLA-v${Revision}.zip">
             <zipfileset dir="${maude.lib}">
                 <include name="IPLA/**"/>
+                <!-- exclude old and unused files -->
+                <exclude name="IPLA/PlaLib.lsp"/>
+                <exclude name="IPLA/*bnet*"/>
+                <exclude name="IPLA/HOWTO-lsp.txt"/>
             </zipfileset>
         </zip>
-        <zip destfile="PL-v${Revision}.zip">
+        <!-- zip up example model files -->
+        <zip destfile="PL.zip">
             <zipfileset dir="${maude.lib}">
                 <include name="PL/**"/>
+                <exclude name="PL/load-ipla.maude"/>
             </zipfileset>
         </zip>
     </target>
@@ -463,7 +457,8 @@ Creating ${app.dir} bundle using
 
         <!-- distributable products -->
         <delete>
-            <fileset dir="." includes="PLA-v*.zip"/>
+            <fileset dir="." includes="IPLA-v*.zip"/>
+            <fileset dir="." includes="PL*.zip"/>
         </delete>
 
         <delete dir="${app.dir}"/>
