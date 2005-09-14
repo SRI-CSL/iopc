@@ -5,7 +5,7 @@ use strict;
 my $DMODE = 0755;
 my $FMODE = 0777;
 
-my $zipfile = <IOP*.zip>;
+my $zipfile = <IOP-v*.zip>;
 if(!$zipfile){
     die "Sorry but I can't find my zip file!\n";
 }
@@ -82,7 +82,7 @@ if(-e $iopbindir){
 	die "I couldn't create the desired directory ${iopbindir}: $!\n";
 }
 
-print `unzip -d $iopbindir $zipfile`;
+print `unzip -d "$iopbindir" $zipfile`;
 
 }
 
