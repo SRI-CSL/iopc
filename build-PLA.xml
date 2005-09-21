@@ -448,7 +448,7 @@ Creating ${app.dir} bundle using
 
         <!-- compilation and javadoc products -->
         <delete dir="${classes}/pla"/>
-        <delete file="${build}/iop.jar"/>
+        <delete file="${build_lib}/pla.jar"/>
         <delete dir="${doccheck}"/>
         <delete dir="${api-pla}"/>
 
