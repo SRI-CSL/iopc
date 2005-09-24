@@ -686,12 +686,17 @@ static void shutdownActor(actor_id *act){
   }
   if(act->spec->pid > 0){
     for(i = 0; i < 3; i++){
+#ifndef _MAC
       if(act->fds[i] > 0){ close(act->fds[i]); }
+#endif
+    }
+    for(i = 0; i < 3; i++){
       if(unlink(act->spec->fifos[i]) < 0){
 	perror("Unlink in shutdownActor failed");
       }
     }
-    kill(act->spec->pid, SIGINT);
+    if(strcmp(act->spec->name, REGISTRY_ACTOR))    
+      kill(act->spec->pid, SIGINT);
   }
 }
 
@@ -720,8 +725,9 @@ static void shutdownRegistry(){
 void bail(){
   int i;
   for(i = 0; i < theRegistrySize; i++){
-    if(theRegistry[i] != NULL)
+    if(theRegistry[i] != NULL){
       shutdownActor(theRegistry[i]);
+    }
   }
   if(unlink(registry_fifo_in) < 0){
     perror("Unlink of REGISTRY_FIFO_IN failed");
@@ -729,11 +735,9 @@ void bail(){
   if(unlink(registry_fifo_out) < 0){
     perror("Unlink of REGISTRY_FIFO_IN failed");
   }
-  
   if(unlink(errorsFileName) < 0){
     perror("Unlink of errorsFileName failed");
   }
-
   if(!iop_no_windows_flag){
     if(unlink(javaErrorsFileName) < 0){
       perror("Unlink of javaErrorsFileName failed");
