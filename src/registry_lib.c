@@ -705,7 +705,9 @@ void deleteActor(actor_id *act){
   act->exitFlag = 1;
   if(act->spec->pid > 0){
     for(i = 0; i < 3; i++){
+#ifndef _MAC
       if(act->fds[i] > 0){ close(act->fds[i]); }
+#endif
       if(unlink(act->spec->fifos[i]) < 0){
 	fprintf(stderr, 
 		"Unlink of %s in deleteActor failed: %s\n", 
