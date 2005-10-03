@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=us-ascii">
+
+  <title>Installation Notes</title>
+</head>
+
+<body>
+
+<p>The Pathway Logic Assistant (PLA) relies on several programs that must
+be installed to use it. Below are instructions for obtaining those
+programs that you don't already have. Followed by the very simple
+instructions for installing and running PLA.  Hopefully you won't be
+discouraged.   As PLA matures, installation will get simpler,
+and once you have all the auxilliaries, updates will be easy!</p>
+
+
+<hr>
+<h2>Maude</h2>
+
+<p>Documentation and papers are available at <A HREF="http://maude.cs.uiuc.edu">http://maude.cs.uiuc.edu</a></p>
+
+<p>Currently you need an Alpha release as some of the features needed
+are not yet in the official release on the Maude website.
+You can get Maude Alpha releases from the alpha release site 
+<A HREF="http://www.csl.sri.com/~eker/Maude/">http://www.csl.sri.com/~eker/Maude/</a> using the following authentication:</p>
+
+<p>
+User Name: maudeabuser<br>
+Password: bughunter
+</p>
+
+<p>Select the Alpha86a release directories.</p>
+
+<p>Download
+  <ul>
+    <li>maude.&lt;platform&gt;  (linux or darwin)</li>
+    <li>prelude.maude</li>
+    <li>model-checker.maude</li>
+  </ul>
+and put them in one directory  (for example ~/Maude/bin/). Make sure that maude.&lt;platform&gt; is executable, e.g. by using this command
+<pre>
+  $> chmod a+x maude.&lt;platform&gt;
+</pre>
+</p>
+
+<p>Set the MAUDE_LIB environment variable to include 
+the directory where you put Maude and associated files.
+For example, users running a csh or tcsh might add
+<pre>
+  setenv MAUDE_LIB ${HOME}/Maude/bin
+</pre>
+to their .cshrc file.  Users running sh or bash would use
+<pre>
+  export MAUDE_LIB=$HOME/Maude/bin
+</pre>
+in their .profile file.</p>
+
+<p>
+Caveat: in this release, 
+your maude binary needs to retain the name maude.&lt;platform&gt;
+for iop to find it.  If you want to call it maude, you can
+define an alias, or make a symbolic link from maude to the actual
+binary.
+<p>
+
+<hr>
+<h2>The IOP Platform</h2>
+
+<p>Caveat, you will need Java 1.4.2 properly installed on your machine.
+For Mac OSX this seems to be automagic.
+For Linux maybe not.</p>
+(If you have upgraded to Java 1.5, you will need to roll back for iop 
+to work, i.e. put the path to Java 1.4 before Java 1.5 in your PATH
+environment variable.)
+<p>
+
+<h3>1.) Download</h3>
+
+<p>From <A HREF="PLresources/">PL resources directory</a>, download IOP-v&lt;number&gt;-&lt;platform&gt;.zip where &lt;platform&gt; is either "macosx"
+or "linux" and it matches your operating system.  Download the installer 
+script <A HREF="PLresources/installer.pl">"installer.pl"</a> to the same location.</p>
+
+<h3>2.) Environment Variables</h3>
+
+<p>Before you run the installer you must set your IOBINDIR environment
+variable to the path where you would like the binaries to go.
+~/bin/IOP is a good choice.  Furthermore, IOPBINDIR must be
+in your PATH environment variable.<p>
+
+<h3>3.) Run installer</h3>
+
+<p>Make sure that the installer script is executable.  To ensure this, you 
+may run from the command line in the directory where you downloaded items
+from step 1.)
+<pre>
+  $> chmod a+x installer.pl
+</pre>
+</p>
+
+<p>Run the installer script from the command line (in the directory where 
+you downloaded items) using this command
+<pre>
+  $> ./installer.pl
+</pre>
+and follow the instructions of the installer.</p>
+
+<p>To test the installation (if you use tcsh, do "rehash" first), do from the command line
+<pre>
+  $> which iop
+</pre>
+which should print the location of the IOP installation.</p>
+
+<h3>4.) Install "dot" </h3>
+
+<p>For IOP to support PLA you need to have the GraphViz program dot
+installed.  If you do not have dot already you can get dot only
+by downloading one of these .zip files:
+    <ul>
+      <li><A HREF="PLresources/Dot4Linux.zip">Dot4Linux.zip</a></li>
+      <li><A HREF="PLresources/Dot4Mac.zip">Dot4Mac.zip</a> (Mac OS X 10.4 Tiger)</li>
+      <li><A HREF="PLresources/Dot4Panther.zip">Dot4Panther.zip</a> (Mac OS X 10.3 Panther)</li>
+    </ul>
+</p>
+
+<p>Unzip and follow instructions in README.txt.
+You need to have X11 installed as dot relies on some X11 libraries.
+You can also install a proper GraphViz.  For Mac OS X, see 
+<A HREF="PLresources/install-dot-mac.txt">install-dot-mac.txt</a>.  Or see the GraphViz
+website: <A HREF="http://www.graphviz.org"> http://www.graphviz.org</a></p>
+
+
+
+
+<hr>
+<h2>Pathway Logic Assistant</h2>
+
+<h3>1.) Installation of PLA</h3>
+
+<p>Download the file IPLA-v&lt;number&gt;.zip from the <A HREF="PLresources/">PL resources directory</a>.
+In this file name, &lt;number&gt; denotes a version number.  Create a directory
+~/Maude/Lib if you don't already have one.  Unzip the file in this directory,
+which creates a new subdirectory called "IPLA".</p>
+
+<h3>2.) Obtaining a model</h3>
+
+<p>One or models will be available in  the PL resources directory. 
+They can be recognized as zip files with names beginning with PL.
+Download a file PL-&lt;model-id&gt;.zip, unzip this file anywhere you like. 
+Unzipping will create a new subdirectory called "PL-&lt;model-id&gt;".</p>
+
+<h3>3.) Running PLA</h3>
+
+<p>To run PLA, change into one of your model folders and execute the shell
+command "iop".  To suppress the InterOperability Platform console window
+called  "GUI.Editor" use the following command:
+<pre>
+  $> iop -n
+</pre>
+</p>
+
+<p>
+The file PL-05Aug30-guide.txt in the PL resources directory
+contains a guide for getting started with PLA in connection with
+the model contained in PL-05Aug30.zip in that same directory.
+</p>
+
+<h3>4.) Customizing or writing your own model</h3>
+
+<p>Download a model .zip file from the web page or create your own set of .maude files 
+that constitute a valid Pathway Logic model.  As a minimum, you need the following 4 files:
+<ul>
+      <li>components.maude</li>
+      <li>qq.maude</li>
+      <li>rules.maude</li>
+      <li>theops.maude</li>
+</ul>
+</p>
+
+<p>Crucially, with the module QQ defined in qq.maude and including
+the modules defined in the other files.</p>
+
+<p>Make sure that you copy 2 files from the example model into your other model 
+directories if they are not already included in the directory:
+<ul>
+      <li>startup.txt</li>
+      <li>load-pla.maude</li>
+</ul>
+</p>
+
+<p>Then, one can customize the model in your own PL directory by copying from the
+example model and editing the file "predef-dishes.lsp" in a text editor.  
+This file is used to initialize the menu items for predefined dishes in PLA. </p>
+
+<p>Replace the predefined dish names with names of dishes in your  "qq.maude" 
+file.  Be careful with spelling and capitalization!  E.g., if you have 
+something like the following defined in your "qq.maude"
+<pre>
+  op hmec-model : -> Dish .
+  eq hmec-model = PD(
+  [...] )
+</pre>
+you may want to add the line
+<pre>
+  "hmec-model"
+</pre>
+(with the double quotes!) into the list of predefined dishes.  You may leave
+the list of predefined dishes empty or choose to delete the file
+predef-dishes.lsp altogether.</p>
+
+<p>Finally, a file called "input.txt" in the model directory is used when
+starting PLA with a console. This file is intended for expert users and can be
+omitted.</p>
+
+<hr>
+
+<p>You can find a small tutorial on Maude and PLA
+at <A HREF="PLresources/PLATutorial.zip">PLATutorial.zip</a>.  Enjoy!</p>
+
+
+<hr>
+
+</body>
+</html>
