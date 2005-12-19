@@ -60,7 +60,7 @@ int make_arguments(int argcIn, char** argvIn, char*** argvOut){
   }
   if((cpIndex < 0) || (classpath == NULL)){
     /* no usable classpath passed in */
-    argcO = argcIn + 4;
+    argcO = argcIn + 5;
     ec_null( argvO = calloc(argcO, sizeof(char*)) );
     argvO[0] = "java";
     argvO[1] = "-cp";
@@ -72,10 +72,11 @@ int make_arguments(int argcIn, char** argvIn, char*** argvOut){
     }
     argvO[argcIn + 1] = "g2d.Main";
     argvO[argcIn + 2] = self;
-    argvO[argcIn + 3] = NULL;
+    argvO[argcIn + 3] = argvIn[1];
+    argvO[argcIn + 4] = NULL;
 
   } else {
-    argcO = argcIn + 2;
+    argcO = argcIn + 3;
     ec_null( argvO = calloc(argcO, sizeof(char*)) );
     argvO[0] = "java";
     for(i = 1; i < cpIndex; i++){
@@ -90,7 +91,8 @@ int make_arguments(int argcIn, char** argvIn, char*** argvOut){
     }
     argvO[argcIn - 1] = "g2d.Main";
     argvO[argcIn] = self;
-    argvO[argcIn + 1] = NULL;
+    argvO[argcIn + 1] = argvIn[1];
+    argvO[argcIn + 2] = NULL;
   }
   *argvOut = argvO;
   return argcO;
