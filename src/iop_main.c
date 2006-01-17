@@ -52,8 +52,8 @@ int main(int argc, char** argv){
   announce("iop_port                  = %s\n", iop_port);
   
   if(iop_server_mode){
-    if(iop_port == NULL){
-      fprintf(stderr, "Usage: iop -sp <portno>\n");
+    if((iop_port == NULL) || (atoi(iop_port) == 0)){
+      fprintf(stderr, "Usage: iop -s <portno>\n");
       exit(EXIT_FAILURE);
     } else {
       spawnServer(argc, argv);

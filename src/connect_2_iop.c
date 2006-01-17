@@ -22,33 +22,31 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#define CHATTER                   0
+#include "cheaders.h"
+#include "constants.h"
+#include "types.h"
+#include "socket_lib.h"
+#include "externs.h"
 
-#define EXECUTOR_DEBUG            0
-#define FILEMANAGER_DEBUG         0
-#define HTTPLISTEN_DEBUG          0
-#define IOP_DEBUG                 0
-#define IOP_LIB_DEBUG             0
-#define LISTENER_DEBUG            0
-#define LISTEN2IOP_DEBUG          1
-#define SERVER_DEBUG              1
-#define LOCKS_DEBUG               0
-/*
-  WARNING: Turning on both MSG_DEBUG and
-  REGISTRY_DEBUG can cause error messages
-  to cause error messages, which results in
-  SILENCE!
-*/
-#define MSG_DEBUG                 0
-#define REGISTRY_DEBUG            0  
-#define SOCKET_DEBUG              0
-#define SOCKETFACTORY_DEBUG       0
-#define WRAPPER_DEBUG             0
-#define MAUDE_WRAPPER_DEBUG       0
-#define SAL_ACTOR_DEBUG           0
-#define SALSPAWNER_DEBUG          0
-#define SALWRAPPER_DEBUG          0
-#define PVS_ACTOR_DEBUG           0
-#define G2D_ACTOR_DEBUG           0
+int main(int argc, char** argv){
+  pthread_t outThreadhandle;
+  pthread_t inThreadhandle;
+  unsigned short port;  
+  char *host;
+  int socket;
+  if(argc != 3) {
+    fprintf(stderr, "Usage: %s host port\n", argv[0]);
+    return -1;
+  }
+  host = argv[1];
+  port = atoi(argv[2]);
+  if(allocateSocket(port, host, &socket) != 1)
+    return 0;
+  pthread_create(&outThreadhandle, NULL, in2socket, &socket);
+  pthread_create(&inThreadhandle, NULL, socket2outViolent, &socket);
 
+  pthread_join(outThreadhandle, NULL);
+  pthread_join(inThreadhandle, NULL);
 
+  return 0;
+}

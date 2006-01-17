@@ -16,13 +16,15 @@ CFLAGS =  -Wall -pthread -D_LINUX -pedantic
 endif
 
 
-EXE = iop_executor\
+EXE = connect_2_iop\
+      iop_executor\
       iop_registry\
       iop_main\
       iop_filemanager\
       iop_socketfactory\
       iop_listener\
       iop_socket\
+      iop_server\
       iop_graphics2d_wrapper\
       iop_pvs_wrapper\
       iop_maude_wrapper\
