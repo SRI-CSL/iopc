@@ -61,7 +61,7 @@ static actor_spec *launchGraphics2d(char* code_dir);
 static actor_spec *launchExecutor(void);
 static actor_spec *launchFilemanager(void);
 static actor_spec *launchSocketfactory(void);
-static actor_spec *launchRemoteApplet(int remoteFd);
+static actor_spec *launchRemoteActor(int remoteFd);
 /* static actor_spec *launchPVS(void); */
 static char** mkRegistryArgv(int, char**, char*, char*, char*, char*, char*);
 static void iop_sigint_handler(int);
@@ -242,7 +242,7 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
   if(iop_hardwired_actors_flag && launchSocketfactory() == NULL) goto bail;
 
-  if((remoteFd > 0) && (launchRemoteApplet(remoteFd) == NULL)) goto bail;
+  if((remoteFd > 0) && (launchRemoteActor(remoteFd) == NULL)) goto bail;
 
   /* 
      if(iop_hardwired_actors_flag && launchPVS() == NULL) goto bail;
@@ -423,15 +423,15 @@ static actor_spec *launchSocketfactory(){
   return launchActor(1, "socketfactory", socketfactory_exe, socketfactory_argv);
 }
 
-static actor_spec *launchRemoteApplet(int remoteFd){
+static actor_spec *launchRemoteActor(int remoteFd){
   char  fdString[SIZE];
-  char  remoteApplet_exe[] = "iop_remoteApplet";
-  char* remoteApplet_argv[] = {"graphics", NULL, NULL, NULL, NULL};
+  char  remoteActor_exe[] = "iop_remote_actor";
+  char* remoteActor_argv[] = {"iop_remote_actor", NULL, NULL, NULL, NULL};
   sprintf(fdString, "%d", remoteFd);
-  remoteApplet_argv[1] = fdString;
-  remoteApplet_argv[2] = registry_fifo_in;
-  remoteApplet_argv[3] = registry_fifo_out;
-  return launchActor(1, "remoteApplet", remoteApplet_exe, remoteApplet_argv);
+  remoteActor_argv[1] = fdString;
+  remoteActor_argv[2] = registry_fifo_in;
+  remoteActor_argv[3] = registry_fifo_out;
+  return launchActor(1, "remoteActor", remoteActor_exe, remoteActor_argv);
 }
 
 /*
