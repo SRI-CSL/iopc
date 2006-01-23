@@ -30,7 +30,7 @@
 #define IOP_DEBUG                 0
 #define IOP_LIB_DEBUG             0
 #define LISTENER_DEBUG            0
-#define LISTEN2IOP_DEBUG          1
+#define LISTEN2IOP_DEBUG          0
 #define SERVER_DEBUG              1
 #define LOCKS_DEBUG               0
 /*

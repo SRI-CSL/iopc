@@ -12,7 +12,7 @@ else
 #Linux flags
 SCRIPT = linux_iop
 LIBS =  -lm 
-CFLAGS =  -Wall -pthread -D_LINUX -pedantic
+CFLAGS =  -Wall -pthread -D_LINUX -pedantic -g 
 endif
 
 

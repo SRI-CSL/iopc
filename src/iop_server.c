@@ -92,6 +92,16 @@ int main(int argc, char *argv[]){
     /*
       spawn dedicated iop process
     */
+
+    fprintf(stderr, 
+	    "Spawning [%s %s %s %s %s]\n", 
+	    iop_argv[0],
+	    iop_argv[1],
+	    iop_argv[2],
+	    iop_argv[3],
+	    iop_argv[4]);
+
+
     spawnProcess(iop_argv[0], iop_argv);
     close(*sockp);
     free(sockp);
