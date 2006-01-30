@@ -16,7 +16,7 @@ CFLAGS =  -Wall -pthread -D_LINUX -pedantic -g
 endif
 
 
-EXE = connect_2_iop\
+EXE = talk2iop\
       iop_executor\
       iop_registry\
       iop_main\
@@ -28,6 +28,7 @@ EXE = connect_2_iop\
       iop_graphics2d_wrapper\
       iop_pvs_wrapper\
       iop_maude_wrapper\
+      iop_remote_actor\
       iop_sal_actor\
       iop_sal_spawner\
       iop_sal_wrapper

@@ -16,9 +16,6 @@ debug: c
 java:
 	ant
 
-javaclean:
-	ant clean
-
 src-zip:
 	ant zip
 
@@ -26,7 +23,8 @@ doc:
 	ant api-g2d
 	ant api-GUI
 
-clean: javaclean
+clean: 
+	ant clean
 	cd src; make clean
 
 install:
@@ -39,4 +37,3 @@ ianstall:
 webdoc:
 	ant api-g2d
 	cp -r doc/api-g2d/*  ~iop/public_html/GraphicsActor2D/doc/
-
