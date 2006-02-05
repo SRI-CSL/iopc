@@ -7,12 +7,16 @@ ifneq (,$(findstring Darwin,$(shell uname )))
 #Mac flags
 SCRIPT = mac_iop
 CFLAGS =  -Wall -D_MAC
+# add to CFLAGS for debugging:
+# -g 
 LIBS = -lpthread -lm 
 else
 #Linux flags
 SCRIPT = linux_iop
 LIBS =  -lm 
-CFLAGS =  -Wall -pthread -D_LINUX -pedantic -g 
+CFLAGS =  -Wall -pthread -D_LINUX -pedantic
+# add to CFLAGS for debugging:
+# -g 
 endif
 
 
