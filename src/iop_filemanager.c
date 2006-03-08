@@ -37,6 +37,7 @@
 static int requestNo = 0;
 
 static mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+
 int main(int argc, char** argv){
   msg *messageIn = NULL, *messageOut = NULL;
   int byteswritten;

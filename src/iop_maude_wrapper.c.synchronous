@@ -38,7 +38,6 @@ static char maude_exe[] = "maude.linux";
 #elif defined(_MAC)
 static char maude_exe[] = "maude.darwin";
 #endif
-
 static char* maude_argv[] = {"maude", "-no-tecla", "-interactive", NULL};
 
 static void chld_handler(int sig){
@@ -46,18 +45,6 @@ static void chld_handler(int sig){
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }
 
-
-static int child_STDIN_FILENO  = STDIN_FILENO;
-static int child_STDOUT_FILENO = STDOUT_FILENO;
-static int child_STDERR_FILENO = STDERR_FILENO;
-
-
-static void *echoMaude(void *arg){
-  while(1){
-    announce("Listening to Maude\n");
-    wait4IO(child_STDOUT_FILENO, child_STDERR_FILENO, parseMaudeThenEcho);
-  }
-}
 
 
 int main(int argc, char** argv){
@@ -93,39 +80,34 @@ int main(int argc, char** argv){
     /* end of child code */
   } else { 
     /* i'm the boss */
-    pthread_t echoMaudeThread;
     char cmdBuff[PATH_MAX + SIZE];
     int len;
     
     ec_neg1( close(pin[0]) );
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
-
-    child_STDIN_FILENO  = pin[1];
-    child_STDOUT_FILENO = pout[0];
-    child_STDERR_FILENO = perr[0];
     
-    if(pthread_create(&echoMaudeThread, NULL, echoMaude, NULL)){
-      fprintf(stderr, "Could not spawn echoMaude thread\n");
-      return -1;
-    }
-
+    wait4IO(pout[0], perr[0], parseMaudeThenEcho);
+    
     if(argc == 3){
       announce("%s\t:\tloading %s\n", argv[0], argv[2]); 
       
       sprintf(cmdBuff, "load %s\n", argv[2]);
       len = strlen(cmdBuff);
-      if(write(child_STDIN_FILENO, cmdBuff, len) !=  len){
+      if(write(pin[1], cmdBuff, len) !=  len){
 	fprintf(stderr, "write failed of \"%s\" command", cmdBuff);
 	/* forge on, notify registry, die calmly? */
 	exit(EXIT_FAILURE);
       };
       announce(cmdBuff);
+      wait4IO(pout[0], perr[0], parseMaudeThenEcho);
     }
           
     while(1){
       announce("Listening to IO\n");
-      echo2Maude(STDIN_FILENO, child_STDIN_FILENO);
+      echo2Maude(STDIN_FILENO, pin[1]);
+      announce("Listening to Maude\n");
+      wait4IO(pout[0], perr[0], parseMaudeThenEcho);
     }
   } /* end of boss code */
 
