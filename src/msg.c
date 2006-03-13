@@ -167,8 +167,18 @@ EC_CLEANUP_END
 msg* readMaudeMsg(int fd){
   char prompt[] = "Maude> ";
   char *promptPointer = NULL;
-  int bytes = 0, iteration = 0;
-  msg* retval = makeMsg(BUFFSZ);
+  int bytes = 0, iteration = 0, continuation = 0;
+  msg* retval;
+  static msg* next = NULL;
+  if(next == NULL){ 
+    retval = makeMsg(BUFFSZ);
+  } else {
+    continuation = 1;
+    retval = next;
+  }
+  
+  next = NULL;
+
   if(retval == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
     goto fail;
@@ -176,8 +186,15 @@ msg* readMaudeMsg(int fd){
 
   while(1){
     char buff[BUFFSZ];
-    eM("readMaudeMsg\t:\tcommencing a read\n");
+    
+    if(continuation){
+      continuation = 0;
+      goto checkprompt;
+    }
+    
   restart:
+
+    eM("readMaudeMsg\t:\tcommencing a read\n");
     if((bytes = read(fd, buff, BUFFSZ)) < 0){
       eM("readMaudeMsg\t:\tread error read returned %d bytes\n", bytes);
       if(errno == EINTR){
@@ -199,48 +216,36 @@ msg* readMaudeMsg(int fd){
       goto fail;
     }
 
-    iteration++;
 
-    if((promptPointer = strstr(retval->data, prompt)) != NULL){
-      fd_set readset;
-      struct timeval delay;
-      int sret;
-      eM("readMaudeMsg\t:\tsaw the prompt, making sure!\n");
-      FD_ZERO(&readset);
-      FD_SET(fd, &readset);
-      delay.tv_sec = 0;
-      delay.tv_usec = 0;
-      sret = select(fd + 1, &readset, NULL, NULL, &delay);
-      if(sret < 0){
-	fprintf(stderr, "readMaudeMsg\t:\tselect error\n");
-	goto fail;
-      } else if(sret == 0){
-	eM("readMaudeMsg\t:\tdefinitely the prompt!\n");
-	break;
-      } else {
-	eM("readMaudeMsg\t:\tsret = %d more coming! TOO CONFUSING\n", sret);
-	fprintf(stderr, "readMaudeMsg getting swamped, bailing out\n");
-	goto fail;
-      }
-    }
+  checkprompt:
+    
+    iteration++;
+    
+    if((promptPointer = strstr(retval->data, prompt)) != NULL){  break; }
 
   }/* while */
 
   if(retval != NULL){
-    eM("readMaudeMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
-    eM("readMaudeMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
-    eM("==================================================\n");
-    promptPointer[0] = '\0';                   /* chomp the prompt I           */
-    retval->bytesUsed -= strlen(prompt)    ;   /* chomp the prompt II          */
-    eM("readMaudeMsg\t:\tretval->bytesUsed = %d\n", retval->bytesUsed);
-    eM("readMaudeMsg\t:\tretval->data = \n\"%s\"\n", retval->data);
-    eM("==================================================\n");
+    int msgLength = (promptPointer - retval->data) ;
+    int datLength = msgLength + strlen(prompt) ;
+    int total = retval->bytesUsed;
+    if(datLength < total) {
+      next = makeMsg(BUFFSZ);
+      addToMsg(next,total - datLength,&(retval->data[datLength]));
+      promptPointer[0] = '\0';             /* chomp the prompt I  */
+      retval->bytesUsed = msgLength;       /* chomp the prompt II */
+    } else {
+      promptPointer[0] = '\0';             /* chomp the prompt I  */
+      retval->bytesUsed -= strlen(prompt); /* chomp the prompt II */
+    }
+
     if((retval->bytesUsed == 0) || 
        ((retval->bytesUsed == 1) && (retval->data[0] == '\n'))){
       sprintf(retval->data, "OK\n");
       retval->bytesUsed = strlen("OK\n");
+      }
     }
-  }
+
   return retval;
 
  fail:
@@ -496,6 +501,22 @@ int writeMsg(int fd, msg* m){
   return 1;
 }
 
+int logMsg(char* filename, msg* message){
+  FILE* fp; 
+  int fno;
+  if(filename != NULL){
+    fp = fopen(filename,"a");
+    if(fp != NULL){
+      fno = fileno(fp) ;
+      write(fno, "start\n", strlen("start\n"));
+      writeMsg(fno, message);
+      write(fno, "stop\n", strlen("stop\n"));
+      fclose(fp);
+      return 1;
+    }
+  }
+  return 0;
+}
 
 int writeInt(int fd, int number){
   int len;

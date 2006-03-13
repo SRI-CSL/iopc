@@ -61,6 +61,7 @@ EC_CLEANUP_END
 
 }
 
+
 void parseMaudeThenEcho(int from, int to){
   msg* message;
   int length;
@@ -68,6 +69,7 @@ void parseMaudeThenEcho(int from, int to){
   message = readMaudeMsg(from);
   announce("parseMaudeThenEcho\t:\treadMaudeMsg returned %d bytes\n", message->bytesUsed);
   if(message != NULL){
+    if(WATCH_MAUDE)logMsg(MAUDE_LOGFILE, message);
     length = parseString(message->data, message->bytesUsed);
     message->bytesUsed = length;
     if(sendMsg(to, message) < 0){

@@ -35,6 +35,7 @@ msg* readMaudeMsg(int fd);
 msg* readPVSMsg(char* prompt, int fd);
 msg* readMsg(int fd);
 int writeMsg(int fd, msg* m);
+int logMsg(char* filename, msg* m);
 
 int writeInt(int fd, int number);
 int readInt(int fd, int* nump);
