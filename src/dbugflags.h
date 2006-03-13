@@ -22,7 +22,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#define WATCH_MAUDE               1
+#define WATCH_MAUDE               0
 #define MAUDE_LOGFILE             "/tmp/maude-out.txt"
 
 #define CHATTER                   0
