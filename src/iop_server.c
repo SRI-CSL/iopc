@@ -29,15 +29,52 @@
 #include "iop_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
+#include "ec.h"
+
+static char logFile[] = "/tmp/iopServerLog.txt";
+static pthread_mutex_t server_log_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+
+static char* time2string(){
+  time_t t;
+  char *date;
+  time(&t);
+  date = ctime(&t);
+  if(date != NULL){
+    char* cr = strchr(date, '\n');
+    if(cr != NULL){ cr[0] = '\t';  }
+  }
+  return date;
+}
+
+void serverLog(const char *format, ...){
+  FILE* logfp = NULL;
+  va_list arg;
+  va_start(arg, format);
+  logfp = fopen(logFile, "aw");
+  if(logfp != NULL){
+    ec_rv( pthread_mutex_lock(&server_log_mutex) );
+    if(SERVER_DEBUG)vfprintf(stderr, format, arg);
+    fprintf(logfp, "%s", time2string());
+    vfprintf(logfp, format, arg);
+    ec_rv( pthread_mutex_unlock(&server_log_mutex) );
+    fclose(logfp);
+  }
+  va_end(arg);
+  return;
+EC_CLEANUP_BGN
+  va_end(arg);
+  return;
+EC_CLEANUP_END
+}
+
 
 static void iop_server_sigchild_handler(int sig){
-  /* for the prevention of zombies */
+  /* for the prevention of zombies and logging statistics */
   pid_t child;
   int status;
   child = wait(&status);
-  if(SERVER_DEBUG)
-    fprintf(stderr, 
-	    "Server waited on child with pid %d with exit status %d\n", 
+  serverLog("Server waited on child with pid %d with exit status %d\n", 
 	    child, status);
 }
 
@@ -55,7 +92,7 @@ int main(int argc, char *argv[]){
   char *iop_executable_dir, *maude_executable_dir;
   int listen_socket, *sockp, no_windows;
   if (argc != 5) {
-    fprintf(stderr, "Usage: %s <port> <iop_executable_dir> <maude_executable_dir> <no_windows>\n", argv[0]);
+    fprintf(stderr, "Usage: %s <port> <iop exe dir> <maude exe dir> <no windows>\n", argv[0]);
     exit(EXIT_FAILURE);
   }
   port = atoi(argv[1]);
@@ -72,19 +109,22 @@ int main(int argc, char *argv[]){
     fprintf(stderr, "Couldn't listen on port %d\n", port);
     exit(EXIT_FAILURE);
   }
-  if(SERVER_DEBUG)fprintf(stderr,"Listening on port %d\n", port);
+  
+  serverLog("Server listening on port %d\n", port);
+  
   while(1){
+    pid_t child;
     char remoteFd[SIZE];
     char *iop_argv[] = {"iop_main", "-r", NULL, NULL, NULL, NULL, NULL};
     description = NULL;
-    if(SERVER_DEBUG)fprintf(stderr, "Blocking on acceptSocket\n");
+    serverLog("Blocking on acceptSocket\n");
     sockp = acceptSocket(listen_socket, &description);
     if (*sockp == INVALID_SOCKET) {
-      fprintf(stderr, description);
+      serverLog("%s", description);
       free(description);
       continue;
     }
-    if(SERVER_DEBUG)fprintf(stderr, description);
+    serverLog("%s", description);
     sprintf(remoteFd, "%d", *sockp);
     iop_argv[2] = remoteFd;
     if(no_windows){
@@ -97,21 +137,24 @@ int main(int argc, char *argv[]){
     }
     /*
       spawn dedicated iop process
+
+    if(SERVER_DEBUG)fprintf(stderr, 
+			    "Spawning [%s %s %s %s %s %s]\n", 
+			    iop_argv[0],
+			    iop_argv[1],
+			    iop_argv[2],
+			    iop_argv[3],
+			    iop_argv[4], 
+			    iop_argv[5]);
+    
     */
 
-    fprintf(stderr, 
-	    "Spawning [%s %s %s %s %s %s]\n", 
-	    iop_argv[0],
-	    iop_argv[1],
-	    iop_argv[2],
-	    iop_argv[3],
-	    iop_argv[4], 
-	    iop_argv[5]);
-
-
-    spawnProcess(iop_argv[0], iop_argv);
+    child = spawnProcess(iop_argv[0], iop_argv);
     close(*sockp);
     free(sockp);
     free(description);
+    if(child > 0){
+      serverLog("Spawned iop process %d\n", child);
+    }
   }
 }

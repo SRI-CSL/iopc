@@ -54,9 +54,8 @@ int *acceptSocket(int listenSocket, char **comments){
   hostname = "unknown";
   if(hostptr != NULL) hostname =(*hostptr).h_name;
   sprintf(buff, 
-          "acceptSocket got connection from:\n\t %s, port %u\n", 
-          hostname,
-	  htons(from.sin_port));
+          "acceptSocket got connection from: %s\n", 
+          hostname);
   *comments = buff;
   return retval;
 }
