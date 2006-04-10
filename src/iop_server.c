@@ -53,15 +53,15 @@ int main(int argc, char *argv[]){
   unsigned short port;
   char *description = NULL;
   char *iop_executable_dir, *maude_executable_dir;
-  int listen_socket, *sockp;
-  if (argc != 4) {
-    fprintf(stderr, "Usage: %s <port> <iop_executable_dir> <maude_executable_dir>\n", argv[0]);
+  int listen_socket, *sockp, no_windows;
+  if (argc != 5) {
+    fprintf(stderr, "Usage: %s <port> <iop_executable_dir> <maude_executable_dir> <no_windows>\n", argv[0]);
     exit(EXIT_FAILURE);
   }
   port = atoi(argv[1]);
   iop_executable_dir = argv[2];
   maude_executable_dir = argv[3];
-
+  no_windows = atoi(argv[4]);
 
   if(iop_server_installHandler() != 0){
     perror("iop_server could not install signal handler");
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
   if(SERVER_DEBUG)fprintf(stderr,"Listening on port %d\n", port);
   while(1){
     char remoteFd[SIZE];
-    char *iop_argv[] = {"iop_main", "-r", NULL, NULL, NULL, NULL};
+    char *iop_argv[] = {"iop_main", "-r", NULL, NULL, NULL, NULL, NULL};
     description = NULL;
     if(SERVER_DEBUG)fprintf(stderr, "Blocking on acceptSocket\n");
     sockp = acceptSocket(listen_socket, &description);
@@ -87,19 +87,26 @@ int main(int argc, char *argv[]){
     if(SERVER_DEBUG)fprintf(stderr, description);
     sprintf(remoteFd, "%d", *sockp);
     iop_argv[2] = remoteFd;
-    iop_argv[3] = iop_executable_dir;
-    iop_argv[4] = maude_executable_dir;
+    if(no_windows){
+      iop_argv[3] = "-n";
+      iop_argv[4] = iop_executable_dir;
+      iop_argv[5] = maude_executable_dir;
+    } else {
+      iop_argv[3] = iop_executable_dir;
+      iop_argv[4] = maude_executable_dir;
+    }
     /*
       spawn dedicated iop process
     */
 
     fprintf(stderr, 
-	    "Spawning [%s %s %s %s %s]\n", 
+	    "Spawning [%s %s %s %s %s %s]\n", 
 	    iop_argv[0],
 	    iop_argv[1],
 	    iop_argv[2],
 	    iop_argv[3],
-	    iop_argv[4]);
+	    iop_argv[4], 
+	    iop_argv[5]);
 
 
     spawnProcess(iop_argv[0], iop_argv);

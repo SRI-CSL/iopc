@@ -98,14 +98,16 @@ EC_CLEANUP_BGN
 EC_CLEANUP_END
 }
 
-void spawnServer(int argc, char** argv){
-  char *server_argv[] = {"iop_server", NULL,  NULL, NULL, NULL};
+void spawnServer(int argc, char** argv, int no_windows){
+  char *server_argv[] = {"iop_server", NULL,  NULL, NULL, NULL, NULL};
   server_argv[1] = iop_port;
   server_argv[2] = argv[argc - 2];
   server_argv[3] = argv[argc - 1];
+  server_argv[4] = (no_windows ? "1" : "0");
+
   fprintf(stderr, 
-	  "Attempting to spawn iop_server\n\tport      = %s\n\tiop_dir   = %s\n\tmaude_dir = %s\n", 
-	  server_argv[1], server_argv[2], server_argv[3]);
+	  "Attempting to spawn iop_server\n\tport       = %s\n\tiop_dir    = %s\n\tmaude_dir  = %s\n\tno_windows = %s\n", 
+	  server_argv[1], server_argv[2], server_argv[3],  server_argv[4]);
   spawnProcess(server_argv[0], server_argv);
 }
 

@@ -56,7 +56,7 @@ int main(int argc, char** argv){
       fprintf(stderr, "Usage: iop -s <portno>\n");
       exit(EXIT_FAILURE);
     } else {
-      spawnServer(argc, argv);
+      spawnServer(argc, argv, iop_no_windows_flag);
     }
   } else {
     iop_init(argc, argv, optind, iop_remote_fd);
