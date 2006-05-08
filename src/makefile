@@ -38,7 +38,7 @@ EXE = talk2iop\
       iop_sal_wrapper
 
 SCRIPTS = iop jlambda  
-HEADERS = cheaders.h constants.h types.h dbugflags.h externs.h options.h sal_lib.h
+HEADERS = actor.h argv.h cheaders.h constants.h dbugflags.h ec.h externs.h iop_lib.h macrostr.h msg.h options.h registry_lib.h sal_lib.h socket_lib.h types.h version.h wrapper_lib.h
 MISC    = makefile 
 
 vpath % ${BUILDDIR}
@@ -54,7 +54,7 @@ COBJS = actor.o\
 all:  scripts ${EXE}
 
 ${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
-	${COMPILER} ${CFLAGS}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
+	${COMPILER} ${CFLAGS} ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
 
 %.o: %.c %.h ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS} $< -c 
