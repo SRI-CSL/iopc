@@ -34,6 +34,7 @@
 #include "ec.h"
 
 
+extern int   iop_version_flag;
 extern int   iop_debug_flag;
 extern int   iop_no_windows_flag;
 extern int   iop_chatter_flag;
@@ -475,6 +476,12 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
 	fprintf(stderr, "%s\t:\tchatter option selected\n", caller);
       break;
     }
+    case 'v': {
+      iop_version_flag = 1; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tversion option selected\n", caller);
+      break;
+    }
     case 'r': {
       iop_remote_fd = atoi(optarg); 
       if(IOP_LIB_DEBUG)
@@ -537,6 +544,12 @@ void parseOptions(int argc, char** argv, const char* options){
       iop_chatter_flag = 1; 
       if(IOP_LIB_DEBUG)
 	fprintf(stderr, "%s\t:\tchatter option selected\n", caller);
+      break;
+    }
+    case 'v': {
+      iop_version_flag = 1; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tversion option selected\n", caller);
       break;
     }
     case 'r': {

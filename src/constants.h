@@ -87,6 +87,7 @@
 #define IOP_USAGE \
 "\
 \nUsage: iop options:\
+\n\t-v     --version     Print iop's version number\
 \n\t-d     --debug       Debug mode\
 \n\t-a     --actors      Hardwired actors mode\
 \n\t-s <n> --server  <n> Server mode on port: <n>\

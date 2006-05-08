@@ -11,8 +11,8 @@ if(!defined($ENV{IOPBINDIR})){
 } else {
     my $iop = "$ENV{IOPBINDIR}";
     if($ARGV[0]){
-	system "java  -Xms256m -Xmx1024m  -ea -cp ${iop}/iop.jar${jlambdaClasses} g2d/jlambda/ReadEvalPrintLoop $iop $ARGV[0]";
+	system "java  -Xms256m -Xmx1024m  -ea -cp ${iop}/iop.jar${jlambdaClasses}  g2d/jlambda/ReadEvalPrintLoop $iop $ARGV[0]";
     } else {
-	system "java  -Xms256m -Xmx1024m -ea  -cp ${iop}/iop.jar${jlambdaClasses} g2d/jlambda/ReadEvalPrintLoop $iop";
+	system "java  -Xms256m -Xmx1024m -ea  -cp ${iop}/iop.jar${jlambdaClasses}  g2d/jlambda/ReadEvalPrintLoop $iop";
     }
 }

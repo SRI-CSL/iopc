@@ -31,6 +31,8 @@
 #include "externs.h"
 #include "dbugflags.h"
 #include "options.h"
+#include "version.h"
+
 
 int main(int argc, char** argv){
 #ifdef _LINUX
@@ -42,6 +44,7 @@ int main(int argc, char** argv){
   self_debug_flag   = IOP_DEBUG || iop_debug_flag;
   self = argv[0];
 
+  announce("iop_version_flag          = %d\n", iop_version_flag);
   announce("iop_debug_flag            = %d\n", iop_debug_flag);
   announce("iop_no_windows_flag       = %d\n", iop_no_windows_flag);
   announce("iop_chatter_flag          = %d\n", iop_chatter_flag);
@@ -51,6 +54,11 @@ int main(int argc, char** argv){
   announce("iop_gui_debug_port        = %s\n", iop_gui_debug_port);
   announce("iop_port                  = %s\n", iop_port);
   
+  if(iop_version_flag){
+    fprintf(stdout, "IOP version: %d\n", IOP_VERSION_NUMBER);
+    exit(EXIT_SUCCESS);
+  }
+
   if(iop_server_mode){
     if((iop_port == NULL) || (atoi(iop_port) == 0)){
       fprintf(stderr, "Usage: iop -s <portno>\n");
