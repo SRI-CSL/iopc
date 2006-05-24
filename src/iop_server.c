@@ -31,7 +31,9 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-static char logFile[] = "/tmp/iopServerLog.txt";
+static char logFile[]   = "/tmp/iopServerLog.txt";
+static char ouputFile[] = "/tmp/iop_server_output.txt";
+
 static pthread_mutex_t server_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 
@@ -91,6 +93,8 @@ int main(int argc, char *argv[]){
   char *description = NULL;
   char *iop_executable_dir, *maude_executable_dir;
   int listen_socket, *sockp, no_windows;
+  int outfd;
+  pid_t sid, pid;
   if (argc != 5) {
     fprintf(stderr, "Usage: %s <port> <iop exe dir> <maude exe dir> <no windows>\n", argv[0]);
     exit(EXIT_FAILURE);
@@ -99,7 +103,48 @@ int main(int argc, char *argv[]){
   iop_executable_dir = argv[2];
   maude_executable_dir = argv[3];
   no_windows = atoi(argv[4]);
+  
+  /* we want to be a daemon, so lets do that first */
 
+  /* we have already been forked by iop_main (hopefully) so we start with: */
+  /* detaching ourselves from the controlling tty                          */
+
+  if((sid = setsid()) < 0){
+    perror("iop_server could not create a new session id");
+    exit(EXIT_FAILURE);
+  }
+
+  if((pid = fork()) < 0){
+    perror("iop_server could not fork");
+    exit(EXIT_FAILURE);
+  }
+  
+  if(pid > 0){
+    /* only the child should continue */
+    exit(EXIT_SUCCESS);
+  }
+  
+
+
+  outfd = open(ouputFile, O_CREAT|O_TRUNC, S_IRWXU);
+  if(outfd < 0){
+    perror("iop_server could not open output file");
+    exit(EXIT_FAILURE);
+  }
+
+  /* hopefully we haven't inherited many more open file descriptors than these three. */
+  close(STDIN_FILENO);
+  close(STDOUT_FILENO);
+  close(STDERR_FILENO);
+
+
+  if((dup2(outfd, STDOUT_FILENO) < 0) || (dup2(outfd, STDERR_FILENO) < 0)){
+    perror("iop_server could not dup2 (who knows where this error msg goes?)");
+    exit(EXIT_FAILURE);
+  }
+
+  /* N.B. all errors now go to ouputFile */
+  
   if(iop_server_installHandler() != 0){
     perror("iop_server could not install signal handler");
     exit(EXIT_FAILURE);
@@ -135,17 +180,16 @@ int main(int argc, char *argv[]){
       iop_argv[3] = iop_executable_dir;
       iop_argv[4] = maude_executable_dir;
     }
-    /*
-      spawn dedicated iop process
 
-    if(SERVER_DEBUG)fprintf(stderr, 
-			    "Spawning [%s %s %s %s %s %s]\n", 
-			    iop_argv[0],
-			    iop_argv[1],
-			    iop_argv[2],
-			    iop_argv[3],
-			    iop_argv[4], 
-			    iop_argv[5]);
+    /* spawn dedicated iop process
+
+    if(SERVER_DEBUG)serverLog("Spawning [%s %s %s %s %s %s]\n", 
+			      iop_argv[0],
+			      iop_argv[1],
+			      iop_argv[2],
+			      iop_argv[3],
+			      iop_argv[4], 
+			      iop_argv[5]);
     
     */
 
