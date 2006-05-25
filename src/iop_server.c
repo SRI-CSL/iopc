@@ -31,8 +31,8 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-static char logFile[]   = "/tmp/iop_server_log.txt";
-static char ouputFile[] = "/tmp/iop_server_output.txt";
+static char logFile[]    = "/tmp/iop_server_log.txt";
+static char outputFile[] = "/tmp/iop_server_output.txt";
 
 static pthread_mutex_t server_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]){
   
 
 
-  outfd = open(ouputFile, O_CREAT|O_TRUNC|O_RDWR, S_IRWXU);
+  outfd = open(outputFile, O_CREAT|O_TRUNC|O_RDWR, S_IRWXU);
   if(outfd < 0){
     perror("iop_server could not open output file");
     exit(EXIT_FAILURE);
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]){
     exit(EXIT_FAILURE);
   }
 
-  /* N.B. all errors should now go to ouputFile */
+  /* N.B. all errors should now go to outputFile */
   
   if(iop_server_installHandler() != 0){
     perror("iop_server could not install signal handler");
@@ -182,16 +182,16 @@ int main(int argc, char *argv[]){
     }
 
     /* spawn dedicated iop process
-       if(SERVER_DEBUG)serverLog("Spawning [%s %s %s %s %s %s]\n", 
-			          iop_argv[0],
-			          iop_argv[1],
-			          iop_argv[2],
-			          iop_argv[3],
-			          iop_argv[4], 
-			          iop_argv[5]);
 
+    if(SERVER_DEBUG)serverLog("Spawning [%s %s %s %s %s %s]\n", 
+			      iop_argv[0],
+			      iop_argv[1],
+			      iop_argv[2],
+			      iop_argv[3],
+			      iop_argv[4], 
+			      iop_argv[5]);
     */
-
+    
     child = spawnProcess(iop_argv[0], iop_argv);
     close(*sockp);
     free(sockp);

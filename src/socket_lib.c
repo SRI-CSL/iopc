@@ -33,10 +33,11 @@
 int *acceptSocket(int listenSocket, char **comments){
   int *retval = (int*)calloc(1, sizeof(int));
   char *buff = (char *)calloc(BUFFSZ,sizeof(char));
-  char *hostname;
+  char *hostname, *ip = NULL;
   struct sockaddr_in from;
   socklen_t fromlen = sizeof(from);
   struct hostent *hostptr;
+  
   if((retval == NULL) || (buff == NULL)){
     fprintf(stderr, "calloc failed in acceptSocket\n");
     return NULL;
@@ -48,14 +49,18 @@ int *acceptSocket(int listenSocket, char **comments){
 
   if((*retval == -1) && (errno == EINTR)){  goto restart; }
 
-  if (*retval == INVALID_SOCKET)
+  if (*retval == INVALID_SOCKET){
     sprintf(buff, "acceptSocket: accept() error %d\n", errno);
+  }
+
+  ip = inet_ntoa(from.sin_addr);
   hostptr = gethostbyaddr((char*)&(from.sin_addr.s_addr), 4, AF_INET);
+
   hostname = "unknown";
-  if(hostptr != NULL) hostname =(*hostptr).h_name;
-  sprintf(buff, 
-          "acceptSocket got connection from: %s\n", 
-          hostname);
+  if(hostptr != NULL){ hostname = hostptr->h_name; }
+  snprintf(buff, 
+	   BUFFSZ, 
+	   "acceptSocket: host = %s, IP = %s\n", hostname, ip);
   *comments = buff;
   return retval;
 }

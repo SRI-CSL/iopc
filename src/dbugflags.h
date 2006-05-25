@@ -34,7 +34,7 @@
 #define IOP_LIB_DEBUG             0
 #define LISTENER_DEBUG            0
 #define LISTEN2IOP_DEBUG          0
-#define SERVER_DEBUG              1
+#define SERVER_DEBUG              0
 #define LOCKS_DEBUG               0
 /*
   WARNING: Turning on both MSG_DEBUG and
