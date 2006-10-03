@@ -529,7 +529,7 @@ int writeInt(int fd, int number){
   }
   return 1;
 }
-
+/*
 int readInt(int fd, int* nump){
   ssize_t retval;
   if(nump == NULL){
@@ -537,6 +537,49 @@ int readInt(int fd, int* nump){
   } else {
     int i = 0;
     char buff[SIZE];
+    while(i < SIZE){
+    restart:
+      errno = 0;
+      if((retval = read(fd, &buff[i], sizeof(char))) != sizeof(char)){
+        if(retval == 0){
+          buff[i] = '\0';
+          break;
+        } else {
+          if(errno == EINTR){
+            eM("readInt: restarting (errno == EINTR)\n");
+            goto restart;
+          }
+          fprintf(stderr, "readInt: read failed: %s\n", strerror(errno));
+          return -1;
+          if(errno == EBADF){
+            fprintf(stderr, "readInt: read failed because of a bad file descriptor\n");
+            return -1;
+          }
+        }
+      }
+      if(!isdigit(buff[i])){
+        buff[i] = '\0';
+        break;
+      }
+      i++;
+    }
+    if(i == SIZE) return -1;
+    *nump = atoi(buff);
+    return 1;
+  }
+}
+*/
+
+int readInt(int fd, int* nump){
+  ssize_t retval;
+  if(nump == NULL){
+    return -1;
+  } else {
+    int i = 0, bad = 0;
+    char buff[SIZE];
+
+  squareone:
+    i = 0;
     while(i < SIZE){
     restart:
       errno = 0;
@@ -557,17 +600,26 @@ int readInt(int fd, int* nump){
 	  }
 	}
       }
-      if(!isdigit(buff[i])){
+      if(buff[i] == '\n'){
 	buff[i] = '\0';
 	break;
       }
+      if(bad){ continue; }
+      if(!isdigit(buff[i])){
+	bad = 1;
+	/* fprintf(stderr, "readInt saw a non-digit: %c (bad = %d)\n", buff[i], bad); */
+	/* read and discard everything upto the next '\n'; */
+	goto squareone;
+      }
       i++;
-    }
-    if(i == SIZE) return -1;
+    } /* while  */
+    if(bad || (i == SIZE)){ return -1; }
     *nump = atoi(buff);
+    /*    fprintf(stderr, "readInt returning: %d (bad = %d, i = %d)\n", *nump, bad, i); */
     return 1;
   }
 }
+
 
 int readIntVolatile(int fd, int* nump, volatile int* exitFlag){
   ssize_t retval;
