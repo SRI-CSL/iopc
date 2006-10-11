@@ -3,10 +3,20 @@ COMPILER = gcc
 # location of temporary build products
 BUILDDIR = ../build
 
-ifneq (,$(findstring Darwin,$(shell uname )))
+OS       =  $(shell uname)
+
+ARCH     =  $(shell uname -p)
+
+CPU      =  Intel
+
+ifeq (Darwin, $(findstring Darwin, ${OS}))
+#we are a mac, find out what CPU:
+ ifeq (powerpc, $(findstring powerpc, ${ARCH}))
+  CPU = powerpc
+ endif
 #Mac flags
 SCRIPT = mac_iop
-CFLAGS =  -Wall -D_MAC
+CFLAGS =  -Wall -D_MAC -D_${CPU}
 # add to CFLAGS for debugging:
 # -g 
 LIBS = -lpthread -lm 
@@ -14,7 +24,7 @@ else
 #Linux flags
 SCRIPT = linux_iop
 LIBS =  -lm 
-CFLAGS =  -Wall -pthread -D_LINUX -pedantic
+CFLAGS =  -Wall -pthread -D_LINUX -D_${CPU} -pedantic
 # add to CFLAGS for debugging:
 # -g 
 endif

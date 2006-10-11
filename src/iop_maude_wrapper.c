@@ -36,7 +36,11 @@ static char* maudebindir;
 #ifdef _LINUX
 static char maude_exe[] = "maude.linux";
 #elif defined(_MAC)
+  #ifdef _Intel
+static char maude_exe[] = "maude.intelDarwin";
+  #else 
 static char maude_exe[] = "maude.darwin";
+  #endif
 #endif
 
 static char* maude_argv[] = {"maude", "-no-tecla", "-interactive", NULL};
