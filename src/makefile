@@ -14,6 +14,9 @@ ifeq (Darwin, $(findstring Darwin, ${OS}))
  ifeq (powerpc, $(findstring powerpc, ${ARCH}))
   CPU = powerpc
  endif
+ ifeq (i386, $(findstring i386, ${ARCH}))
+  CPU = Intel
+ endif
 #Mac flags
 SCRIPT = mac_iop
 CFLAGS =  -Wall -D_MAC -D_${CPU}
