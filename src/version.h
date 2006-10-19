@@ -1,2 +1,2 @@
-#define IOP_VERSION_NUMBER  500
+#define IOP_VERSION_NUMBER  524
 
