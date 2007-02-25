@@ -52,6 +52,7 @@ int main(int argc, char** argv){
 #endif
   self_debug_flag  = (REGISTRY_DEBUG || iop_debug_flag);
   self = argv[0];
+
   /* fprintf(stderr, "%s local_debug_flag = %d\n", argv[0], local_debug_flag); */
 
   /* set externs */
@@ -63,6 +64,9 @@ int main(int argc, char** argv){
   iop_bin_dir       = argv[argc - 1];
   registry_pid      = getpid();
 
+  /* fprintf(stderr, "iop_startup_file = %s\n", iop_startup_file);  */
+
+    
   /*
   if(atexit(bail) != 0){
     fprintf(stderr, "atexit(bail) failed\n");
@@ -116,12 +120,12 @@ int main(int argc, char** argv){
   ec_rv( pthread_create(&commandThread, NULL, registryCommandThread, NULL) );
 
   if(!iop_hardwired_actors_flag){
-    if(registryProcessStartupFile() < 0){
+    if(registryProcessStartupFile(iop_startup_file) < 0){
       log2File("startup file reading failed\n");
       log2File("reading configuration file\n");
       if(registryProcessConfigFile() < 0){
-	log2File("configuration file reading failed\n");
-      }
+      log2File("configuration file reading failed\n");
+    }
       log2File("reading startup file\n");
     } 
   }

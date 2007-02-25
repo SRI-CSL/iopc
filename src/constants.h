@@ -93,6 +93,7 @@
 \n\t-s <n> --server  <n> Server mode on port: <n>\
 \n\t-r <n> --remote  <n> Slave to remote applet on socket fd: <n>\
 \n\t-g <n> --gui     <n> Enable remote debugging of GUI JVM on port: <n>\
+\n\t-i <f> --init    <f> Use the startup file: <f>\
 \n\t-n     --nowin       Don't launch any windows\
 \n\t-c     --chatter     Prove commandline when in no windows mode\n\n"
 

@@ -35,4 +35,4 @@ void processRegistryCommand(int, int, int);
 void *monitorInSocket(void *);
 void processRegistryMessage(char*, char*);
 int registryProcessConfigFile();
-int registryProcessStartupFile();
+int registryProcessStartupFile(char*);

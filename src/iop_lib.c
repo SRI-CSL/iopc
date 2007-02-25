@@ -43,6 +43,7 @@ extern int   iop_remote_fd;
 extern int   iop_server_mode;
 extern char *iop_port;
 extern char *iop_gui_debug_port;
+extern char *iop_startup_file;
 
 extern pid_t registry_pid;
 extern char* registry_fifo_in;
@@ -171,7 +172,6 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   }
 
   announce("made fifos\n");
-
 
   registry_argv = 
     mkRegistryArgv(argc, argv, 
@@ -506,6 +506,12 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
 	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
       break;
     }
+    case 'i': {
+      iop_startup_file = optarg; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tstartup file = %s\n", caller, iop_startup_file);
+      break;
+    }
      case '?': {
       fprintf(stderr, IOP_USAGE); 
       exit(EXIT_SUCCESS);
@@ -571,6 +577,12 @@ void parseOptions(int argc, char** argv, const char* options){
       iop_gui_debug_port = optarg; 
       if(IOP_LIB_DEBUG)
 	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
+      break;
+    }
+    case 'g': {
+      iop_startup_file = optarg; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tstartup file = %s\n", caller, iop_startup_file);
       break;
     }
     case '?': {

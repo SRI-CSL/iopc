@@ -44,6 +44,7 @@ int main(int argc, char** argv){
   self_debug_flag   = IOP_DEBUG || iop_debug_flag;
   self = argv[0];
 
+  /*  self_debug_flag   = 1;  */
   announce("iop_version_flag          = %d\n", iop_version_flag);
   announce("iop_debug_flag            = %d\n", iop_debug_flag);
   announce("iop_no_windows_flag       = %d\n", iop_no_windows_flag);
@@ -52,7 +53,9 @@ int main(int argc, char** argv){
   announce("iop_remote_fd             = %d\n", iop_remote_fd);
   announce("iop_server_mode           = %d\n", iop_server_mode);
   announce("iop_gui_debug_port        = %s\n", iop_gui_debug_port);
+  announce("iop_startup_file          = %s\n", iop_startup_file);
   announce("iop_port                  = %s\n", iop_port);
+  /*  self_debug_flag   = 0;  */
   
   if(iop_version_flag){
     fprintf(stdout, "IOP version: %d\n", IOP_VERSION_NUMBER);

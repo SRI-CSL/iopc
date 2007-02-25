@@ -25,7 +25,7 @@
 
 #ifndef OPTIONS
 #define OPTIONS
-char* short_options = "adncvr:s:g:";
+char* short_options = "adncvr:s:g:i:";
 #ifdef _LINUX
 struct option long_options[] = {
   { "actorless",      0, NULL, 'a'},
@@ -36,6 +36,7 @@ struct option long_options[] = {
   { "remote",         1, NULL, 'r'},
   { "server",         1, NULL, 's'},
   { "gui",            1, NULL, 'g'},
+  { "init",           1, NULL, 'i'},
   { NULL,             0, NULL,  0 }
 };
 #endif

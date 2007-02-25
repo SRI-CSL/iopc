@@ -1528,11 +1528,12 @@ int registryProcessConfigFile(){
   }
 }
 
-int registryProcessStartupFile(){
-  FILE* startup;
-  startup = fopen(STARTUP, "r");
+int registryProcessStartupFile(char * sfile){
+  FILE* startup = NULL;
+  char * startfile = (sfile != NULL) ? sfile : STARTUP;
+  startup = fopen(startfile, "r");
   if(startup == NULL){
-    log2File("Startup file not opened: %s\n", strerror(errno));
+    log2File("Startup file (%s) not opened: %s\n", startfile, strerror(errno));
     return -1;
   } else {
     return registryProcessFile(startup);
