@@ -129,3 +129,64 @@ int interpretTildes(const char* filename, char **newfilenamep){
     return 1;
   }
 }
+
+char *argv2String(int argc, char** argv, const char* seperator){
+  char *retval = NULL;
+  if(argc < 2){
+    char* arg = argv[0];
+    if(arg != NULL){
+      int len = strlen(arg) + 1;
+      retval = (char *)calloc(len, sizeof(char));
+      if(retval == NULL){ 
+	fprintf(stderr, "calloc failure in argv2String: %s\n", strerror(errno));
+      }
+      strcpy(retval, arg);
+    }
+  } else {
+    int i, len = 0, slen = (seperator == NULL) ? 0 : strlen(seperator) + 1;
+    if(seperator == NULL){ seperator = ""; }
+    for(i = 0; i < argc; i++){
+      char *arg = argv[i];
+      len += (arg == NULL) ? 0 : strlen(arg);
+      len += slen;
+    }
+    if(len > 0){
+      retval = (char *)calloc(len, sizeof(char));
+      if(retval == NULL){ 
+	fprintf(stderr, "calloc failure in argv2String: %s\n", strerror(errno));
+      } else {
+	for(i = 0; i < argc; i++){
+	  if(i == 0){ 
+	    strcpy(retval, argv[i]); 
+	  } else {
+	    strcat(retval, seperator);
+	    strcat(retval, argv[i]);
+	  }
+	}
+      }
+    }
+  }
+  return retval;
+}
+
+
+/* returns 0 if it didn't do something, and >= 1 if it did */
+int interpretTildesCSL(const char* path, char **newpathp){
+  char **pathv = NULL;
+  int retval = 0, i, pathc;
+  if(path == NULL){ return retval; }
+  pathc = makeArgv(path, ":\n", &pathv);
+  for(i = 0; i < pathc; i++){
+    char *entryI = pathv[i];
+    char *entryO = NULL;
+    int tilde = interpretTildes(entryI, &entryO);
+    if(tilde){
+      pathv[i] = entryO;
+      free(entryI);
+      retval++;
+    }
+  }
+  *newpathp = argv2String(pathc, pathv, ":");
+  freeArgv(pathc, pathv);
+  return retval;
+}

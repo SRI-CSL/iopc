@@ -25,7 +25,12 @@
 
 int interpretTildes(const char* filename, char **newfilenamep);
 
+/* CSL = "Colon Seperated List" (i.e. a class path) */
+int interpretTildesCSL(const char* path, char **newpathp);
+
 int makeArgv(const char *s, const char *delimiters, char ***argvp);
 void freeArgv(int argc, char** argv);
 void printArgv(FILE* file, int argc, char** argv, char*);
+
+char *argv2String(int argc, char** argv, const char* seperator);
 

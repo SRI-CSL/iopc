@@ -328,7 +328,9 @@ static actor_spec *launchMaude(int argc, char** argv){
   return launchActor(1, "maude", maude_exe, maude_argv);
 }
 
-char* iop_alloc_jarpath(char* code_dir, char* who, char* classpath){
+
+
+static char* iop_alloc_jarpath_aux(char* code_dir, char* who, char* classpath){
   int len = (classpath == NULL) ? 0 : strlen(classpath) + 1;
   char *retval = calloc(len + strlen(code_dir) + strlen(JARPATH) + 1, sizeof(char));
   if(retval == NULL){
@@ -344,6 +346,20 @@ char* iop_alloc_jarpath(char* code_dir, char* who, char* classpath){
     }
   }
   return retval;
+}
+
+char* iop_alloc_jarpath(char* code_dir, char* who, char* classpath){
+  char* new_code_dir = NULL;
+  char* new_classpath = NULL;
+  int tilde = interpretTildes(code_dir, &new_code_dir);
+  if(!tilde){
+    new_code_dir = code_dir;
+  }
+  tilde = interpretTildesCSL(classpath, &new_classpath);
+  if(!tilde){
+    new_classpath = classpath;
+  }
+  return iop_alloc_jarpath_aux(new_code_dir, who, new_classpath);
 }
 
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
