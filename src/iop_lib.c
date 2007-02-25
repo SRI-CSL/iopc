@@ -595,7 +595,7 @@ void parseOptions(int argc, char** argv, const char* options){
 	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
       break;
     }
-    case 'g': {
+    case 'i': {
       iop_startup_file = optarg; 
       if(IOP_LIB_DEBUG)
 	fprintf(stderr, "%s\t:\tstartup file = %s\n", caller, iop_startup_file);
