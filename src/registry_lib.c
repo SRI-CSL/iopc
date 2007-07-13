@@ -86,7 +86,7 @@ void log2File(const char *format, ...){
   if(self_debug_flag && (format != NULL) && (errorsFileName != NULL)){
     ec_rv( pthread_mutex_lock(&iop_errlog_mutex) );
     ec_null( errorsFile = fopen(errorsFileName, "a") );
-    fprintf(errorsFile, "%s(%ld)\t:\t", self, (long)pthread_self());
+    fprintf(errorsFile, "%s(%p)\t:\t", self, (void *)pthread_self());
     vfprintf(errorsFile, format, arg);
     fflush(errorsFile);
     fclose(errorsFile);

@@ -88,7 +88,7 @@ void announce(const char *format, ...){
   va_start(arg, format);
   if(self_debug_flag  && (format != NULL)){
     ec_rv( pthread_mutex_lock(&iop_err_mutex) );
-    fprintf(stderr, "%s(%ld)\t:\t", self, (long)pthread_self());
+    fprintf(stderr, "%s(%p)\t:\t", self, (void *)pthread_self());
     vfprintf(stderr, format, arg);
     ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
   }

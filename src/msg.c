@@ -47,7 +47,7 @@ static void eM(const char *format, ...){
   if(format != NULL) {
     if(MSG_DEBUG || self_debug_flag){
       ec_rv( pthread_mutex_lock(&iop_err_mutex) );
-      fprintf(stderr, "MSG(%ld)\t:\t", (long)pthread_self());
+      fprintf(stderr, "MSG(%p)\t:\t", (void *)pthread_self());
       vfprintf(stderr, format, arg);
       ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
     }
