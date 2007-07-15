@@ -1,14 +1,13 @@
 (let (
-;      (host "10.3.0.152")
-       (host "localhost")
-;       (host (object null))
-; dark's IP: 103.107.96.240
+     (host "10.3.0.50")
+;      (host "localhost")
 ;      (host "dark.csl.sri.com")
+;      (port (int 8765))
       (port (int 7765))
       (socket  (object ("java.net.Socket" host port)))
       )
   (seq
-   (load "pla.lsp")
+   (load "g2dlib.lsp")
    (sinvoke "g2d.Main" "main" socket)
    ) ; seq
   ) ; let
