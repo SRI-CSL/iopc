@@ -1,0 +1,23 @@
+(entry tval(qidlist tkb SmallKB)(notes(note graph :=(qval SmallKB))
+(note source :=(qval rules QQQ)))(tval QQQ pnTrans('15.Cbl.reloc.Yphos,< Cbl,
+    CLc >,<[Cbl - Yphos],CLi >,<[EgfR - act],CLm >)pnTrans('1.EgfR.act,< Egf,
+    Out > < EgfR,CLm >,<[Egf - bound],CLo > <[EgfR - act],CLm >,none)pnTrans(
+    '1.EgfR.act#1,< EgfR,CLm > < Tgfa,Out >,<[EgfR - act],CLm > <[Tgfa -
+    bound],CLo >,none)pnTrans('5.Grb2.reloc,< Grb2,CLc >,<[Grb2 - reloc],CLi >,
+    <[EgfR - act],CLm >)pnTrans('7.IP3.from.PIP2.by.Plc,< PIP2,CLm >,< DAG,CLm
+    > < IP3,CLc >,<[Plcg - act],CLi >)pnTrans('9.PIP3.from.PIP2.by.Pi3k,< PIP2,
+    CLm >,< PIP3,CLm >,<[Pi3k - act],CLi >)pnTrans('E56.Pak1.irt.Egf,< Pak1,CLc
+    >,<[Pak1 - act],CLi >,<[EgfR - act],CLm >)pnTrans('8.Pi3k.act,< Pi3k,CLc >,
+    <[Pi3k - act],CLi >,<[Gab1 - Yphos],CLi >)pnTrans('13.Sos1.reloc,< Sos1,CLc
+    >,<[Sos1 - reloc],CLi >,<[Grb2 - reloc],CLi >)pnTrans('4.Gab1.Yphosed,<
+    Gab1,CLc >,<[Gab1 - Yphos],CLi >,<[EgfR - act],CLm > <[Grb2 - reloc],CLi
+    >)pnTrans('11.Shc.Yphosed,< Shc,CLc >,<[Shc - Yphos],CLi >,< Src,CLi > <[
+    EgfR - act],CLm >)pnTrans('2.EgfR.ubiq,<[EgfR - act],CLm > <[Ube2l3 -
+    ubiq],CLi >,< Ube2l3,CLi > <[EgfR - ubiq],CLm >,<[Cbl - Yphos],CLi
+    >)pnTrans('12.Sos1.reinit,<[Grb2 - reloc],CLi > <[Sos1 - reloc],CLi >,<
+    Sos1,CLc > <[Grb2 - Yphos],CLi >,<[EgfR - act],CLm >)pnTrans('10.Plcg.act,<
+    Plcg,CLc >,<[Plcg - act],CLi >,< PIP3,CLm > < Src,CLi > <[EgfR - act],CLm
+    >)pnTrans('6.Hras.act.1,<[Hras - GDP],CLi >,<[Hras - GTP],CLi >,< PIP3,CLm
+    > <[Grb2 - reloc],CLi > <[Sos1 - reloc],CLi >)pnTrans('280.Raf1.by.Hras,<
+    1433x1,CLc > < Raf1,CLc >,< 1433x1,CLi > <[Raf1 - act],CLi >,< PP2a,CLc > <
+    Src,CLi > <[Hras - GTP],CLi > <[Pak1 - act],CLi >)))

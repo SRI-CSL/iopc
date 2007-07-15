@@ -1,0 +1,87 @@
+**** NEWSTUFF
+(gfilewrite C foo.txt a b c d)
+
+
+(topetri ThreeWaysToActRac)
+(save entry laura-3rac-pnet.txt petri-net ThreeWaysToActRac)
+(petri2graph graph-3rac ThreeWaysToActRac)
+(savegraph graph-3rac laura-3rac pn)
+(savegraph graph-3rac laura-3rac sbml)
+
+(topetri EGF-EGFR)
+(save entry laura-egf-pnet.txt petri-net EGF-EGFR)
+
+
+**** in each case determine graph name using cmd-I and replace the place holder
+**** if need be
+
+*** Knockouts  -- tested with 3ways goal Rac1-GTP
+**** select dish, set goal(s) make subnet -- must be called from subnet
+(displayKOs graph2)
+
+**** little window shows in upper left
+
+**** tested with rrme and 3ways, from top level graph (or anyother I think)
+
+(colorGenes graph0 g.txt)
+
+**** shrink graph or move window to see colors
+**** reset selections will remove the colors!
+**** tried this one with 3ways
+(displayInterestSubnet graph0 Dock Crk )
+
+
+
+
+(displayPetri RRME)
+(displayPetri TwoWaysToActRac)
+(displayPetri ThreeWaysToActRac)
+(displayPetri ThreeWaysToActRacX)
+(displayPetri AdrenergicR)
+(displayPetri FASL-FASR)
+(displayPetri EGF-EGFR)
+(displayPetri TNF-TNFR1)
+(displayPetri everything)
+(displayPetri quiz)
+(displayPetri qt-test)
+
+*** what is going on
+(show control)
+(show requests)
+(show wait4s)
+(show log)
+(show summary)
+(reset wait4s)
+
+
+**** save a graph  (described in JLambda) in a file
+
+(graph2file graph0  g0.lsp)
+
+(showruleids graph2)
+(hideRules graph0 83 true)
+****************************************
+**** saves petri-(sub)net underlying graph in pn format as filename.pn  
+(savegraph graph0 filename pn)
+**** saves petri-(sub)net underlying graph in sbml format as filename.sbml  
+(savegraph graph0 filename sbml)
+
+
+**** saves graph gname as sexpression for construction in JLambda as fname.lsp
+(graph2file gname fname)
+
+**** saving and restoring pnets
+****        fname             etype     id
+(save entry rrme-pnet.txt petri-net rrme)
+
+**** current restore is a bit of a hack
+**** read file and save as qidlist
+(restore rrme-pnet.txt rrme-restored)
+
+**** only understands petri-net entries at the moment
+(parseSavedEntry rrme-restored)
+
+
+
+
+

@@ -1,0 +1,55 @@
+load theops
+load components
+load rules
+load model-checker
+load qq
+load ~/Maude/Lib/M2.2/PLA/load-pla
+
+**** from scratch 
+(seq
+ (loadg2dlib graphics2d ~/Maude/Lib/M2.2/PLA/load-g2dlib.lsp)
+
+ (g2dexe graphics2d (sinvoke "g2d.swing.IOPFileChooser" "setDirectory" "~/IOP/NewServerClient/ServerArea/SmallKB"))
+**** setting default bulk input directory
+ (g2dexe graphics2d (sinvoke "pla.BulkInputDialog" "setCurrentDir" (object ("java.io.File" (sinvoke "g2d.util.IO" "interpretTilde" "~/IOP/NewServerClient/ServerArea/SmallKB")))))
+
+**** "iop_remote_actor"
+ (initPLAeset maude graphics2d iop_remote_actor)
+ (initKBManagerD iop_remote_actor QQQ)
+ (initDishes QQQ)
+ (initKBnet SmallKB QQQ)
+ (initKBgraph SmallKB)
+
+**** save kb and its graph
+*** (save SmallKB-tkb.txt  C  entry tval tkb SmallKB)
+*** (saveKBG SmallKB QQQ SmallKB-graph.txt)
+
+**** restore hand crafted evidence
+*** (restore SmallKB-evidence.txt tmp entry)
+
+ (startListener SmallKB graphreq iop_remote_actor)
+ (defineKBGraph SmallKB iop_remote_actor)
+
+)
+
+**** from saved kb/graph
+***(seq
+ (loadg2dlib graphics2d ~/Maude/Lib/M2.2/PLA/load-g2dlib.lsp)
+
+ (g2dexe graphics2d (sinvoke "g2d.swing.IOPFileChooser" "setDirectory" "~/IOP/NewServerClient/ServerArea/SmallKB"))
+
+ (initPLAeset maude graphics2d graphics2d)
+ (initKBManagerD graphics2d QQQ)
+ (initDishes QQQ)
+
+**** restore saved kb and graph
+ (restore SmallKB-tkb.txt tmp entry)
+ (restore SmallKB-graph.txt tmp entry)
+
+**** restore hand crafted evidence
+ (restore SmallKB-evidence.txt tmp entry)
+
+ (startListener SmallKB graphreq graphics2d)
+ (defineKBGraph SmallKB graphics2d)
+
+)

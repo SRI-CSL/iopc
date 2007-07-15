@@ -1,0 +1,243 @@
+*********1*********2*********3*********4*********5*********6*********7****
+***
+***  rules.maude  for CLTs Rule Making Quiz
+***
+**************************************************************************
+mod ALLBP is inc PROTEINOPS .
+
+var  cell : CellType .
+vars clo clm cli clc nuo num nui nuc : Soup .
+vars moo mom moi moc mio mim mii mic : Soup .
+vars ero erm eri erc pxo pxm pxi pxc : Soup .
+vars gao gam gai gac lyo lym lyi lyc : Soup .
+vars eeo eem eei eec leo lem lei lec : Soup .
+vars cpo cpm cpi cpc ct ptc sig : Soup .
+var ms : ModSet .
+
+rl[1.EgfR.act]:
+  ?ErbB1L:ErbB1L
+  [CellType:CellType | ct
+  {CLo | clo                          }
+  {CLm | clm EgfR                     } ]
+  =>
+  [CellType:CellType | ct
+  {CLo | clo [?ErbB1L:ErbB1L - bound] }
+  {CLm | clm [EgfR - act]             } ] .
+  -----------------------------------------
+  *** 11566606(R) ErbB1Ls are AR Egf TGFa Btc Epr Hbegf
+  *** 12620237(D) Crystal structure of Egf-EgfR interaction.
+
+
+rl[2.EgfR.ubiq]:
+  {CLm | clm [EgfR - act]                  }
+  {CLi | cli [Cbl - Yphos] [Ube2l3 - ubiq] }
+  =>
+  {CLm | clm [EgfR - ubiq]                 }
+  {CLi | cli [Cbl - Yphos]  Ube2l3         } .
+  --------------------------------------------
+  *** 10531381(D) Cbl-Ring binds Ube2l3
+    *** Together they ubiq EgfR after Egf stim
+
+
+rl[4.Gab1.Yphosed]:
+  {CLm | clm [EgfR - act]                  }
+  {CLi | cli [Grb2 - reloc]                }
+  {CLc | clc Gab1                          }
+  =>
+  {CLm | clm [EgfR - act]                  }
+  {CLi | cli [Grb2 - reloc] [Gab1 - Yphos] }
+  {CLc | clc                               } .
+  --------------------------------------------
+   *** 11350724(R)(R-31) 11566606(R) STKE
+   *** 11916960(I-49,60) May not require Grb2
+     *** causes phosphorylation of Gab1 at p85 and Shp binding sites
+   *** 14662016(R) Gab1 binds to Grb2-SH3
+   *** 11134009(D) This is enhanced by PIP3 but it may not be necessary
+     *** Gab1-PH binds to PIP3
+
+rl[5.Grb2.reloc]:
+  {CLm | clm [EgfR - act]      }
+  {CLi | cli                   }
+  {CLc | clc Grb2              } 
+  =>
+  {CLm | clm [EgfR - act]      }
+  {CLi | cli [Grb2 - reloc]    }
+  {CLc | clc                   } .
+  --------------------------------
+  *** 2803273(D) Grb2 binds to EgfR-Grb2 pY1086
+  *** 7518560(R)  Grb2 binds to EgfR-pY1068,pY1086
+  *** 7527043(D) Grb2 binds directly to EgfR-pY1068,1068. 
+    *** Grb2 binds to EgfR-pY1148 via Shc
+  *** 7798267(D) Grb2 binds Shc and EgfR after Egf stim
+
+rl[6.Hras.act.1]:
+  {CLm | clm PIP3                                       }         
+  {CLi | cli [Grb2 - reloc] [Sos1 - reloc] [Hras - GDP] }
+  =>
+  {CLm | clm PIP3                                       }         
+  {CLi | cli [Grb2 - reloc] [Sos1 - reloc] [Hras - GTP] } .
+  ---------------------------------------------------------
+  *** 11152757(R)
+  *** 11777939(D) Grb2-Sos1 act Ras; Eps8-Abi1-Sos1 act Rac1
+
+rl[7.IP3.from.PIP2.by.Plc]:
+  {CLm | clm PIP2             }
+  {CLi | cli [?Plc:Plc - act] }
+  {CLc | clc                  }
+  =>
+  {CLm | clm DAG              }
+  {CLi | cli [?Plc:Plc - act] } 
+  {CLc | clc IP3              } .
+  --------------------------------
+  *** 10707049(R)-10 11358118(R)-3 10076047(R)-4
+    *** DAG recruits effectors via their C1 domain
+    *** IP3 cause calcium influx from intracellular stores
+  *** DA0014(R) kr53 Plcg Plcb truncated-Plcg
+
+rl[8.Pi3k.act]:
+  {CLi | cli [Gab1 - Yphos]              }
+  {CLc | clc Pi3k                        }
+  =>
+  {CLi | cli [Gab1 - Yphos] [Pi3k - act] }
+  {CLc | clc                             } .
+  ------------------------------------------
+     *** 11353842(D) from FgfR
+     *** 11695994(D) from EdnRa and EdnRb
+     *** 14662016(R)
+     *** 11779868(D) p85 SH2 binds to Gab1 pY447 pY472 pY589
+
+rl[9.PIP3.from.PIP2.by.Pi3k]:
+  {CLm | clm  PIP2        }
+  {CLi | cli [Pi3k - act] }
+  =>
+  {CLm | clm  PIP3        }
+  {CLi | cli [Pi3k - act] } .
+  ---------------------------
+  *** 10707049(R)-23  10702641(R)
+  *** 11395417(R)
+  *** DA0014(R) kr108
+
+rl[10.Plcg.act]:
+  {CLm | clm [EgfR - act] PIP3 }
+  {CLi | cli Src               }
+  {CLc | clc Plcg              }
+  =>
+  {CLm | clm [EgfR - act] PIP3 }
+  {CLi | cli Src [Plcg - act]  }
+  {CLc | clc                   } .
+  ---------------------------------
+  *** 1537335(D) SH2 fragments from Plcg bind to EgfR ppt from A431
+   *** cells on PY 992
+  *** 10880430(R) Plcg binds to EgfR PY 992, 1173 
+  *** 11872156(R) Plcg1,g2 have 2 SH2 and 1 SH3 domains
+   *** full activation requires PIP3 (13,14)
+  *** 14967142(I) Puts Shp2 and Src between EgfR and Plcg1
+
+rl[11.Shc.Yphosed]:
+  {CLm | clm [EgfR - act]      }
+  {CLi | cli Src               }
+  {CLc | clc Shc               }
+  =>
+  {CLm | clm [EgfR - act]      }
+  {CLi | cli Src [Shc - Yphos] }
+  {CLc | clc                   } .
+  --------------------------------
+  *** 9710588(D) Shc binds to EgfR in response to Egf
+  *** 8662998(D) Shc binds to Grb2 regardless of phos state
+    *** Shc binds to EgfR in response to Egf
+  *** 8939605(D) v-Src phoses Shc on Y239 Y240 in vitro
+  *** 9388490(D) Shc phos on Y239 Y240 by EgfR and Src reqs PIP2
+  *** 11566606(R) Shc-PID binds to EgfR-pY1148. 
+  ***           Shc-SH3 binds to EgfR-pY1173.
+
+rl[12.Sos1.reinit]:
+  {CLm | clm [EgfR - act]                   }
+  {CLi | cli [Grb2 - reloc] [Sos1 - reloc]  }
+  {CLc | clc                                } 
+  =>
+  {CLm | clm [EgfR - act]                   }
+  {CLi | cli [Grb2 - Yphos]           }
+  {CLc | clc  Sos1                          } .
+  --------------------------------------------
+  *** 11726515(D) Grb2 phosed on Y209 by EgfR causes Sos1
+    *** to detach from Grb2
+
+rl[13.Sos1.reloc]:
+  {CLi | cli [Grb2 - reloc]                }
+  {CLc | clc Sos1                          }
+  =>
+  {CLi | cli [Grb2 - reloc] [Sos1 - reloc] }
+  {CLc | clc                               } .
+  --------------------------------------------
+  *** Grb2-SH3 is bound by Sos1 poly-proline region (1244-7)
+  *** Grb2 and Sos1 can be bound in the cyto and move to
+    *** the CLm together 
+  *** 11278271(I)  11573199(R)-4  about Fak/Pyk2,Grb2,Sos1
+
+
+rl[15.Cbl.reloc.Yphos]:
+  {CLm | clm [EgfR - act]  }
+  {CLi | cli               }
+  {CLc | clc Cbl           }
+  =>
+  {CLm | clm [EgfR - act]  }
+  {CLi | cli [Cbl - Yphos] }
+  {CLc | clc               } .
+  ----------------------------
+  *** 8662998(D) EgfR-Yphosed recruits Cbl to the CLi and 
+    *** phosphorylates it on Tyrosine
+
+
+
+rl[E56.Pak1.irt.Egf]:
+  {CLm | clm [EgfR - act]  }
+  {CLi | cli                                }
+  {CLc | clc   Pak1                         } 
+  =>
+  {CLm | clm [EgfR - act]  }
+  {CLi | cli  [Pak1 - act]                  }
+  {CLc | clc                                } .
+  ---------------------------------------------
+  *** 8798379(D) xPak1[xAb]-IPKA(MBP) is increased irt Egf
+    *** time course: 0 15+ 45++ 180+++ sec
+  *** 16129686(D) PakS-ingelKA(HistH4) is not increased irt Egf (5 min)
+
+
+
+rl[280.Raf1.by.Hras]:
+  {CLi | cli [Hras - GTP] [Pak1 - act] Src }
+  {CLc | clc  Raf1            1433x1 PP2a          }
+  =>
+  {CLi | cli [Hras - GTP] [Pak1 - act] Src [Raf1 - act] 1433x1  }
+  {CLc | clc                         PP2a          } .
+  ----------------------------------------------------
+
+rl[14.Vav2.act]:
+  {CLm | clm [EgfR - act]     }
+  {CLi | cli Src              }
+  {CLc | clc Vav2             }
+  =>
+  {CLm | clm [EgfR - act]     }
+  {CLi | cli Src [Vav2 - act] }
+  {CLc | clc                  } .
+  -------------------------------
+   *** 10618391(D) EgfR activation leads to Vav2 act
+   *** 10623460(R) activation of RhoGefs usually require a Slk
+   *** 12101119(R) binding of Vav to PIP2 masks the binding site for
+     *** Rac.  This may also be a prerequisite of the phosphorylation
+     *** of Vav by ?Slks and thus the activation of Vav by RTKs
+   *** 12454019(D) Vav2-SH2 binds to EgfR pY-992 pY-1148
+     *** Vav2 gets phosed on pY-142 pY-159 pY-172
+   *** amk replace ?Slk with Src - src is the slk most often
+     *** associated with Egfr
+
+
+
+rl[clt1.ctest]:
+  {CLi | cli Src  [Vav2 - act]   [Cbl - Yphos]   }
+  =>
+  {CLi | cli ( Src : ( [Vav2 - act] : [Cbl - Yphos] ) ) } .
+  -------------------------------
+
+
+endm

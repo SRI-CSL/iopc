@@ -1,0 +1,24 @@
+(entry qval(qidlist SmallKB)(notes
+(note 15.Cbl.reloc.Yphos :=(qval 8662998))
+(note 1.EgfR.act :=(qval 12620237))
+(note 3.ErbB2.act :=(qval 8617201 8665853 11297548 7903153))
+(note 5.Grb2.reloc :=(qval 2803273 7527043 7798267))
+(note 7.IP3.from.PIP2.by.Plc :=(qval ))
+(note 9.PIP3.from.PIP2.by.Pi3k :=(qval ))
+(note 8.Pi3k.act :=(qval 11353842 11695994 11779868))
+(note 13.Sos1.reloc :=(qval ))
+(note 4.Gab1.Yphosed :=(qval 11134009))
+(note 11.Shc.Yphosed :=(qval  9710588 8662998 8939605 9388490))
+(note 14.Vav2.act :=(qval 10618391 12454019))
+(note 2.EgfR.ubiq :=(qval 10531381))
+(note 12.Sos1.reinit :=(qval 11726515))
+(note 10.Plcg.act :=(qval 1537335))
+(note 6.Hras.act.1 :=(qval 11777939))
+)(qval )
+)
+
+
+
+
+
+
