@@ -1,5 +1,6 @@
 (let (
-     (host "10.3.0.50")
+ ;    (host "10.3.0.50") ; ian
+     (host "10.3.0.27")  ; clt 
 ;      (host "localhost")
 ;      (host "dark.csl.sri.com")
 ;      (port (int 8765))
