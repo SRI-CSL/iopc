@@ -1,49 +1,26 @@
-**** NEWSTUFF
-(gfilewrite C foo.txt a b c d)
+**** turn on IOP/g2d VERBOSITY
+ (g2dexe graphics2d (supdate "g2d.util.ActorMsg" "VERBOSE" (boolean true)))
+ (g2dexe graphics2d (supdate "g2d.Main" "DEBUG" (boolean true)))
+
+**** turn off IOP/g2d VERBOSITY
+ (g2dexe graphics2d (supdate "g2d.util.ActorMsg" "VERBOSE" (boolean false)))
+ (g2dexe graphics2d (supdate "g2d.Main" "DEBUG" (boolean false)))
+
+**** saving LoLa input  (by turning on loladebug)
+(g2dexe graphics2d (seq (define lolaDebug (boolean true)) (invoke java.lang.System.err "println" (concat "lolaDebug = " lolaDebug))))
+
+**** by turning off loladebug
+(g2dexe graphics2d (seq (define lolaDebug (boolean false)) (invoke java.lang.System.err "println" (concat "lolaDebug = " lolaDebug))))
 
 
-(topetri ThreeWaysToActRac)
-(save entry laura-3rac-pnet.txt petri-net ThreeWaysToActRac)
-(petri2graph graph-3rac ThreeWaysToActRac)
-(savegraph graph-3rac laura-3rac pn)
-(savegraph graph-3rac laura-3rac sbml)
+**** printing out some graph attribute
+ (g2dexe graphics2d (invoke java.lang.System.err "println" (getAttr (fetch "graph6") "kbname"))
 
-(topetri EGF-EGFR)
-(save entry laura-egf-pnet.txt petri-net EGF-EGFR)
+**** printing out some node attribute
+ (g2dexe graphics2d (invoke java.lang.System.err "println"  (concat "xselect = "
+	 (getAttr (invoke (fetch "graph1") "getNode" "22") "xselect" "none"))))
 
 
-**** in each case determine graph name using cmd-I and replace the place holder
-**** if need be
-
-*** Knockouts  -- tested with 3ways goal Rac1-GTP
-**** select dish, set goal(s) make subnet -- must be called from subnet
-(displayKOs graph2)
-
-**** little window shows in upper left
-
-**** tested with rrme and 3ways, from top level graph (or anyother I think)
-
-(colorGenes graph0 g.txt)
-
-**** shrink graph or move window to see colors
-**** reset selections will remove the colors!
-**** tried this one with 3ways
-(displayInterestSubnet graph0 Dock Crk )
-
-
-
-
-(displayPetri RRME)
-(displayPetri TwoWaysToActRac)
-(displayPetri ThreeWaysToActRac)
-(displayPetri ThreeWaysToActRacX)
-(displayPetri AdrenergicR)
-(displayPetri FASL-FASR)
-(displayPetri EGF-EGFR)
-(displayPetri TNF-TNFR1)
-(displayPetri everything)
-(displayPetri quiz)
-(displayPetri qt-test)
 
 *** what is going on
 (show control)
@@ -51,37 +28,89 @@
 (show wait4s)
 (show log)
 (show summary)
+
+(reset control)
 (reset wait4s)
+(graphics2d OK)
+(iop_remote_actor OK)
+
+**** geting the exploration history  -- replace ? by the xpnet id
+(show note history tval xnet xpnet?)
+
+**** showing bits
+(show notes gval graph1)
+(show note selections gval graph2)
+(show entry gval graph1)
+(show val gval graph1)
+
+**** saving a net and its graph 
+**** the show is a check that you have the right net/graph ids
+(show note source tval pnet pnet1)
+(save rasDish-net1.txt C entry tval pnet pnet1)
+(save  rasDish-graph2.txt C entry gval graph2)
+(exportGraph graph2 graphics2d rasDishg lsp)
 
 
-**** save a graph  (described in JLambda) in a file
+****restoring a pnet and its graph   
+**** restoring is delicate at the moment 
+**** need to restore in the order saved 
+**** need to know the graph name to activate (define,show, startlistener)
+**** once done reset the globalCounter to something larger that the
+****   highest counter restored
+(restore rasDish-net1.txt tmp entry) 
+(restore rasDish-graph2.txt tmp entry) 
+(defineGraph graphics2d graph2)
+(showGraph graphics2d graph2)
+(startListener graph2 graphreq graphics2d)
 
-(graph2file graph0  g0.lsp)
-
-(showruleids graph2)
-(hideRules graph0 83 true)
-****************************************
-**** saves petri-(sub)net underlying graph in pn format as filename.pn  
-(savegraph graph0 filename pn)
-**** saves petri-(sub)net underlying graph in sbml format as filename.sbml  
-(savegraph graph0 filename sbml)
-
-
-**** saves graph gname as sexpression for construction in JLambda as fname.lsp
-(graph2file gname fname)
-
-**** saving and restoring pnets
-****        fname             etype     id
-(save entry rrme-pnet.txt petri-net rrme)
-
-**** current restore is a bit of a hack
-**** read file and save as qidlist
-(restore rrme-pnet.txt rrme-restored)
-
-**** only understands petri-net entries at the moment
-(parseSavedEntry rrme-restored)
+*****reset global counter
+(setsc globalCounter 3)
 
 
+****restoring explore net 
+--- need to exploreSelected, with no selection to color
+**** NB starting the listener is different from a pnet
+**** NB this graph was generated in a different session -- not compatible
+**** with restoring the above pnet
+(restore plcg-xnet0.txt tmp entry) 
+(restore plcg-graph1.txt tmp entry) 
+(defineGraph graphics2d graph1)
+(showGraph graphics2d graph1)
+(startcListener graph1 onetimeListener graphics2d)
+
+*****reset global counter
+(setsc globalCounter 2)
+(show val sval globalCounter)
 
 
+**** save all entries in eset.txt
+(save eset.txt C eset)
+(save log.txt C log)
 
+**** save net of type <nettype> with id <pname> in <filename>
+(save <filename> C entry tval <nettype> <pname>)
+
+**** saving .lsp for use in jlambda alone
+(graph2filex <graphname> graphics2d <filename>.lsp)
+
+**** exporting to other formats (lsp omits loading pla.lsp into g2d)
+(exportGraph <graphname> graphics2d <filename> lsp)
+(exportGraph <graphname> graphics2d <filename> pn)
+(exportGraph <graphname> graphics2d <filename> sbml)
+  
+(exportGraph graph4 graphics2d xg4 lsp)
+(exportGraph graph4 graphics2d xg4 pn)
+(exportGraph graph4 graphics2d xg4 sbml)
+
+
+**** testing coloring -- history these lsp functions have not yet been added
+****!!!! speak to graphics2d  
+(user (load "hilite.lsp"))
+**** color all  mid thresh  = mid level, white for nodata gray for nochange       
+(user (apply hiliteGenes5 "graph2" "g.txt" (float 1.0) (float 0.3) java.awt.Color.white java.awt.Color.gray (boolean true)))
+
+**** color base mid thresh  = mid level
+(user (apply hiliteGenes5 "graph2" "g.txt" (float 1.0) (float 0.3) java.awt.Color.white java.awt.Color.gray (boolean false)))
+
+**** color base midthresh > level
+(user (apply hiliteGenes5 "graph2" "g.txt" (float 1.0) (float 0.4) java.awt.Color.white java.awt.Color.gray (boolean false)))
