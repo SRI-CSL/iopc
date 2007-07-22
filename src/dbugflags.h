@@ -53,5 +53,6 @@
 #define SALWRAPPER_DEBUG          0
 #define PVS_ACTOR_DEBUG           0
 #define G2D_ACTOR_DEBUG           0
+#define G2D_REMOTE_ACTOR_DEBUG    0
 
 

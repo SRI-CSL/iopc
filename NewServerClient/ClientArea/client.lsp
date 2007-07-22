@@ -1,8 +1,8 @@
 (let (
  ;    (host "10.3.0.50") ; ian
-     (host "10.3.0.27")  ; clt 
+;     (host "10.3.0.27")  ; clt 
 ;      (host "localhost")
-;      (host "dark.csl.sri.com")
+      (host "dark.csl.sri.com")
 ;      (port (int 8765))
       (port (int 7765))
       (socket  (object ("java.net.Socket" host port)))

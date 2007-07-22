@@ -937,9 +937,9 @@ void* echoLoopDieOnFail(void* args){
     message = acceptMsg(from);
     if(message != NULL){
       sendMsg(to, message);
-      if(MSG_DEBUG){
+      if(MSG_DEBUG ||  G2D_REMOTE_ACTOR_DEBUG){
 	sendMsg(STDERR_FILENO, message);
-	fprintf(stderr, "echoMsg: echo wrote %d bytes\n", message->bytesUsed);
+	fprintf(stderr, "\nechoMsg: echo wrote %d bytes\n", message->bytesUsed);
       }
       freeMsg(message);
     } else break;
@@ -960,9 +960,9 @@ void* echoLoop(void* args){
     message = acceptMsg(from);
     if(message != NULL){
       sendMsg(to, message);
-      if(MSG_DEBUG){
+      if(MSG_DEBUG || G2D_REMOTE_ACTOR_DEBUG){
 	sendMsg(STDERR_FILENO, message);
-	eM("echoMsg: echo wrote %d bytes\n", message->bytesUsed);
+	eM("\nechoMsg: echo wrote %d bytes\n", message->bytesUsed);
       }
       freeMsg(message);
     }
