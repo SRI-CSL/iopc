@@ -1,3 +1,0 @@
-Hras-GTP-CLi
-Plcg-act-CLi
-Sos1-CLc
