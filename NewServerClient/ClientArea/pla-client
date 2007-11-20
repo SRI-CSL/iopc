@@ -1,3 +1,0 @@
-java  -Xms256m -Xmx1024m -ea  -cp iop.jar:pla.jar:BrowserLauncher2-10.jar g2d/jlambda/ReadEvalPrintLoop . client.lsp
-
-
