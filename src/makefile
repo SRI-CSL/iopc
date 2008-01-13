@@ -11,15 +11,17 @@ CPU      =  Intel
 
 ifeq (Darwin, $(findstring Darwin, ${OS}))
 #we are a mac, find out what CPU:
- ifeq (powerpc, $(findstring powerpc, ${ARCH}))
-  CPU = powerpc
- endif
- ifeq (i386, $(findstring i386, ${ARCH}))
-  CPU = Intel
- endif
+# ifeq (powerpc, $(findstring powerpc, ${ARCH}))
+#  CPU = powerpc
+# endif
+# ifeq (i386, $(findstring i386, ${ARCH}))
+#  CPU = Intel
+# endif
 #Mac flags
 SCRIPT = mac_iop
-CFLAGS =  -Wall -D_MAC -D_${CPU}
+#CFLAGS =  -Wall -D_MAC -D_${CPU}
+#we build universal
+CFLAGS =  -Wall -D_MAC -arch i386 -arch ppc
 # add to CFLAGS for debugging:
 # -g 
 LIBS = -lpthread -lm 
@@ -27,7 +29,7 @@ else
 #Linux flags
 SCRIPT = linux_iop
 LIBS =  -lm 
-CFLAGS =  -Wall -pthread -D_LINUX -D_${CPU} -pedantic
+CFLAGS =  -Wall -pthread -D_LINUX -pedantic
 # add to CFLAGS for debugging:
 # -g 
 endif
