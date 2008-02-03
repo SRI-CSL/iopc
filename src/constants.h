@@ -84,16 +84,20 @@
 \n\tmay help. You will also need this directory to be in your PATH.\n\n"
 
 
-#define IOP_USAGE \
+#define IOP_USAGE_I \
 "\
 \nUsage: iop options:\
 \n\t-v     --version     Print iop's version number\
 \n\t-d     --debug       Debug mode\
 \n\t-a     --actors      Hardwired actors mode\
+\n\t-m     --minimal     Minimal hardwired actors mode\
+\n\t-n     --nowin       Don't launch any windows\
+\n\t-c     --chatter     Provide a commandline interface when in no windows mode"
+
+#define IOP_USAGE_II \
+"\
 \n\t-s <n> --server  <n> Server mode on port: <n>\
 \n\t-r <n> --remote  <n> Slave to remote applet on socket fd: <n>\
 \n\t-g <n> --gui     <n> Enable remote debugging of GUI JVM on port: <n>\
-\n\t-i <f> --init    <f> Use the startup file: <f>\
-\n\t-n     --nowin       Don't launch any windows\
-\n\t-c     --chatter     Prove commandline when in no windows mode\n\n"
+\n\t-i <f> --init    <f> Use the startup file: <f>\n\n"
 

@@ -39,6 +39,7 @@ extern int   iop_debug_flag;
 extern int   iop_no_windows_flag;
 extern int   iop_chatter_flag;
 extern int   iop_hardwired_actors_flag;
+extern int   iop_minimal_actors_flag;
 extern int   iop_remote_fd;
 extern int   iop_server_mode;
 extern char *iop_port;
@@ -56,6 +57,7 @@ extern char* iop_bin_dir;
 /* statics */
 static void wait4shutdown();
 static actor_spec *launchActor(int notify, char* name, char* exe, char** argv);
+
 static actor_spec *launchMaude(int argc, char** argv);
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str);
 /* static actor_spec *launchGraphics(char* code_dir); */
@@ -120,6 +122,7 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   char in2RegPortString[SIZE], in2RegFdString[SIZE];
   char** registry_argv;
   actor_spec *registry_spec;
+  int spawn = !iop_minimal_actors_flag && iop_hardwired_actors_flag;
 
   announce("commencing\n");
   announce("optind = %d\n", optind);
@@ -230,31 +233,31 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   announce("spawning hardwired actors actors\n");
 
 
-  if(iop_hardwired_actors_flag && launchMaude(argc, argv) == NULL) goto bail;
+  if(spawn && launchMaude(argc, argv) == NULL){  goto bail; }
 
   /*
     if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics(iop_bin_dir) == NULL) 
       goto bail;
   */
   
-  if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics2d(iop_bin_dir) == NULL) goto bail;
+  if((remoteFd == 0) && spawn && launchGraphics2d(iop_bin_dir) == NULL){ goto bail; }
    
-  if(iop_hardwired_actors_flag && launchExecutor() == NULL) goto bail;
+  if(spawn && launchExecutor() == NULL){ goto bail; }
   
-  if(iop_hardwired_actors_flag && launchFilemanager() == NULL) goto bail;
+  if(spawn && launchFilemanager() == NULL){ goto bail; }
 
-  if(iop_hardwired_actors_flag && launchSocketfactory() == NULL) goto bail;
-
+  if(spawn && launchSocketfactory() == NULL){ goto bail; }
+  
   if((remoteFd > 0) && (launchRemoteActor(remoteFd) == NULL)) goto bail;
-
+  
   /* 
      if(iop_hardwired_actors_flag && launchPVS() == NULL) goto bail;
   */
-
+  
   announce("spawned actors\n");
-
- 
-
+  
+  
+  
   if(!iop_no_windows_flag){ 
     if(CHATTER){
       registryDump(stderr);
@@ -486,6 +489,13 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
 	fprintf(stderr, "%s\t:\tno windows option selected\n", caller);
       break;
     }
+    case 'm': {
+      iop_hardwired_actors_flag = 1; 
+      iop_minimal_actors_flag = 1; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tminimal actors option selected\n", caller);
+      break;
+    }
     case 'c': {
       iop_chatter_flag = 1; 
       if(IOP_LIB_DEBUG)
@@ -529,7 +539,8 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
       break;
     }
      case '?': {
-      fprintf(stderr, IOP_USAGE); 
+      fprintf(stderr, IOP_USAGE_I); 
+      fprintf(stderr, IOP_USAGE_II); 
       exit(EXIT_SUCCESS);
     }
     case -1 : break;
@@ -554,6 +565,13 @@ void parseOptions(int argc, char** argv, const char* options){
       iop_debug_flag = 1; 
       if(IOP_LIB_DEBUG)
 	fprintf(stderr, "%s\t:\tdebug option selected\n", caller);
+      break;
+    }
+    case 'm': {
+      iop_hardwired_actors_flag = 1; 
+      iop_minimal_actors_flag = 1; 
+      if(IOP_LIB_DEBUG)
+	fprintf(stderr, "%s\t:\tminimal actors option selected\n", caller);
       break;
     }
     case 'n': {
@@ -602,7 +620,8 @@ void parseOptions(int argc, char** argv, const char* options){
       break;
     }
     case '?': {
-      fprintf(stderr, IOP_USAGE); 
+      fprintf(stderr, IOP_USAGE_I); 
+      fprintf(stderr, IOP_USAGE_II); 
       exit(EXIT_SUCCESS);
     }
     case -1 : break;
