@@ -21,15 +21,17 @@ ifeq (Darwin, $(findstring Darwin, ${OS}))
 SCRIPT = mac_iop
 #CFLAGS =  -Wall -D_MAC -D_${CPU}
 #we build universal
-CFLAGS =  -Wall -D_MAC -arch i386 -arch ppc
+CFLAGS = -Wall -D_MAC -arch i386 -arch ppc 
+# on tiger remove the arches
 # add to CFLAGS for debugging:
 # -g 
-LIBS = -lpthread -lm 
+LIBS = -lpthread -lm  -arch i386 -arch ppc
+# on tiger remove the arches
 else
 #Linux flags
 SCRIPT = linux_iop
-LIBS =  -lm 
-CFLAGS =  -Wall -pthread -D_LINUX -pedantic
+LIBS =  -lm -pthread 
+CFLAGS =  -Wall -D_LINUX -pedantic
 # add to CFLAGS for debugging:
 # -g 
 endif
@@ -68,8 +70,10 @@ COBJS = actor.o\
 
 all:  scripts ${EXE}
 
-${EXE}: %: %.c ${COBJS} ${HEADERS} ${MISC}
-	${COMPILER} ${CFLAGS} ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
+${EXE}: %: %.o ${COBJS} ${HEADERS} ${MISC}
+	${COMPILER}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
+
+#${CFLAGS}
 
 %.o: %.c %.h ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS} $< -c 
@@ -83,7 +87,7 @@ clean_tmp:
 	rm -f /tmp/iop_*
 
 clean:
-	rm -f ${EXE} ${COBJS} 
+	rm -f ${EXE} ${COBJS} *.o
 
 zip: clean
 	rm -f *~ *.zip *.bak
