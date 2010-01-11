@@ -102,7 +102,7 @@ pid_t spawnActor(actor_spec *act, char* executable, char** argv){
     if(iop_debug_flag || iop_no_windows_flag){
       /* better not rely on the registry to handles its errors */
       if(strcmp(act->name, REGISTRY_ACTOR)){
-	ec_neg1( dup2(fds[2], STDERR_FILENO) );
+        ec_neg1( dup2(fds[2], STDERR_FILENO) );
       }
       ec_neg1( dup2(fds[0], STDIN_FILENO)  );
       ec_neg1( dup2(fds[1], STDOUT_FILENO) );
@@ -123,8 +123,8 @@ pid_t spawnActor(actor_spec *act, char* executable, char** argv){
       execvp(executable, argv);
     }
     fprintf(stderr, 
-	    "WARNING: Failure of execvp in actor creation: %s executable:%s \n",
-	    strerror(errno), executable);
+            "WARNING: Failure of execvp in actor creation: %s executable:%s \n",
+            strerror(errno), executable);
     sleep(1);  /* give the registry time to see this error message */
     sendFormattedMsgFP(stdout, "system\n%s\nunenroll %s\n", self, self);
     sleep(1);  /* give the registry time to see this request */
@@ -140,10 +140,10 @@ pid_t spawnActor(actor_spec *act, char* executable, char** argv){
     return retval;
   }
  fail:
-EC_CLEANUP_BGN
-if(retval > 0){ kill(retval, SIGKILL); }
+  EC_CLEANUP_BGN
+    if(retval > 0){ kill(retval, SIGKILL); }
   return -1;
-EC_CLEANUP_END
+  EC_CLEANUP_END
 }
 
 actor_spec* makeActorSpec(char *name){

@@ -1,25 +1,25 @@
 /*
-    The InterOperability Platform: IOP
-    Copyright (C) 2004 Ian A. Mason
-    School of Mathematics, Statistics, and Computer Science   
-    University of New England, Armidale, NSW 2351, Australia
-    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
-    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+  The InterOperability Platform: IOP
+  Copyright (C) 2004 Ian A. Mason
+  School of Mathematics, Statistics, and Computer Science   
+  University of New England, Armidale, NSW 2351, Australia
+  iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
+  http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
 
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include "cheaders.h"
@@ -53,7 +53,9 @@ int main(int argc, char** argv){
   self_debug_flag  = (REGISTRY_DEBUG || iop_debug_flag);
   self = argv[0];
 
-  /* fprintf(stderr, "%s local_debug_flag = %d\n", argv[0], local_debug_flag); */
+  /* fprintf(stderr, "%s self_debug_flag = %d\n", argv[0], self_debug_flag);  */
+  
+   
 
   /* set externs */
   iop_pid           = getppid();
@@ -68,17 +70,19 @@ int main(int argc, char** argv){
 
     
   /*
-  if(atexit(bail) != 0){
+    if(atexit(bail) != 0){
     fprintf(stderr, "atexit(bail) failed\n");
     goto killIOP;
-  }
+    }
   */
 
   if(errorsInit() < 0){
     fprintf(stderr, "errorsInit failed\n");
     goto killIOP;
   }
-
+  
+  fprintf(stderr, "%s self_debug_flag = %d REGISTRY_DEBUG = %d\n", argv[0], self_debug_flag, REGISTRY_DEBUG); 
+  
   /* rethink this if they ever fail */
   assert(strlen(registry_fifo_in)  < PATH_MAX);
   assert(strlen(registry_fifo_out) < PATH_MAX);
@@ -89,7 +93,7 @@ int main(int argc, char** argv){
     perror("could not install signal handler");
     goto killIOP;
   }
-
+  
   log2File("Calling registryInit\n");
 
   if(registryInit(&fifoIn, &fifoOut) < 0){
@@ -124,8 +128,8 @@ int main(int argc, char** argv){
       log2File("startup file reading failed\n");
       log2File("reading configuration file\n");
       if(registryProcessConfigFile() < 0){
-      log2File("configuration file reading failed\n");
-    }
+        log2File("configuration file reading failed\n");
+      }
       log2File("reading startup file\n");
     } 
   }
@@ -141,19 +145,19 @@ int main(int argc, char** argv){
       freeMsg(message);
       message = acceptMsg(STDIN_FILENO);
       if(message == NULL){
-	perror("registry readMsg failed");
-	continue;
+        perror("registry readMsg failed");
+        continue;
       }
       log2File("received:\"%s\"\n", message->data);
       retval = parseActorMsg(message->data, &sender, &body);
       if(!retval){
-	fprintf(stderr, "registry didn't understand: \n\t \"%s\" \n", message->data);
-	continue;
+        fprintf(stderr, "registry didn't understand: \n\t \"%s\" \n", message->data);
+        continue;
       }
       if(body == NULL){
-	fprintf(stderr, "registry didn't understand: (body == NULL)\n");
+        fprintf(stderr, "registry didn't understand: (body == NULL)\n");
       } else {
-	processRegistryMessage(sender, body);
+        processRegistryMessage(sender, body);
       }
     }
   }
@@ -165,10 +169,10 @@ int main(int argc, char** argv){
   (void)kill(iop_pid, SIGKILL);
   exit(EXIT_SUCCESS);
 
-EC_CLEANUP_BGN
-  bail();
+  EC_CLEANUP_BGN
+    bail();
   exit(EXIT_FAILURE);
-EC_CLEANUP_END
+  EC_CLEANUP_END
 
-}
+    }
 

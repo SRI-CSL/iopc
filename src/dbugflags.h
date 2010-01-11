@@ -43,7 +43,7 @@
   SILENCE!
 */
 #define MSG_DEBUG                 0
-#define REGISTRY_DEBUG            0  
+#define REGISTRY_DEBUG            0
 #define SOCKET_DEBUG              0
 #define SOCKETFACTORY_DEBUG       0
 #define WRAPPER_DEBUG             0

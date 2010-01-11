@@ -29,7 +29,10 @@ int registry_installHandler();
 int makeRegistryFifos();
 int registryInit();
 int errorsInit();
+//does locking
 void log2File(const char *format, ...);
+//doesn't do locking (used in signal handlers)
+void log2FileVolatile(const char *format, ...);
 void bail();
 void processRegistryCommand(int, int, int);
 void *monitorInSocket(void *);

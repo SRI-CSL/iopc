@@ -21,7 +21,7 @@ ifeq (Darwin, $(findstring Darwin, ${OS}))
 SCRIPT = mac_iop
 #CFLAGS =  -Wall -D_MAC -D_${CPU}
 #we build universal
-CFLAGS = -Wall -D_MAC -arch i386 -arch ppc 
+CFLAGS = -Wall -D_MAC -arch i386 -arch ppc  -g
 # on tiger remove the arches
 # add to CFLAGS for debugging:
 # -g 
@@ -65,7 +65,7 @@ COBJS = actor.o\
         iop_lib.o\
         socket_lib.o\
         msg.o argv.o wrapper_lib.o sal_lib.o\
-	ec.o macrostr.o
+				ec.o macrostr.o
 
 
 all:  scripts ${EXE}

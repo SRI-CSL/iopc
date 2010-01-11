@@ -89,17 +89,13 @@ void announce(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   if(self_debug_flag  && (format != NULL)){
-    ec_rv( pthread_mutex_lock(&iop_err_mutex) );
-    fprintf(stderr, "%s(%p)\t:\t", self, (void *)pthread_self());
+    pthread_mutex_lock(&iop_err_mutex);
+    fprintf(stderr, "%s<%p>\t:\t", self, (void *)pthread_self());
     vfprintf(stderr, format, arg);
-    ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
+    pthread_mutex_unlock(&iop_err_mutex);
   }
   va_end(arg);
   return;
-EC_CLEANUP_BGN
-  va_end(arg);
-  return;
-EC_CLEANUP_END
 }
 
 void spawnServer(int argc, char** argv, int no_windows){

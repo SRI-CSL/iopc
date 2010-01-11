@@ -44,8 +44,8 @@ static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 static void eM(const char *format, ...){
   va_list arg;
   va_start(arg, format);
-  if(format != NULL) {
-    if(MSG_DEBUG || self_debug_flag){
+  if(format != NULL){
+    if(MSG_DEBUG && self_debug_flag){
       ec_rv( pthread_mutex_lock(&iop_err_mutex) );
       fprintf(stderr, "MSG(%p)\t:\t", (void *)pthread_self());
       vfprintf(stderr, format, arg);
