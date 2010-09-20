@@ -81,7 +81,7 @@ int main(int argc, char** argv){
     goto killIOP;
   }
   
-  fprintf(stderr, "%s self_debug_flag = %d REGISTRY_DEBUG = %d\n", argv[0], self_debug_flag, REGISTRY_DEBUG); 
+  /* fprintf(stderr, "%s self_debug_flag = %d REGISTRY_DEBUG = %d\n", argv[0], self_debug_flag, REGISTRY_DEBUG);  */
   
   /* rethink this if they ever fail */
   assert(strlen(registry_fifo_in)  < PATH_MAX);
