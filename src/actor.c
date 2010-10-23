@@ -151,7 +151,7 @@ actor_spec* makeActorSpec(char *name){
   actor_spec *retval = NULL;
   if(name != NULL){
     ec_null( retval = calloc(1, sizeof(actor_spec)) );
-    sprintf(retval->name, name);
+    sprintf(retval->name, "%s", name);
     for(i = 0; i < 3; i++){
       char *stream = ((i == 0) ? "IN" : ((i == 1) ? "OUT" : "ERR"));
       sprintf(retval->fifos[i], "/tmp/iop_%d_%s_%s", iop_pid, name, stream);

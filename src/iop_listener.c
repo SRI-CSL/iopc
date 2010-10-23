@@ -145,7 +145,7 @@ int main(int argc, char** argv){
     announce("Blocking on acceptSocket\n");
     msgsock = acceptSocket(listenFd, &description);
     if (*msgsock == INVALID_SOCKET) {
-      fprintf(stderr, description);
+      fprintf(stderr, "%s\n", description);
       free(description);
       continue;
     }

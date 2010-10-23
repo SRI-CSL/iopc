@@ -979,7 +979,7 @@ void *monitorInSocket(void *arg){
     log2File("monitorInSocket blocking on acceptSocket\n");
     msgsock = acceptSocket(listeningSocket, &description);
     if (*msgsock == INVALID_SOCKET){
-      fprintf(stderr, description);
+      fprintf(stderr, "%s\n", description);
       free(description); 
       pthread_exit(NULL);
     }
@@ -996,7 +996,7 @@ static int wait4ReadyFromInputWindow(int in2regSocket){
   log2File("wait4ReadyFromInputWindow blocking on acceptSocket\n");
   msgsock = acceptSocket(in2regSocket, &description);
   if (*msgsock == INVALID_SOCKET){
-    fprintf(stderr, description);
+    fprintf(stderr, "%s\n", description);
     free(description);
     return -1;
   }
