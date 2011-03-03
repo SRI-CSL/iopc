@@ -748,7 +748,7 @@ int parseActorMsg(char* buff, char** senderp, char** bodyp){
 }
 
 int getNextToken(char *buff, char** next, char** rest){
-  int start = 0, end;
+  int start = 0, end = 0;
   if((next == NULL) || (rest == NULL)) return -1;
   if(buff == NULL) goto exit;
   while(isspace(buff[start])){
@@ -771,7 +771,7 @@ int getNextToken(char *buff, char** next, char** rest){
     buff[end] = '\0';
     *next = &buff[start];
     *rest = &buff[end + 1];
-    return 1;
+    return end + 1;
   }
  exit:
   *next = NULL;

@@ -103,7 +103,7 @@ int main(int argc, char** argv){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", messageIn->data);
       continue;
     }
-    if(getNextToken(body, &cmd, &rest) != 1){
+    if(getNextToken(body, &cmd, &rest) <= 0){
       fprintf(stderr, "didn't understand: (cmd)\n\t \"%s\" \n", body);
       continue;
     }
@@ -113,7 +113,7 @@ int main(int argc, char** argv){
       } else {
         char *bytes2read;
         int bytesDesired;
-        if(getNextToken(rest, &bytes2read, &rest) != 1){
+        if(getNextToken(rest, &bytes2read, &rest) <= 0){
           fprintf(stderr, 
                   "didn't understand: (bytes2read)\n\t \"%s\" \n", 
                   rest);
@@ -157,7 +157,7 @@ int main(int argc, char** argv){
       } else {
         char *bytes2write;
         int bytesToSend, bytesSent;
-        if(getNextToken(rest, &bytes2write, &rest) != 1){
+        if(getNextToken(rest, &bytes2write, &rest) <= 0){
           fprintf(stderr, 
                   "didn't understand: (bytes2write)\n\t \"%s\" \n", 
                   rest);

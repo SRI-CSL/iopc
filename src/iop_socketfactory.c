@@ -107,7 +107,7 @@ int main(int argc, char** argv){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", message->data);
       continue;
     }
-    if(getNextToken(body, &cmd, &rest) != 1){
+    if(getNextToken(body, &cmd, &rest) <= 0){
       fprintf(stderr, "didn't understand: (cmd)\n\t \"%s\" \n", body);
       continue;
     }
@@ -115,11 +115,11 @@ int main(int argc, char** argv){
       char *host;
       announce("openclient case\n");
      
-      if(getNextToken(rest, &host, &rest) != 1){
+      if(getNextToken(rest, &host, &rest) <= 0){
         fprintf(stderr, "didn't understand: (host)\n\t \"%s\" \n", rest);
         continue;
       }
-      if(getNextToken(rest, &port, &rest) != 1){
+      if(getNextToken(rest, &port, &rest) <= 0){
         fprintf(stderr, "didn't understand: (port)\n\t \"%s\" \n", rest);
         continue;
       }
@@ -159,7 +159,7 @@ int main(int argc, char** argv){
       continue;
     } else if(!strcmp(cmd, "openlistener")){
       announce("openlistener case\n");
-      if(getNextToken(rest, &port, &rest) != 1){
+      if(getNextToken(rest, &port, &rest) <= 0){
         fprintf(stderr, "didn't understand: (port)\n\t \"%s\" \n", rest);
         continue;
       }

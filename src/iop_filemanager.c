@@ -72,12 +72,12 @@ int main(int argc, char** argv){
       continue;
     }
     announce("filemanager parseActorMsg-ed\n");
-    if(getNextToken(body, &cmd, &rest) != 1){
+    if(getNextToken(body, &cmd, &rest) <= 0){
       fprintf(stderr, "didn't understand: (cmd)\n\t \"%s\" \n", body);
       continue;
     }
     announce("filemanager getNextToken-ed of cmd\n");
-    if(getNextToken(rest, &filename, &rest) != 1){
+    if(getNextToken(rest, &filename, &rest) <= 0){
       fprintf(stderr, "didn't understand: (filename)\n\t \"%s\" \n", rest);
       continue;
     }

@@ -62,7 +62,7 @@ static void *listener_cmd_thread(void *arg){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", message->data);
       continue;
     }
-    if(getNextToken(body, &cmd, &rest) != 1){
+    if(getNextToken(body, &cmd, &rest) <= 0){
       fprintf(stderr, "didn't understand: (cmd)\n\t \"%s\" \n", body);
       continue;
     }
@@ -145,7 +145,7 @@ int main(int argc, char** argv){
     announce("Blocking on acceptSocket\n");
     msgsock = acceptSocket(listenFd, &description);
     if (*msgsock == INVALID_SOCKET) {
-      fprintf(stderr, description);
+      fprintf(stderr, "%s\n", description);
       free(description);
       continue;
     }
