@@ -1,25 +1,25 @@
 /*
-    The InterOperability Platform: IOP
-    Copyright (C) 2004 Ian A. Mason
-    School of Mathematics, Statistics, and Computer Science   
-    University of New England, Armidale, NSW 2351, Australia
-    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
-    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+  The InterOperability Platform: IOP
+  Copyright (C) 2004 Ian A. Mason
+  School of Mathematics, Statistics, and Computer Science   
+  University of New England, Armidale, NSW 2351, Australia
+  iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
+  http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
 
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include "cheaders.h"
@@ -106,8 +106,8 @@ void spawnServer(int argc, char** argv, int no_windows){
   server_argv[4] = (no_windows ? "1" : "0");
 
   fprintf(stderr, 
-	  "Attempting to spawn iop_server\n\tport       = %s\n\tiop_dir    = %s\n\tmaude_dir  = %s\n\tno_windows = %s\n", 
-	  server_argv[1], server_argv[2], server_argv[3],  server_argv[4]);
+          "Attempting to spawn iop_server\n\tport       = %s\n\tiop_dir    = %s\n\tmaude_dir  = %s\n\tno_windows = %s\n", 
+          server_argv[1], server_argv[2], server_argv[3],  server_argv[4]);
   spawnProcess(server_argv[0], server_argv);
 }
 
@@ -125,8 +125,8 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
    
   if((argc - optind) < 1){
     fprintf(stderr, 
-	    "Usage: %s  <iop_executable_dir> <maude_executable_dir>\n",
-	    argv[0]);
+            "Usage: %s  <iop_executable_dir> <maude_executable_dir>\n",
+            argv[0]);
     exit(EXIT_FAILURE);
   }
 
@@ -174,9 +174,9 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
   registry_argv = 
     mkRegistryArgv(argc, argv, 
-		   registry_fifo_in, registry_fifo_out, 
-		   in2RegPortString, in2RegFdString,
-		   iop_bin_dir);
+                   registry_fifo_in, registry_fifo_out, 
+                   in2RegPortString, in2RegFdString,
+                   iop_bin_dir);
 
   announce("spawning registry\n");
   
@@ -233,7 +233,7 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
   /*
     if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics(iop_bin_dir) == NULL) 
-      goto bail;
+    goto bail;
   */
   
   if((remoteFd == 0) && spawn && launchGraphics2d(iop_bin_dir) == NULL){ goto bail; }
@@ -322,7 +322,7 @@ static actor_spec *launchMaude(int argc, char** argv){
     maude_argv[2] = argv[optind];
     if(IOP_DEBUG || iop_debug_flag)
       fprintf(stderr, "(argc - optind) = %d, maude_argv[2] = %s\n",
-	      (argc - optind), argv[optind]);
+              (argc - optind), argv[optind]);
   }
   return launchActor(1, "maude", maude_exe, maude_argv);
 }
@@ -334,8 +334,8 @@ static char* iop_alloc_jarpath_aux(char* code_dir, char* who, char* classpath){
   char *retval = calloc(len + strlen(code_dir) + strlen(JARPATH) + 1, sizeof(char));
   if(retval == NULL){
     fprintf(stderr, 
-	    "calloc failed in iop_alloc_jarpath called by %s: %s\n",
-	    who, strerror(errno));
+            "calloc failed in iop_alloc_jarpath called by %s: %s\n",
+            who, strerror(errno));
   } else {
     strcpy(retval, code_dir);
     strcat(retval, JARPATH);
@@ -367,18 +367,18 @@ static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
   char** input_argv  = NULL;
   /* N is for normal */
   char* input_argvN[] = {INWINDOW, 
-			 "-cp", 
-			 NULL,
-			 "GUI.Editor", NULL, NULL, NULL};
+                         "-cp", 
+                         NULL,
+                         "GUI.Editor", NULL, NULL, NULL};
   /* D is for debug  */
   char* input_argvD[] = {INWINDOW, 
-			 "-cp", 
-			 NULL, 
-			 "-Xdebug", 
-			 "-Xnoagent",
-			 "-Djava.compiler=NONE",
-			 NULL,
-			 "GUI.Editor", NULL, NULL, NULL};
+                         "-cp", 
+                         NULL, 
+                         "-Xdebug", 
+                         "-Xnoagent",
+                         "-Djava.compiler=NONE",
+                         NULL,
+                         "GUI.Editor", NULL, NULL, NULL};
   if(iop_gui_debug_port == NULL){
     /* normal mode */
     input_argv = input_argvN;
@@ -391,8 +391,8 @@ static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
     input_argv = input_argvD;
     input_argc = 10;
     snprintf(buff, BUFFSZ,
-	     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
-	     iop_gui_debug_port); 
+             "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
+             iop_gui_debug_port); 
     input_argv[6] = buff;
     input_argv[8] = pid_str;
     input_argv[9] = port_str;
@@ -405,12 +405,12 @@ static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
 }
 
 /*
-static actor_spec *launchGraphics(char* code_dir){
+  static actor_spec *launchGraphics(char* code_dir){
   char  graphics_exe[] = "iop_graphics_wrapper";
   char* graphics_argv[] = {"graphics", NULL, NULL};
   graphics_argv[1]  = code_dir;
   return launchActor(1, "graphics", graphics_exe, graphics_argv);
-}
+  }
 */
 
 static actor_spec *launchGraphics2d(char* code_dir){
@@ -428,9 +428,9 @@ static actor_spec *launchExecutor(){
 }
 
 static actor_spec *launchFilemanager(){
-    char  filemanager_exe[] = "iop_filemanager";
-    char* filemanager_argv[] = {"filemanager", NULL};
-    return launchActor(1, "filemanager", filemanager_exe, filemanager_argv);
+  char  filemanager_exe[] = "iop_filemanager";
+  char* filemanager_argv[] = {"filemanager", NULL};
+  return launchActor(1, "filemanager", filemanager_exe, filemanager_argv);
 }
 
 static actor_spec *launchSocketfactory(){
@@ -453,11 +453,11 @@ static actor_spec *launchRemoteActor(int remoteFd){
 }
 
 /*
-static actor_spec *launchPVS(){
+  static actor_spec *launchPVS(){
   char  pvs_exe[] = "iop_pvs_wrapper";
   char* pvs_argv[] = {"pvs",  NULL};
   return launchActor(1, "pvs", pvs_exe, pvs_argv);
-}
+  }
 */
 
 #ifdef _LINUX
@@ -470,44 +470,44 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
     case 'a': {
       iop_hardwired_actors_flag = 1; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\thardwired actors option selected\n", caller);
+        fprintf(stderr, "%s\t:\thardwired actors option selected\n", caller);
       break;
     }
     case 'd': {
       iop_debug_flag = 1; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tdebug option selected\n", caller);
+        fprintf(stderr, "%s\t:\tdebug option selected\n", caller);
       break;
     }
     case 'n': {
       iop_no_windows_flag = 1; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tno windows option selected\n", caller);
+        fprintf(stderr, "%s\t:\tno windows option selected\n", caller);
       break;
     }
     case 'm': {
       iop_hardwired_actors_flag = 1; 
       iop_minimal_actors_flag = 1; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tminimal actors option selected\n", caller);
+        fprintf(stderr, "%s\t:\tminimal actors option selected\n", caller);
       break;
     }
     case 'c': {
       iop_chatter_flag = 1; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tchatter option selected\n", caller);
+        fprintf(stderr, "%s\t:\tchatter option selected\n", caller);
       break;
     }
     case 'v': {
       iop_version_flag = 1; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tversion option selected\n", caller);
+        fprintf(stderr, "%s\t:\tversion option selected\n", caller);
       break;
     }
     case 'r': {
       iop_remote_fd = atoi(optarg); 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tremote fd = %d\n", caller, iop_remote_fd);
+        fprintf(stderr, "%s\t:\tremote fd = %d\n", caller, iop_remote_fd);
       break;
     }
     case 'p': {
@@ -517,24 +517,24 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
       iop_server_mode = 1; 
       iop_port = optarg; 
       if(IOP_LIB_DEBUG){
-	fprintf(stderr, "%s\t:\tserver mode selected\n", caller);
-	fprintf(stderr, "%s\t:\tserver port = %s\n", caller, iop_port);
+        fprintf(stderr, "%s\t:\tserver mode selected\n", caller);
+        fprintf(stderr, "%s\t:\tserver port = %s\n", caller, iop_port);
       }
       break;
     }
     case 'g': {
       iop_gui_debug_port = optarg; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
+        fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
       break;
     }
     case 'i': {
       iop_startup_file = optarg; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tstartup file = %s\n", caller, iop_startup_file);
+        fprintf(stderr, "%s\t:\tstartup file = %s\n", caller, iop_startup_file);
       break;
     }
-     case '?': {
+    case '?': {
       fprintf(stderr, IOP_USAGE_I); 
       fprintf(stderr, IOP_USAGE_II); 
       exit(EXIT_SUCCESS);
@@ -548,71 +548,65 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
 void parseOptions(int argc, char** argv, const char* options){
   int next_option;
   char* caller = argv[0];
-  do {
-    next_option = getopt(argc, argv, options);
+  opterr = 0;
+  while((next_option = getopt(argc, argv, options)) != -1){
+    if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tparseOptions(next_option = %c)\n", caller, next_option); }
     switch(next_option){
     case 'a': {
       iop_hardwired_actors_flag = 1; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\thardwired actors option selected\n", caller);
+      if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\thardwired actors option selected\n", caller); }
       break;
     }
     case 'd': {
       iop_debug_flag = 1; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tdebug option selected\n", caller);
+      if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tdebug option selected\n", caller); }
       break;
     }
     case 'm': {
       iop_hardwired_actors_flag = 1; 
       iop_minimal_actors_flag = 1; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tminimal actors option selected\n", caller);
+      if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tminimal actors option selected\n", caller); }
       break;
     }
     case 'n': {
       iop_no_windows_flag = 1; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tno windows option selected\n", caller);
+      if(IOP_LIB_DEBUG){  fprintf(stderr, "%s\t:\tno windows option selected\n", caller); }
       break;
     }
     case 'c': {
       iop_chatter_flag = 1; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tchatter option selected\n", caller);
+      if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tchatter option selected\n", caller); }
       break;
     }
     case 'v': {
       iop_version_flag = 1; 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tversion option selected\n", caller);
+      if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tversion option selected\n", caller); }
       break;
     }
     case 'r': {
       iop_remote_fd = atoi(optarg); 
-      if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tremote fd = %d\n", caller, iop_remote_fd);
+      if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tremote fd = %d\n", caller, iop_remote_fd); }
       break;
     }
     case 's': {
       iop_server_mode = 1; 
       iop_port = optarg; 
       if(IOP_LIB_DEBUG){
-	fprintf(stderr, "%s\t:\tserver mode selected\n", caller);
-	fprintf(stderr, "%s\t:\tserver port = %s\n", caller, iop_port);
+        fprintf(stderr, "%s\t:\tserver mode selected\n", caller);
+        fprintf(stderr, "%s\t:\tserver port = %s\n", caller, iop_port);
       }
       break;
     }
     case 'g': {
       iop_gui_debug_port = optarg; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
+        fprintf(stderr, "%s\t:\tgui port = %s\n", caller, iop_gui_debug_port);
       break;
     }
     case 'i': {
       iop_startup_file = optarg; 
       if(IOP_LIB_DEBUG)
-	fprintf(stderr, "%s\t:\tstartup file = %s\n", caller, iop_startup_file);
+        fprintf(stderr, "%s\t:\tstartup file = %s\n", caller, iop_startup_file);
       break;
     }
     case '?': {
@@ -620,19 +614,16 @@ void parseOptions(int argc, char** argv, const char* options){
       fprintf(stderr, IOP_USAGE_II); 
       exit(EXIT_SUCCESS);
     }
-    case -1 : break;
     default : exit(EXIT_SUCCESS);
     }
-    argc -= optind;
-    argv += optind;
-  }while(next_option != -1);
+  }
 }
 #endif
 
 char** mkRegistryArgv(int argc, char** argv, 
-		      char* fifoIn, char* fifoOut, 
-		      char* port, char* fd,
-		      char* dir){
+                      char* fifoIn, char* fifoOut, 
+                      char* port, char* fd,
+                      char* dir){
   int i;
   char ** retval = (char **)calloc(argc + 6, sizeof(char *));
   if(retval == NULL){
@@ -664,7 +655,7 @@ void iop_sigchld_handler(int sig){
   int status;
   pid_t child = waitpid(-1, &status, WNOHANG);
   announce("waited on child with pid %d with exit status %d\n", 
-	    child, status);
+           child, status);
   return;
 }
 
@@ -819,33 +810,33 @@ void chatter(){
       char *name;
       actorId = atoi(buff);
       if((actorId < 0) ||
-	 (actorId >= REGISTRYSZ)){
-	fprintf(stderr, "Huh?\n");
-	continue;
+         (actorId >= REGISTRYSZ)){
+        fprintf(stderr, "Huh?\n");
+        continue;
       } else {
-	name = fetchActorName(actorId);
-	if(!strcmp(name, UNKNOWNNAME)){
-	  fprintf(stderr, "Huh?\n");
-	  continue;
-	}
-	acursor(name);
-	if((bytesin = read(STDIN_FILENO, buff, BUFFSZ)) <= 0){ 
-	  fprintf(stderr, "read from STDIN_FILENO failed (buff 2) bytesin = %d\n", bytesin);
-	  return;
-	}
-	/* doesn't seem necesssary any more	
-	if(buff[bytesin - 1] == '\n'){
-	  if(IOP_LIB_DEBUG || iop_debug_flag)
-	    fprintf(stderr, "chomping in chatter\n");
-	  buff[bytesin - 1] = '\0';
-	  bytesin--;
-	}
-	*/
-	if(IOP_LIB_DEBUG || iop_debug_flag)
-	  fprintf(stderr, "sending....\"%s\"\n", buff);
-	else
-	  fprintf(stderr, "sending....\n");
-	sendRequest(actorId, bytesin, buff);
+        name = fetchActorName(actorId);
+        if(!strcmp(name, UNKNOWNNAME)){
+          fprintf(stderr, "Huh?\n");
+          continue;
+        }
+        acursor(name);
+        if((bytesin = read(STDIN_FILENO, buff, BUFFSZ)) <= 0){ 
+          fprintf(stderr, "read from STDIN_FILENO failed (buff 2) bytesin = %d\n", bytesin);
+          return;
+        }
+        /* doesn't seem necesssary any more	
+           if(buff[bytesin - 1] == '\n'){
+           if(IOP_LIB_DEBUG || iop_debug_flag)
+           fprintf(stderr, "chomping in chatter\n");
+           buff[bytesin - 1] = '\0';
+           bytesin--;
+           }
+        */
+        if(IOP_LIB_DEBUG || iop_debug_flag)
+          fprintf(stderr, "sending....\"%s\"\n", buff);
+        else
+          fprintf(stderr, "sending....\n");
+        sendRequest(actorId, bytesin, buff);
       }
     } else {
       announce("switching on %c\n", buff[0]);
@@ -1005,24 +996,24 @@ char* fetchActorName(int index){
 }
 
 /*
-int fetchRegistrySize(){
+  int fetchRegistrySize(){
   int reg_wr_fd, reg_rd_fd, rsize = -1;
   struct flock wr_lock, rd_lock;
   registry_cmd_t cmd = RSIZE;
   if(IOP_LIB_DEBUG || iop_debug_flag)
-    fprintf(stderr, "opening Registry write fifo\n");  
+  fprintf(stderr, "opening Registry write fifo\n");  
   if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
-    goto fail;
+  goto fail;
   if(IOP_LIB_DEBUG || iop_debug_flag)
-    fprintf(stderr, "opened Registry write fifo\n");  
+  fprintf(stderr, "opened Registry write fifo\n");  
   
   
   if(IOP_LIB_DEBUG || iop_debug_flag)
-    fprintf(stderr, "opening Registry read fifo\n");  
+  fprintf(stderr, "opening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
-    goto fail;
+  goto fail;
   if(IOP_LIB_DEBUG || iop_debug_flag)
-    fprintf(stderr, "opened Registry read fifo\n");  
+  fprintf(stderr, "opened Registry read fifo\n");  
 
 
   lockFD(&wr_lock, reg_wr_fd, "Registry write  fifo");
@@ -1030,28 +1021,28 @@ int fetchRegistrySize(){
   lockFD(&rd_lock, reg_rd_fd, "Registry read  fifo");
 
   if(IOP_LIB_DEBUG || iop_debug_flag)
-    fprintf(stderr, "writing cmd\n");  
+  fprintf(stderr, "writing cmd\n");  
   if(writeInt(reg_wr_fd, cmd) < 0) goto unlock;
 
   if(readInt(reg_rd_fd, &rsize) < 0)  goto unlock;
     
- unlock:
+  unlock:
   
   unlockFD(&rd_lock, reg_rd_fd, "Registry read fifo");
   
   unlockFD(&wr_lock, reg_wr_fd, "Registry write fifo");
   
   if((close(reg_wr_fd) == -1) || (close(reg_rd_fd) == -1)) 
-    goto fail;
+  goto fail;
 
   return rsize;
   
- fail:
+  fail:
   
   fprintf(stderr, "failure in fetchRegistrySize: %s\n", strerror(errno));
   return -1;
   
-}
+  }
 */
 
 int waitForRegistry(void){
