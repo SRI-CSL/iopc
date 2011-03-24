@@ -63,7 +63,8 @@ static void outputRegistry(int);
 static void outputRegistrySize(int);
 static int registerActor(actor_spec*);
 static int unregisterActor(int);
-static void sendActor(actor_id*, char*);
+/* static void _sendActor(actor_id*, char*); */
+static void sendActor(actor_id*, int, char*);
 static actor_id *getActorBySlot(int);
 static actor_id *getActorByName(char*);
 static int getActorsSlotByName(char *);
@@ -517,11 +518,38 @@ static int getActorsSlotByName(char *name){
   
 }
 
-static void sendActor(actor_id *rcv, char* buff){
+/*
+static void _sendActor(actor_id *rcv, char* buff){
   if(rcv == NULL){
     return;
   } else {
     int bytes = strlen(buff);
+    log2File("sendActor locking mutex\n");  
+    pthread_mutex_lock(&(rcv->mutex));
+    log2File("sendActor locked mutex\n");  
+    if(writeInt((rcv->fds)[IN], bytes) != 1){
+      perror("WriteInt is sendActor failed\n");
+      goto exit;
+    }
+    if(write((rcv->fds)[IN], buff, bytes) != bytes){
+      perror("Write is sendActor failed\n");
+      goto exit;
+    }
+    if(VERBOSE)
+      fprintf(stderr, "Sent %s to %s\n", buff, rcv->spec->name);
+  }
+ exit:
+  log2File("sendActor unlocking mutex\n");  
+  pthread_mutex_unlock(&(rcv->mutex));
+  log2File("sendActor unlocked mutex\n");  
+}
+*/
+
+static void sendActor(actor_id *rcv, int bytes, char* buff){
+  if(rcv == NULL){
+    return;
+  } else {
+    //    int bytes = strlen(buff);
     log2File("sendActor locking mutex\n");  
     pthread_mutex_lock(&(rcv->mutex));
     log2File("sendActor locked mutex\n");  
@@ -627,38 +655,55 @@ static void* echoOut(void *arg){
   }
 }
 
+/* March 2nd 2011; Removed implicit assumption that the message body is a C string */
 static void parseOut(msg* outmsg){
   char *copy = NULL;
   char *parsedmsg = NULL;
+  int parsedmsgsz = 0;
   char *target, *sender, *rest;
   actor_id *recipient;
-  log2File("commencing parseOut\n");
-  if((copy = (char *)calloc(outmsg->bytesUsed + 1, sizeof(char))) == NULL)
-    goto fail;
-  strncpy(copy, outmsg->data, outmsg->bytesUsed + 1);
-  if(getNextToken(copy, &target, &rest) != 1)
-    goto echo;
+  int bytes, offset, rest_offset = 0;
+  log2File("commencing parseOut on msg of size: %d\n", outmsg->bytesUsed);
+  if((copy = (char *)calloc(outmsg->bytesUsed + 1, sizeof(char))) == NULL){ goto fail; }
+  /* strncpy(copy, outmsg->data, outmsg->bytesUsed + 1);  */
+  memcpy(copy, outmsg->data, outmsg->bytesUsed);
+  copy[outmsg->bytesUsed] = '\0';
+  offset = getNextToken(copy, &target, &rest);
+  if(offset <= 0){ goto echo;  }
+  rest_offset += offset;
   log2File("target = \"%s\"\n", target);
   log2File("calling getActorByName\n");
   recipient = getActorByName(target);
   log2File("recipient == NULL: %d\n", recipient == NULL);
-  if(recipient == NULL)
-    goto echo;
-  if(recipient->spec->pid <= 0)
-    goto echo;
-  if(getNextToken(rest, &sender, &rest) != 1)
-    goto echo;
+  if(recipient == NULL){ goto echo; }
+  if(recipient->spec->pid <= 0){ goto echo; }
+  offset = getNextToken(rest, &sender, &rest);
+  if(offset <= 0){ goto echo; }
+  rest_offset += offset;
   log2File("sender = \"%s\"\n", sender);
-  if(rest == NULL)
-    goto echo;
-  if((parsedmsg = (char *)calloc((outmsg->bytesUsed + 4), sizeof(char))) == NULL)
-    goto fail;
-
-  snprintf(parsedmsg, outmsg->bytesUsed + 4, "(%s %s)", sender, rest);
-
-
+  if(rest == NULL){ goto echo; }
+  parsedmsgsz = outmsg->bytesUsed + 4;
+  if((parsedmsg = (char *)calloc(parsedmsgsz, sizeof(char))) == NULL){ goto fail; }
+  /* true clause old way; false clause new way */
+  if(0){
+    bytes = snprintf(parsedmsg, parsedmsgsz, "(%s %s)", sender, rest);
+    log2File("snprintf formatted %d bytes, rest_offset = %d ... %c%c\n", bytes, rest_offset, copy[rest_offset], copy[rest_offset + 1]);
+  } else {
+    if((offset == 1) && (rest == NULL)){
+      offset = snprintf(parsedmsg, parsedmsgsz, "(%s)", sender);
+      bytes = offset;
+    } else {
+      offset = snprintf(parsedmsg, parsedmsgsz, "(%s ", sender);
+      memcpy(&parsedmsg[offset], &copy[rest_offset], outmsg->bytesUsed - rest_offset);
+      parsedmsg[offset + outmsg->bytesUsed - rest_offset]     = ')';
+      parsedmsg[offset + outmsg->bytesUsed - rest_offset + 1] = '\0';
+      bytes = 1 + offset + outmsg->bytesUsed - rest_offset;
+    }
+    log2File("snprintf, memcpy and brute force formatted %d bytes, rest_offset = %d ... %c%c\n", bytes, rest_offset, copy[rest_offset], copy[rest_offset + 1]);
+  }
+  
   log2File("parsedmsg = \"%s\"\n", parsedmsg);
-  sendActor(recipient, parsedmsg);
+  sendActor(recipient, bytes, parsedmsg);
   free(copy);
   free(parsedmsg);
   return;
@@ -1146,7 +1191,7 @@ char* registryLaunchActor(char* name, int argc, char** argv){
 
 void  processRegistryStartMessage(char *sender, char *rest, int notify){
   char *name, *args;
-  if(getNextToken(rest, &name, &args) != 1){
+  if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistryStartMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     return;
   } else {
@@ -1184,7 +1229,7 @@ void  processRegistryStartMessage(char *sender, char *rest, int notify){
 void  processRegistryStopMessage(char *sender, char *rest){
   char *name, *args;
   log2File("Stopping %s\n", sender);
-  if(getNextToken(rest, &name, &args) != 1){
+  if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistryStopMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     return;
   } else {
@@ -1223,7 +1268,7 @@ void  processRegistryStopMessage(char *sender, char *rest){
 
 void  processRegistrySelectMessage(char *sender, char *rest){
   char *name, *args;
-  if(getNextToken(rest, &name, &args) != 1){
+  if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistrySelectMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     return;
   } else {
@@ -1243,7 +1288,7 @@ void  processRegistrySelectMessage(char *sender, char *rest){
 void  processRegistryNameMessage(char *sender, char *rest){
   char *name, *args;
   int slot = -1;
-  if(getNextToken(rest, &name, &args) != 1){
+  if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistryNameMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     goto exit; 
   } else {
@@ -1346,7 +1391,7 @@ void  processRegistryEnrollMessage(char *sender, char *rest){
   char *name, *args;
   actor_id* subject = NULL;
   int slot = -1, errcode = -1;
-  if(getNextToken(rest, &name, &args) != 1){
+  if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistryEnrollMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     goto exit;
   } else {
@@ -1395,7 +1440,7 @@ void  processRegistryUnenrollMessage(char *sender, char *rest){
   char *name, *args;
   actor_id* victim = NULL;
   int slot = -1, errcode = -1;
-  if(getNextToken(rest, &name, &args) != 1){
+  if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistryUnenrollMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     goto exit;
   } else {
@@ -1446,7 +1491,7 @@ void  processRegistryUnenrollMessage(char *sender, char *rest){
 
 void processRegistryMessage(char *sender, char *body){
   char *cmd, *rest;
-  if(getNextToken(body, &cmd, &rest) != 1){
+  if(getNextToken(body, &cmd, &rest) <= 0){
     fprintf(stderr, "processRegistryMessage: didn't understand: (cmd)\n\t \"%s\" \n", body);
     return;
   }
@@ -1480,7 +1525,7 @@ static int registryProcessFile(FILE* filep){
     if(strncmp(line, REGISTRY_START, strlen(REGISTRY_START)) == 0){
       /* its probably a start command */
       char *cmd, *rest;
-      if(getNextToken(line, &cmd, &rest) != 1){
+      if(getNextToken(line, &cmd, &rest) <= 0){
         fprintf(stderr, "registryProcessFile: parsing %s failed\n", line);
         continue;
       }
@@ -1492,7 +1537,7 @@ static int registryProcessFile(FILE* filep){
     } else if(strncmp(line, REGISTRY_SELECT, strlen(REGISTRY_SELECT)) == 0){
       /* its probably a select command */
       char *cmd, *name, *rest;
-      if(getNextToken(line, &cmd, &rest) != 1){
+      if(getNextToken(line, &cmd, &rest) <= 0){
         fprintf(stderr, "registryProcessFile: parsing %s failed\n", line);
         continue;
       }
@@ -1500,7 +1545,7 @@ static int registryProcessFile(FILE* filep){
         fprintf(stderr, "registryProcessFile: cmd %s not recognized\n", cmd);
         continue;
       } 
-      if(getNextToken(rest, &name, &rest) != 1){
+      if(getNextToken(rest, &name, &rest) <= 0){
         fprintf(stderr, "registryProcessFile: parsing %s failed\n", line);
         continue;
       }

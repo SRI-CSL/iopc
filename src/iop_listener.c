@@ -62,7 +62,7 @@ static void *listener_cmd_thread(void *arg){
       fprintf(stderr, "didn't understand: (parseActorMsg)\n\t \"%s\" \n", message->data);
       continue;
     }
-    if(getNextToken(body, &cmd, &rest) != 1){
+    if(getNextToken(body, &cmd, &rest) <= 0){
       fprintf(stderr, "didn't understand: (cmd)\n\t \"%s\" \n", body);
       continue;
     }

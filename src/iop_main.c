@@ -44,7 +44,7 @@ int main(int argc, char** argv){
   self_debug_flag   = IOP_DEBUG || iop_debug_flag;
   self = argv[0];
 
-  /*  self_debug_flag   = 1;  */
+  /* self_debug_flag   = 1;    */
   announce("iop_version_flag          = %d\n", iop_version_flag);
   announce("iop_debug_flag            = %d\n", iop_debug_flag);
   announce("iop_no_windows_flag       = %d\n", iop_no_windows_flag);
@@ -55,13 +55,13 @@ int main(int argc, char** argv){
   announce("iop_gui_debug_port        = %s\n", iop_gui_debug_port);
   announce("iop_startup_file          = %s\n", iop_startup_file);
   announce("iop_port                  = %s\n", iop_port);
-  /*  self_debug_flag   = 0;  */
+  /* self_debug_flag   = 0;   */
   
   if(iop_version_flag){
     fprintf(stdout, "IOP version: %d\n", IOP_VERSION_NUMBER);
     exit(EXIT_SUCCESS);
   }
-
+  
   if(iop_server_mode){
     if((iop_port == NULL) || (atoi(iop_port) == 0)){
       fprintf(stderr, "Usage: iop -s <portno>\n");
@@ -70,7 +70,7 @@ int main(int argc, char** argv){
       spawnServer(argc, argv, iop_no_windows_flag);
     }
   } else {
-    iop_init(argc, argv, optind, iop_remote_fd);
+    iop_init(argc, argv, optind, iop_remote_fd); 
   }
   exit(EXIT_SUCCESS);
 }

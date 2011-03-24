@@ -190,6 +190,7 @@ int main(int argc, char** argv){
 	continue;
       }
       size = message->bytesUsed;
+      /* fprintf(stderr, "graphics2d wrapper forwarding a msg of %d bytes\n", size); */
       sendMsg(pin[1], message);
     }
     /* end of boss code */
