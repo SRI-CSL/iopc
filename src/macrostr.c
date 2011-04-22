@@ -15,6 +15,11 @@
 #include <sys/shm.h>
 #include <sys/mman.h>
 
+/* ubuntu complaints */
+#ifndef EAI_ADDRFAMILY
+#define EAI_ADDRFAMILY 1
+#endif
+
 static int initialized = 0;
 
 static struct {
