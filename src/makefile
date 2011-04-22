@@ -48,6 +48,7 @@ EXE = talk2iop\
       iop_server\
       iop_graphics2d_wrapper\
       iop_pvs_wrapper\
+      iop_qtbrowser_wrapper\
       iop_maude_wrapper\
       iop_remote_actor\
       iop_sal_actor\
