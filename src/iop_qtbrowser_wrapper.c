@@ -65,6 +65,8 @@ int main(int argc, char** argv){
   bindir  = argv[1];
   display = argv[2];
 
+  
+  
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
   /* need to start the virtual X server  */
@@ -79,7 +81,7 @@ int main(int argc, char** argv){
   ec_neg1( setenv("DISPLAY", ":1",  1) );
 
  
-
+  fprintf(stderr, "setenv complete");
 
 
   ec_neg1( pipe(pin) );
