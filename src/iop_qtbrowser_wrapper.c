@@ -67,13 +67,18 @@ int main(int argc, char** argv){
 
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
-  /* need to start the virtual X server and then set the display in the environment */
+  /* need to start the virtual X server  */
   
   ec_neg1( child_x = fork() );
 
   if(child_x == 0){
     ec_neg1( execvp(xserver_exe, xserver_argv) );
   }
+
+  /* now we need to set the DISPLAY variable */
+  ec_neg1( setenv("DISPLAY", ":1",  1) );
+
+ 
 
 
 
