@@ -36,9 +36,10 @@
 static char* bindir;
 static char* display;
 
-///Users/iam/Repositories/safeview/qtbrowser-build-desktop/qtbrowser.app/Contents/MacOS/
-static char  xserver_exe[]  = "/usr/bin/Xvfb";
-static char* xserver_argv[] = { ":1", "-screen", "0", "1024x768x24", NULL };
+static char  xserver_exe[]  = "Xvfb";
+static char* xserver_argv[] = { "Xvfb", ":1", "-screen", "0", "1024x768x24", NULL };
+
+
 
 static char  qtbrowser_exe[]  = "qtbrowser";
 static char* qtbrowser_argv[] = { NULL };
@@ -50,8 +51,10 @@ static  int child_died = 0;
 
 static void chld_handler(int sig){
   fprintf(stderr, "%s died! Exiting\n", self);
-  //  child_died = 1;
-  //  sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
+  /*
+    child_died = 1;
+    sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
+  */
 }
 
 int main(int argc, char** argv){
@@ -69,21 +72,17 @@ int main(int argc, char** argv){
   
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
-  /* need to start the virtual X server  */
-  
-  ec_neg1( child_x = fork() );
 
+  /* need to start the virtual X server  */
+  ec_neg1( child_x = fork() );
+  
   if(child_x == 0){
     ec_neg1( execvp(xserver_exe, xserver_argv) );
   }
-
+  
   /* now we need to set the DISPLAY variable */
   ec_neg1( setenv("DISPLAY", ":1",  1) );
-
- 
-  fprintf(stderr, "setenv complete");
-
-
+  
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );
   ec_neg1( pipe(pout) );
@@ -101,6 +100,7 @@ int main(int argc, char** argv){
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
 
+    
     ec_neg1( execvp(qtbrowser_exe, qtbrowser_argv) );
 
     /* end of child_b code */
