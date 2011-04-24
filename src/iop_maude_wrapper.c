@@ -34,7 +34,7 @@
 static char* maudebindir;
 
 #ifdef _LINUX
-static char maude_exe[] = "maude.linux";
+static char maude_exe[] = "maude.linux64";
 #elif defined(_MAC)
 static char maude_exe[] = "maude";
 #endif
