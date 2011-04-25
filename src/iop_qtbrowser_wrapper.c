@@ -33,18 +33,17 @@
 
 #define QTBROWSER_WRAPPER_DEBUG  0
 
-static char* bindir;
 static char* display;
 
-static char  xserver_exe[]  = "Xvfb";
-static char* xserver_argv[] = { "Xvfb", ":1", "-screen", "0", "1024x768x24", NULL };
+//static char  xserver_exe[]  = "Xvfb";
+//static char* xserver_argv[] = { "Xvfb", ":1", "-screen", "0", "1024x768x24", NULL };
 
 
 
 static char  qtbrowser_exe[]  = "qtbrowser";
 static char* qtbrowser_argv[] = { NULL };
 
-pid_t child_x                      = -1;
+//pid_t child_x                      = -1;
 pid_t child_b                      = -1;
 
 static  int child_died = 0;
@@ -59,30 +58,32 @@ static void chld_handler(int sig){
 
 int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
-  if(argc !=  3){
-    fprintf(stderr, "Usage: %s <bin dir with xvfb and qtbrowser> displayname\n", argv[0]);
+  if(argc !=  2){
+    fprintf(stderr, "Usage: %s displayname\n", argv[0]);
     exit(EXIT_FAILURE);
   }
   self_debug_flag  = QTBROWSER_WRAPPER_DEBUG;
   self    = argv[0];
-  bindir  = argv[1];
-  display = argv[2];
+  display = argv[1];
 
   
   
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
 
-  /* need to start the virtual X server  */
+  /* need to start the virtual X server 
   ec_neg1( child_x = fork() );
   
   if(child_x == 0){
     ec_neg1( execvp(xserver_exe, xserver_argv) );
   }
   
-  /* now we need to set the DISPLAY variable */
-  ec_neg1( setenv("DISPLAY", ":1",  1) );
-  
+  */
+
+  /* set the virtual display */
+  ec_neg1( setenv("DISPLAY", display,  1) );
+
+
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );
   ec_neg1( pipe(pout) );
