@@ -33,17 +33,13 @@
 
 #define QTBROWSER_WRAPPER_DEBUG  0
 
-static char* display;
+#define DISPLAY_MAX  1024
 
-//static char  xserver_exe[]  = "Xvfb";
-//static char* xserver_argv[] = { "Xvfb", ":1", "-screen", "0", "1024x768x24", NULL };
-
-
+static char display[DISPLAY_MAX]  = "";
 
 static char  qtbrowser_exe[]  = "qtbrowser";
 static char* qtbrowser_argv[] = { NULL };
 
-//pid_t child_x                      = -1;
 pid_t child_b                      = -1;
 
 static  int child_died = 0;
@@ -56,32 +52,42 @@ static void chld_handler(int sig){
   */
 }
 
+void forward(int fd, char* body){
+  write(fd, body, strlen(body));
+  write(fd, "\n", sizeof(char));
+}
+
+
 int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
-  if(argc !=  2){
-    fprintf(stderr, "Usage: %s displayname\n", argv[0]);
+  if((argc !=  1) && (argc !=  2)){
+    fprintf(stderr, "Usage: %s [displayname]\n", argv[0]);
     exit(EXIT_FAILURE);
   }
   self_debug_flag  = QTBROWSER_WRAPPER_DEBUG;
-  self    = argv[0];
-  display = argv[1];
-
+  self = argv[0];
+  
+  if(argc == 1){
+    char* ed = getenv("DISPLAY");
+    if(ed == NULL){ 
+      fprintf(stderr, "%s found no display.\n", argv[0]);
+      exit(EXIT_FAILURE);
+    } else {
+      strncpy(display, ed, DISPLAY_MAX);
+    }
+  } else {
+    strncpy(display, argv[1], DISPLAY_MAX);
+  }
+  
   
   
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
 
-  /* need to start the virtual X server 
-  ec_neg1( child_x = fork() );
-  
-  if(child_x == 0){
-    ec_neg1( execvp(xserver_exe, xserver_argv) );
-  }
-  
-  */
-
   /* set the virtual display */
-  ec_neg1( setenv("DISPLAY", display,  1) );
+  if(argc == 2){ 
+    ec_neg1( setenv("DISPLAY", display,  1) );
+  }
 
 
   ec_neg1( pipe(pin) );
@@ -129,17 +135,21 @@ int main(int argc, char** argv){
 
       
     while(1){
-      int size;
       requestNo++;
       freeMsg(message);
       message = acceptMsg(STDIN_FILENO);
       if(message == NULL){
-        perror("graphics readMsg failed");
+        fprintf(stderr, "%s readMsg failed", self);
         continue;
+      } else {
+        char *from, *body;
+        int retval = parseActorMsg(message->data, &from, &body);
+        if(retval){
+          forward(pin[1], body);
+        } else {
+          fprintf(stderr, "%s did not parse message!\n", self);
+        }
       }
-      size = message->bytesUsed;
-      /* fprintf(stderr, "graphics2d wrapper forwarding a msg of %d bytes\n", size); */
-      writeMsg(pin[1], message);
     }
     /* end of boss code */
   }
@@ -150,6 +160,7 @@ int main(int argc, char** argv){
   EC_CLEANUP_END
     
 }
+
 
 
 
