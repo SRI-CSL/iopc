@@ -40,34 +40,62 @@ static char display[DISPLAY_MAX]  = "";
 static char  qtbrowser_exe[]  = "qtbrowser";
 static char* qtbrowser_argv[] = { NULL };
 
-pid_t child_b                      = -1;
+/* the guy who is going to handle all my responses etc */
+static char* farmer;
+
 
 static  int child_died = 0;
 
+/* let the handler know not to try and restart */
+static  int exiting    = 0;
+
 static void chld_handler(int sig){
-  fprintf(stderr, "%s died! Exiting\n", self);
-  /*
-    child_died = 1;
+  fprintf(stderr, "%s died! exiting = %d\n", self, exiting);
+  child_died = 1;
+  if(exiting){
+    /* don't restart */
     sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
-  */
+  } else {
+    /* restart */
+  }
 }
 
+/* beef this up when relaxed */
 void forward(int fd, char* body){
   write(fd, body, strlen(body));
   write(fd, "\n", sizeof(char));
 }
 
+void *handleBrowserResponses(void *arg){
+  int outfd;
+  if(arg == NULL){
+    fprintf(stderr, "Bad arg to handleBrowserResponses\n");
+    return NULL;
+  }
+  outfd = *((int *)arg);
+  while(1){
+    char* line = readline(outfd);
+    if(line == NULL){ break; }
+    sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", farmer, self, line);
+    free(line);
+  }
+  return NULL;
+}
+
+
 
 int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
-  if((argc !=  1) && (argc !=  2)){
-    fprintf(stderr, "Usage: %s [displayname]\n", argv[0]);
+  if((argc !=  3) && (argc !=  4)){
+    fprintf(stderr, "Usage: %s self farmer [displayname]\n", argv[0]);
     exit(EXIT_FAILURE);
   }
   self_debug_flag  = QTBROWSER_WRAPPER_DEBUG;
-  self = argv[0];
-  
-  if(argc == 1){
+  self             = argv[1];
+  farmer           = argv[2];
+
+  /* no display passed in; better find it in the environment */
+  if(argc == 3){
     char* ed = getenv("DISPLAY");
     if(ed == NULL){ 
       fprintf(stderr, "%s found no display.\n", argv[0]);
@@ -78,8 +106,6 @@ int main(int argc, char** argv){
   } else {
     strncpy(display, argv[1], DISPLAY_MAX);
   }
-  
-  
   
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
@@ -95,9 +121,9 @@ int main(int argc, char** argv){
   ec_neg1( pipe(pout) );
 
   /*it's time to fork */
-  ec_neg1( child_b = fork() );
+  ec_neg1( child = fork() );
 
-  if(child_b == 0){
+  if(child == 0){
     /* i'm destined to be qtbrowser  */
     ec_neg1( dup2(pin[0],  STDIN_FILENO) );
     ec_neg1( dup2(perr[1], STDERR_FILENO) );
@@ -110,7 +136,7 @@ int main(int argc, char** argv){
     
     ec_neg1( execvp(qtbrowser_exe, qtbrowser_argv) );
 
-    /* end of child_b code */
+    /* end of child code */
   } else { 
     pthread_t errThread, outThread;
     msg* message = NULL;
@@ -131,7 +157,7 @@ int main(int argc, char** argv){
 
     ec_rv( pthread_create(&errThread, NULL, echoErrorsSilently, &errFdB) );
 
-    ec_rv( pthread_create(&outThread, NULL, echoErrorsSilently, &outFdB) );
+    ec_rv( pthread_create(&outThread, NULL, handleBrowserResponses, &pout[0]) );
 
       
     while(1){
@@ -145,6 +171,7 @@ int main(int argc, char** argv){
         char *from, *body;
         int retval = parseActorMsg(message->data, &from, &body);
         if(retval){
+	  if(!strcmp(body, "q")){ exiting = 1; }
           forward(pin[1], body);
         } else {
           fprintf(stderr, "%s did not parse message!\n", self);

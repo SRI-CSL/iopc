@@ -856,7 +856,7 @@ int sendFormattedMsgFP(FILE* fp, char* fmt, ...){
       addToMsg(m, strlen(numbuff), numbuff);
       break;
     case 'f':
-      ival = va_arg(ap, double);
+      dval = va_arg(ap, double);
       sprintf(numbuff, "%f", dval);
       addToMsg(m, strlen(numbuff), numbuff);
       break;
@@ -897,7 +897,7 @@ int sendFormattedMsgFD(int fd, char* fmt, ...){
       addToMsg(m, strlen(numbuff), numbuff);
       break;
     case 'f':
-      ival = va_arg(ap, double);
+      dval = va_arg(ap, double);
       sprintf(numbuff, "%f", dval);
       addToMsg(m, strlen(numbuff), numbuff);
       break;

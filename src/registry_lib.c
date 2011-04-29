@@ -549,7 +549,7 @@ static void sendActor(actor_id *rcv, int bytes, char* buff){
   if(rcv == NULL){
     return;
   } else {
-    //    int bytes = strlen(buff);
+    /*    int bytes = strlen(buff); */
     log2File("sendActor locking mutex\n");  
     pthread_mutex_lock(&(rcv->mutex));
     log2File("sendActor locked mutex\n");  

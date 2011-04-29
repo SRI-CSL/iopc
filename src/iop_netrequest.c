@@ -56,7 +56,7 @@ static void *netrequest_cmd_thread(void *arg){
     }
     netlog("%s processing request:\n\"%s\"\n", me, message->data);
   }
-
+  return NULL;
 }
 
 

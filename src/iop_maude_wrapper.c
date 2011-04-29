@@ -57,6 +57,7 @@ static void *echoMaude(void *arg){
     announce("Listening to Maude\n");
     wait4IO(child_STDOUT_FILENO, child_STDERR_FILENO, parseMaudeThenEcho);
   }
+  return NULL; 
 }
 
 
