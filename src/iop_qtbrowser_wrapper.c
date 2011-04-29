@@ -33,7 +33,8 @@
 
 #define QTBROWSER_WRAPPER_DEBUG  0
 
-#define DISPLAY_MAX  1024
+#define DISPLAY_ARGC             3
+#define DISPLAY_MAX              1024
 
 static char display[DISPLAY_MAX]  = "";
 
@@ -86,7 +87,7 @@ void *handleBrowserResponses(void *arg){
 
 int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
-  if((argc !=  3) && (argc !=  4)){
+  if((argc !=  DISPLAY_ARGC) && (argc !=  DISPLAY_ARGC + 1)){
     fprintf(stderr, "Usage: %s self farmer [displayname]\n", argv[0]);
     exit(EXIT_FAILURE);
   }
@@ -95,7 +96,7 @@ int main(int argc, char** argv){
   farmer           = argv[2];
 
   /* no display passed in; better find it in the environment */
-  if(argc == 3){
+  if(argc == DISPLAY_ARGC){
     char* ed = getenv("DISPLAY");
     if(ed == NULL){ 
       fprintf(stderr, "%s found no display.\n", argv[0]);
@@ -104,14 +105,13 @@ int main(int argc, char** argv){
       strncpy(display, ed, DISPLAY_MAX);
     }
   } else {
-    strncpy(display, argv[1], DISPLAY_MAX);
+    strncpy(display, argv[DISPLAY_ARGC], DISPLAY_MAX);
   }
-  
+
   ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
 
-
   /* set the virtual display */
-  if(argc == 2){ 
+  if(argc != DISPLAY_ARGC){ 
     ec_neg1( setenv("DISPLAY", display,  1) );
   }
 
