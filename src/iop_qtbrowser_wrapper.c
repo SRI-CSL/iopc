@@ -44,7 +44,6 @@ static char* qtbrowser_argv[] = { NULL };
 /* the guy who is going to handle all my responses etc */
 static char* farmer;
 
-
 static  int child_died = 0;
 
 /* let the handler know not to try and restart */
@@ -76,7 +75,11 @@ void *handleBrowserResponses(void *arg){
   outfd = *((int *)arg);
   while(1){
     char* line = readline(outfd);
-    if(line == NULL){ break; }
+    if(line == NULL){ 
+      /* fprintf(stderr, "handleBrowserResponses read a NULL\n"); */
+      break; 
+    }
+    /* fprintf(stderr, "handleBrowserResponses read a %s\n", line);*/
     sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", farmer, self, line);
     free(line);
   }
