@@ -1041,7 +1041,7 @@ static int wait4ReadyFromInputWindow(int in2regSocket){
   log2File("wait4ReadyFromInputWindow blocking on acceptSocket\n");
   msgsock = acceptSocket(in2regSocket, &description);
   if (*msgsock == INVALID_SOCKET){
-    fprintf(stderr, "%s\n", description);
+    fprintf(stderr, "acceptSocket failed: %s\n", description);
     free(description);
     return -1;
   }

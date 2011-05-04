@@ -75,8 +75,7 @@ static void iop_daemon_sigchild_handler(int sig){
   pid_t child;
   int status;
   child = wait(&status);
-  daemonLog("Daemon waited on child with pid %d with exit status %d\n", 
-	    child, status);
+  daemonLog("Daemon waited on child with pid %d with exit status %d\n", child, status);
 }
 
 static int iop_daemon_installHandler(){
@@ -127,7 +126,7 @@ int main(int argc, char *argv[]){
   }
 
   /* hopefully we haven't inherited many more open file descriptors than these three. */
-  close(STDIN_FILENO);
+  //  close(STDIN_FILENO);
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
 
@@ -144,12 +143,16 @@ int main(int argc, char *argv[]){
     exit(EXIT_FAILURE);
   }
 
-  daemonLog("Daemon prepparing to morph into iop\n");
+  daemonLog("Daemon preparing to morph into iop\n");
   
   { 
     char *iop_argv[] = {"iop_main", "-n", NULL, NULL, NULL};
     iop_argv[2] = iop_executable_dir;
     iop_argv[3] = maude_executable_dir;
+
+    //char *iop_argv[] = {"iop", "-n", NULL};
+
+
     execvp(iop_argv[0], iop_argv);
   }
 }
