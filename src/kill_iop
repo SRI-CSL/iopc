@@ -16,8 +16,8 @@ foreach my $p ( @{$t->table} ){
 
 if($iop_system_pid){
     kill USR1 => $iop_system_pid;
-    print STDOUT "Sent $iop_system_pid the SIGUSR1 signal!";
+    print STDOUT "Sent $iop_system_pid the SIGUSR1 signal!\n";
 } else {
-    print STDOUT "Didn't see the system actor.";
+    print STDOUT "Didn't see the system actor.\n";
 }
 

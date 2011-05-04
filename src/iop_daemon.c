@@ -31,7 +31,7 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-static char logFile[]    = "/tmp/iop_daemon_log.txt";
+static char logFile[]    = DAEMON_LOG;
 
 static pthread_mutex_t daemon_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]){
   }
 
   /* hopefully we haven't inherited many more open file descriptors than these three. */
-  //  close(STDIN_FILENO);
+  /*  close(STDIN_FILENO);  closing this causes the wait4ReadyFromInputWindow to fail MYSTERY */
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
 
@@ -149,9 +149,6 @@ int main(int argc, char *argv[]){
     char *iop_argv[] = {"iop_main", "-n", NULL, NULL, NULL};
     iop_argv[2] = iop_executable_dir;
     iop_argv[3] = maude_executable_dir;
-
-    //char *iop_argv[] = {"iop", "-n", NULL};
-
 
     execvp(iop_argv[0], iop_argv);
   }

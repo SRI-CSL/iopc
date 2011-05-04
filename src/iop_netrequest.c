@@ -32,7 +32,7 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-static char logFile[] = "/tmp/iop_netrequest_log.txt";
+static char logFile[] = DAEMON_LOG;
 
 static int  requestNo = 0;
 

@@ -57,7 +57,7 @@ EXE = talk2iop\
       iop_sal_spawner\
       iop_sal_wrapper
 
-SCRIPTS = iop jlambda kill_iop
+SCRIPTS = jlambda kill_iop
 HEADERS = actor.h argv.h cheaders.h constants.h dbugflags.h ec.h externs.h iop_lib.h macrostr.h msg.h options.h registry_lib.h sal_lib.h socket_lib.h types.h version.h wrapper_lib.h
 MISC    = makefile 
 
@@ -84,7 +84,7 @@ ${EXE}: %: %.o ${COBJS} ${HEADERS} ${MISC}
 scripts:
 	mkdir -p ${BUILDDIR}
 	cp ${SCRIPT}  ${BUILDDIR}/iop
-	cp jlambda   ${BUILDDIR}/
+	cp ${SCRIPTS}  ${BUILDDIR}/
 
 clean_tmp:
 	rm -f /tmp/iop_*
