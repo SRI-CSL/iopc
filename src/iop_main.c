@@ -69,6 +69,10 @@ int main(int argc, char** argv){
     } else {
       spawnServer(argc, argv, iop_no_windows_flag);
     }
+  } else if(iop_daemon_mode){
+    spawnDaemon(argc, argv);
+    fprintf(stdout, "IOP daemon version: %d\n", IOP_VERSION_NUMBER);
+    exit(EXIT_SUCCESS);
   } else {
     iop_init(argc, argv, optind, iop_remote_fd); 
   }

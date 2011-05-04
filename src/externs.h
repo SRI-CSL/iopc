@@ -38,6 +38,7 @@ int   iop_hardwired_actors_flag  =  0;
 int   iop_minimal_actors_flag    =  0;
 int   iop_remote_fd              =  0;
 int   iop_server_mode            =  0;
+int   iop_daemon_mode            =  0;
 char *iop_port                   =  NULL;
 char *iop_gui_debug_port         =  NULL;
 char *iop_startup_file           = NULL;

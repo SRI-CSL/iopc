@@ -35,6 +35,7 @@
 #define LISTENER_DEBUG            0
 #define LISTEN2IOP_DEBUG          0
 #define SERVER_DEBUG              0
+#define DAEMON_DEBUG              0
 #define NETREQUEST_DEBUG          0
 #define LOCKS_DEBUG               0
 /*

@@ -92,7 +92,8 @@
 \n\t-a     --actors      Hardwired actors mode\
 \n\t-m     --minimal     Minimal hardwired actors mode\
 \n\t-n     --nowin       Don't launch any windows\
-\n\t-c     --chatter     Provide a commandline interface when in no windows mode"
+\n\t-c     --chatter     Provide a commandline interface when in no windows mode\
+\n\t-z     --daemonize   Launch a windowless daemon"
 
 #define IOP_USAGE_II \
 "\

@@ -42,6 +42,7 @@ extern int   iop_hardwired_actors_flag;
 extern int   iop_minimal_actors_flag;
 extern int   iop_remote_fd;
 extern int   iop_server_mode;
+extern int   iop_daemon_mode;
 extern char *iop_port;
 extern char *iop_gui_debug_port;
 extern char *iop_startup_file;
@@ -109,6 +110,17 @@ void spawnServer(int argc, char** argv, int no_windows){
           "Attempting to spawn iop_server\n\tport       = %s\n\tiop_dir    = %s\n\tmaude_dir  = %s\n\tno_windows = %s\n", 
           server_argv[1], server_argv[2], server_argv[3],  server_argv[4]);
   spawnProcess(server_argv[0], server_argv);
+}
+
+void spawnDaemon(int argc, char** argv){
+  char *daemon_argv[] = {"iop_daemon", NULL,  NULL, NULL};
+  daemon_argv[1] = argv[argc - 2];
+  daemon_argv[2] = argv[argc - 1];
+
+  fprintf(stderr, 
+          "Attempting to spawn iop_daemon\n\tiop_dir    = %s\n\tmaude_dir  = %s\n", 
+          daemon_argv[1], daemon_argv[2]);
+  spawnProcess(daemon_argv[0], daemon_argv);
 }
 
 
@@ -504,6 +516,12 @@ void parseOptions(int argc, char** argv, char* short_options,  const struct opti
         fprintf(stderr, "%s\t:\tversion option selected\n", caller);
       break;
     }
+     case 'z': {
+      iop_daemon_mode = 1; 
+      if(IOP_LIB_DEBUG)
+        fprintf(stderr, "%s\t:\tdaemon option selected\n", caller);
+      break;
+    }
     case 'r': {
       iop_remote_fd = atoi(optarg); 
       if(IOP_LIB_DEBUG)
@@ -581,6 +599,11 @@ void parseOptions(int argc, char** argv, const char* options){
     case 'v': {
       iop_version_flag = 1; 
       if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tversion option selected\n", caller); }
+      break;
+    }
+    case 'z': {
+      iop_daemon_mode = 1; 
+      if(IOP_LIB_DEBUG){ fprintf(stderr, "%s\t:\tdaemon option selected\n", caller); }
       break;
     }
     case 'r': {

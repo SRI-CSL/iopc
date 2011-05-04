@@ -24,6 +24,7 @@
 
 void announce(const char *format, ...);
 void spawnServer(int argc, char** argv, int no_windows);
+void spawnDaemon(int argc, char** argv);
 void iop_init(int argc, char** argv, int optind, int remoteFd);
 #ifdef _LINUX
 void parseOptions(int, char**, char*,  const struct option *);
