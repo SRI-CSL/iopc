@@ -152,4 +152,5 @@ int main(int argc, char *argv[]){
 
     execvp(iop_argv[0], iop_argv);
   }
+  exit(EXIT_SUCCESS);
 }
