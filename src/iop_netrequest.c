@@ -80,7 +80,7 @@ void netlog(const char *format, ...){
   if(logfp != NULL){
     ec_rv( pthread_mutex_lock(&netrequest_log_mutex) );
     if(NETREQUEST_DEBUG)vfprintf(stderr, format, arg);
-    fprintf(logfp, "%s", time2string());
+    fprintf(logfp, "\n%s", time2string());
     vfprintf(logfp, format, arg);
     ec_rv( pthread_mutex_unlock(&netrequest_log_mutex) );
     fclose(logfp);
@@ -157,7 +157,7 @@ void* handleRequest(void* args){
 int main(int argc, char *argv[]){
   unsigned short port;
   char *description = NULL;
-  int listen_socket, *sockp;
+  int connections = 0, listen_socket, *sockp;
   pthread_t commandThread;
   if (argc != 3) {
     fprintf(stderr, "Usage: %s <port> <self>\n", argv[0]);
@@ -187,14 +187,16 @@ int main(int argc, char *argv[]){
     pthread_t thrNet2Sys;
 
     description = NULL;
-    netlog("Blocking on acceptSocket\n");
+    netlog("Blocking on acceptSocket (connections = %d)\n", connections);
     sockp = acceptSocket(listen_socket, &description);
     if (*sockp == INVALID_SOCKET) {
       netlog("%s", description);
       free(description);
       continue;
     }
-     
+
+    connections++;
+    
     net2Sys.from = *sockp;
     net2Sys.to = STDOUT_FILENO;
 
