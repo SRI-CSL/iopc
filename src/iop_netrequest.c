@@ -32,7 +32,7 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-static char logFile[] = DAEMON_LOG;
+static char logFile[] = "/tmp/iop_netrequest_log.txt"; 
 
 static int  requestNo = 0;
 
@@ -73,13 +73,14 @@ static char* time2string(){
 }
 
 void netlog(const char *format, ...){
+#if NETREQUEST_DEBUG == 1
   FILE* logfp = NULL;
   va_list arg;
   va_start(arg, format);
   logfp = fopen(logFile, "aw");
   if(logfp != NULL){
     ec_rv( pthread_mutex_lock(&netrequest_log_mutex) );
-    if(NETREQUEST_DEBUG)vfprintf(stderr, format, arg);
+    /* if(NETREQUEST_DEBUG)vfprintf(stderr, format, arg);*/
     fprintf(logfp, "\n%s", time2string());
     vfprintf(logfp, format, arg);
     ec_rv( pthread_mutex_unlock(&netrequest_log_mutex) );
@@ -91,6 +92,7 @@ EC_CLEANUP_BGN
   va_end(arg);
   return;
 EC_CLEANUP_END
+#endif
 }
 
 int msg2netlog(msg* message){
@@ -168,7 +170,7 @@ int main(int argc, char *argv[]){
   self = argv[2];
 
   if(iop_netrequest_installHandler() != 0){
-    perror("iop_netrequest could not install signal handler");
+    netlog("iop_netrequest could not install signal handler");
     exit(EXIT_FAILURE);
   }
 
@@ -189,13 +191,17 @@ int main(int argc, char *argv[]){
     description = NULL;
     netlog("Blocking on acceptSocket (connections = %d)\n", connections);
     sockp = acceptSocket(listen_socket, &description);
+    
+    connections++;
+
+    netlog("Woken from acceptSocket: %s)\n", description);
+
     if (*sockp == INVALID_SOCKET) {
       netlog("%s", description);
       free(description);
       continue;
     }
 
-    connections++;
     
     net2Sys.from = *sockp;
     net2Sys.to = STDOUT_FILENO;
