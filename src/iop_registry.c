@@ -41,6 +41,7 @@ static void *registryCommandThread(void* arg){
   while(1){
     processRegistryCommand(fifoIn, fifoOut, 1);
   }
+  return NULL;
 }
 
 int main(int argc, char** argv){

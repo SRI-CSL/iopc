@@ -55,7 +55,6 @@
 #define HOME              "HOME"
 #define JARPATH           "/iop.jar"
 #define STARTUP           "startup.txt"
-#define DAEMON_LOG        "/tmp/iop_daemon_log.txt"
 
 /* name of configuration file, must be keep in synch with GUI/Constants.java */
 #define IOPRC             ".ioprc"

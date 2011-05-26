@@ -31,7 +31,8 @@
 #include "dbugflags.h"
 #include "ec.h"
 
-static char logFile[]    = DAEMON_LOG;
+static char logFile[]  =      "/var/log/iop/daemon.log";
+
 
 static pthread_mutex_t daemon_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -59,6 +60,7 @@ void daemonLog(const char *format, ...){
     fprintf(logfp, "%s", time2string());
     vfprintf(logfp, format, arg);
     ec_rv( pthread_mutex_unlock(&daemon_log_mutex) );
+    fflush(logfp);
     fclose(logfp);
   }
   va_end(arg);
@@ -78,17 +80,25 @@ static void iop_daemon_sigchild_handler(int sig){
   daemonLog("Daemon waited on child with pid %d with exit status %d\n", child, status);
 }
 
+
 static int iop_daemon_installHandler(){
   struct sigaction sigactchild;
+  struct sigaction sigacthup;
   sigactchild.sa_handler = iop_daemon_sigchild_handler;
   sigactchild.sa_flags = 0;
   sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
+  if(sigaction(SIGCHLD, &sigactchild, NULL) != 0){ return -1; }
+  /* let the spawned iop know we want HUP handled to cope with logrotate */
+  sigacthup.sa_handler = SIG_IGN;
+  sigacthup.sa_flags = 0;
+  sigfillset(&sigacthup.sa_mask);
+  return sigaction(SIGHUP, &sigacthup, NULL);
 }
+
 
 int main(int argc, char *argv[]){
   char *iop_executable_dir, *maude_executable_dir;
-  int outfd;
+  int logok;
   pid_t sid, pid;
   if (argc != 3) {
     fprintf(stderr, "Usage: %s <iop exe dir> <maude exe dir>\n", argv[0]);
@@ -99,6 +109,12 @@ int main(int argc, char *argv[]){
   
   /* we want to be a daemon, so lets do that first */
 
+  /* N.B. all errors should now go to outputFile */
+  if(iop_daemon_installHandler() != 0){
+    fprintf(stderr, "iop_daemon could not install signal handler");
+    exit(EXIT_FAILURE);
+  }
+  
   /* we have already been forked by iop_main (hopefully) so we start with: */
   /* detaching ourselves from the controlling tty                          */
 
@@ -117,31 +133,13 @@ int main(int argc, char *argv[]){
     exit(EXIT_SUCCESS);
   }
   
+  logok = iop_daemon_io_config();
 
-
-  outfd = open(logFile, O_CREAT|O_TRUNC|O_RDWR, S_IRWXU);
-  if(outfd < 0){
-    perror("iop_daemon could not open log file");
+  if(logok != 0){
+    daemonLog("iop_daemon_io_config failed (wasting my breath...)");
     exit(EXIT_FAILURE);
   }
 
-  /* hopefully we haven't inherited many more open file descriptors than these three. */
-  /*  close(STDIN_FILENO);  closing this causes the wait4ReadyFromInputWindow to fail MYSTERY */
-  close(STDOUT_FILENO);
-  close(STDERR_FILENO);
-
-
-  if((dup2(outfd, STDOUT_FILENO) < 0) || (dup2(outfd, STDERR_FILENO) < 0)){
-    perror("iop_daemon could not dup2 (who knows where this error msg goes?)");
-    exit(EXIT_FAILURE);
-  }
-
-  /* N.B. all errors should now go to outputFile */
-  
-  if(iop_daemon_installHandler() != 0){
-    perror("iop_daemon could not install signal handler");
-    exit(EXIT_FAILURE);
-  }
 
   daemonLog("Daemon preparing to morph into iop\n");
   

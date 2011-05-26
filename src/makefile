@@ -57,7 +57,7 @@ EXE = talk2iop\
       iop_sal_spawner\
       iop_sal_wrapper
 
-SCRIPTS = jlambda kill_iop
+SCRIPTS = jlambda kill_iop send_hup_2_iop
 HEADERS = actor.h argv.h cheaders.h constants.h dbugflags.h ec.h externs.h iop_lib.h macrostr.h msg.h options.h registry_lib.h sal_lib.h socket_lib.h types.h version.h wrapper_lib.h
 MISC    = makefile 
 
