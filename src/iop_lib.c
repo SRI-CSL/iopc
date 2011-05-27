@@ -682,45 +682,10 @@ void iop_sigchld_handler(int sig){
   return;
 }
 
-static char outputFile[]  =   "/var/log/iop/output.log";
-
-int iop_daemon_io_config(){
-  int outfd = open(outputFile, O_CREAT|O_RDWR|O_APPEND, S_IRWXU);
-  if(outfd < 0){
-    return 1;
-  }
-  close(STDOUT_FILENO);
-  close(STDERR_FILENO);
-  if((dup2(outfd, STDOUT_FILENO) < 0) || (dup2(outfd, STDERR_FILENO) < 0)){
-    return 2;
-  }
-  return 0;
-}
-
-void iop_sighup_handler(int sig){
-  /* for reestablishing the error logging (after a logrotate) */
-  char hupmsg[] = "iop got a HUP\n";
-  int hupmsgsz = sizeof(hupmsg);
-  write(STDERR_FILENO, hupmsg, hupmsgsz);
-  iop_daemon_io_config();
-}
-
 
 int iop_installHandler(){
   struct sigaction sigactInt;
   struct sigaction sigactChld;
-  struct sigaction sigacthup;
-  if(sigaction(SIGHUP, NULL, &sigacthup) != 0){
-    return -1;
-  } else {
-    /* if it is set to be ignored then we are in daemon mode! */
-    if(SIG_IGN == sigacthup.sa_handler){
-      sigacthup.sa_handler = iop_sighup_handler;
-      sigacthup.sa_flags = 0;
-      sigfillset(&sigacthup.sa_mask);
-      if(sigaction(SIGHUP, &sigacthup, NULL) != 0){ return -1; }
-    }
-  }
   sigactInt.sa_handler = iop_sigint_handler;
   sigactInt.sa_flags = SA_NOCLDSTOP;
   sigfillset(&sigactInt.sa_mask);

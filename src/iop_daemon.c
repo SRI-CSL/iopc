@@ -32,6 +32,7 @@
 #include "ec.h"
 
 static char logFile[]  =      "/var/log/iop/daemon.log";
+static char outputFile[]  =   "/var/log/iop/output.log";
 
 
 static pthread_mutex_t daemon_log_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -83,16 +84,23 @@ static void iop_daemon_sigchild_handler(int sig){
 
 static int iop_daemon_installHandler(){
   struct sigaction sigactchild;
-  struct sigaction sigacthup;
   sigactchild.sa_handler = iop_daemon_sigchild_handler;
   sigactchild.sa_flags = 0;
   sigfillset(&sigactchild.sa_mask);
-  if(sigaction(SIGCHLD, &sigactchild, NULL) != 0){ return -1; }
-  /* let the spawned iop know we want HUP handled to cope with logrotate */
-  sigacthup.sa_handler = SIG_IGN;
-  sigacthup.sa_flags = 0;
-  sigfillset(&sigacthup.sa_mask);
-  return sigaction(SIGHUP, &sigacthup, NULL);
+  return sigaction(SIGCHLD, &sigactchild, NULL);
+}
+
+int iop_daemon_io_config(){
+  int outfd = open(outputFile, O_CREAT|O_RDWR|O_APPEND, S_IRWXU);
+  if(outfd < 0){
+    return 1;
+  }
+  close(STDOUT_FILENO);
+  close(STDERR_FILENO);
+  if((dup2(outfd, STDOUT_FILENO) < 0) || (dup2(outfd, STDERR_FILENO) < 0)){
+    return 2;
+  }
+  return 0;
 }
 
 
