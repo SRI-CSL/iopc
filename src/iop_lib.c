@@ -378,7 +378,7 @@ static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
   char   input_exe[] = "java";
   char** input_argv  = NULL;
   /* N is for normal */
-  char* input_argvN[] = {INWINDOW, 
+  char* input_argvN[] = {INWINDOW,
                          "-cp", 
                          NULL,
                          "GUI.Editor", NULL, NULL, NULL};
