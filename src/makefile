@@ -31,7 +31,7 @@ else
 #Linux flags
 SCRIPT = linux_iop
 LIBS =  -lm -pthread 
-CFLAGS =  -Wall -D_LINUX -pedantic
+CFLAGS =  -Wall -D_LINUX -pedantic -Wno-unused-but-set-variable
 # add to CFLAGS for debugging:
 # -g 
 endif
