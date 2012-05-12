@@ -850,7 +850,7 @@
 
 (define ruleEvidence (gname clab refArray)
   (apply displayMessage2G gname 
-	 (concat "Evidence for Rule \"" clab "\"")
+	 (concat "Evidence for Rule " clab )
 	 (if (> (lookup refArray "length") (int 0))
 	     (concat "<html><br>"
        (if (= evidencePath "")
@@ -3274,3 +3274,178 @@
 )
 
 
+;;;;;;;;;; clt loaded DumbV/dumb.lsp ;;;;;;;;;;
+(seq
+;;; Need a server running for dot layout
+;;; GraphDetails seems to be a no-op in tab frame
+;;; occ context menu -- needs non-maude version
+;;;   generate metadata table from ops files
+;;;   name  xref xlink synonyms
+;;; rule context menu -- needs direct evidence link
+;;; maybe we just direcly handle clicks in occs and rules if dumb mode
+;;;  convert evidence links file to java array mapping clab to file
+;;;   relative to evidence path
+
+
+(define protoKBM (kbname)
+  (let ((name  "KBManager")
+        (kbm0 (fetch name))
+        (kbm (if (= kbm0 (object null))  ; **** don't create if exists
+                 (object ("g2d.glyph.Attributable"))
+                 kbm0))
+        (model (object ("javax.swing.DefaultListModel")))
+        (list (object ("javax.swing.JList" model) )) 
+       )
+    (seq
+      (if (= kbm0 (object null)) (invoke kbm "setUID" name))
+      (setAttr kbm "kbnames" model)
+      (setAttr kbm "kblist" list)
+      (invoke model "addElement" kbname)  ; add element to list
+    )
+))
+
+(define mkDumbMouseClickedClosure (graph)
+  (lambda (self e)  ;; self is the node clicked
+     (if (instanceof self "g2d.graph.IOPNode")
+        (let ((type (getAttr self "type")))
+          (if (= type "rule") 
+            (apply doDumbNetMouseClickedRuleAction graph self e)             
+          (if (= type "occ")
+             (apply doDumbNetMouseClickedOccAction graph self e)
+             (object null))) ; not a known node type
+          )
+        (object null)  ; not a node
+        )) ; if lambda
+ )
+
+(define  doDumbNetMouseClickedRuleAction (graph node e)  
+  (let (
+        (clab (getAttr node "chattylabel"))
+        (gname (invoke graph "getUID"))
+        (evidenceArr (getAttr node "evidence"))
+      )
+    (if (= evidenceArr (object null))
+       (apply displayMessage2G gname 
+           	 (concat "Evidence for Rule " clab )
+             (apply mkNoComponentInfoStr))
+        (apply ruleEvidence gname clab evidenceArr)      ;; displays evidence links
+     )))
+
+
+(define  doDumbNetMouseClickedOccAction (graph node e)  
+  (let (
+        (clab (getAttr node "chattylabel"))
+        (gname (invoke graph "getUID"))
+        (infoArr (getAttr node "infoArr"))
+        (occType (getAttr node "occType"))  ;; simple or complex
+      )
+    (apply displayMessage2G gname 
+          (concat "About " clab )
+           (if (= occType "simple")
+               (apply mkSimplInfoStr infoArray)
+           (if (= occType "complex")
+               (apply mkComplexInfoStr infoArray)
+               (apply mkNoComponentInfoStr) )))
+   ))
+
+(define mkNoComponentInfoStr ()
+     (let ((strb (object ("java.lang.StringBuffer"))))
+      (seq 
+        (invoke strb "append" "<html><br> ")
+        (concat "No information available ")
+        (invoke strb "append" " </html>")
+        (invoke strb "toString")
+)))
+
+(define mkSimpleInfoStr (infoArray)
+     (let ((strb (object ("java.lang.StringBuffer"))))
+      (seq 
+        (invoke strb "append" "<html><br> ")
+        (for item infoArray (apply makeInfoItem item strb ))
+        (invoke strb "append" " </html>")
+        (invoke strb "toString")
+)))
+
+(define mkComplexInfoStr (infoArray)
+  (let ((strb (object ("java.lang.StringBuffer"))))
+     (seq 
+       (invoke strb "append" "<html><br> <ul>")
+       (apply mkComplexInfoStrX strb infoArray (lookup infoArray "length") (int 0))
+       (invoke strb "append" "</ul> </html>")
+       (invoke strb "toString")
+)))
+
+
+(define mkComplexInfoStrX (strb infoArray len cur )
+  (if (>= cur len) 
+    strb
+    (seq 
+       (invoke strb "append" "<li> ")
+       (invoke strb "append" (aget infoArray cur))
+       (invoke strb "append" " <br>")
+       (for item (aget infoArray (+ cur (int 1))) (apply makeInfoItem item strb ))
+       (apply mkComplexInfoStrX strb infoArray len  (+ cur (int 2)))
+     )))
+
+; (apply showNewGraph %gname %parent %selections %title %subtitle  %toolBarFun )
+;                      str  str or null bool                 id
+;;iam 2012 version (still needs work: toolbar and menu stuff pushed into anyShowGraph missing)
+;;iam 2012  gname vs graph & pname vs parent  WANTS TO be cleaned up
+
+
+(define showDumbGraph (gname)
+  (let ((graph (fetch gname))
+        (toolBarFun dumbToolBarFun)
+        (menuBarFun dumbMenuBarFun)
+       )  
+   (seq
+     (invoke graph "setStrokeWidth" (float 1.0))
+     ;; do layout with dot by default
+     (invoke graph "doLayout" (object null))
+     ;;<workzone>
+     ;; this block needs to migrate out of here to newGraph ...
+     (update graph "name" gname)
+     ;;note that parent is now private (must use getters and setters)
+     ;;done this way because a graph now knows (and hence "setParent" maintains) its children 
+     (invoke graph "setParent" (object null))
+     (update graph "title"  (apply makeGraphTitle gname graph))
+     (update graph "description" (apply makeGraphDescription gname graph))
+     (update graph "colorClosure" (getAttr graph "colorFun" (object null)))
+     (update graph "toolBarClosure" 
+                (lambda (panel graph) 
+                  (apply toolBarFun (lookup panel "toolBar")
+                               gname graph panel (object null)))) 
+     (update graph "menuBarClosure" 
+                (lambda (panel graph) 
+                  (apply menuBarFun gname graph panel)))
+;; launch graph in new panel, next to parent graph, or new frame if parent  null
+     (sinvoke "g2d.pla.PLAUtils" "launchTab"  graph (boolean false))
+     ;; get progressbar attr from KBM, if not null, setvisible false
+     (apply closeProgressd)
+     graph)
+   ) ) ; showDumbGraph
+
+(define dumbToolBarFun (toolbar gname graph panel pgraph) 
+  (seq "noop") )
+
+(define dumbMenuBarFun (gname graph panel) 
+  (invoke (lookup panel "menuBar") "add" (apply mkDumbGraphMenu gname graph panel))
+)
+
+
+;; the graph items should be relevant to graph type
+(define mkDumbGraphMenu (gname graph panel)
+  (let ((graphMenu (lookup panel "graphMenu")))
+    (seq
+      (invoke graphMenu "add" (apply mkOccLabelItem gname))
+      (invoke graphMenu "add" (apply mkOccChattyLabelItem gname))
+      (invoke graphMenu "add" (apply mkRuleLabelItem gname))
+      (invoke graphMenu "add" (apply mkRuleChattyLabelItem gname))
+      (invoke graphMenu "add" (apply mkSuppressRuleLabelItem gname))
+      (invoke graphMenu "addSeparator" )        
+      graphMenu
+    )
+   )
+)
+
+) 
