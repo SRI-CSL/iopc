@@ -3271,7 +3271,7 @@
 
  (invoke java.lang.System.err "println" "exploreRule loaded")
 )
-)
+
 
 
 ;;;;;;;;;; clt loaded DumbV/dumb.lsp ;;;;;;;;;;
@@ -3447,5 +3447,7 @@
     )
    )
 )
+ (invoke java.lang.System.err "println" "dumb loaded")
+)
 
-) 
+)
