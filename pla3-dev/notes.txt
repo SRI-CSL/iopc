@@ -1,0 +1,114 @@
+Treemanager for tabs too ...
+
+What sort of ancestor relation are we interested in?  The graph child relationship, not the Frame child relationship.
+
+
+
+
+Good time to incorporate preferences....
+
+
+If toolbars belong to panes, how should jlambda add stuff to toolbars etc...
+This actually may work if we keep global things global, and local things local.
+
+global menu items:
+
+File            Window
+preferences     hide
+close           zoom
+quit            cascade
+                "MWA tree view"
+
+
+local menu items:
+
+Exporting (as an image or graph)
+Comparing (PNET ancestral hierarchy)
+Graph
+
+
+Toolbar pretty much constant, except that explore and compare window doesn't
+have "Explore Subnet FindPath" buttons.
+
+>>> Incorporate tabs into a mwa-like framework
+=============================================
+
+See if we can shrink the wasted space in the TabFrame too...
+
+=============================================
+MWA notes
+
+Ditch Cascade  etc
+Note that mwa titles are not that relevant in the tabbed world, so perhaps 
+that part of mwa can be simplified.
+
+
+=============================================
+
+N.B. current system has an implict kb, which could be made explicit  AS PART OF pnet hierarchy.
+
+
+two hierarchies: mwa and pnet geneology
+
+
+tab <==> pnet ARE synonyms when the tab still exists!
+
+root tab
+
+unary tab constructions
+
+binary tab constructions
+
+
+to make a graph pnet need a static method  
+
+createTab(parent, ......)
+
+pnet family:
+   --- dishnet
+   --- subnet
+   --- pathnet
+   
+cnet:
+   --- comparenet 
+
+xnet:
+   --- explorenet aka XNet 
+
+
+setGraph via a frame should GO
+
+
+graphs should have zero or one tabs
+
+and
+
+tabs should have exactly one graphs 
+
+
+if the parent is null then obvious thing is make this in a new frame.
+
+if parent is not null, then new tab is adjacent to parent in same frame. what about focus???
+
+
+Carolyn would like the tab/graph hierachy to be perpetual, killing a tab will
+grey it out, but not delete it. And selecting a greyed out tab should 
+relaunch it.
+
+
+
+
+===============================================
+
+launchTab(
+        parentG,    //possibly null parent graph
+        siblingG,   //new graph 
+        )  
+
+maybe then add arguments for customizing the toolbar and menubar
+
+================================================
+
+start with 
+
+TabPanel launchTab(parentTab)

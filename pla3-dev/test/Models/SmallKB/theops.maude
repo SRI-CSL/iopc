@@ -1,0 +1,252 @@
+************************* 80 columns *******************************************
+***
+*** --------------------------------------------------------------------
+*** Pathway Logic Assistant.
+*** Copyright (C) 2006, SRI International.  All Rights Reserved.
+***
+*** This program is free software; you can redistribute it and/or
+*** modify it under the terms of the GNU General Public License
+*** as published by the Free Software Foundation; either version 2
+*** of the License, or (at your option) any later version.
+***
+*** This program is distributed in the hope that it will be useful,
+*** but WITHOUT ANY WARRANTY; without even the implied warranty of
+*** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*** GNU General Public License for more details.
+***
+*** You should have received a copy of the GNU General Public License
+*** along with this program; if not, write to the Free Software
+*** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*** --------------------------------------------------------------------
+***
+
+***
+***  theops.maude
+*** 
+***
+******************************************************
+******************************************************
+fmod PROTEIN is pr NAT .
+
+  sorts AminoAcid Protein .
+  subsort AminoAcid < Protein . 
+  
+  ops T Y S K P N : -> AminoAcid . 
+  ops pT pY pS : -> AminoAcid .  *** modified amino acids 
+ 
+endfm 
+**************************************************
+fmod THING is pr PROTEIN .
+
+sort Thing Family Composite DNA Complex Chemical Signature Stimulus .
+subsorts Protein Family Composite DNA Complex Chemical Signature 
+         Stimulus < Thing .
+
+  op (_:_) : Thing Thing -> Complex [assoc comm] .           
+
+
+**** removing duplicates in complexes  for new complexes
+  op reduce : Complex -> Complex .
+  eq reduce((T1:Thing : T2:Thing)) = (T1:Thing : T2:Thing) . 
+
+
+endfm
+**************************************************
+fmod SOUP is pr THING .
+
+  sort Soup .
+  subsort Thing < Soup .
+  op empty : -> Soup .
+  op __ : Soup Soup -> Soup [assoc comm id: empty ] .
+
+  op _has_ : Soup Thing -> Bool .
+
+  eq (T1:Thing S:Soup ) has T2:Thing =
+      if T1:Thing == T2:Thing then true else S:Soup has T2:Thing fi .
+  eq (S:Soup has T:Thing) =  false [owise] .
+
+  *** A quick way to add more than one of the same thing to qt
+  op # : Nat Thing -> Soup .
+  eq #((s N:Nat),T:Thing) = T:Thing #(N:Nat,T:Thing) .
+  eq #(0,T:Thing) = empty .
+
+  op <_> : Soup -> Complex .  **** for new complexes
+  op reduceS : Soup -> Soup .
+  eq reduceS(T:Thing T:Thing S:Soup) =  reduceS(T:Thing S:Soup) .
+  eq reduceS(S:Soup) = S:Soup [owise] .
+
+  eq reduce(< s:Soup >) = < reduceS(s:Soup) > .
+
+endfm
+**************************************************
+fmod MODIFICATION is pr SOUP .  
+ 
+  sorts Site Modification ModSet .
+  subsort Modification < ModSet . 
+
+***( !!!! testing modvar
+  sort GMod .   subsort GMod < Modification .
+  ops gmod0 gmod1 : -> GMod .
+)
+  op acetyl : -> Modification . 
+  op acetyl : Site -> Modification . 
+  op act : -> Modification .
+  op act1 : -> Modification .
+  op act2 : -> Modification .
+  op act3 : -> Modification .
+  op bound :      -> Modification .
+  op bound : Site -> Modification .
+  op deact : -> Modification .
+  op degraded : -> Modification .
+****!!! cvit mod
+  op dim       : -> Modification .
+  op disrupted : -> Modification .
+  op downreg : -> Modification .
+  op hydrox : -> Modification .
+  op hydrox : Site -> Modification .
+  op inhib : -> Modification .  *** inhibited by inhibitor binding
+  op mem  : -> Modification .   *** at the membrane for TTZ
+  op mito : -> Modification .  *** in the mito for TTZ
+  op nm : Site    -> Modification .
+  op notthere : -> Modification .
+  op out : -> Modification .
+  op phos :       -> Modification .
+  op phos : Site  -> Modification .
+  op phosbound : Site -> Modification .
+  op pro : -> Modification .            *** Precursor
+  op reloc : -> Modification .         *** Relocated
+  op Sphos : -> Modification .
+  op STphos : -> Modification . *** Serine/Threonine phosphorylation
+  op STphos1 : -> Modification .
+  op STphos2 : -> Modification .
+  op Tphos : -> Modification .
+  op trunc : -> Modification .  *** Truncated
+  op ubiq : -> Modification .
+  op Yphos : -> Modification . *** Tyrosine phosphorylation 
+  ops GTP GDP : -> Modification .    *** used for small GTPases
+  ops GTP GDP : Site -> Modification .
+  ops mono poly : -> Modification .  *** used for G-actin and F-actin
+  ops on off : -> Modification .
+  ops open closed : -> Modification .
+  ops ox red    : -> Modification .  *** oxidized and reduced
+  ops new : -> Modification .
+ 
+  op num : Nat -> Modification .
+   
+  op none : -> ModSet . 
+  op __ : ModSet ModSet -> ModSet [assoc comm id: none] . 
+  op __ : AminoAcid Nat -> Site .
+
+  op _contains_ : ModSet Modification -> Bool .
+  var M M' : Modification .
+  var MS : ModSet .
+
+  eq none contains M' = false .
+  eq (M MS) contains M' = if M == M' then true
+                          else MS contains M' fi .
+
+  op [_-_] : Protein   ModSet -> Protein  
+                            [right id: none ] . *** format (nt d d d d d)] . 
+  op [_-_] : Family    ModSet -> Family  
+                            [right id: none ] . *** format (nt d d d d d)] . 
+  op [_-_] : Composite ModSet -> Composite  
+                            [right id: none ] . *** format (nt d d d d d)] . 
+  op [_-_] : DNA       ModSet -> DNA      
+                            [right id: none ] . *** format (nt d d d d d)] .
+  op [_-_] : Chemical  ModSet -> Chemical 
+                            [right id: none ] . *** format (nt d d d d d)] .
+
+endfm
+**************************************************
+fmod LOCATION is inc MODIFICATION .
+
+sort Location LocName .
+subsort Location < Soup . 
+op {_|_} : LocName Soup -> Location [format (n d d t d d)] .
+
+ops CLo CLm CLi CLc : -> LocName .  *** Cell - out,mem,in,cytosol
+ops NUo NUm NUi NUc : -> LocName .  *** Nucleus - out,mem,in,cytosol
+ops MOo MOm MOi MOc : -> LocName .  *** Mitochondria Outer membrane
+ops MIo MIm MIi MIc : -> LocName .  *** Mitochondria Inner membrane
+ops ERo ERm ERi ERc : -> LocName .  *** Endoplasmic Reticulum
+ops PXo PXm PXi PXc : -> LocName .  *** Peroxisome
+ops GAo GAm GAi GAc : -> LocName .  *** Golgi Apparatus
+ops LEo LEm LEi LEc : -> LocName .  *** Late Endosome
+ops EEo EEm EEi EEc : -> LocName .  *** Early Endosome
+ops LYo LYm LYi LYc : -> LocName .  *** Lysosome
+ops CPo CPm CPi CPc : -> LocName .  *** Clathrin Coated Pits
+op  PTc             : -> LocName .  *** Proteosome
+op  Sig             : -> LocName .  *** a place for signatures
+
+
+*** Location convention for Internalized vesicles:
+*** LYo is the surface between LYm and CLc
+*** LYi is the surface between LYm and LYc
+
+
+endfm
+**************************************************
+fmod CELL is inc LOCATION .
+
+sort Cell CellType .
+subsort Cell < Soup .
+
+op [_|_] : CellType Soup -> Cell .
+
+op Cell : -> CellType .
+op EpithelialCell : -> CellType .
+op EverythingCell : -> CellType .
+op Fibroblast : -> CellType .
+op HMEC : -> CellType .
+op LiverCell : -> CellType .
+op Macrophage : -> CellType .
+op MuscleCell : -> CellType .
+
+endfm
+***************************************************
+fmod DISH is inc CELL .
+
+sort Dish .
+op PD : Soup -> Dish .
+
+endfm
+**************************************************
+***(
+fmod DOMAIN is inc DISH .
+
+op (_-_) : Site ModSet -> Site   [right id: none] . 
+
+ops BS1 BS2 BS3 BS4 BS5 BS6 BS7 BS8 BS9 : -> Site .
+op PS1 : -> Site .
+
+
+sort Att Atts .
+subsort Att < Atts .
+op mt : -> Atts .
+
+*** op _,_ : Atts Atts -> Atts [ assoc comm id: mt] .
+op __ : Atts Atts -> Atts [ assoc comm id: mt] .
+
+subsort Site < Att .
+op m : Modification -> Att .
+
+sorts BindingSite Edge .
+subsort Edge < Soup .
+op (_,_) : Protein Site -> BindingSite .
+op e : BindingSite BindingSite -> Edge [format (nt d)] .
+op b : Thing -> BindingSite .
+
+op [_|_] : Protein Atts -> Protein [format (nt d d d d d)] .
+
+
+*** sort Domain .
+*** op (_-_) : Domain ModSet -> Domain [right id: none] .
+*** subsorts Domain Site  < Att .
+*** op (_,_) : Protein Domain -> BindingSite .
+
+endfm
+)
+****************************************************************
+
+fmod THEOPS is inc DISH . endfm 
+

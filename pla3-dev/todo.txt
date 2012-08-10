@@ -1,0 +1,15 @@
+preferences and perhaps a preferences panel
+
+tab manager parental tree
+
+how would one launch a tab from jlambda (need a parent
+tab to orient itself, perhaps a static method of ....)
+
+tab reordering ...
+
+start building uo the tab panel ...
+
+... and organizing menu items into global and local
+
+closure constructor for TabFrame ...
+

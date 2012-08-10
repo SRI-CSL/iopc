@@ -1,0 +1,50 @@
+load theops
+load components
+load rules
+load model-checker
+load qq
+load ../../PLALib/load-pla
+
+**** from saved kb/graph
+(seq
+ (loadg2dlib graphics2d ../../PLALib/g2dlib.lsp)
+ (initPLAeset maude graphics2d graphics2d)
+ (initKBManagerD graphics2d QQQ)
+ (initDishes QQQ)
+
+**** restore saved kb and graph
+ (restore SmallKB-tkb.txt tmp entry)
+ (restore SmallKB-graph.txt tmp entry)
+
+**** restore hand crafted evidence
+ (restore SmallKB-evidence.txt tmp entry)
+ (g2dexe graphics2d (define evidencePath ""))
+ (g2dexe graphics2d (seq (define useChattyLabels (boolean true))))
+ (restore componentInfoSpec.txt tmp entry) 
+ (startListener SmallKB graphreq graphics2d)
+ (defineKBGraph SmallKB graphics2d)
+)
+
+**** from scratch 
+***(seq
+ (loadg2dlib graphics2d ~/Maude/Lib/M2.2/PLA1/g2dlib.lsp)
+ (initPLAeset maude graphics2d graphics2d)
+ (initKBManagerD graphics2d QQQ)
+ (initDishes QQQ)
+ (initKBnet SmallKB QQQ)
+ (initKBgraph SmallKB)
+
+**** save kb and its graph
+*** (save SmallKB-tkb.txt  C  entry tval tkb SmallKB)
+*** (saveKBG SmallKB QQQ SmallKB-graph.txt)
+
+**** restore hand crafted evidence
+ (restore SmallKB-evidence.txt tmp entry)
+
+ (restore componentInfoSpec.txt tmp entry) 
+
+ (startListener SmallKB graphreq graphics2d)
+ (defineKBGraph SmallKB graphics2d)
+
+)
+
