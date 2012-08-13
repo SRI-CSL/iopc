@@ -33,9 +33,7 @@
 extern pid_t child;
 
 void wrapper_sigint_handler(int sig){
-  if(child > 0){
-    kill(child, SIGKILL);
-  }
+  if(child > 0){  kill(child, SIGKILL);   }
   /* calling exit rather than _exit causes a SIGSEGV in RH9 */
   /* don't think it used to?                                */
   _exit(EXIT_FAILURE);
@@ -53,6 +51,7 @@ int wrapper_installHandler(void (*chld_fun)(int), void (*intr_fun)(int)){
   sigactint.sa_flags = 0;
   ec_neg1( sigfillset(&sigactint.sa_mask) );
   ec_neg1( sigaction(SIGINT, &sigactint, NULL) );
+
   return 0;
 
 EC_CLEANUP_BGN

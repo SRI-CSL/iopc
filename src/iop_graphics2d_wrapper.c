@@ -106,7 +106,7 @@ int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
   char **g2dargv;
   int g2dargc;
-
+  
   if(argc < 2){
     fprintf(stderr, "Usage: %s <iop bin directory> [jvm options]\n", argv[0]);
     exit(EXIT_FAILURE);
@@ -117,7 +117,7 @@ int main(int argc, char** argv){
 
   g2dargc = make_arguments(argc, argv, &g2dargv);
 
-  /*   printArgv(stderr, g2dargc, g2dargv, "g2dargv");  */
+  /* printArgv(stderr, g2dargc, g2dargv, "g2dargv");   */
 
   /*
     ec_null( g2dargv = calloc(argc + 4, sizeof(char*)) );
@@ -190,7 +190,7 @@ int main(int argc, char** argv){
 	continue;
       }
       size = message->bytesUsed;
-      /* fprintf(stderr, "graphics2d wrapper forwarding a msg of %d bytes\n", size); */
+      /* fprintf(stderr, "graphics2d wrapper forwarding a msg of %d bytes\n", size);  */
       sendMsg(pin[1], message);
     }
     /* end of boss code */

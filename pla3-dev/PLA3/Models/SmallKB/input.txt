@@ -8,6 +8,11 @@
  (g2dexe graphics2d (supdate "g2d.Main" "DEBUG" (boolean false)))
 
 
+(g2dexe graphics2d (sinvoke "java.lang.System" "exit" (int 0)))
+
+(user (sinvoke "java.lang.System" "exit" (int 0)))
+
+
 *** what is going on
 (show control)
 (show requests)
@@ -18,4 +23,5 @@
 (reset control)
 (reset wait4s)
 (graphics2d OK)
+
 
