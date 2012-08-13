@@ -1,0 +1,39 @@
+************************* 80 columns *******************************************
+***
+*** --------------------------------------------------------------------
+*** Pathway Logic Assistant.
+*** Copyright (C) 2006, SRI International.  All Rights Reserved.
+***
+*** This program is free software; you can redistribute it and/or
+*** modify it under the terms of the GNU General Public License
+*** as published by the Free Software Foundation; either version 2
+*** of the License, or (at your option) any later version.
+***
+*** This program is distributed in the hope that it will be useful,
+*** but WITHOUT ANY WARRANTY; without even the implied warranty of
+*** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*** GNU General Public License for more details.
+***
+*** You should have received a copy of the GNU General Public License
+*** along with this program; if not, write to the Free Software
+*** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*** --------------------------------------------------------------------
+***
+
+(entry sxval (qidlist ComponentInfoSpec)(notes) 
+  (sxval
+   (
+    (Protein 
+       (hugosym val HUGO)
+       (spname val SwissProtName)
+       (spnumber link SwissProt http://www.uniprot.org/uniprot/%arg) 
+       (spnumber link PFAM http://pfam.sanger.ac.uk/protein/%arg) 
+       (synonyms list Synonyms ident)
+    )
+    (Chemical 
+      (keggcpd link KEGG http://www.genome.jp/dbget-bin/www_bget?compound+%arg)
+      (synonyms list Synonyms ident)
+    )
+  )
+ )
+)

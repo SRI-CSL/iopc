@@ -1,0 +1,22 @@
+**** assumes PLA model, including model-checker loaded
+
+load lib-util
+**** load ../Util/load-pla-util        **** to get the latest
+
+load lib-meta   **** defines MY-META-ALL
+**** load ../Meta/load-metalib         **** to get the latest
+
+load lib-imaude              **** defines RFE
+**** load ../IMaude/load-pla-imaude    **** to get the latest
+
+mod RFE is
+  inc REWRITE .
+  inc FILEMANAGER .
+  inc G2D .
+  inc SEQUENCER .
+  inc LISTENER .
+endm
+
+load pla-core
+**** load load-pla-core                **** to get the latest
+
