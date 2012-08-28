@@ -21,11 +21,13 @@ ifeq (Darwin, $(findstring Darwin, ${OS}))
 SCRIPT = mac_iop
 #CFLAGS =  -Wall -D_MAC -D_${CPU}
 #we build universal
-CFLAGS = -Wall -D_MAC -arch i386 -arch ppc  -g
+#CFLAGS = -Wall -D_MAC -arch i386 -arch ppc  -g
+CFLAGS = -Wall -D_MAC -arch i386 -g
 # on tiger remove the arches
 # add to CFLAGS for debugging:
 # -g 
-LIBS = -lpthread -lm  -arch i386 -arch ppc
+#LIBS = -lpthread -lm  -arch i386 -arch ppc
+LIBS = -lpthread -lm  -arch i386 
 # on tiger remove the arches
 else
 #Linux flags
