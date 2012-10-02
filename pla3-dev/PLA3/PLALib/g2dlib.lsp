@@ -106,7 +106,7 @@
 
 ; if true prints lola retcode and path to GUI output
 ; and leaves the lola files in /tmp
-(define lolaDebug (boolean false))
+(define lolaDebug (boolean true))
 
 ;;; *********** exception handling *********
 
@@ -261,7 +261,8 @@
 			      "exec" command))
 	    (dummy
 	     (if lolaDebug
-		 (invoke java.lang.System.err "println" "lolaProc started")))
+		 (seq (invoke java.lang.System.err "println" "lolaProc started")
+                      (invoke java.lang.System.err "println" command))))
 	    (retcode (invoke lolaProc "waitFor"))
 	    (resPath
 	     (if (= retcode (int 0))
