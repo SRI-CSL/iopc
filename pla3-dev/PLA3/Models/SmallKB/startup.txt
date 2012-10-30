@@ -1,4 +1,4 @@
 start maude iop_maude_wrapper basura load-pl
-start graphics2d iop_graphics2d_wrapper $IOPBINDIR  -Xms256m -Xmx1024m  -agentlib:hprof=cpu=samples,doe=y,force=y,verbose=y
+start graphics2d iop_graphics2d_wrapper $IOPBINDIR  -Xms256m -Xmx1024m  -Dcom.apple.mrj.application.apple.menu.about.name=PLA3
 start filemanager iop_filemanager
 select maude

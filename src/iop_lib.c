@@ -378,36 +378,46 @@ static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
   char   input_exe[] = "java";
   char** input_argv  = NULL;
   /* N is for normal */
-  char* input_argvN[] = {INWINDOW,
-                         "-cp", 
-                         NULL,
-                         "GUI.Editor", NULL, NULL, NULL};
+  char* input_argvN[] = {
+    INWINDOW,
+    "-cp", 
+    NULL,
+    "-Dcom.apple.mrj.application.apple.menu.about.name=IOP",
+    "GUI.Editor", 
+    NULL, 
+    NULL, 
+    NULL};
   /* D is for debug  */
-  char* input_argvD[] = {INWINDOW, 
-                         "-cp", 
-                         NULL, 
-                         "-Xdebug", 
-                         "-Xnoagent",
-                         "-Djava.compiler=NONE",
-                         NULL,
-                         "GUI.Editor", NULL, NULL, NULL};
+  char* input_argvD[] = {
+    INWINDOW, 
+    "-cp", 
+    NULL, 
+    "-Dcom.apple.mrj.application.apple.menu.about.name=IOP",
+    "-Xdebug", 
+    "-Xnoagent",
+    "-Djava.compiler=NONE",
+    NULL,
+    "GUI.Editor", 
+    NULL, 
+    NULL, 
+    NULL};
   if(iop_gui_debug_port == NULL){
     /* normal mode */
     input_argv = input_argvN;
-    input_argc = 6;
-    input_argv[4] = pid_str;
-    input_argv[5] = port_str;
+    input_argc = 7;
+    input_argv[5] = pid_str;
+    input_argv[6] = port_str;
   } else {
     /* debug mode */
     char buff[BUFFSZ];
     input_argv = input_argvD;
-    input_argc = 10;
+    input_argc = 11;
     snprintf(buff, BUFFSZ,
              "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=%s", 
              iop_gui_debug_port); 
-    input_argv[6] = buff;
-    input_argv[8] = pid_str;
-    input_argv[9] = port_str;
+    input_argv[7] = buff;
+    input_argv[9] = pid_str;
+    input_argv[10] = port_str;
   }
   if((input_argv[2] = iop_alloc_jarpath(code_dir, "launchGUI", NULL)) == NULL){
     exit(EXIT_FAILURE);
