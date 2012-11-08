@@ -10,28 +10,11 @@ ARCH     =  $(shell uname -p)
 CPU      =  Intel
 
 ifeq (Darwin, $(findstring Darwin, ${OS}))
-#we are a mac, find out what CPU:
-# ifeq (powerpc, $(findstring powerpc, ${ARCH}))
-#  CPU = powerpc
-# endif
-# ifeq (i386, $(findstring i386, ${ARCH}))
-#  CPU = Intel
-# endif
-#Mac flags
-SCRIPT = mac_iop
-#CFLAGS =  -Wall -D_MAC -D_${CPU}
-#we build universal
-#CFLAGS = -Wall -D_MAC -arch i386 -arch ppc  -g
 CFLAGS = -Wall -D_MAC -arch i386 -g
-# on tiger remove the arches
 # add to CFLAGS for debugging:
 # -g 
-#LIBS = -lpthread -lm  -arch i386 -arch ppc
 LIBS = -lpthread -lm  -arch i386 
-# on tiger remove the arches
 else
-#Linux flags
-SCRIPT = linux_iop
 LIBS =  -lm -pthread 
 CFLAGS =  -Wall -D_LINUX -pedantic -Wno-unused-but-set-variable
 # add to CFLAGS for debugging:
@@ -59,7 +42,7 @@ EXE = talk2iop\
       iop_sal_spawner\
       iop_sal_wrapper
 
-SCRIPTS = jlambda kill_iop
+SCRIPTS = iop jlambda kill_iop
 HEADERS = actor.h argv.h cheaders.h constants.h dbugflags.h ec.h externs.h iop_lib.h macrostr.h msg.h options.h registry_lib.h sal_lib.h socket_lib.h types.h version.h wrapper_lib.h
 MISC    = makefile 
 
@@ -85,7 +68,6 @@ ${EXE}: %: %.o ${COBJS} ${HEADERS} ${MISC}
 
 scripts:
 	mkdir -p ${BUILDDIR}
-	cp ${SCRIPT}  ${BUILDDIR}/iop
 	cp ${SCRIPTS}  ${BUILDDIR}/
 
 clean_tmp:

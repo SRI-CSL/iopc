@@ -9,7 +9,8 @@ if(defined($ENV{JLAMBDA_CLASSES})){
 if(!defined($ENV{IOPBINDIR})){
     print "You must set envionment variable IOPBINDIR!\n";
 } else {
-    my $iop = "$ENV{IOPBINDIR}";
+    #putting in the talkies prevents white spaces from confounding.
+    my $iop = "\"$ENV{IOPBINDIR}\"";
     if($ARGV[0]){
 	system "java  -Dcom.apple.mrj.application.apple.menu.about.name=jlambda -Xms256m -Xmx1024m  -ea -cp ${iop}/iop.jar${jlambdaClasses}  g2d/jlambda/ReadEvalPrintLoop $iop $ARGV[0]";
     } else {

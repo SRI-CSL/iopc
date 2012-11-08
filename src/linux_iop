@@ -32,7 +32,7 @@ if(!defined($maude)){
     }
 }
 #print "iop_main @ARGV $iop $maude\n";
-system("iop_main @ARGV $iop $maude");
+system("iop_main @ARGV \"$iop\" \"$maude\"");
 
 sub whither {
     my $exe  = $_[0];
