@@ -558,7 +558,8 @@
 ;                      dish name string array
 (define initKBwdo (title kbm dishes)
   (let (
-       (frame (object ("g2d.pla.ManagerFrame" title)))
+        ;(frame (object ("g2d.pla.ManagerFrame" title)))
+        (frame (object ("g2d.tabwin.AppFrame" title)))
         (isRemote (sinvoke "g2d.Main" "isRemote"))
         (model (object ("javax.swing.DefaultListModel")))
         (list (object ("javax.swing.JList" model) ))
