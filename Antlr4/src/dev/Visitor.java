@@ -7,8 +7,10 @@ import g2d.graph.*;
 
 import antlr4.*;
 import antlr4.DotParser.IdContext;
+import antlr4.DotParser.A_listContext;
 
 import java.util.List;
+import java.util.HashMap;
 
 public class Visitor extends DotBaseVisitor<Object>  {
     public final IOPGraph graph;
@@ -32,6 +34,15 @@ public class Visitor extends DotBaseVisitor<Object>  {
         System.err.println("Edge: ");
         return retval;
     }
+
+    public Object visitEdgeRHS(DotParser.EdgeRHSContext ctx) { 
+        return visitChildren(ctx); 
+    }
+
+    public Object visitEdgeop(DotParser.EdgeopContext ctx) {
+        return visitChildren(ctx); 
+    }
+
     
     public Object visitNode_stmt(DotParser.Node_stmtContext ctx) { 
         Object id = visit(ctx.node_id());
@@ -42,18 +53,25 @@ public class Visitor extends DotBaseVisitor<Object>  {
     }
 
     public Object visitAttr_list(DotParser.Attr_listContext ctx) { 
-        System.err.println("Attribute List: ");
-        Object attrs = visitChildren(ctx); 
-        return attrs; 
+        List<A_listContext> list = ctx.a_list();
+        //usually only one of these; but if more we'll need to join them
+        Object entry = null;
+        for(A_listContext al : list){
+            entry = visit(al);
+        }
+        System.err.println("Attribute List: " + entry);
+        return null; 
     }
 
     public Object visitA_list(DotParser.A_listContext ctx) { 
         List<IdContext> list = ctx.id();
-        for(IdContext id : list){
-            System.err.println("id = " + value(id));
+        Attributes attributes = new Attributes();
+        for(int i = 0; i < list.size(); i = i + 2){
+            attributes.put(value(list.get(i)), value(list.get(i + 1)));
         }
-        return visitChildren(ctx); 
+        return attributes; 
     }
+    
 
     private String value(IdContext id){
         Object v = null;
@@ -75,6 +93,14 @@ public class Visitor extends DotBaseVisitor<Object>  {
             Visitor v = new Visitor(null);
             v.visit(tree);
         }
+    }
+
+    public static class Attributes extends HashMap<String,String> {
+        public Attributes(){
+            super();
+        }
+
+
     }
 
 }

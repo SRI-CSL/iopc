@@ -6,13 +6,12 @@
   <property name="gen" location="src/antlr4"/>
   <property name="classes" location="classes"/>
   <property name="lib"     location="lib"/>
-  <property name="HOME"    location="/Users/iam"/>
-  <property name="ANTLR4"  location="${HOME}/Repositories/IOP++/lib/antlr-4.0-complete.jar"/>
+  <property name="ANTLR4"  location="${user.home}/Repositories/IOP++/lib/antlr-4.0-complete.jar"/>
 
   <path id="classpath">
-    <pathelement location="${HOME}/Software/antlr4/antlr-4.0-complete.jar"/>
-    <pathelement location="${HOME}/bin/IOP/iop.jar"/>
-    <pathelement location="${HOME}/Repositories/IOP++/Antlr4/lib/antlr4.jar"/>
+    <pathelement location="${user.home}/Software/antlr4/antlr-4.0-complete.jar"/>
+    <pathelement location="${user.home}/bin/IOP/iop.jar"/>
+    <pathelement location="${user.home}/Repositories/IOP++/Antlr4/lib/antlr4.jar"/>
   </path>
 
   <target name="init">
@@ -22,12 +21,12 @@
     <mkdir dir="${gen}"/>
   </target>
 
-  <target name="antlr4" depends="init"
-          description="generates the source " >
+  <target name="antlr4" depends="init" description="generates the source " >
+    <echo message="${user.home}"/>
     <exec executable="java"
           dir="."
           failifexecutionfails="true">
-      <arg line="-jar ${HOME}/Repositories/IOP++/lib/antlr-4.0-complete.jar ${grammar} -no-listener -visitor -package antlr4 -o ${gen}"/>
+      <arg line="-jar ${user.home}/Repositories/IOP++/lib/antlr-4.0-complete.jar ${grammar} -no-listener -visitor -package antlr4 -o ${gen}"/>
     </exec>
   </target>
 
