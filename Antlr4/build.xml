@@ -1,0 +1,67 @@
+<project name="antlr4" default="jar" basedir=".">
+
+
+  <property name="grammar" location="Dot.g4"/>
+  <property name="src" location="src"/>
+  <property name="gen" location="src/antlr4"/>
+  <property name="classes" location="classes"/>
+  <property name="lib"  location="lib"/>
+  <property name="HOME"  location="/Users/iam/"/>
+
+  <path id="classpath">
+    <pathelement location="${HOME}/Software/antlr4/antlr-4.0-complete.jar"/>
+    <pathelement location="${HOME}/bin/IOP/iop.jar"/>
+    <pathelement location="${HOME}/Repositories/IOP++/Antlr4/lib/antlr4.jar"/>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${classes}"/>
+    <mkdir dir="${src}"/>
+    <mkdir dir="${gen}"/>
+  </target>
+
+  <target name="antlr4" depends="init"
+          description="generates the source " >
+    <exec executable="java"
+          dir="."
+          failifexecutionfails="true">
+      <arg line="-jar ${HOME}/Repositories/IOP++/lib/antlr-4.0-complete.jar ${grammar} -no-listener -visitor -package antlr4 -o ${gen}"/>
+    </exec>
+  </target>
+
+  <target name="compile" depends="antlr4" 
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${classes} -->
+    <javac includeantruntime="false" 
+           srcdir="${src}" 
+           destdir="${classes}"
+           classpathref="classpath"
+           />
+  </target>
+
+  <target name="jar" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${lib}"/>
+
+    <!-- Put everything in ${classes} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${lib}/antlr4.jar" basedir="${classes}">
+            <fileset dir="${classes}">
+                <include name="antlr4/**"/>
+            </fileset>
+    </jar>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${classes}"/>
+    <delete dir="${gen}"/>
+  </target>
+
+  <target name="run">
+    <java classname="dev.Visitor" fork="true" classpathref="classpath">
+      <arg value="samples/test.xdot"/>
+    </java>
+  </target>
+
+</project>

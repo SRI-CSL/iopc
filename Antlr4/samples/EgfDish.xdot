@@ -1,0 +1,1194 @@
+digraph temp {
+	graph [rankdir=TB, nslimit=15];
+	node [label="\N"];
+	graph [bb="0,0,13926,1354"];
+	11735 [label="032c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="255,1272"];
+	11734 [label="Tab3-Tak1C", height="0.45176", width="1.7589", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="369,1337"];
+	20573 [label=828, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="956,867"];
+	20572 [label="Ube2l3-CLc", height="0.45176", width="1.7352", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="875,937"];
+	20575 [label=268, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2850,867"];
+	20574 [label="Vav2-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2850,937"];
+	20576 [label="Rap1a-GDP-CLi", height="0.45176", width="2.2781", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6276,797"];
+	3281 [label="Erks-act-EgfRC", height="0.45176", width="2.1497", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1841,147"];
+	159 [label="Fos-gene-NUc", height="0.45176", width="2.0017", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9600,17"];
+	158 [label="Fos-NUc", height="0.45176", width="1.368", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9460,17"];
+	157 [label="Fos-gene-on-NUc", height="0.45176", width="2.3926", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9486,147"];
+	11731 [label="070c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="192,1272"];
+	20906 [label=196, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1841,212"];
+	156 [label="626c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6325,1007"];
+	11730 [label="Tab2-Tak1C", height="0.45176", width="1.7589", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="79,1337"];
+	20907 [label="196-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1096,212"];
+	155 [label="Egr1-gene-NUc", height="0.45176", width="2.1497", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6272,937"];
+	154 [label="Egr1-NUc", height="0.45176", width="1.5299", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6423,937"];
+	1580 [label="Braf-act-EgfRC", height="0.45176", width="2.1399", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5281,407"];
+	11466 [label="Stat5a-CLc", height="0.45176", width="1.597", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8712,1207"];
+	1581 [label="Plce1-EgfRC", height="0.45176", width="1.8398", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7365,667"];
+	7897 [label=172, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5502,867"];
+	153 [label="Egr1-gene-on-NUc", height="0.45176", width="2.5643", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6325,1077"];
+	11467 [label="Stat5a-Yphos-EgfRC", height="0.45176", width="2.736", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8189,1077"];
+	7894 [label="Pi3k-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="4770,937"];
+	11468 [label=253, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8714,1142"];
+	4613 [label="Mekk1-act-EgfRC", height="0.45176", width="2.4498", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3842,867"];
+	11469 [label="Stat5b-CLc", height="0.45176", width="1.6207", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9092,1207"];
+	8737 [label="037c-2", height="0.31944", width="0.80556", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6319,602"];
+	2208 [label="Csk-EgfRC", height="0.45176", width="1.6681", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9199,937"];
+	19203 [label=474, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9199,1007"];
+	19202 [label="Csk-CLc", height="0.45176", width="1.3443", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9199,1077"];
+	2850 [label="Dok2-CLc", height="0.45176", width="1.5635", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9636,1207"];
+	1829 [label="Cbl-CLc", height="0.45176", width="1.3345", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3582,1207"];
+	2851 [label=103, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9636,1142"];
+	20581 [label="369-2", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6408,732"];
+	11729 [label="Tak1-Tak1C", height="0.45176", width="1.7589", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="224,1337"];
+	11728 [label="954c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="143,1142"];
+	19217 [label="Dok1-Yphos-EgfRC", height="0.45176", width="2.6788", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3815,937"];
+	11727 [label="Tab1-phos-Tak1C", height="0.45176", width="2.4024", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="143,1077"];
+	19218 [label=486, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3658,1007"];
+	20375 [label=166, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5999,212"];
+	11471 [label=907, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9170,1142"];
+	11470 [label="Stat5b-Yphos-EgfRC", height="0.45176", width="2.7598", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8558,1077"];
+	20377 [label=763, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4843,212"];
+	3718 [label="Mek1-act-EgfRC", height="0.45176", width="2.2879", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6244,277"];
+	938 [label="Rac1-GTP-EgfRC", height="0.45176", width="2.4261", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3371,667"];
+	20376 [label="Msk2-NUc", height="0.45176", width="1.597", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="4843,277"];
+	735 [label="Araf-CLc", height="0.45176", width="1.4253", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9801,1207"];
+	1 [label="Smad3-CLc", height="0.45176", width="1.7016", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2460,147"];
+	737 [label=815, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9801,1142"];
+	160 [label="634c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9486,82"];
+	400 [label="Pi3k-EgfRC", height="0.45176", width="1.7352", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5517,797"];
+	4504 [label="Rela-CLc", height="0.45176", width="1.4016", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="13428,1207"];
+	1495 [label="Rap1a-GTP-EgfRC", height="0.45176", width="2.5643", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6430,667"];
+	20825 [label="529-4", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5293,732"];
+	4506 [label="704c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="13418,1142"];
+	4505 [label="Ikba:Rela-CLc", height="0.45176", width="1.978", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="13418,1077"];
+	8437 [label="Ptpn11-CLc", height="0.45176", width="1.7352", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2249,1207"];
+	316 [label="Egf:EgfR-Yphos-EgfRC", height="0.45176", width="3.1408", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6033,1207"];
+	4774 [label="Ikk2-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="13617,1337"];
+	317 [label=222, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9964,1142"];
+	214 [label="Ikba-CLc", height="0.45176", width="1.4016", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="13308,1207"];
+	314 [label="Abl1-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9964,1207"];
+	315 [label="Abl1-act-CLc", height="0.45176", width="1.8971", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="10004,1077"];
+	18913 [label="ArhGef4-CLc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2008,937"];
+	18914 [label=156, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2022,867"];
+	2980 [label=001, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6033,1272"];
+	19918 [label=1108, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8673,212"];
+	8301 [label=184, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="10144,1142"];
+	6378 [label="Tak1-act-Tak1C", height="0.45176", width="2.1735", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="223,1207"];
+	8300 [label="Plscr1-Yphos-EgfRC", height="0.45176", width="2.736", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="10190,1077"];
+	8440 [label="Ptpn11-Yphos-EgfRC", height="0.45176", width="2.8644", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4065,1077"];
+	8441 [label=188, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2210,1142"];
+	19223 [label="Mtor-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8869,667"];
+	624 [label="Akt1-act-CLc", height="0.45176", width="1.8971", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7159,407"];
+	19913 [label=1085, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6165,602"];
+	19914 [label="1085-1", height="0.31944", width="0.8125", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6472,602"];
+	2979 [label="EgfR-EgfRC", height="0.45176", width="1.8161", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5965,1337"];
+	2978 [label="Egf-XOut", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6101,1337"];
+	19916 [label="RasGrp3-CLc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5329,937"];
+	19917 [label=440, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5328,867"];
+	11350 [label="Stat3-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4139,667"];
+	7998 [label="Pkcd-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="12946,1207"];
+	224 [label="Irf1-gene-on-NUc", height="0.45176", width="2.4024", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6949,1077"];
+	20258 [label=1079, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8005,732"];
+	225 [label="Irf1-CLc", height="0.45176", width="1.3345", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6966,937"];
+	20257 [label="Freud1-EgfRC", height="0.45176", width="2.0353", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7322,537"];
+	226 [label="Irf1-gene-NUc", height="0.45176", width="2.0116", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7105,937"];
+	20256 [label="Freud1-CLc", height="0.45176", width="1.7352", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8152,797"];
+	227 [label="762c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6966,1007"];
+	7999 [label="Pkcd-phos-T507 phos-S645-CLc", height="0.45176", width="4.1515", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="13026,1077"];
+	8040 [label="Pkcz-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7805,797"];
+	20151 [label="ArhGef7-CLc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2557,937"];
+	229 [label="Jun-NUc", height="0.45176", width="1.3443", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="974,667"];
+	3834 [label="Erks-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1271,277"];
+	1449 [label="Rala-GTP-EgfRC", height="0.45176", width="2.3452", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6868,407"];
+	1302 [label="Atf2-CLc", height="0.45176", width="1.4253", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="729,537"];
+	1060 [label="Src-act-EgfRC", height="0.45176", width="2.0116", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1810,937"];
+	1831 [label=096, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3582,1142"];
+	20156 [label="Msk2-act-NUc", height="0.45176", width="2.0116", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4866,147"];
+	1832 [label="Cblb-CLc", height="0.45176", width="1.4727", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3732,1207"];
+	20157 [label="628-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4684,82"];
+	1833 [label="Cblb-Yphos-EgfRC", height="0.45176", width="2.6117", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5816,1077"];
+	20154 [label="Atf1-phos-NUc", height="0.45176", width="2.1162", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4725,17"];
+	20155 [label=628, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4765,82"];
+	1059 [label="ArhGef4-Yphos-EgfRC", height="0.45176", width="3.0598", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="2036,797"];
+	20765 [label="Stat3-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3990,797"];
+	20152 [label="Fak1-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2416,937"];
+	20766 [label=241, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3861,732"];
+	20153 [label=264, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2546,867"];
+	20805 [label="683-9", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3464,732"];
+	20804 [label="683-8", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3134,732"];
+	19232 [label=946, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6856,602"];
+	20803 [label="683-7", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3580,732"];
+	618 [label="Akt1-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7467,537"];
+	1834 [label=353, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3732,1142"];
+	20801 [label="683-5", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3704,732"];
+	6102 [label="Raf1-act-EgfRC", height="0.45176", width="2.1735", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5492,277"];
+	10068 [label=727, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="13261,1142"];
+	10067 [label="Rela-act-NUc", height="0.45176", width="1.8635", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="13261,1077"];
+	4352 [label="Hpk1-act-EgfRC", height="0.45176", width="2.2781", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7278,937"];
+	10581 [label=545, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="10350,1142"];
+	10580 [label="Sh2d3c-Yphos-EgfRC", height="0.45176", width="2.9217", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="10412,1077"];
+	4071 [label="Gab2-Yphos-EgfRC", height="0.45176", width="2.669", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4744,797"];
+	4556 [label="Ikbb:Rela-CLc", height="0.45176", width="2.0116", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="13580,1077"];
+	12151 [label="Vav3-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3026,867"];
+	10589 [label="Shc1-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="832,1077"];
+	4072 [label=075, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2702,1142"];
+	4557 [label="807c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="13569,1142"];
+	12152 [label=374, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="994,1142"];
+	4555 [label="Ikbb-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="13569,1207"];
+	12150 [label="Vav3-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="994,1207"];
+	574 [label="Pdpk1-act-EgfRC", height="0.45176", width="2.3926", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8037,667"];
+	12576 [label="Jun-phos-NUc", height="0.45176", width="2.0017", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1078,537"];
+	8630 [label="RalGds-EgfRC", height="0.45176", width="2.059", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6366,537"];
+	10576 [label="Sh2d3a-CLc", height="0.45176", width="1.7826", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="10569,1207"];
+	10438 [label="Rsk1-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8755,277"];
+	10577 [label="Sh2d3a-Yphos-EgfRC", height="0.45176", width="2.9217", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="10641,1077"];
+	10439 [label="Rsk1-act-CLc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8673,147"];
+	10578 [label=454, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="10569,1142"];
+	4646 [label="Mekk2-act-EgfRC", height="0.45176", width="2.4498", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8801,1007"];
+	2114 [label="Crk-CLc", height="0.45176", width="1.3443", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6719,1207"];
+	2981 [label=620, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6214,1142"];
+	2115 [label="Crk-Yphos-EgfRC", height="0.45176", width="2.4834", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6754,1077"];
+	2116 [label=102, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6719,1142"];
+	10579 [label="Sh2d3c-CLc", height="0.45176", width="1.7826", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="10350,1207"];
+	76 [label="Atf1-NUc", height="0.45176", width="1.4727", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="4684,147"];
+	7577 [label="Pag1-CLm", height="0.45176", width="1.5872", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9494,1207"];
+	7578 [label=147, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9422,1142"];
+	4993 [label="Jak1-CLc", height="0.45176", width="1.4253", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="11167,1207"];
+	3361 [label="Elk1-NUc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6864,667"];
+	3362 [label="Elk1-act-NUc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6849,537"];
+	20828 [label="529-6", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5047,732"];
+	3364 [label="EndA1-CLc", height="0.45176", width="1.7352", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="10977,1207"];
+	3365 [label="EndA1-EgfRC", height="0.45176", width="2.0353", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="11041,1077"];
+	20835 [label="529-13", height="0.31944", width="0.8125", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4896,732"];
+	20699 [label=639, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5980,342"];
+	20797 [label="683-2", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3371,732"];
+	20796 [label="683-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2791,732"];
+	8623 [label="Raf1-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5492,407"];
+	16215 [label="540c-3588", height="0.31944", width="1.1111", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="729,472"];
+	8486 [label="Pxn-Yphos-EgfRC", height="0.45176", width="2.5071", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3371,797"];
+	10630 [label="Shc1-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="850,1207"];
+	20833 [label="529-11", height="0.31944", width="0.8125", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4973,732"];
+	10632 [label=191, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="850,1142"];
+	20793 [label="Rac1-GDP-CLi", height="0.45176", width="2.1162", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3186,797"];
+	20692 [label=678, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1258,472"];
+	8713 [label="485c-2", height="0.31944", width="0.80556", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6395,602"];
+	11306 [label=235, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9365,1142"];
+	20798 [label="683-3", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2931,732"];
+	11305 [label="Stat1-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9365,1207"];
+	550 [label="Mras-GTP-EgfRC", height="0.45176", width="2.4261", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6628,667"];
+	20848 [label=1111, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8869,602"];
+	4998 [label=126, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="10780,1142"];
+	16227 [label="540c-3600", height="0.31944", width="1.1111", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="904,472"];
+	20847 [label="Lst8-CLc", height="0.45176", width="1.4016", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8992,667"];
+	3366 [label=546, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="10977,1142"];
+	466 [label="Hras-GTP-EgfRC", height="0.45176", width="2.3926", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5277,667"];
+	4994 [label="Jak1-Yphos-EgfRC", height="0.45176", width="2.5643", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="11225,1077"];
+	4995 [label=913, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="11167,1142"];
+	4996 [label="Jak2-CLc", height="0.45176", width="1.4253", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="10780,1207"];
+	4997 [label="Jak2-Yphos-EgfRC", height="0.45176", width="2.5643", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="10857,1077"];
+	20840 [label=227, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7159,472"];
+	4066 [label="Gab1-CLc", height="0.45176", width="1.5299", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5661,937"];
+	4067 [label=116, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5808,867"];
+	4068 [label="Gab2-CLc", height="0.45176", width="1.5299", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2702,1207"];
+	7536 [label="P38s-CLc", height="0.45176", width="1.4727", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2115,1207"];
+	7537 [label="P38s-act-CLc", height="0.45176", width="1.8734", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3876,1077"];
+	12291 [label="Ywhaz-EgfRC", height="0.45176", width="2.0017", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="12786,1077"];
+	7539 [label=940, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2153,1142"];
+	20700 [label="639-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5705,342"];
+	20101 [label="Rap2b-GDP-CLi", height="0.45176", width="2.2879", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7836,937"];
+	20102 [label=365, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7634,867"];
+	1107 [label="ArhGef7-Yphos-EgfRC", height="0.45176", width="3.0598", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="2546,797"];
+	9747 [label="Rasa1-Yphos-EgfRC", height="0.45176", width="2.7262", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="11434,1077"];
+	9746 [label="Rasa1-CLc", height="0.45176", width="1.5872", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="11364,1207"];
+	9748 [label=537, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="11364,1142"];
+	19691 [label="Mapkapk2-act-CLc", height="0.45176", width="2.5406", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3244,937"];
+	19692 [label=662, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3252,1007"];
+	19004 [label=352, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="987,342"];
+	11942 [label="Tnk2-Yphos-EgfRC", height="0.45176", width="2.6453", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="667,667"];
+	11941 [label="Tnk2-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="617,797"];
+	19690 [label="Mapkapk2-CLc", height="0.45176", width="2.1399", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3155,1077"];
+	11947 [label=551, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="11568,1142"];
+	20508 [label=452, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6603,867"];
+	19419 [label="Ikk1:Ikk2:Nemo-CLc", height="0.45176", width="2.8072", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="13740,1207"];
+	20507 [label="RapGef1-CLc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6603,937"];
+	11944 [label=254, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="667,732"];
+	19876 [label=1102, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3162,867"];
+	11943 [label="Egf:EgfR-ubiq-EgfRC", height="0.45176", width="2.9217", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="795,797"];
+	19418 [label="Ikk1-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="13740,1337"];
+	19875 [label="Pxn-CLc", height="0.45176", width="1.368", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3085,937"];
+	11946 [label="Tns3-Yphos-EgfRC", height="0.45176", width="2.6117", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="11644,1077"];
+	11945 [label="Tns3-CLc", height="0.45176", width="1.4727", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="11568,1207"];
+	7548 [label="Pag1-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9361,1077"];
+	8689 [label="1091c-2", height="0.31944", width="0.89583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6239,602"];
+	8686 [label="RalGds-CLc", height="0.45176", width="1.7352", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6256,667"];
+	4295 [label="Grb2-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="11757,1207"];
+	4298 [label="Grb2-EgfRC", height="0.45176", width="1.8161", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="11822,1077"];
+	4299 [label=117, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="11757,1142"];
+	8299 [label="Plscr1-CLm", height="0.45176", width="1.7254", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="10144,1207"];
+	4832 [label=760, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6949,1142"];
+	9642 [label="RasGrp3-Yphos-EgfRC", height="0.45176", width="3.0598", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5326,797"];
+	19155 [label="Cin85-CLc", height="0.45176", width="1.6207", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5645,1077"];
+	19156 [label="Cin85-EgfRC", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5879,937"];
+	19157 [label=550, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5822,1007"];
+	19158 [label=579, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5879,1007"];
+	11148 [label=197, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4528,867"];
+	11147 [label="Sos1-CLc", height="0.45176", width="1.4727", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="4419,937"];
+	8387 [label="Ptk6-act-EgfRC", height="0.45176", width="2.1497", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3470,937"];
+	8388 [label=532, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3448,1007"];
+	4188 [label="Git1-Yphos-EgfRC", height="0.45176", width="2.5406", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1433,277"];
+	8386 [label="Ptk6-CLc", height="0.45176", width="1.449", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3378,1077"];
+	2075 [label="Gab1-Yphos-EgfRC", height="0.45176", width="2.669", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5808,797"];
+	2763 [label="Dok1-CLc", height="0.45176", width="1.5635", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3695,1077"];
+	6283 [label=217, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8848,1142"];
+	6282 [label="Mekk3-CLc", height="0.45176", width="1.7254", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8850,1207"];
+	19850 [label="Shoc2-CLc", height="0.45176", width="1.6207", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1602,277"];
+	16168 [label="Atf2-NUc", height="0.45176", width="1.4727", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="904,407"];
+	2172 [label="CrkL-Yphos-EgfRC", height="0.45176", width="2.669", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7226,1077"];
+	19420 [label="169c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="13740,1272"];
+	19844 [label="Plcg1-act-EgfRC", height="0.45176", width="2.2781", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4922,937"];
+	2634 [label="Cdc42-GTP-EgfRC", height="0.45176", width="2.6117", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1841,667"];
+	19845 [label=176, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4882,1007"];
+	9239 [label="Raptor-CLc", height="0.45176", width="1.6779", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9122,667"];
+	8958 [label="RapGef1-Yphos-EgfRC", height="0.45176", width="3.0598", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6524,797"];
+	1778 [label="Cbl-Yphos-EgfRC", height="0.45176", width="2.4498", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5404,1077"];
+	6176 [label=570, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8536,732"];
+	2775 [label="Dok2-Yphos-EgfRC", height="0.45176", width="2.6788", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9647,1077"];
+	6175 [label="Mek5-act-CLc", height="0.45176", width="1.978", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8536,667"];
+	6174 [label="Mek5-CLc", height="0.45176", width="1.5635", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8562,797"];
+	19980 [label="Src-CLc", height="0.45176", width="1.2871", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1802,1077"];
+	8657 [label="Ralb-GTP-EgfRC", height="0.45176", width="2.3926", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6234,407"];
+	19981 [label=207, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1834,1007"];
+	19841 [label=002, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7752,732"];
+	19843 [label="Plcg1-CLc", height="0.45176", width="1.5635", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="4843,1077"];
+	19842 [label=311, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7365,732"];
+	1570 [label=263, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="11941,1142"];
+	20600 [label="Mapkap1-CLc", height="0.45176", width="1.978", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7159,537"];
+	19380 [label=398, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1193,867"];
+	6122 [label="Mek1-CLc", height="0.45176", width="1.5635", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5809,407"];
+	20605 [label="Braf-CLc", height="0.45176", width="1.4016", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5295,537"];
+	5781 [label="Pkcz-act-EgfRC", height="0.45176", width="2.1735", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7779,667"];
+	20607 [label=310, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5255,472"];
+	19381 [label="Hpk1-CLc", height="0.45176", width="1.5635", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7397,1077"];
+	20606 [label="IqGap1-CLc", height="0.45176", width="1.7589", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1732,537"];
+	19382 [label=218, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7344,1007"];
+	19385 [label="218-2", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7252,1007"];
+	20098 [label=1107, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6234,472"];
+	20097 [label="Ralb-GDP-CLi", height="0.45176", width="2.0688", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6131,537"];
+	11194 [label="Stat1-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8961,1077"];
+	19590 [label=530, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9055,212"];
+	2193 [label=115, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7188,1142"];
+	12420 [label=281, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="12141,1142"];
+	2192 [label="CrkL-CLc", height="0.45176", width="1.5299", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7188,1207"];
+	5484 [label=661, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7639,1142"];
+	12422 [label=964, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8927,1007"];
+	12421 [label="Stat1-Yphos-NUc", height="0.45176", width="2.3452", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8862,937"];
+	12424 [label=963, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4140,602"];
+	7118 [label="Nemo-CLc", height="0.45176", width="1.597", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="13868,1337"];
+	12423 [label="Stat3-act-NUc", height="0.45176", width="1.9445", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4140,537"];
+	20090 [label=1064, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7302,602"];
+	20204 [label=403, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6156,82"];
+	20091 [label="1064-1", height="0.31944", width="0.8125", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6810,472"];
+	12426 [label=948, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8189,1007"];
+	20205 [label="403-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6068,82"];
+	12425 [label="Stat5a-Yphos-NUc", height="0.45176", width="2.4735", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8216,937"];
+	20202 [label="Creb1-NUc", height="0.45176", width="1.6681", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6156,147"];
+	19930 [label=906, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2370,82"];
+	12428 [label=947, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8490,1007"];
+	20203 [label="Creb1-act-NUc", height="0.45176", width="2.0688", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="6112,17"];
+	12427 [label="Stat5b-Yphos-NUc", height="0.45176", width="2.5071", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8490,937"];
+	1568 [label="Bmx-CLc", height="0.45176", width="1.4727", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="11941,1207"];
+	1569 [label="Bmx-Yphos-EgfRC", height="0.45176", width="2.6117", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="12000,1077"];
+	5267 [label="Pak1-act-EgfRC", height="0.45176", width="2.207", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1932,537"];
+	7904 [label="325c-2", height="0.31944", width="0.80556", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="4509,602"];
+	19922 [label="Rsk3-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9566,277"];
+	19588 [label="Lkb1-CLc", height="0.45176", width="1.5299", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9055,277"];
+	19924 [label=663, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9607,212"];
+	19589 [label="Lkb1-phos-S431-EgfRC", height="0.45176", width="3.198", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9055,147"];
+	19923 [label="Rsk3-act-CLc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9697,147"];
+	3451 [label="Eps15-CLc", height="0.45176", width="1.6207", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="12339,1207"];
+	19929 [label="Smad3-phos-EgfRC", height="0.45176", width="2.669", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="2370,17"];
+	3453 [label=1100, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="12339,1142"];
+	3452 [label="Eps15-Yphos-CLc", height="0.45176", width="2.4498", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="12387,1077"];
+	12410 [label="Hras-GDP-CLi", height="0.45176", width="2.0688", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5047,797"];
+	12064 [label="Vav1-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3565,867"];
+	12063 [label="Vav1-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1324,1207"];
+	12414 [label="Mras-GDP-CLi", height="0.45176", width="2.1162", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6766,797"];
+	19780 [label="Myc-gene-on-NUc", height="0.45176", width="2.5071", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5151,937"];
+	12065 [label=388, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1324,1142"];
+	232 [label="Junb-gene-on-NUc", height="0.45176", width="2.5308", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7639,1077"];
+	12419 [label="Rit1-GDP-CLi", height="0.45176", width="2.0353", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="12141,1207"];
+	12418 [label=334, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="6662,732"];
+	19781 [label=668, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5089,1007"];
+	234 [label="Junb-gene-NUc", height="0.45176", width="2.1399", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7620,937"];
+	233 [label="Junb-NUc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7470,937"];
+	235 [label="716c", height="0.31944", width="0.61806", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7620,1007"];
+	19779 [label="Myc-gene-NUc", height="0.45176", width="2.0925", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="5070,1077"];
+	19369 [label="Fak2-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1434,937"];
+	6241 [label="Mekk2-CLc", height="0.45176", width="1.7254", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9231,1207"];
+	6242 [label=1106, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9231,1142"];
+	3461 [label=113, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="12537,1142"];
+	3460 [label="ErbB2-Yphos-EgfRC", height="0.45176", width="2.8072", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="12595,1077"];
+	19813 [label="Pdpk1-CLc", height="0.45176", width="1.6681", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7973,797"];
+	19812 [label="S6k1-act-CLc", height="0.45176", width="1.9208", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8869,537"];
+	19811 [label="S6k1-CLc", height="0.45176", width="1.5062", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="9255,667"];
+	5384 [label="Jnks-act-CLc", height="0.45176", width="1.8161", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1070,407"];
+	8280 [label="017c-2", height="0.31944", width="0.80556", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="7432,732"];
+	6238 [label=480, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1925,1142"];
+	12321 [label="Ywhaz-CLc", height="0.45176", width="1.6779", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="12733,1207"];
+	19810 [label="937-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1835,602"];
+	6237 [label="Mekk1-CLc", height="0.45176", width="1.7254", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1925,1207"];
+	3458 [label=112, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="373,1142"];
+	12075 [label="Vav2-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="2921,797"];
+	5383 [label="Jnks-CLc", height="0.45176", width="1.4016", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1219,537"];
+	3459 [label="ErbB2-CLm", height="0.45176", width="1.7826", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="12537,1207"];
+	12322 [label=552, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="12733,1142"];
+	1683 [label="Rit1-GTP-EgfRC", height="0.45176", width="2.3354", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="12196,1077"];
+	3457 [label="Eps8-Yphos-EgfRC", height="0.45176", width="2.6216", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="893,537"];
+	3454 [label="Eps8-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="373,1207"];
+	17116 [label="Atf2-phos-NUc", height="0.45176", width="2.1162", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="935,277"];
+	19777 [label="Msk1-act-NUc", height="0.45176", width="2.0116", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="5967,147"];
+	19776 [label="Msk1-NUc", height="0.45176", width="1.597", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="6085,277"];
+	19775 [label="1063-1", height="0.31944", width="0.8125", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3973,602"];
+	11079 [label="Sos1-Yphos-EgfRC", height="0.45176", width="2.6117", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="4536,797"];
+	20596 [label="399-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1860,732"];
+	20597 [label="399-2", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1709,732"];
+	19774 [label=1063, height="0.31944", width="0.64583", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="3902,602"];
+	20594 [label="Cdc42-GDP-CLi", height="0.45176", width="2.2879", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1749,797"];
+	20595 [label=399, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1773,732"];
+	3670 [label="Fak2-act-EgfRC", height="0.45176", width="2.207", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="1302,797"];
+	19372 [label=186, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1327,867"];
+	19373 [label=631, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="9485,212"];
+	7015 [label="Mlk3-CLc", height="0.45176", width="1.5299", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="3971,667"];
+	658 [label="Araf-act-EgfRC", height="0.45176", width="2.1497", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="9840,1077"];
+	20614 [label="028-1", height="0.31944", width="0.72222", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8352,602"];
+	19809 [label=937, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1555,602"];
+	20613 [label=028, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="8464,602"];
+	19808 [label="Pak1-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1637,667"];
+	20612 [label="Erk5-act-CLc", height="0.45176", width="1.8971", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8434,537"];
+	19563 [label=627, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="1063,602"];
+	20611 [label="Erk5-CLc", height="0.45176", width="1.4825", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="8393,667"];
+	19379 [label="Git1-CLc", height="0.45176", width="1.4016", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="1197,937"];
+	2736 [label="Dbl-CLc", height="0.45176", width="1.3345", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="2182,937"];
+	2737 [label="Dbl-Yphos-EgfRC", height="0.45176", width="2.4735", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="2253,797"];
+	11586 [label="Tab1-Tak1C", height="0.45176", width="1.7589", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="63,1207"];
+	2738 [label=389, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="2253,867"];
+	8000 [label=724, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="12946,1142"];
+	20707 [label=378, height="0.31944", width="0.53472", style=filled, distortion="0.0", orientation="0.0", shape=box, skew="0.0", pos="5492,342"];
+	3766 [label="Mekk3-act-EgfRC", height="0.45176", width="2.4498", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="8397,867"];
+	12430 [label="Rala-GDP-CLi", height="0.45176", width="2.0353", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7201,667"];
+	8274 [label="Plce1-CLc", height="0.45176", width="1.5299", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6666667 0.4117647 1.0", pos="7398,797"];
+	6030 [label="Mlk3-act-EgfRC", height="0.45176", width="2.2544", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="3968,537"];
+	8279 [label="Rap2b-GTP-EgfRC", height="0.45176", width="2.6117", style=filled, distortion="0.0", orientation="0.0", skew="0.0", fillcolor="0.6918239 0.20784314 1.0", pos="7565,797"];
+	2634 -> 19809 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1574.3,609.65 1777.6,654.91 1726.4,645.47 1652.6,630.8 1589,614 1587.4,613.56 1585.7,613.1 1584,612.61"];
+	20090 -> 1449 [style=solid, color="0.0 0.0 0.0", pos="e,6884.6,423.07 7278.6,599.13 7237,595.16 7147.9,583.65 7079,554 7004.8,522.07 6929.9,462.14 6892.5,429.89"];
+	20798 -> 938 [style=solid, color="0.0 0.0 0.0", pos="e,3304.1,677.57 2957.2,727.25 3022.3,717.93 3193.4,693.43 3294,679.02"];
+	466 -> 8689 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6206.6,612.18 5363.2,666.84 5525.1,667.17 5885.3,661.99 6196.5,613.76"];
+	316 -> 8000 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,12927,1144.5 6141.9,1202.6 6267.1,1198.8 6478.9,1192.9 6661,1190 8016.4,1168.7 11406,1198.2 12761,1154 12816,1152.2 12880,1147.9\
+ 12916,1145.3"];
+	19850 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1821.5,218.15 1642.8,265.24 1690.8,252.58 1769.4,231.87 1811.8,220.71"];
+	19779 -> 19781 [style=solid, color="0.0 0.0 0.0", pos="e,5086.1,1018.5 5074.3,1060.6 5077,1051 5080.4,1038.7 5083.3,1028.3"];
+	19850 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1122.3,214.71 1560.6,265.54 1551.5,263.49 1542,261.52 1533,260 1385.6,235.08 1208,220.78 1132.6,215.44"];
+	12420 -> 1683 [style=solid, color="0.0 0.0 0.0", pos="e,12182,1093.5 12150,1130.3 12157,1122.3 12167,1111.1 12176,1101.1"];
+	316 -> 9748 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,11345,1144.6 6142.2,1202.6 6267.4,1198.9 6479,1193 6661,1190 8675.9,1156.3 9181.2,1227.5 11195,1154 11244,1152.2 11301,1148.1 \
+11334,1145.4"];
+	1570 -> 1569 [style=solid, color="0.0 0.0 0.0", pos="e,11986,1093.5 11951,1130.3 11959,1122.3 11969,1110.9 11979,1100.8"];
+	8279 -> 19842 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7384.3,740.52 7518.6,782.82 7484.1,772.78 7435.8,758.28 7394,744 7393.9,743.97 7393.8,743.93 7393.7,743.9"];
+	316 -> 6238 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1944.5,1150.4 5920.7,1205 5274.9,1199.4 2059.4,1170.5 1959,1154 1957.5,1153.8 1956,1153.5 1954.5,1153.1"];
+	8686 -> 8689 [style=solid, color="0.0 0.0 0.0", pos="e,6241.9,613.58 6251.9,650.75 6249.7,642.57 6246.9,632.37 6244.5,623.51"];
+	3451 -> 3453 [style=solid, color="0.0 0.0 0.0", pos="e,12339,1153.9 12339,1190.4 12339,1182.4 12339,1172.6 12339,1163.9"];
+	2172 -> 19385 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7248,1018.5 7231.9,1060.6 7235.6,1050.9 7240.4,1038.4 7244.3,1028"];
+	12414 -> 12418 [style=solid, color="0.0 0.0 0.0", pos="e,6679.6,743.65 6742.1,781.55 6726,771.8 6704.8,758.94 6688.2,748.9"];
+	11350 -> 12424 [style=solid, color="0.0 0.0 0.0", pos="e,4139.8,613.85 4139.2,650.43 4139.4,642.43 4139.5,632.58 4139.7,623.93"];
+	1107 -> 20797 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3344.7,735.01 2641,788.74 2823,774.84 3213.4,745.03 3334.5,735.79"];
+	3718 -> 20377 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4862.6,213.34 6187.6,265.05 6175.6,263.06 6162.9,261.23 6151,260 5891.1,233.1 5042.8,216.6 4872.8,213.53"];
+	11945 -> 11947 [style=solid, color="0.0 0.0 0.0", pos="e,11568,1153.9 11568,1190.4 11568,1182.4 11568,1172.6 11568,1163.9"];
+	6176 -> 6175 [style=solid, color="0.0 0.0 0.0", pos="e,8536,683.47 8536,720.31 8536,712.97 8536,702.89 8536,693.54"];
+	20907 -> 3281 [style=solid, color="0.0 0.0 0.0", pos="e,1770.9,153.92 1122.1,208.79 1223.7,200.2 1595.5,168.76 1760.8,154.78"];
+	19690 -> 19692 [style=solid, color="0.0 0.0 0.0", pos="e,3237,1018.5 3176,1061.2 3191.6,1050.4 3212.7,1035.6 3228.7,1024.3"];
+	19913 -> 8630 [style=solid, color="0.0 0.0 0.0", pos="e,6324.2,550.44 6188.4,592.86 6191.3,591.88 6194.2,590.91 6197,590 6236.3,577.2 6281.1,563.47 6314.6,553.34"];
+	316 -> 6242 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9207.4,1151.8 6142.5,1202.8 6267.8,1199.3 6479.2,1193.6 6661,1190 6939.7,1184.5 8875.9,1200.8 9197.1,1153.5"];
+	3718 -> 20375 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6018.3,217.96 6196.2,263.7 6146.2,250.86 6069.5,231.14 6028,220.47"];
+	8440 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1069.7,213.72 3991.8,1065.5 3892.3,1051.3 3726,1027.1 3720,1024 3700.9,1014.4 3705.7,998.3 3686,990 3538.4,927.78 958.44,992.68\
+ 803,954 640.21,913.49 497,900.76 497,733 497,733 497,733 497,341 497,300.65 504.54,282.55 538,260 581.14,230.92 942.3,217.61 1059.5\
+,214.03"];
+	11305 -> 11306 [style=solid, color="0.0 0.0 0.0", pos="e,9365,1153.9 9365,1190.4 9365,1182.4 9365,1172.6 9365,1163.9"];
+	12430 -> 20091 [style=solid, color="0.0 0.0 0.0", pos="e,6839.4,482.19 7167.3,652.4 7121.2,633.2 7036.6,595.8 6970,554 6949.4,541.05 6948.1,532.22 6927,520 6902.3,505.68 6872.4,493.76\
+ 6849,485.5"];
+	8440 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1821.6,222.07 3991,1065.7 3906.9,1053.6 3778.7,1034 3758,1024 3737.6,1014.2 3741.1,998.25 3720,990 3476.9,894.97 1618.5,1037.1\
+ 1371,954 1358.5,949.81 1185.9,825.73 1180,814 1173.2,800.52 1172.7,793.23 1180,780 1194.5,753.76 1213.4,762.52 1237,744 1267.1,\
+720.3 1274.1,713.16 1299,684 1332.2,645.19 1324.5,621.11 1365,590 1401.8,561.72 1426.4,582.52 1463,554 1558.1,479.91 1522.1,405.62\
+ 1616,330 1649.2,303.24 1667.8,314.85 1705,294 1727.2,281.58 1729.4,273.48 1751,260 1770.8,247.62 1794.2,235.47 1812.2,226.62"];
+	12430 -> 20090 [style=solid, color="0.0 0.0 0.0", pos="e,7284.9,613.65 7224.2,651.55 7239.7,641.89 7260,629.17 7276.1,619.18"];
+	1107 -> 20596 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1886.3,735.41 2455.6,787.7 2303,773.68 2000.5,745.9 1896.3,736.33"];
+	157 -> 160 [style=solid, color="0.0 0.0 0.0", pos="e,9486,93.852 9486,130.43 9486,122.43 9486,112.58 9486,103.93"];
+	20707 -> 6102 [style=solid, color="0.0 0.0 0.0", pos="e,5492,293.47 5492,330.31 5492,322.97 5492,312.89 5492,303.54"];
+	19004 -> 17116 [style=solid, color="0.0 0.0 0.0", pos="e,947.77,293.47 978.18,330.31 971.66,322.41 962.53,311.35 954.35,301.44"];
+	1834 -> 1833 [style=solid, color="0.0 0.0 0.0", pos="e,5752.6,1089.1 3751.3,1140.9 3930.4,1139.8 5302.5,1130.2 5712,1094 5721.9,1093.1 5732.3,1091.9 5742.5,1090.5"];
+	20835 -> 466 [style=solid, color="0.0 0.0 0.0", pos="e,5205.2,676.1 4925.4,722.09 4928.3,721.33 4931.2,720.62 4934,720 5022.5,700.58 5125.3,686.04 5195.2,677.34"];
+	2193 -> 2172 [style=solid, color="0.0 0.0 0.0", pos="e,7216.7,1093.5 7194.4,1130.3 7199.1,1122.7 7205.5,1112 7211.3,1102.3"];
+	466 -> 19563 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1082.4,603.53 5191.5,664.61 5014.3,661.76 4594.4,655.06 4242,650 3034.9,632.67 2733,636.34 1526,614 1362.4,610.97 1166.2,605.8\
+ 1092.7,603.81"];
+	7118 -> 19420 [style=solid, color="0.0 0.0 0.0", pos="e,13762,1283.6 13841,1322.6 13820,1312.5 13792,1298.6 13771,1288.1"];
+	4504 -> 4506 [style=solid, color="0.0 0.0 0.0", pos="e,13420,1153.6 13426,1190.7 13424,1182.6 13423,1172.4 13421,1163.5"];
+	20796 -> 938 [style=solid, color="0.0 0.0 0.0", pos="e,3297.8,675.95 2817,728.17 2899,719.27 3154.1,691.56 3287.6,677.06"];
+	5484 -> 232 [style=solid, color="0.0 0.0 0.0", pos="e,7639,1093.5 7639,1130.3 7639,1123 7639,1112.9 7639,1103.5"];
+	1060 -> 20766 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3841.6,738.08 1868.5,927.29 1888,924.62 1909.9,921.9 1930,920 2215.4,893.04 2288.7,911.57 2574,884 2684.3,873.34 2710.7,860.63\
+ 2821,850 3108.6,822.28 3183.5,851.4 3470,814 3606.7,796.14 3767.1,757.13 3831.8,740.62"];
+	316 -> 20595 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1753.7,740.35 5920.7,1205.1 5266.4,1200 1973.3,1173.2 1871,1154 1776.3,1136.2 1668,1174.3 1668,1078 1668,1078 1668,1078 1668,1006\
+ 1668,905.16 1590.6,862.88 1648,780 1674,742.55 1701.4,760.08 1744,744 1744.1,743.96 1744.2,743.93 1744.3,743.89"];
+	316 -> 8388 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3449.5,1018.5 5920.2,1205.3 5438,1201.9 3571.3,1186.6 3520,1154 3475.7,1125.8 3457.7,1061.5 3451.3,1028.5"];
+	10068 -> 10067 [style=solid, color="0.0 0.0 0.0", pos="e,13261,1093.5 13261,1130.3 13261,1123 13261,1112.9 13261,1103.5"];
+	316 -> 20596 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1861.8,743.71 5920.5,1205.1 5282.6,1200.2 2147.5,1174.7 2103,1154 1936.7,1076.6 1877.6,827.18 1863.6,753.61"];
+	11944 -> 11942 [style=solid, color="0.0 0.0 0.0", pos="e,667,683.47 667,720.31 667,712.97 667,702.89 667,693.54"];
+	316 -> 20597 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1682.7,740.53 5920.4,1205.3 5242.7,1201.2 1735.6,1178.7 1687,1154 1649.3,1134.9 1630,1120.2 1630,1078 1630,1078 1630,1078 1630\
+,1006 1630,905.55 1574.8,865.82 1627,780 1637.3,763.13 1656,751.73 1673,744.39"];
+	20156 -> 20205 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6041.7,83.336 4924.7,137.46 4945.6,134.69 4969.3,131.86 4991,130 5398.1,95.121 5894.2,85.549 6031.4,83.488"];
+	12321 -> 12322 [style=solid, color="0.0 0.0 0.0", pos="e,12733,1153.9 12733,1190.4 12733,1182.4 12733,1172.6 12733,1163.9"];
+	19379 -> 19380 [style=solid, color="0.0 0.0 0.0", pos="e,1193.6,878.51 1196.1,920.57 1195.5,911.13 1194.8,898.94 1194.2,888.67"];
+	316 -> 20102 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7653.3,877.67 6143.1,1203.3 6504.2,1194.4 7630.7,1165.7 7667,1154 7712.4,1139.3 7733.6,1136.1 7756,1094 7763.1,1080.7 7758.6,1074.9\
+ 7756,1060 7744.7,994.9 7745.7,972.83 7706,920 7694.4,904.58 7677,891.82 7662.2,882.8"];
+	20375 -> 19777 [style=solid, color="0.0 0.0 0.0", pos="e,5974.9,163.47 5993.6,200.31 5989.7,192.73 5984.4,182.23 5979.5,172.63"];
+	8958 -> 20581 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6427.4,743.54 6496.8,781.23 6478.6,771.34 6454.7,758.34 6436.2,748.33"];
+	20797 -> 938 [style=solid, color="0.0 0.0 0.0", pos="e,3371,683.47 3371,720.31 3371,712.97 3371,702.89 3371,693.54"];
+	20906 -> 3281 [style=solid, color="0.0 0.0 0.0", pos="e,1841,163.47 1841,200.31 1841,192.97 1841,182.89 1841,173.54"];
+	7539 -> 7537 [style=solid, color="0.0 0.0 0.0", pos="e,3821.8,1086.8 2172.3,1132.4 2175.2,1131.4 2178.1,1130.6 2181,1130 2525.1,1060.8 3410.1,1122 3760,1094 3776.8,1092.7 3794.8,1090.5\
+ 3811.6,1088.2"];
+	3453 -> 3452 [style=solid, color="0.0 0.0 0.0", pos="e,12375,1093.5 12347,1130.3 12353,1122.4 12362,1111.4 12369,1101.4"];
+	1 -> 19930 [style=solid, color="0.0 0.0 0.0", pos="e,2385.1,93.598 2439.1,131.39 2425.5,121.82 2407.6,109.29 2393.4,99.38"];
+	550 -> 8713 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6424,611.47 6579.4,653.36 6542.2,643.58 6489.2,629.55 6434,614.24"];
+	156 -> 155 [style=solid, color="0.0 0.0 0.0", pos="e,6283.8,953.09 6316.7,995.38 6309.6,986.24 6299.1,972.73 6290,961.12"];
+	156 -> 154 [style=solid, color="0.0 0.0 0.0", pos="e,6402.3,952.34 6340.3,995.38 6354.7,985.42 6376.5,970.29 6394.1,958.07"];
+	8689 -> 8630 [style=solid, color="0.0 0.0 0.0", pos="e,6337.5,552.13 6260.3,590.46 6278.8,581.26 6306.1,567.71 6328.3,556.68"];
+	19385 -> 4352 [style=solid, color="0.0 0.0 0.0", pos="e,7272.1,953.35 7256.1,995.38 7259.4,986.65 7264.3,973.94 7268.6,962.71"];
+	11943 -> 11944 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,686.58,742.64 765.31,781.39 744.4,771.1 716.55,757.39 695.83,747.19"];
+	159 -> 19373 [style=solid, color="0.0 0.0 0.0", pos="e,9504.4,207.23 9602.4,33.336 9606,61.939 9609.6,124.13 9581,164 9565.2,186 9536.2,198.19 9514.2,204.6"];
+	6174 -> 6176 [style=solid, color="0.0 0.0 0.0", pos="e,8540.4,743.58 8555.7,780.75 8552.3,772.39 8547.9,761.92 8544.2,752.92"];
+	19692 -> 19691 [style=solid, color="0.0 0.0 0.0", pos="e,3245.8,953.35 3250.8,995.38 3249.7,986.83 3248.3,974.46 3247,963.39"];
+	20825 -> 466 [style=solid, color="0.0 0.0 0.0", pos="e,5280.9,683.47 5290.3,720.31 5288.4,712.89 5285.8,702.67 5283.4,693.23"];
+	12150 -> 12152 [style=solid, color="0.0 0.0 0.0", pos="e,994,1153.9 994,1190.4 994,1182.4 994,1172.6 994,1163.9"];
+	1832 -> 1834 [style=solid, color="0.0 0.0 0.0", pos="e,3732,1153.9 3732,1190.4 3732,1182.4 3732,1172.6 3732,1163.9"];
+	316 -> 6176 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8522.8,743.8 6143,1203.1 6268.4,1199.9 6479.5,1194.5 6661,1190 6827.2,1185.9 7993.3,1183.3 8157,1154 8277.5,1132.4 8301.5,1103.4\
+ 8416,1060 8461,1043 8477.2,1049.5 8518,1024 8555.6,1000.5 8571.9,994.88 8589,954 8617.8,885.09 8522.3,883.91 8496,814 8490.7,\
+799.86 8490.8,794.18 8496,780 8500,769.14 8507.7,759.08 8515.4,751.07"];
+	4506 -> 4505 [style=solid, color="0.0 0.0 0.0", pos="e,13418,1093.5 13418,1130.3 13418,1123 13418,1112.9 13418,1103.5"];
+	316 -> 1570 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,11921,1144.8 6141.9,1202.6 6267.1,1198.9 6478.9,1193 6661,1190 7799.5,1171.5 10647,1198.1 11785,1154 11829,1152.3 11880,1148.3\
+ 11911,1145.7"];
+	12075 -> 20804 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3108,740.7 2966.2,782.64 3005.6,770.98 3062,754.31 3098.3,743.56"];
+	316 -> 2116 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6699.7,1146.5 6134.5,1199.8 6257,1191.7 6469,1176 6650,1154 6663,1152.4 6677.4,1150.2 6689.6,1148.2"];
+	4071 -> 20700 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5693.7,353.56 4763,780.85 4784.7,764.14 4821.8,737.33 4857,720 5066,617.19 5139.4,644.54 5354,554 5470.1,505 5500.7,493.17 5606\
+,424 5635.7,404.48 5667,377.69 5686.3,360.36"];
+	229 -> 16215 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,706.65,483.55 934.67,657.46 859.37,640.21 699.47,599.04 668,554 659.34,541.61 661.33,533.56 668,520 674.4,507 686.31,496.58 697.92\
+,488.89"];
+	20153 -> 1107 [style=solid, color="0.0 0.0 0.0", pos="e,2546,813.35 2546,855.38 2546,846.83 2546,834.46 2546,823.39"];
+	316 -> 6283 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8828.5,1150.4 6142.5,1202.9 6267.8,1199.5 6479.2,1193.8 6661,1190 6900.2,1185 8578,1193.3 8814,1154 8815.5,1153.8 8817,1153.5 \
+8818.5,1153.1"];
+	19369 -> 19372 [style=solid, color="0.0 0.0 0.0", pos="e,1343.6,878.57 1412.1,922.08 1394.8,911.09 1370.7,895.75 1352.5,884.21"];
+	16215 -> 16168 [style=solid, color="0.0 0.0 0.0", pos="e,871.03,419.87 758.29,460.46 786.51,450.3 829.51,434.82 861.49,423.3"];
+	2192 -> 2193 [style=solid, color="0.0 0.0 0.0", pos="e,7188,1153.9 7188,1190.4 7188,1182.4 7188,1172.6 7188,1163.9"];
+	2981 -> 153 [style=solid, color="0.0 0.0 0.0", pos="e,6298.9,1092.8 6232.6,1130.5 6248.2,1121.6 6271.1,1108.6 6290.1,1097.8"];
+	19980 -> 19981 [style=solid, color="0.0 0.0 0.0", pos="e,1829,1018.6 1809.1,1060.9 1813.7,1051.2 1819.7,1038.4 1824.6,1027.9"];
+	12151 -> 20805 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3469.2,743.76 3091.9,855.28 3104.2,853.41 3117,851.57 3129,850 3204.6,840.15 3419,870.64 3470,814 3484.7,797.72 3479.3,771.36 \
+3472.8,753.16"];
+	8387 -> 19876 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3185,878.6 3413.6,925.78 3340.5,912.45 3220.1,890.1 3200,884 3198.2,883.44 3196.3,882.82 3194.4,882.16"];
+	12422 -> 12421 [style=solid, color="0.0 0.0 0.0", pos="e,8876.4,953.09 8916.8,995.38 8907.9,986.06 8894.7,972.21 8883.5,960.45"];
+	6175 -> 20613 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8476.2,613.68 8518.9,651.07 8508.5,641.91 8495,630.13 8484,620.53"];
+	19775 -> 6030 [style=solid, color="0.0 0.0 0.0", pos="e,3969.2,553.47 3972.2,590.31 3971.6,582.97 3970.8,572.89 3970,563.54"];
+	10589 -> 19781 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5069.7,1010.2 925.09,1074.2 1090.4,1071 1445.9,1064.3 1746,1060 2449.1,1049.8 4207.7,1059.3 4910,1024 4962.8,1021.3 5024.1,1015.2\
+ 5059.6,1011.3"];
+	20793 -> 20797 [style=solid, color="0.0 0.0 0.0", pos="e,3344.8,741.93 3224.8,782.79 3257.3,771.72 3303.3,756.04 3335,745.25"];
+	4071 -> 20835 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4870.6,743.51 4778.5,781.7 4803.2,771.45 4836.4,757.68 4861.3,747.4"];
+	20793 -> 20798 [style=solid, color="0.0 0.0 0.0", pos="e,2957,739.42 3138.3,784.22 3088.6,771.93 3011.7,752.94 2966.9,741.86"];
+	4071 -> 20833 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4943.6,741.31 4792.4,782.85 4828.7,772.99 4879.7,759.06 4933.8,744.03"];
+	20793 -> 20796 [style=solid, color="0.0 0.0 0.0", pos="e,2817.5,737.22 3126.9,786.57 3044.1,773.37 2896.3,749.79 2827.8,738.86"];
+	6175 -> 20614 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8378.1,611.92 8498.3,653.1 8466,642.02 8419.7,626.16 8387.8,615.27"];
+	3454 -> 3458 [style=solid, color="0.0 0.0 0.0", pos="e,373,1153.9 373,1190.4 373,1182.4 373,1172.6 373,1163.9"];
+	19813 -> 20258 [style=solid, color="0.0 0.0 0.0", pos="e,7999.6,743.58 7980.7,780.75 7985,772.3 7990.4,761.7 7995,752.63"];
+	4504 -> 4557 [style=solid, color="0.0 0.0 0.0", pos="e,13546,1153.1 13456,1193.4 13480,1182.9 13513,1168.1 13537,1157.2"];
+	19380 -> 4188 [style=solid, color="0.0 0.0 0.0", pos="e,1444.4,293.25 1177.2,855.29 1165,846 1149.1,831.32 1142,814 1136.3,800.01 1134.4,793.04 1142,780 1158.5,751.83 1179.3,762.8 1206\
+,744 1239.2,720.58 1249.4,715.6 1275,684 1305,646.88 1290.7,621.02 1327,590 1362.6,559.58 1388.3,581.7 1426,554 1462.5,527.18 \
+1488,518.34 1488,473 1488,473 1488,473 1488,406 1488,367.01 1466.2,326.37 1450,301.62"];
+	11947 -> 11946 [style=solid, color="0.0 0.0 0.0", pos="e,11626,1093 11581,1130.3 11591,1121.9 11606,1109.9 11618,1099.5"];
+	6242 -> 4646 [style=solid, color="0.0 0.0 0.0", pos="e,8806.3,1023.5 9207.7,1132.6 9204.5,1131.6 9201.2,1130.7 9198,1130 9123.5,1113.9 8922,1133.8 8857,1094 8834.3,1080.1 8819,1053 \
+8810.2,1033"];
+	12152 -> 12151 [style=solid, color="0.0 0.0 0.0", pos="e,3012.1,883.34 1013.3,1136.3 1102.6,1114.7 1485.4,1024.7 1805,990 1927.5,976.69 2796.9,995.25 2913,954 2949.6,940.98 2984,911.39\
+ 3005,890.57"];
+	316 -> 18914 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2040.9,878.51 5920.4,1205.4 5283.7,1202.1 2162.2,1184.3 2124,1154 2096.7,1132.4 2105,1112.8 2105,1078 2105,1078 2105,1078 2105\
+,1006 2105,966.86 2106.6,953.31 2086,920 2077,905.45 2062.5,893.16 2049.5,884.18"];
+	316 -> 2738 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2253.7,878.73 5920.4,1205.3 5299.5,1201.5 2319.5,1181.8 2282,1154 2253.6,1132.9 2258,1113.4 2258,1078 2258,1078 2258,1078 2258\
+,1006 2258,964.46 2255.7,915.94 2254.2,888.92"];
+	18913 -> 18914 [style=solid, color="0.0 0.0 0.0", pos="e,2019.8,878.51 2011.2,920.57 2013.1,911.03 2015.7,898.68 2017.8,888.34"];
+	3718 -> 19373 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9465.3,213.6 6325.6,274.78 6664.2,269.64 7991.7,248.93 9083,224 9222.2,220.82 9388.4,215.92 9455.1,213.91"];
+	214 -> 4506 [style=solid, color="0.0 0.0 0.0", pos="e,13400,1153.6 13332,1192.5 13349,1182.6 13372,1169.1 13391,1158.7"];
+	8737 -> 8630 [style=solid, color="0.0 0.0 0.0", pos="e,6354.5,553.47 6327,590.31 6332.8,582.49 6341,571.58 6348.3,561.74"];
+	8440 -> 20833 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4959.2,743.76 4091.9,1061.3 4128.5,1042 4196.3,1008.4 4258,990 4354.2,961.33 4389.1,994.44 4481,954 4503.3,944.19 4502.5,931.51\
+ 4524,920 4657.9,848.21 4712,879.67 4849,814 4887,795.79 4927.2,767.7 4951.1,749.84"];
+	316 -> 4299 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,11738,1144.7 6142.2,1202.6 6267.4,1198.9 6479,1193 6661,1190 7757.5,1172 10500,1195.4 11596,1154 11642,1152.3 11695,1148.2 11728\
+,1145.5"];
+	8440 -> 20835 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4866.7,733.91 4077.7,1060.6 4120.9,1009.4 4268.9,844.48 4433,780 4509.9,749.77 4759.5,737.84 4856.7,734.27"];
+	7015 -> 19774 [style=solid, color="0.0 0.0 0.0", pos="e,3913.8,613.79 3955,651.39 3945,642.23 3932,630.38 3921.4,620.7"];
+	19875 -> 19876 [style=solid, color="0.0 0.0 0.0", pos="e,3149.7,878.83 3101.3,921.58 3113.2,911.09 3129.4,896.83 3142,885.66"];
+	7015 -> 19775 [style=solid, color="0.0 0.0 0.0", pos="e,3972.7,613.85 3971.5,650.43 3971.7,642.43 3972.1,632.58 3972.3,623.93"];
+	160 -> 159 [style=solid, color="0.0 0.0 0.0", pos="e,9574,32.36 9505.1,70.455 9521.4,61.444 9545.3,48.245 9565,37.342"];
+	19418 -> 19420 [style=solid, color="0.0 0.0 0.0", pos="e,13740,1283.9 13740,1320.4 13740,1312.4 13740,1302.6 13740,1293.9"];
+	11730 -> 11731 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,172.96,1283.6 104.08,1322 121.88,1312.1 145.78,1298.8 164.17,1288.5"];
+	316 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1825.7,223.59 5920.5,1205.3 5227.7,1201.1 1568.7,1177.5 1517,1154 1470.9,1133 1231.1,861.34 1213,814 1207.6,799.88 1205.9,793.35\
+ 1213,780 1226.3,754.84 1243.2,761.11 1266,744 1371.7,664.53 1398,643.92 1495,554 1561.6,492.24 1711,320.28 1779,260 1791.2,249.18\
+ 1805.7,238.12 1817.6,229.44"];
+	1495 -> 19914 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6464.9,613.58 6440.2,650.75 6445.9,642.12 6453.2,631.25 6459.3,622.06"];
+	938 -> 19775 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3943.7,611.87 3456.1,662.98 3564.8,658.05 3758.9,645.6 3933.8,613.7"];
+	11148 -> 11079 [style=solid, color="0.0 0.0 0.0", pos="e,4534.2,813.35 4529.2,855.38 4530.3,846.83 4531.7,834.46 4533,823.39"];
+	160 -> 158 [style=solid, color="0.0 0.0 0.0", pos="e,9466.4,33.472 9481.6,70.313 9478.5,62.809 9474.2,52.453 9470.3,42.934"];
+	316 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1069.8,213.36 5920.5,1205.2 5173.4,1199.5 952.31,1167 821,1154 640.93,1136.1 421,1259 421,1078 421,1078 421,1078 421,341 421,301.6\
+ 424.78,282.67 457,260 506.39,225.26 931.74,215.64 1059.7,213.52"];
+	19382 -> 4352 [style=solid, color="0.0 0.0 0.0", pos="e,7292.6,953.09 7333.7,995.38 7324.6,986.06 7311.2,972.21 7299.8,960.45"];
+	316 -> 20205 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6041.9,85.386 5920.8,1204.8 5592.3,1200.8 4651.3,1186.7 4594,1154 4518.8,1111.1 4558.7,1041.3 4489,990 4440,953.99 4393.9,1002.3\
+ 4357,954 4339,930.37 4324.9,748.54 4471,590 4490.8,568.49 4686.2,497.81 4712,484 4824.1,424.01 4835.6,378.71 4953,330 5355.5,\
+163 5888.7,100.7 6031.5,86.406"];
+	316 -> 20204 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6175.6,83.109 6142.5,1202.9 6267.8,1199.4 6479.2,1193.8 6661,1190 6907.1,1184.9 8633.1,1193.8 8876,1154 8962.6,1139.8 9000.3,1154.3\
+ 9064,1094 9124,1037.1 9087,990.63 9130,920 9222.6,767.94 9375,781.06 9375,603 9375,603 9375,603 9375,341 9375,269.59 9196.4\
+,136.97 9179,130 9105.7,100.69 6496.2,84.938 6186,83.168"];
+	153 -> 156 [style=solid, color="0.0 0.0 0.0", pos="e,6325,1018.5 6325,1060.6 6325,1051.1 6325,1038.9 6325,1028.7"];
+	20091 -> 1449 [style=solid, color="0.0 0.0 0.0", pos="e,6853.8,423.47 6819.8,460.31 6827.3,452.26 6837.7,440.91 6847,430.85"];
+	76 -> 20157 [style=solid, color="0.0 0.0 0.0", pos="e,4684,93.852 4684,130.43 4684,122.43 4684,112.58 4684,103.93"];
+	18914 -> 1059 [style=solid, color="0.0 0.0 0.0", pos="e,2032.8,813.35 2024.2,855.38 2025.9,846.83 2028.5,834.46 2030.8,823.39"];
+	20848 -> 19812 [style=solid, color="0.0 0.0 0.0", pos="e,8869,553.47 8869,590.31 8869,582.97 8869,572.89 8869,563.54"];
+	9239 -> 20848 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8892.4,608.83 9079.4,655.38 9029.5,642.96 8947.9,622.64 8902.3,611.3"];
+	8274 -> 19842 [style=solid, color="0.0 0.0 0.0", pos="e,7370.5,743.58 7390,780.75 7385.6,772.3 7380,761.7 7375.3,752.63"];
+	20833 -> 466 [style=solid, color="0.0 0.0 0.0", pos="e,5215.9,678.53 5002.3,722.45 5005.6,721.59 5008.9,720.75 5012,720 5077.2,704.43 5152.3,690.02 5205.8,680.34"];
+	19223 -> 20848 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8869,613.85 8869,650.43 8869,642.43 8869,632.58 8869,623.93"];
+	19372 -> 3670 [style=solid, color="0.0 0.0 0.0", pos="e,1307.6,813.35 1323.1,855.38 1319.9,846.74 1315.3,834.2 1311.2,823.05"];
+	76 -> 20155 [style=solid, color="0.0 0.0 0.0", pos="e,4751.5,93.509 4702.4,131.7 4714.5,122.27 4730.5,109.85 4743.2,99.922"];
+	8440 -> 20825 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5319.1,740.7 4143.2,1066.3 4284.6,1049.1 4592.5,1012.7 4853,990 4975.9,979.31 5288.8,989.41 5407,954 5467.3,935.94 5481.8,924.43\
+ 5530,884 5570.5,849.98 5622.7,819.95 5588,780 5550.5,736.8 5389,755.61 5333,744 5331.7,743.74 5330.4,743.46 5329.1,743.16"];
+	20801 -> 938 [style=solid, color="0.0 0.0 0.0", pos="e,3429.8,679.13 3677.9,726.06 3627.1,716.46 3513.8,695.01 3440,681.05"];
+	12424 -> 12423 [style=solid, color="0.0 0.0 0.0", pos="e,4140,553.47 4140,590.31 4140,582.97 4140,572.89 4140,563.54"];
+	8440 -> 20828 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5073.1,740.01 4113.8,1062.6 4146.6,1053 4190.4,1039.3 4228,1024 4259.3,1011.3 4263.8,1000.4 4296,990 4390.7,959.4 4419.3,973.09\
+ 4517,954 4551.3,947.3 5108.2,841.31 5130,814 5139.4,802.19 5137.6,793.05 5130,780 5119.7,762.38 5100.1,750.83 5082.5,743.59"];
+	19381 -> 19382 [style=solid, color="0.0 0.0 0.0", pos="e,7352.3,1018.6 7385.2,1060.9 7377.3,1050.8 7366.9,1037.4 7358.5,1026.6"];
+	20840 -> 624 [style=solid, color="0.0 0.0 0.0", pos="e,7159,423.47 7159,460.31 7159,452.97 7159,442.89 7159,433.54"];
+	20581 -> 1495 [style=solid, color="0.0 0.0 0.0", pos="e,6424.6,683.47 6411.7,720.31 6414.4,712.81 6418,702.45 6421.3,692.93"];
+	20507 -> 20508 [style=solid, color="0.0 0.0 0.0", pos="e,6603,878.51 6603,920.57 6603,911.13 6603,898.94 6603,888.67"];
+	20828 -> 466 [style=solid, color="0.0 0.0 0.0", pos="e,5230.3,680.8 5073.4,723.77 5109.1,714 5173.7,696.31 5220.5,683.46"];
+	11586 -> 11728 [style=solid, color="0.0 0.0 0.0", pos="e,129.54,1153.6 81.555,1191.4 93.481,1182 109.02,1169.8 121.48,1159.9"];
+	19381 -> 19385 [style=solid, color="0.0 0.0 0.0", pos="e,7274.5,1018.6 7368.7,1062.7 7344.3,1051.3 7309.1,1034.8 7283.7,1022.9"];
+	4067 -> 2075 [style=solid, color="0.0 0.0 0.0", pos="e,5808,813.35 5808,855.38 5808,846.83 5808,834.46 5808,823.39"];
+	8437 -> 8441 [style=solid, color="0.0 0.0 0.0", pos="e,2216.5,1153.6 2239.6,1190.7 2234.3,1182.2 2227.6,1171.5 2222,1162.3"];
+	2979 -> 2980 [style=solid, color="0.0 0.0 0.0", pos="e,6021.5,1283.7 5981.1,1321.1 5991,1311.9 6003.7,1300.1 6014.1,1290.5"];
+	4646 -> 20613 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8483.6,602.82 8789.4,990.85 8782.3,980.87 8773.5,967.24 8768,954 8753.1,917.82 8749,907.14 8749,868 8749,868 8749,868 8749,731\
+ 8749,620.08 8567.1,604.69 8494,602.99"];
+	19157 -> 19156 [style=solid, color="0.0 0.0 0.0", pos="e,5866.3,953.09 5830.9,995.38 5838.6,986.15 5850.1,972.47 5859.9,960.78"];
+	19809 -> 5267 [style=solid, color="0.0 0.0 0.0", pos="e,1873.3,548.02 1574.6,597.78 1620.5,590.2 1739,570.64 1838,554 1846.2,552.62 1854.8,551.16 1863.4,549.71"];
+	316 -> 19232 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6875.4,609.75 6141.1,1202.1 6298.1,1195.6 6574.5,1180.5 6612,1154 6649.5,1127.5 6621.7,1091.6 6655,1060 6686.5,1030.1 6706.9,1043\
+ 6746,1024 6801.5,997.01 6825.7,1000.8 6866,954 6909.8,903.25 6908.1,879.55 6922,814 6937.2,742.67 6961.5,714.24 6927,650 6918\
+,633.29 6900.2,621.52 6884.7,613.94"];
+	3718 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1122,213.47 6188.6,264.96 6176.3,262.92 6163.2,261.1 6151,260 5670.8,216.99 2294.1,229.7 1812,224 1551.2,220.91 1237,215.5 1132.1\
+,213.64"];
+	3718 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1860.3,213.02 6188.1,264.9 6175.9,262.9 6163.1,261.1 6151,260 5698.5,218.88 2225.7,213.48 1870.3,213.03"];
+	12426 -> 12425 [style=solid, color="0.0 0.0 0.0", pos="e,8209.9,953.35 8193.2,995.38 8196.7,986.65 8201.7,973.94 8206.2,962.71"];
+	938 -> 19810 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1861.2,604.08 3286.8,662.55 2999.8,650.78 2067.2,612.52 1871.3,604.49"];
+	155 -> 2981 [style=solid, color="0.0 0.0 0.0", pos="e,6214.3,1130.4 6264.3,953.34 6253.2,976.03 6233,1020.2 6223,1060 6218,1080.1 6215.7,1103.6 6214.8,1120.2"];
+	6241 -> 6242 [style=solid, color="0.0 0.0 0.0", pos="e,9231,1153.9 9231,1190.4 9231,1182.4 9231,1172.6 9231,1163.9"];
+	4555 -> 4557 [style=solid, color="0.0 0.0 0.0", pos="e,13569,1153.9 13569,1190.4 13569,1182.4 13569,1172.6 13569,1163.9"];
+	19373 -> 157 [style=solid, color="0.0 0.0 0.0", pos="e,9485.8,163.47 9485.2,200.31 9485.3,192.97 9485.4,182.89 9485.6,173.54"];
+	2978 -> 2980 [style=solid, color="0.0 0.0 0.0", pos="e,6044.7,1283.8 6085.2,1321.4 6075.3,1312.2 6062.6,1300.4 6052.1,1290.7"];
+	20611 -> 20614 [style=solid, color="0.0 0.0 0.0", pos="e,8358.9,613.58 8383.1,650.75 8377.5,642.12 8370.4,631.25 8364.4,622.06"];
+	20611 -> 20613 [style=solid, color="0.0 0.0 0.0", pos="e,8451.8,613.79 8409.5,651.39 8419.8,642.23 8433.1,630.38 8444.1,620.7"];
+	10589 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1069.6,213.29 765.32,1065.4 658.03,1046.4 459,1002.6 459,938 459,938 459,938 459,341 459,303.45 453.8,283.6 483,260 527.87,223.74\
+ 934.16,215.2 1059.4,213.43"];
+	10589 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1821.6,218.12 823.07,1060.5 807.59,1031.5 779.55,967.41 803,920 808.99,907.89 1564.2,336.6 1576,330 1614.7,308.34 1630.4,315.78\
+ 1669,294 1690.5,281.86 1691.4,271.95 1713,260 1745,242.31 1785,228.85 1811.7,220.96"];
+	316 -> 10068 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,13242,1144 6141.9,1202.6 6267.1,1198.8 6478.9,1192.8 6661,1190 9466.5,1146.3 10169,1215.7 12974,1154 13068,1151.9 13179,1146.9\
+ 13231,1144.5"];
+	19811 -> 20848 [style=solid, color="0.0 0.0 0.0", pos="e,8892.6,605.62 9215.9,655.56 9207.7,653.56 9199.1,651.6 9191,650 9086.6,629.39 8961.6,613.67 8902.8,606.8"];
+	11734 -> 11735 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,274.21,1283.6 343.7,1322 325.74,1312.1 301.63,1298.8 283.08,1288.5"];
+	20573 -> 11943 [style=solid, color="0.0 0.0 0.0", pos="e,829.12,812.41 936.58,857.8 912.48,847.62 870.65,829.95 838.69,816.45"];
+	12064 -> 20803 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3592.2,743.58 3587.3,850.98 3598.8,841.81 3611.7,828.98 3618,814 3623.8,800.07 3623,794.25 3618,780 3614.2,769.17 3606.7,759 3599.3\
+,750.92"];
+	7998 -> 8000 [style=solid, color="0.0 0.0 0.0", pos="e,12946,1153.9 12946,1190.4 12946,1182.4 12946,1172.6 12946,1163.9"];
+	19218 -> 19217 [style=solid, color="0.0 0.0 0.0", pos="e,3781.9,952.35 3677.3,997.66 3700.8,987.44 3741.5,969.82 3772.6,956.38"];
+	20102 -> 8279 [style=solid, color="0.0 0.0 0.0", pos="e,7580.3,813.09 7623.2,855.38 7613.7,845.97 7599.4,831.94 7587.4,820.11"];
+	3458 -> 3457 [style=solid, color="0.0 0.0 0.0", pos="e,895.1,553.48 392.46,1137.7 463.96,1124.9 708,1076.4 708,1008 708,1008 708,1008 708,936 708,896.32 702.96,877.04 732,850 790.76\
+,795.3 858.21,876.16 909,814 924.61,794.9 904.83,628.45 896.43,563.65"];
+	6282 -> 6283 [style=solid, color="0.0 0.0 0.0", pos="e,8848.3,1153.9 8849.5,1190.4 8849.3,1182.4 8848.9,1172.6 8848.7,1163.9"];
+	316 -> 10632 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,869.48,1146.3 5920.5,1205.2 5194.1,1200.3 1189,1172.5 932,1154 914.54,1152.7 895.12,1150.2 879.56,1147.9"];
+	466 -> 7904 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4538.2,607.43 5202.1,658.85 5170.9,655.96 5134.2,652.68 5101,650 4874.1,631.69 4816.5,637.33 4590,614 4576.4,612.6 4561.6,610.7\
+ 4548.4,608.87"];
+	316 -> 4072 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2721.5,1150.4 5920.4,1205.2 5360.6,1200.9 2896.1,1180.6 2736,1154 2734.5,1153.8 2733,1153.5 2731.5,1153.1"];
+	4993 -> 4995 [style=solid, color="0.0 0.0 0.0", pos="e,11167,1153.9 11167,1190.4 11167,1182.4 11167,1172.6 11167,1163.9"];
+	19916 -> 19917 [style=solid, color="0.0 0.0 0.0", pos="e,5328.2,878.51 5328.8,920.57 5328.6,911.13 5328.5,898.94 5328.3,888.67"];
+	4995 -> 4994 [style=solid, color="0.0 0.0 0.0", pos="e,11211,1093.5 11177,1130.3 11184,1122.3 11195,1110.9 11204,1100.8"];
+	20793 -> 20805 [style=solid, color="0.0 0.0 0.0", pos="e,3437.8,738.93 3236,784.66 3291.3,772.13 3379.1,752.25 3428,741.16"];
+	19774 -> 6030 [style=solid, color="0.0 0.0 0.0", pos="e,3952.3,553 3913.2,590.31 3921.8,582.06 3934.1,570.37 3944.8,560.13"];
+	19918 -> 10439 [style=solid, color="0.0 0.0 0.0", pos="e,8673,163.47 8673,200.31 8673,192.97 8673,182.89 8673,173.54"];
+	20793 -> 20804 [style=solid, color="0.0 0.0 0.0", pos="e,3142.7,743.58 3173.4,780.75 3166.1,771.94 3156.9,760.79 3149.3,751.49"];
+	316 -> 19218 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3677.4,1017.2 5920.9,1204.7 5574.2,1200.5 4522.3,1185.3 4182,1154 4010.4,1138.2 3955.2,1166.8 3799,1094 3778.2,1084.3 3779.1,1072.9\
+ 3760,1060 3747.1,1051.3 3712.1,1033.9 3686.6,1021.6"];
+	316 -> 4067 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5827.5,868.97 6021.2,1190.8 6004.5,1167.8 5976,1122 5976,1078 5976,1078 5976,1078 5976,1006 5976,966.86 5983,949.27 5957,920 5926.4\
+,885.53 5871.6,873.91 5837.7,869.99"];
+	20793 -> 20803 [style=solid, color="0.0 0.0 0.0", pos="e,3553.9,736.65 3240.4,785.47 3250.5,783.59 3261.1,781.69 3271,780 3369.5,763.25 3486.1,746.29 3543.8,738.08"];
+	20793 -> 20801 [style=solid, color="0.0 0.0 0.0", pos="e,3677.9,736.35 3239.4,785.26 3249.8,783.35 3260.7,781.5 3271,780 3423.1,757.76 3462.3,761.43 3615,744 3632.4,742.02 3651.7,739.65\
+ 3667.8,737.63"];
+	20508 -> 8958 [style=solid, color="0.0 0.0 0.0", pos="e,6541.5,813.09 6590.7,855.38 6579.6,845.88 6563.1,831.68 6549.3,819.78"];
+	12428 -> 12427 [style=solid, color="0.0 0.0 0.0", pos="e,8490,953.35 8490,995.38 8490,986.83 8490,974.46 8490,963.39"];
+	20098 -> 8657 [style=solid, color="0.0 0.0 0.0", pos="e,6234,423.47 6234,460.31 6234,452.97 6234,442.89 6234,433.54"];
+	20594 -> 20595 [style=solid, color="0.0 0.0 0.0", pos="e,1769,743.58 1754.8,780.75 1758,772.39 1762,761.92 1765.4,752.92"];
+	20594 -> 20596 [style=solid, color="0.0 0.0 0.0", pos="e,1841.3,743.6 1774.7,781.39 1792.1,771.54 1814.9,758.58 1832.6,748.55"];
+	20594 -> 20597 [style=solid, color="0.0 0.0 0.0", pos="e,1715.7,743.58 1739.3,780.75 1733.8,772.12 1726.9,761.25 1721.1,752.06"];
+	8279 -> 8280 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7454.5,743.65 7534.5,781.55 7513.3,771.53 7485.2,758.22 7463.8,748.07"];
+	20606 -> 20607 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5235.6,473.11 1783,527.24 1801.8,524.38 1823.3,521.55 1843,520 2199,492.01 4911.7,475.05 5225.4,473.17"];
+	19590 -> 19589 [style=solid, color="0.0 0.0 0.0", pos="e,9055,163.47 9055,200.31 9055,192.97 9055,182.89 9055,173.54"];
+	20596 -> 2634 [style=solid, color="0.0 0.0 0.0", pos="e,1845.7,683.47 1856.8,720.31 1854.5,712.89 1851.5,702.67 1848.6,693.23"];
+	19777 -> 20155 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4784.3,84.01 5897.2,142.34 5668.7,130.36 4949,92.642 4794.4,84.542"];
+	4188 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1821.6,215.93 1498.5,265.58 1510.3,263.71 1522.5,261.79 1534,260 1635.9,244.13 1756.9,225.74 1811.6,217.45"];
+	8630 -> 20840 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7139.5,474.55 6434.3,530.57 6599.3,517.46 7014.7,484.46 7129.3,475.36"];
+	4188 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1122.3,217.91 1372.8,264.74 1302.9,251.68 1190,230.57 1132.3,219.79"];
+	7537 -> 19692 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3271.3,1009.9 3820,1067.9 3801,1065.2 3779.6,1062.4 3760,1060 3666,1048.7 3375.3,1020.1 3281.5,1010.9"];
+	4832 -> 224 [style=solid, color="0.0 0.0 0.0", pos="e,6949,1093.5 6949,1130.3 6949,1123 6949,1112.9 6949,1103.5"];
+	8630 -> 20098 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6256.2,483.62 6336.7,522.02 6315.5,511.91 6287,498.28 6265.3,487.96"];
+	3461 -> 3460 [style=solid, color="0.0 0.0 0.0", pos="e,12581,1093.5 12547,1130.3 12554,1122.3 12565,1110.9 12574,1100.8"];
+	20605 -> 20607 [style=solid, color="0.0 0.0 0.0", pos="e,5261.7,483.58 5285.3,520.75 5279.8,512.12 5272.9,501.25 5267.1,492.06"];
+	12419 -> 12420 [style=solid, color="0.0 0.0 0.0", pos="e,12141,1153.9 12141,1190.4 12141,1182.4 12141,1172.6 12141,1163.9"];
+	400 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1860.5,212.89 5472.6,785.43 5463.5,783.46 5454,781.54 5445,780 5316.1,757.79 5276.1,787.98 5153,744 5134.2,737.28 5133.9,726.51\
+ 5115,720 4840.8,625.44 4676.8,818.44 4471,614 4446.3,589.46 4452,572.82 4452,538 4452,538 4452,538 4452,341 4452,204.9 2158.8,\
+211.48 1870.6,212.84"];
+	316 -> 19918 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8673,223.62 6143,1203.1 6268.4,1199.8 6479.5,1194.3 6661,1190 7379.6,1172.8 7561.9,1217.1 8278,1154 8451.8,1138.7 8544.6,1219.4\
+ 8666,1094 8714.6,1043.8 8685,1007.8 8685,938 8685,938 8685,938 8685,866 8685,748.99 8673,720.01 8673,603 8673,603 8673,603 8673\
+,341 8673,303.23 8673,259.19 8673,233.85"];
+	316 -> 19203 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9184.1,1018.6 6142.5,1202.9 6267.8,1199.3 6479.2,1193.7 6661,1190 6728.7,1188.6 9041.3,1191 9098,1154 9136.5,1128.9 9113.8,1097\
+ 9141,1060 9150.8,1046.7 9164.5,1034.2 9176.1,1024.8"];
+	20613 -> 20612 [style=solid, color="0.0 0.0 0.0", pos="e,8441.4,553.47 8458.9,590.31 8455.3,582.73 8450.3,572.23 8445.7,562.63"];
+	400 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1093.8,223.54 5473,785.41 5463.8,783.43 5454.1,781.5 5445,780 5299.4,755.96 5252.6,797.18 5115,744 5098.1,737.46 5099.2,725.7 \
+5082,720 4897,658.78 1748.2,771.4 1574,684 1500.6,647.17 1420.3,432.51 1350,390 1268.2,340.54 1219,404.65 1138,354 1110.2,336.61\
+ 1105,325.23 1095,294 1088.7,274.31 1089.9,250.51 1092.2,233.82"];
+	8630 -> 20091 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6780.7,477.16 6426.3,527.44 6518.6,514.34 6692.3,489.7 6770.3,478.63"];
+	316 -> 19914 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6501.4,602.86 6144.1,1203.9 6265.6,1200 6451.1,1188.3 6512,1154 6557.9,1128.2 6545.1,1095.5 6584,1060 6606.1,1039.8 6617.4,1042.5\
+ 6641,1024 6689.5,986.02 6848.9,819.12 6851,814 6856.7,800.01 6856.7,793.99 6851,780 6843.4,761.3 6741.8,659.52 6724,650 6655.5\
+,613.41 6563.3,604.86 6511.6,603.13"];
+	3459 -> 3461 [style=solid, color="0.0 0.0 0.0", pos="e,12537,1153.9 12537,1190.4 12537,1182.4 12537,1172.6 12537,1163.9"];
+	8280 -> 1581 [style=solid, color="0.0 0.0 0.0", pos="e,7380.9,683 7420.6,720.31 7411.9,712.06 7399.4,700.37 7388.5,690.13"];
+	19155 -> 19157 [style=solid, color="0.0 0.0 0.0", pos="e,5802.7,1017.4 5680.6,1064.1 5709.7,1054.1 5751.9,1039 5788,1024 5789.8,1023.2 5791.7,1022.5 5793.5,1021.6"];
+	19155 -> 19158 [style=solid, color="0.0 0.0 0.0", pos="e,5861.6,1018.6 5687.7,1065.8 5743.2,1052.4 5834.9,1030 5850,1024 5850.8,1023.7 5851.7,1023.3 5852.5,1022.9"];
+	316 -> 19917 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5347.4,874.55 5920.1,1205.5 5716.3,1203.6 5303,1194.6 5252,1154 5195,1108.6 5197.1,1042.2 5248,990 5298.6,938.12 5361.8,1010.6\
+ 5407,954 5416.4,942.19 5414.2,933.3 5407,920 5396.4,900.36 5374.8,886.93 5356.9,878.64"];
+	316 -> 19913 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6165.1,613.64 6082.2,1192.3 6103.2,1184.2 6126.4,1172 6142,1154 6165.2,1127.3 6166,1113.4 6166,1078 6166,1078 6166,1078 6166,936\
+ 6166,817.78 6165.4,675.94 6165.1,623.66"];
+	19843 -> 19845 [style=solid, color="0.0 0.0 0.0", pos="e,4875.9,1018.6 4851.7,1060.9 4857.3,1051.1 4864.7,1038.2 4870.8,1027.6"];
+	2850 -> 2851 [style=solid, color="0.0 0.0 0.0", pos="e,9636,1153.9 9636,1190.4 9636,1182.4 9636,1172.6 9636,1163.9"];
+	11728 -> 11727 [style=solid, color="0.0 0.0 0.0", pos="e,143,1093.5 143,1130.3 143,1123 143,1112.9 143,1103.5"];
+	20597 -> 2634 [style=solid, color="0.0 0.0 0.0", pos="e,1810.4,682.59 1731.1,720.46 1750.2,711.34 1778.3,697.95 1801.2,686.97"];
+	20202 -> 20204 [style=solid, color="0.0 0.0 0.0", pos="e,6156,93.852 6156,130.43 6156,122.43 6156,112.58 6156,103.93"];
+	8440 -> 20575 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2832.2,878.76 4025.9,1061.8 3968.2,1041.7 3856.4,1005.4 3758,990 3704.7,981.66 2824.5,992.87 2787,954 2765.8,931.97 2798.2,902.53\
+ 2823.9,884.44"];
+	20202 -> 20205 [style=solid, color="0.0 0.0 0.0", pos="e,6082.8,93.598 6135.6,131.39 6122.3,121.91 6105.1,109.53 6091.3,99.661"];
+	3718 -> 19924 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9587.6,215.85 6326.3,275.81 6768.4,274.65 8865.8,266.91 9513,224 9534.7,222.56 9559,219.68 9577.5,217.23"];
+	2075 -> 20707 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5511.5,352.69 5748.9,784.08 5690.5,768.47 5610,734.82 5610,668 5610,668 5610,668 5610,471 5610,418.28 5555.2,377.99 5520.3,357.65"];
+	11469 -> 11471 [style=solid, color="0.0 0.0 0.0", pos="e,9156.6,1153.8 9110.1,1191.4 9121.6,1182.1 9136.7,1169.9 9148.8,1160.1"];
+	618 -> 20840 [style=solid, color="0.0 0.0 0.0", pos="e,7178.5,476.33 7428.1,525.74 7420.1,523.75 7411.8,521.74 7404,520 7326.5,502.75 7234.5,486.12 7188.4,478.05"];
+	2115 -> 19382 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7324.7,1014.4 6815.9,1065.2 6828.2,1063.3 6841,1061.5 6853,1060 7045.1,1036.5 7096.5,1058.3 7287,1024 7296.2,1022.3 7306,1019.9\
+ 7314.8,1017.3"];
+	316 -> 12065 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1343.5,1150.4 5920.5,1205.2 5219.3,1200.3 1474.2,1173 1358,1154 1356.5,1153.8 1355,1153.5 1353.5,1153.1"];
+	3670 -> 20766 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3841.6,735.19 1377.8,791.97 1449.7,788.3 1560.6,783 1657,780 2582,751.16 2814.9,793.59 3739,744 3770.6,742.3 3806.8,738.86 3831.4\
+,736.27"];
+	6283 -> 3766 [style=solid, color="0.0 0.0 0.0", pos="e,8393.2,883.38 8828.6,1139 8749.8,1130.7 8456.7,1099.8 8449,1094 8395,1053.4 8403.4,1020.2 8390,954 8385.9,933.82 8388.2,910.51\
+ 8391.3,893.26"];
+	3834 -> 20907 [style=solid, color="0.0 0.0 0.0", pos="e,1122.2,222.43 1238.1,264.15 1207.8,253.25 1163,237.11 1131.8,225.89"];
+	20101 -> 20102 [style=solid, color="0.0 0.0 0.0", pos="e,7653.3,874.51 7796.1,922.57 7756.8,909.35 7697.9,889.51 7662.9,877.75"];
+	2116 -> 2115 [style=solid, color="0.0 0.0 0.0", pos="e,6745.4,1093.5 6724.9,1130.3 6729.2,1122.7 6735.1,1112 6740.5,1102.3"];
+	400 -> 20258 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7981.7,734.38 5573.9,790.09 5610.7,786.52 5659.6,782.24 5703,780 6625,732.41 6857.3,774.55 7780,744 7848.1,741.75 7927.6,737.47\
+ 7971.6,734.96"];
+	3834 -> 20906 [style=solid, color="0.0 0.0 0.0", pos="e,1821.4,213.65 1307.6,265.37 1315.6,263.33 1324,261.4 1332,260 1512.3,228.25 1732.6,217.15 1811.3,214.04"];
+	1060 -> 20153 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2526.5,869.3 1869.1,927.54 1888.5,924.92 1910.2,922.16 1930,920 2155.1,895.51 2427.5,876.07 2516.4,869.99"];
+	20097 -> 20098 [style=solid, color="0.0 0.0 0.0", pos="e,6216.6,483.65 6154.6,521.55 6170.6,511.8 6191.6,498.94 6208,488.9"];
+	6030 -> 20692 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1277.3,473.45 3888,534.14 3470.3,524.43 1549,479.76 1287.5,473.69"];
+	4996 -> 4998 [style=solid, color="0.0 0.0 0.0", pos="e,10780,1153.9 10780,1190.4 10780,1182.4 10780,1172.6 10780,1163.9"];
+	16168 -> 19004 [style=solid, color="0.0 0.0 0.0", pos="e,973.15,353.51 922.83,391.7 935.39,382.17 951.94,369.61 965.08,359.64"];
+	6030 -> 20699 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5970.5,353.63 4024.4,525.2 4036.4,523.21 4049.1,521.33 4061,520 4073.5,518.6 5862.2,428.36 5874,424 5910.1,410.71 5944,380.56 \
+5963.3,361.03"];
+	466 -> 20613 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8444.5,606.48 5362.3,664.46 5523.1,661.56 5881.9,655.13 6184,650 6673.6,641.68 7898.9,652.7 8387,614 8402.7,612.76 8420,610.37\
+ 8434.2,608.14"];
+	466 -> 20614 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8326,603.53 5362,664.26 5822.5,654.82 8007.5,610.06 8315.8,603.74"];
+	4774 -> 19420 [style=solid, color="0.0 0.0 0.0", pos="e,13719,1283.7 13643,1322.8 13662,1312.7 13690,1298.8 13710,1288.3"];
+	3718 -> 19918 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8649.6,213.61 6325.2,273.89 6714.3,263.8 8381.1,220.57 8639.3,213.87"];
+	8623 -> 20707 [style=solid, color="0.0 0.0 0.0", pos="e,5492,353.85 5492,390.43 5492,382.43 5492,372.58 5492,363.93"];
+	11729 -> 11731 [style=solid, color="0.0 0.0 0.0", pos="e,197.37,1283.6 216.25,1320.7 211.96,1312.3 206.58,1301.7 201.97,1292.6"];
+	316 -> 3458 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,392.53,1150.4 5920.5,1205.2 5133.3,1199.5 477.61,1165.5 407,1154 405.51,1153.8 403.99,1153.5 402.47,1153.1"];
+	11941 -> 11944 [style=solid, color="0.0 0.0 0.0", pos="e,658.52,743.68 628.85,781.07 635.84,772.27 644.74,761.05 652.19,751.67"];
+	19781 -> 19780 [style=solid, color="0.0 0.0 0.0", pos="e,5137.2,953.09 5098.7,995.38 5107.1,986.15 5119.6,972.47 5130.2,960.78"];
+	16227 -> 16168 [style=solid, color="0.0 0.0 0.0", pos="e,904,423.47 904,460.31 904,452.97 904,442.89 904,433.54"];
+	11729 -> 11735 [style=solid, color="0.0 0.0 0.0", pos="e,249.8,1283.6 231.5,1320.7 235.66,1312.3 240.88,1301.7 245.34,1292.6"];
+	466 -> 20607 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5248.9,483.8 5269.2,650.56 5258.9,629.41 5241.5,589.96 5235,554 5232.3,539.13 5232,534.81 5235,520 5236.9,510.73 5240.7,501.03\
+ 5244.4,492.87"];
+	316 -> 7897 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5502.4,878.54 5919.8,1206.6 5718.9,1206.4 5317.1,1200.1 5274,1154 5224.3,1100.7 5227.2,1045.8 5274,990 5333.2,919.47 5409.8,1015.9\
+ 5478,954 5496.2,937.47 5501.1,908.38 5502.1,888.65"];
+	20614 -> 20612 [style=solid, color="0.0 0.0 0.0", pos="e,8414.8,552.76 8365.9,590.31 8377,581.77 8393,569.52 8406.6,559.02"];
+	316 -> 3453 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,12316,1144.9 6141.9,1202.6 6267.1,1198.8 6478.9,1192.9 6661,1190 7884.9,1170.4 10946,1197.5 12169,1154 12216,1152.3 12271,1148.4\
+ 12305,1145.8"];
+	20595 -> 2634 [style=solid, color="0.0 0.0 0.0", pos="e,1824.6,683.23 1784.5,720.31 1793.5,712.04 1806.1,700.3 1817.2,690.04"];
+	8486 -> 20797 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3371,743.85 3371,780.43 3371,772.43 3371,762.58 3371,753.93"];
+	8486 -> 20796 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2817.3,735.82 3308.1,785.32 3295.8,783.41 3283,781.54 3271,780 3104.9,758.76 3062.6,760.72 2896,744 2873.2,741.71 2847.6,739.03\
+ 2827.4,736.89"];
+	2115 -> 20508 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6622.6,871.81 6754.2,1060.3 6753.7,1029.8 6748.6,961.77 6714,920 6693.2,894.94 6657.7,881.26 6632.4,874.31"];
+	8486 -> 20798 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2957,736.41 3306.7,785.51 3294.9,783.63 3282.6,781.72 3271,780 3160.4,763.51 3029.3,745.94 2967.1,737.74"];
+	2114 -> 2116 [style=solid, color="0.0 0.0 0.0", pos="e,6719,1153.9 6719,1190.4 6719,1182.4 6719,1172.6 6719,1163.9"];
+	1580 -> 20707 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5472.5,348.83 5323.4,393.33 5364.7,381 5426.4,362.59 5462.6,351.79"];
+	11147 -> 11148 [style=solid, color="0.0 0.0 0.0", pos="e,4511.1,878.57 4441.3,922.08 4459.1,910.99 4484,895.47 4502.5,883.89"];
+	20204 -> 20203 [style=solid, color="0.0 0.0 0.0", pos="e,6122.8,33.472 6148.5,70.313 6143.1,62.493 6135.4,51.576 6128.6,41.736"];
+	1580 -> 20700 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5678.7,346.91 5341.7,396.97 5431.2,383.68 5595.7,359.24 5668.6,348.41"];
+	19845 -> 19844 [style=solid, color="0.0 0.0 0.0", pos="e,4913,953.35 4888.2,995.38 4893.5,986.47 4901.2,973.43 4907.9,962.03"];
+	4557 -> 4556 [style=solid, color="0.0 0.0 0.0", pos="e,13577,1093.5 13571,1130.3 13572,1123 13574,1112.9 13576,1103.5"];
+	19420 -> 19419 [style=solid, color="0.0 0.0 0.0", pos="e,13740,1223.5 13740,1260.3 13740,1253 13740,1242.9 13740,1233.5"];
+	19914 -> 8630 [style=solid, color="0.0 0.0 0.0", pos="e,6390.4,552.53 6454,590.31 6439.1,581.46 6417.6,568.65 6399.5,557.92"];
+	7536 -> 7539 [style=solid, color="0.0 0.0 0.0", pos="e,2146.6,1153.6 2124.2,1190.7 2129.4,1182.2 2135.8,1171.5 2141.3,1162.3"];
+	1580 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1860.4,213.13 5230.2,394.74 5086.4,363.05 4678.2,274.52 4542,260 4263,230.25 2145.4,215.05 1870.4,213.19"];
+	1580 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1112.9,223.63 5204.4,404.56 4652.9,394.12 1307.6,329.42 1210,294 1187.1,285.69 1186.7,274.29 1167,260 1152.2,249.26 1135.1,237.91\
+ 1121.4,229.05"];
+	1059 -> 20595 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1792.5,737.68 1981.2,782.87 1926.8,769.84 1845.5,750.38 1802.4,740.04"];
+	316 -> 3461 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,12518,1144.7 6141.9,1202.6 6267.1,1198.8 6478.9,1192.9 6661,1190 7929.8,1169.8 11103,1200 12371,1154 12419,1152.3 12474,1148.2\
+ 12507,1145.5"];
+	5384 -> 19004 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1001,353.6 1050.7,391.39 1038.3,381.91 1021.9,369.53 1009,359.66"];
+	6237 -> 6238 [style=solid, color="0.0 0.0 0.0", pos="e,1925,1153.9 1925,1190.4 1925,1182.4 1925,1172.6 1925,1163.9"];
+	8000 -> 7999 [style=solid, color="0.0 0.0 0.0", pos="e,13007,1093.2 12960,1130.3 12970,1121.9 12986,1109.9 12999,1099.5"];
+	1829 -> 1831 [style=solid, color="0.0 0.0 0.0", pos="e,3582,1153.9 3582,1190.4 3582,1182.4 3582,1172.6 3582,1163.9"];
+	4295 -> 4299 [style=solid, color="0.0 0.0 0.0", pos="e,11757,1153.9 11757,1190.4 11757,1182.4 11757,1172.6 11757,1163.9"];
+	4998 -> 4997 [style=solid, color="0.0 0.0 0.0", pos="e,10839,1093 10793,1130.3 10803,1121.9 10818,1109.9 10831,1099.5"];
+	8274 -> 8280 [style=solid, color="0.0 0.0 0.0", pos="e,7426.3,743.58 7406.2,780.75 7410.8,772.3 7416.5,761.7 7421.4,752.63"];
+	20205 -> 20203 [style=solid, color="0.0 0.0 0.0", pos="e,6101.2,33.472 6075.5,70.313 6080.9,62.493 6088.6,51.576 6095.4,41.736"];
+	466 -> 20707 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5472.6,353.17 5310.4,651.98 5350.3,632.69 5412,593.88 5412,538 5412,538 5412,538 5412,471 5412,434.02 5411,421.08 5431,390 5439.2\
+,377.28 5452.1,366.63 5463.9,358.69"];
+	2634 -> 20848 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8845.6,603.86 1934.5,664.82 2163.1,661.96 2768.6,654.56 3274,650 5593.1,629.05 6173.2,655.82 8492,614 8618.8,611.71 8769.6,606.59\
+ 8835.4,604.23"];
+	19876 -> 8486 [style=solid, color="0.0 0.0 0.0", pos="e,3329.5,811.49 3185.6,858.33 3218,847.79 3277.1,828.56 3319.9,814.64"];
+	316 -> 19781 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5106.3,1018.6 5920.5,1205.3 5706.3,1203.1 5256.3,1193.7 5198,1154 5159.9,1128 5182.5,1096.2 5154,1060 5143.1,1046.2 5127.9,1033.7\
+ 5114.9,1024.5"];
+	400 -> 20828 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5073.1,740.86 5473,785.35 5463.8,783.37 5454.1,781.46 5445,780 5287.1,754.61 5244.2,773.3 5087,744 5085.7,743.76 5084.4,743.5 \
+5083.1,743.23"];
+	229 -> 19563 [style=solid, color="0.0 0.0 0.0", pos="e,1048,613.62 993.75,652.02 1007.3,642.41 1025.4,629.62 1039.7,619.51"];
+	10630 -> 10632 [style=solid, color="0.0 0.0 0.0", pos="e,850,1153.9 850,1190.4 850,1182.4 850,1172.6 850,1163.9"];
+	316 -> 19590 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9074.4,212.9 6142.8,1202.9 6268.1,1199.5 6479.3,1193.9 6661,1190 6777.9,1187.5 8658.7,1200.6 8766,1154 8819.3,1130.9 8807.3,1090.2\
+ 8857,1060 8905,1030.9 8935.6,1060.8 8978,1024 9068.1,945.79 9005.1,863.86 9090,780 9136.7,733.85 9164.4,745.19 9225,720 9265.9\
+,702.99 9288.9,717.44 9318,684 9342.3,656.1 9337,639.98 9337,603 9337,603 9337,603 9337,341 9337,231.05 9157,215.08 9084.6,213.11"];
+	8387 -> 20805 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3472.7,743.62 3434.3,922.36 3417.7,913.99 3399.5,901.47 3390,884 3382.8,870.72 3381.3,862.38 3390,850 3416.9,811.65 3462.1,852.35\
+ 3489,814 3502.2,795.22 3490,769.29 3478.5,751.87"];
+	19930 -> 19929 [style=solid, color="0.0 0.0 0.0", pos="e,2370,33.472 2370,70.313 2370,62.967 2370,52.888 2370,43.536"];
+	400 -> 20825 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5319.3,740.38 5476.4,784.59 5434.4,772.76 5369.2,754.43 5328.9,743.11"];
+	8301 -> 8300 [style=solid, color="0.0 0.0 0.0", pos="e,10179,1093.5 10152,1130.3 10158,1122.5 10165,1111.6 10173,1101.7"];
+	8387 -> 20804 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3123.2,743.72 3441.2,921.88 3402.3,903.23 3330.3,870.38 3266,850 3194.4,827.33 3148.1,872.46 3101,814 3086,795.4 3101.9,769.09\
+ 3116.4,751.55"];
+	400 -> 20833 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5002.7,742 5473.4,785.31 5464.1,783.31 5454.2,781.4 5445,780 5257.3,751.48 5203.8,777.45 5012.8,743.81"];
+	316 -> 20607 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5274.7,481.15 5920.3,1205.3 5838,1201.5 5725,1189.4 5632,1154 5587.8,1137.2 5566.1,1135.9 5544,1094 5476.5,966.28 5685,912.73 \
+5628,780 5559.7,621.07 5359.4,518.96 5284.1,485.27"];
+	8388 -> 8387 [style=solid, color="0.0 0.0 0.0", pos="e,3465,953.35 3451.4,995.38 3454.2,986.74 3458.3,974.2 3461.9,963.05"];
+	1060 -> 20575 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2830.7,871.28 1868.2,927.2 1887.8,924.51 1909.8,921.79 1930,920 2287.2,888.27 2378.9,916.96 2736,884 2764.9,881.34 2797.6,876.56\
+ 2820.6,872.91"];
+	1060 -> 20573 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,975.41,869.55 1743,930.66 1568.7,916.79 1106.6,879.99 985.43,870.34"];
+	1060 -> 18914 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2002.7,874.2 1849.9,923.21 1891.5,909.85 1955.9,889.21 1993,877.31"];
+	466 -> 19232 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6836.5,603.78 5360.2,662.68 5655.2,650.91 6643,611.5 6826.5,604.18"];
+	19776 -> 20375 [style=solid, color="0.0 0.0 0.0", pos="e,6013.5,223.6 6065.1,261.39 6052.1,251.91 6035.2,239.53 6021.7,229.66"];
+	316 -> 19981 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1838.8,1018.7 5920.6,1205 5260.5,1199.1 1917.4,1168.5 1896,1154 1858.5,1128.6 1874.8,1101.6 1857,1060 1852.4,1049.4 1847.2,1037.6\
+ 1842.9,1027.9"];
+	1831 -> 1778 [style=solid, color="0.0 0.0 0.0", pos="e,5324.1,1083.9 3601.3,1138.9 3625.1,1136.3 3667,1132.1 3703,1130 4347,1092.8 4509.5,1122.6 5154,1094 5207,1091.6 5266.3,1087.9 \
+5313.8,1084.6"];
+	19810 -> 5267 [style=solid, color="0.0 0.0 0.0", pos="e,1909.3,552.76 1851.5,590.31 1864.9,581.6 1884.2,569.05 1900.5,558.43"];
+	316 -> 19845 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4887.5,1018.7 5921.7,1203.7 5653.8,1197.8 4991.8,1180.7 4952,1154 4913.7,1128.3 4928.1,1101.5 4908,1060 4902.8,1049.3 4897,1037.5\
+ 4892.1,1027.9"];
+	316 -> 3366 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,10958,1144.6 6142.2,1202.7 6267.4,1199 6479,1193.1 6661,1190 8503.9,1158.5 8966.1,1221.9 10808,1154 10857,1152.2 10914,1148.1 \
+10947,1145.4"];
+	316 -> 19841 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7747.1,743.65 6143.2,1203.2 6535.1,1193.3 7838.9,1159.7 7848,1154 7887.7,1128.9 7873.1,1100.9 7896,1060 7923,1011.8 7946,1007.2\
+ 7961,954 7965.1,939.46 7969,932.82 7961,920 7904.1,828.96 7800.9,905.04 7744,814 7732.7,795.84 7737.5,770.79 7743.4,753.38"];
+	316 -> 19842 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7355.3,743.64 6142.1,1202.7 6444.7,1193.3 7276.3,1166.6 7334,1154 7402.5,1139 7440.9,1152.3 7480,1094 7488.4,1081.4 7484.5,1074.4\
+ 7480,1060 7463,1005.4 7436.5,1003 7407,954 7370.8,893.88 7350.7,882.16 7334,814 7330.4,799.32 7329.7,794.47 7334,780 7337.1,\
+769.82 7343.1,759.82 7349.1,751.67"];
+	400 -> 20835 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4925.3,742.15 5473.4,785.22 5464.1,783.23 5454.3,781.35 5445,780 5223,747.7 5160,782.82 4935.4,743.93"];
+	19924 -> 19923 [style=solid, color="0.0 0.0 0.0", pos="e,9676.2,162.53 9622.3,200.31 9634.7,191.63 9652.5,179.12 9667.7,168.51"];
+	20572 -> 20573 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,943.23,878.72 892.58,921.25 905.21,910.64 922.29,896.3 935.54,885.17"];
+	8299 -> 8301 [style=solid, color="0.0 0.0 0.0", pos="e,10144,1153.9 10144,1190.4 10144,1182.4 10144,1172.6 10144,1163.9"];
+	232 -> 235 [style=solid, color="0.0 0.0 0.0", pos="e,7622.9,1018.5 7634.7,1060.6 7632,1051 7628.6,1038.7 7625.7,1028.3"];
+	8387 -> 20801 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3683,743.52 3463,920.68 3455.7,902.37 3447.2,871.5 3461,850 3481.6,817.84 3504.5,830.41 3539,814 3586.3,791.46 3640.9,764.49 3673.9\
+,748.06"];
+	8387 -> 20803 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3572.4,743.71 3453.2,920.84 3435.7,903.2 3413,873.51 3428,850 3448.6,817.84 3475.2,836.54 3506,814 3530.1,796.38 3552.4,769.99\
+ 3566.1,752.16"];
+	10576 -> 10578 [style=solid, color="0.0 0.0 0.0", pos="e,10569,1153.9 10569,1190.4 10569,1182.4 10569,1172.6 10569,1163.9"];
+	400 -> 20840 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7139.7,478.49 5566.2,786.97 5657.8,770.57 5860.6,736.12 6033,720 6132,710.74 6838.6,729.56 6927,684 7008.9,641.75 6981.5,576.99\
+ 7054,520 7076.9,502.01 7107.7,489.28 7130.1,481.64"];
+	10581 -> 10580 [style=solid, color="0.0 0.0 0.0", pos="e,10397,1093.5 10361,1130.3 10368,1122.3 10380,1110.9 10390,1100.8"];
+	316 -> 12428 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8470.7,1012.5 6143,1203.2 6268.4,1200 6479.5,1194.6 6661,1190 6975.4,1182 7764.8,1199.7 8076,1154 8176.3,1139.3 8205.3,1139.2 \
+8296,1094 8318.1,1083 8318.3,1071.8 8340,1060 8379.6,1038.6 8429.8,1023.3 8460.9,1015.1"];
+	316 -> 19004 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1006.3,343.79 5920.7,1205.1 5207,1199.4 1332.4,1167.8 1274,1154 1198.9,1136.3 1118,1155.1 1118,1078 1118,1078 1118,1078 1118,1006\
+ 1118,905.33 1099.2,874.81 1133,780 1186,631.52 1377.9,588.06 1286,460 1221.8,370.51 1078.5,349.46 1016.5,344.52"];
+	227 -> 226 [style=solid, color="0.0 0.0 0.0", pos="e,7076.5,951.97 6987.7,995.38 7009,984.96 7041.9,968.88 7067.4,956.39"];
+	227 -> 225 [style=solid, color="0.0 0.0 0.0", pos="e,6966,953.35 6966,995.38 6966,986.83 6966,974.46 6966,963.39"];
+	226 -> 4832 [style=solid, color="0.0 0.0 0.0", pos="e,6968.3,1136 7102.7,953.7 7097.5,984.27 7082.1,1052.4 7044,1094 7026.3,1113.3 6998.8,1125.7 6977.9,1132.9"];
+	3718 -> 20205 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6068.2,93.648 6212.2,261.96 6176.2,244.35 6118.3,210.72 6087,164 6074.9,145.99 6070.5,121.25 6068.9,103.87"];
+	316 -> 12152 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1013.5,1150.4 5920.6,1205.1 5185.3,1198.9 1090.4,1164.2 1028,1154 1026.5,1153.8 1025,1153.5 1023.5,1153.1"];
+	400 -> 20848 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8845.5,613.11 5572.7,789.64 5709.1,774.39 6070.4,735.84 6373,720 6621.9,706.97 8370,724.44 8616,684 8697.4,670.62 8788.5,636.43\
+ 8836,617.01"];
+	11079 -> 20835 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4866.5,738.16 4599.5,784.88 4673.8,771.89 4794.3,750.8 4856.3,739.94"];
+	1778 -> 20573 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,972.08,878.63 5368.9,1062 5315.6,1041.4 5210.3,1004.1 5117,990 4898.4,956.94 1352.5,1003.6 1137,954 1077.5,940.3 1014.5,904.97\
+ 980.79,884.1"];
+	316 -> 19876 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3178.8,878.63 5920.1,1205.8 5458.9,1204.5 3731.6,1196.9 3491,1154 3410.5,1139.7 3364.5,1160.6 3317,1094 3271.6,1030.3 3392.6,981.31\
+ 3344,920 3300.3,864.93 3255.4,909.71 3190,884 3189.3,883.72 3188.6,883.43 3187.9,883.13"];
+	11467 -> 12426 [style=solid, color="0.0 0.0 0.0", pos="e,8189,1018.5 8189,1060.6 8189,1051.1 8189,1038.9 8189,1028.7"];
+	316 -> 19563 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1058.8,613.85 5920.5,1205.1 5183.9,1198.9 1078.2,1163.9 1066,1154 965.19,1071.8 1004,998.06 1004,868 1004,868 1004,868 1004,796\
+ 1004,761.44 1039,665.53 1055.1,623.35"];
+	3718 -> 20204 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6175.5,90.824 6245.9,260.59 6248.6,232.39 6250.6,171.59 6225,130 6215.6,114.7 6199.1,103.21 6184.7,95.414"];
+	235 -> 233 [style=solid, color="0.0 0.0 0.0", pos="e,7498.5,950.93 7597.5,995.82 7573.8,985.07 7536,967.93 7507.7,955.1"];
+	235 -> 234 [style=solid, color="0.0 0.0 0.0", pos="e,7620,953.35 7620,995.38 7620,986.83 7620,974.46 7620,963.39"];
+	316 -> 5484 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7619.7,1145.4 6143,1203.2 6441.7,1195.4 7263.5,1172.8 7534,1154 7559.5,1152.2 7588.5,1149.1 7609.5,1146.6"];
+	316 -> 12420 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,12122,1144.6 6141.9,1202.6 6267.1,1198.9 6478.9,1192.9 6661,1190 7840.4,1171 10790,1195.7 11969,1154 12019,1152.2 12077,1148.1\
+ 12111,1145.4"];
+	316 -> 12422 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8909.6,1018.6 6142.8,1203 6268.1,1199.5 6479.3,1194 6661,1190 6771,1187.6 8539.4,1194 8642,1154 8700.7,1131.1 8692.2,1089.1 8748\
+,1060 8808.8,1028.3 8834.1,1048.8 8898,1024 8898.8,1023.7 8899.7,1023.3 8900.5,1023"];
+	20699 -> 3718 [style=solid, color="0.0 0.0 0.0", pos="e,6194,289.94 5999.4,336.37 6037.8,327.21 6124.8,306.45 6184,292.32"];
+	316 -> 12424 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4159.3,603.26 5920,1205.8 5572.9,1204.7 4542.4,1197.8 4486,1154 4426,1107.4 4493.1,1042.3 4438,990 4387.6,942.21 4330,1007.7 4286\
+,954 4264.6,927.84 4296.1,677.2 4276,650 4251.4,616.58 4201.4,606.75 4169.4,603.96"];
+	8486 -> 20805 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3448.2,743.68 3393,781.07 3407.1,771.55 3425.3,759.2 3439.8,749.41"];
+	316 -> 12426 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8169.4,1010.6 6143.2,1203.2 6557.3,1192.6 7997.5,1155.6 8000,1154 8039.7,1129 8012.9,1091.1 8048,1060 8079.8,1031.8 8128.2,1018.4\
+ 8159.2,1012.4"];
+	8486 -> 20804 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3160.2,739.96 3322.8,783.18 3277.5,771.14 3210.7,753.4 3170,742.56"];
+	316 -> 12418 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6664.6,743.76 6144.1,1203.9 6259.2,1199.9 6429.8,1188.2 6485,1154 6527.3,1127.8 6511.3,1095.7 6546,1060 6560.4,1045.2 6689.4,972.32\
+ 6699,954 6708.2,936.34 6679,805.3 6666.9,753.75"];
+	8486 -> 20801 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3677.7,737.98 3430.5,784.74 3499.4,771.71 3610.6,750.67 3667.7,739.88"];
+	314 -> 317 [style=solid, color="0.0 0.0 0.0", pos="e,9964,1153.9 9964,1190.4 9964,1182.4 9964,1172.6 9964,1163.9"];
+	8486 -> 20803 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3553.8,740.9 3415.1,782.72 3453.3,771.18 3508.1,754.69 3543.8,743.91"];
+	316 -> 19774 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3899.1,613.57 5920.8,1204.9 5568.4,1201.2 4503.1,1187.2 4437,1154 4389.2,1130 4398.1,1099.4 4362,1060 4316,1009.7 4296,1005.3 \
+4251,954 4187.9,881.99 4192.4,846.97 4124,780 4090.7,747.4 4080.2,739.8 4038,720 3983.3,694.35 3945.1,730.87 3907,684 3893.4,667.24\
+ 3894.3,641.53 3897.2,623.59"];
+	316 -> 19775 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4002.7,606.17 5920.3,1205.7 5570.4,1204.1 4522.2,1196.1 4463,1154 4399.4,1108.7 4457.5,1042.8 4400,990 4357.4,950.92 4312.2,998.25\
+ 4275,954 4187.5,849.99 4334.9,749.16 4242,650 4226.5,633.47 4084.1,615.41 4013,607.33"];
+	1778 -> 20581 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6381.9,737.17 5456.4,1063.9 5527.6,1046.1 5657.5,1009 5758,954 5779.4,942.31 5779.6,931.61 5801,920 5845.1,896.09 5860.7,900.82\
+ 5908,884 6031.9,839.92 6058.7,816.78 6185,780 6249.9,761.1 6327.5,746.5 6371.9,738.87"];
+	316 -> 19157 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5802.6,1018.2 5943.8,1197 5824.2,1182.8 5621.7,1151 5577,1094 5484.4,975.88 5501.1,1114.1 5788,1024 5789.7,1023.5 5791.4,1022.9\
+ 5793.1,1022.2"];
+	316 -> 19158 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5888.3,1018.6 6006.4,1191.2 5991.8,1182 5974.3,1169 5962,1154 5933,1118.4 5942.7,1099.3 5919,1060 5911.9,1048.2 5902.6,1036 5894.8\
+,1026.4"];
+	7537 -> 20377 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4823.4,215.82 3888.7,1060.7 3941.8,997.44 4153,751.8 4362,590 4435.4,533.17 4473.3,546.39 4542,484 4633.2,401.25 4605.9,333.03\
+ 4705,260 4737.7,235.93 4783.5,223.58 4813.3,217.7"];
+	7537 -> 20375 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5988.8,223.65 3923.1,1065.2 3932.9,1063.3 3943.3,1061.4 3953,1060 4350.2,1003.5 4452.5,1013.8 4853,990 4949.8,984.24 5636.5,993.61\
+ 5725,954 5744.2,945.4 5740.8,932.17 5758,920 5789.2,897.93 5804.2,905.09 5836,884 5874.6,858.46 5889.6,853.87 5913,814 5931.7\
+,782.13 5932,769.98 5932,733 5932,733 5932,733 5932,341 5932,297.89 5962.2,254.96 5982.1,231.41"];
+	19922 -> 19924 [style=solid, color="0.0 0.0 0.0", pos="e,9600.1,223.58 9575.9,260.75 9581.5,252.12 9588.6,241.25 9594.6,232.06"];
+	19588 -> 19590 [style=solid, color="0.0 0.0 0.0", pos="e,9055,223.85 9055,260.43 9055,252.43 9055,242.58 9055,233.93"];
+	316 -> 20613 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8483.3,602.83 6143,1203.1 6268.4,1199.9 6479.5,1194.4 6661,1190 6834,1185.8 8047.7,1184.9 8218,1154 8297.7,1139.6 8316.4,1127.7\
+ 8390,1094 8417.5,1081.4 8421.4,1072.4 8449,1060 8495.2,1039.3 8513.7,1050.1 8557,1024 8604.4,995.45 8647,993.33 8647,938 8647,\
+938 8647,938 8647,866 8647,769.02 8679,723.76 8616,650 8585.4,614.21 8528.2,605.24 8493.4,603.25"];
+	316 -> 20614 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8343.9,613.56 6143.2,1203.2 6561,1192.4 8023.7,1154.7 8025,1154 8067,1129.4 8042.2,1089.3 8081,1060 8130.9,1022.4 8160.5,1050.7\
+ 8217,1024 8265.1,1001.3 8289.8,1001.3 8314,954 8328.4,925.75 8305.9,915.18 8300,884 8287.4,816.89 8283.2,769.72 8324,650 8327.3\
+,640.2 8332.9,630.23 8338.2,622"];
+	1833 -> 19158 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5869.2,1018.6 5830,1060.9 5839.5,1050.6 5852.3,1036.8 5862.4,1026"];
+	11468 -> 11467 [style=solid, color="0.0 0.0 0.0", pos="e,8265.8,1087.2 8694.7,1138.7 8627.6,1130.6 8401.8,1103.5 8275.8,1088.4"];
+	20700 -> 3718 [style=solid, color="0.0 0.0 0.0", pos="e,6186,288.57 5731.2,338.84 5800.1,333.03 5992.1,316.01 6151,294 6159.2,292.87 6167.7,291.56 6176.2,290.2"];
+	10578 -> 10577 [style=solid, color="0.0 0.0 0.0", pos="e,10624,1093.2 10581,1130.3 10591,1122 10604,1110.3 10616,1100"];
+	20574 -> 20575 [style=solid, color="0.0 0.0 0.0", pos="e,2850,878.51 2850,920.57 2850,911.13 2850,898.94 2850,888.67"];
+	4299 -> 4298 [style=solid, color="0.0 0.0 0.0", pos="e,11807,1093 11768,1130.3 11777,1122.1 11789,1110.4 11799,1100.1"];
+	316 -> 19372 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1346.5,877.92 5920.6,1205.1 5227.4,1199.8 1562.7,1170.8 1540,1154 1511.6,1132.9 1516,1113.4 1516,1078 1516,1078 1516,1078 1516\
+,1006 1516,966.76 1523.3,948.19 1496,920 1452.8,875.39 1419.3,905.31 1361,884 1359.4,883.4 1357.7,882.75 1356,882.07"];
+	316 -> 19810 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1809,612.8 5920.4,1205.4 5239.2,1201.4 1695.9,1179.3 1647,1154 1610,1134.8 1592,1119.7 1592,1078 1592,1078 1592,1078 1592,1006\
+ 1592,905.3 1564.9,871 1608,780 1616.7,761.54 1721.4,661.84 1738,650 1757,636.45 1780.6,624.94 1799.7,616.69"];
+	316 -> 19373 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9484.9,223.62 6142.5,1202.8 6267.8,1199.3 6479.2,1193.6 6661,1190 6950.1,1184.3 8977.8,1201.7 9263,1154 9296.7,1148.4 9303.3,1140\
+ 9336,1130 9392.5,1112.8 9423.2,1136.7 9464,1094 9491.1,1065.6 9484,1047.2 9484,1008 9484,1008 9484,1008 9484,341 9484,303.23\
+ 9484.4,259.19 9484.7,233.85"];
+	9642 -> 20825 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5298.5,743.58 5318,780.75 5313.6,772.3 5308,761.7 5303.3,752.63"];
+	20765 -> 20766 [style=solid, color="0.0 0.0 0.0", pos="e,3880.5,742.5 3963,782.79 3941.5,772.3 3911.5,757.65 3889.6,746.96"];
+	316 -> 20508 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6622.5,874.77 6145.1,1204.8 6254.7,1201.4 6411.8,1190.2 6460,1154 6523.4,1106.4 6469.4,1041.1 6530,990 6582.7,945.52 6638.2,1008.1\
+ 6681,954 6690.4,942.14 6688.1,933.32 6681,920 6670.6,900.63 6649.5,887.23 6631.9,878.89"];
+	316 -> 19692 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3250.5,1018.7 5919.9,1205.8 5408.5,1204.4 3335.8,1196.5 3284,1154 3247,1123.7 3246.7,1061.4 3249.4,1028.8"];
+	316 -> 20700 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5708.2,353.53 6036.8,1190.7 6042.3,1166.9 6052,1119.1 6052,1078 6052,1078 6052,1078 6052,1006 6052,910.6 5997.3,670.45 5946,590\
+ 5883.4,491.72 5814.6,515.93 5743,424 5728.5,405.43 5717.9,380.46 5711.6,363.18"];
+	20600 -> 20840 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7159,483.85 7159,520.43 7159,512.43 7159,502.58 7159,493.93"];
+	1060 -> 19372 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1346.5,872.84 1745.3,929.69 1664.1,921.34 1520.7,905.17 1399,884 1384.9,881.54 1369.3,878.17 1356.3,875.15"];
+	316 -> 7539 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2172.3,1151.6 5920.7,1205 5309.1,1199.7 2398,1173.6 2182.3,1152.9"];
+	2634 -> 20692 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1277.4,479.44 1799.5,652.27 1687.8,615.3 1382.7,514.27 1287,482.61"];
+	316 -> 20707 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5511.3,348.82 6029.2,1190.7 6023.7,1166.9 6014,1119.1 6014,1078 6014,1078 6014,1078 6014,1006 6014,674.89 5857.1,592.33 5595,390\
+ 5572.6,372.68 5542.7,359.97 5521,352.16"];
+	2763 -> 19218 [style=solid, color="0.0 0.0 0.0", pos="e,3663.8,1018.6 3686.8,1060.9 3681.4,1051.1 3674.4,1038.2 3668.6,1027.6"];
+	2075 -> 20699 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5999.5,343.28 5885.2,787.18 5968.8,777.43 6106,760.87 6224,744 6290.4,734.51 6306.3,727.18 6373,720 6662.9,688.78 6743.1,745.75\
+ 7028,684 7056.1,677.91 7241.2,597.24 7269,590 7325.4,575.3 7490.7,597.98 7529,554 7658.5,405.29 8052.8,579.08 7236,390 7113.1,\
+361.56 6188.1,346.16 6009.7,343.44"];
+	317 -> 315 [style=solid, color="0.0 0.0 0.0", pos="e,9994.2,1093.5 9970.8,1130.3 9975.7,1122.6 9982.5,1111.8 9988.7,1102"];
+	6030 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1106.1,223.68 3887.1,534.88 3599,530.68 2623.8,514.51 2313,484 2184.5,471.39 1278.8,358.48 1167,294 1150,284.22 1151.8,274.78 \
+1139,260 1130.6,250.28 1120.9,239.69 1112.9,231.02"];
+	737 -> 658 [style=solid, color="0.0 0.0 0.0", pos="e,9830.4,1093.5 9807.6,1130.3 9812.4,1122.6 9819.1,1111.8 9825.1,1102"];
+	6030 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1860.5,212.85 3887.6,534.69 3532.9,528.38 2125,497.71 2125,408 2125,408 2125,408 2125,341 2125,230.4 1943.8,214.82 1870.9,213.03"];
+	1059 -> 20796 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2764.9,734.37 2111.8,785.12 2126.1,783.26 2141,781.46 2155,780 2382.7,756.3 2657.4,740.23 2754.7,734.92"];
+	316 -> 20098 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6234.2,483.5 6061.4,1191.1 6076,1182.1 6093,1169.4 6104,1154 6124.6,1125.2 6128,1113.4 6128,1078 6128,1078 6128,1078 6128,1006\
+ 6128,821.1 6030.2,744.32 6132,590 6153.9,556.78 6188.4,584.45 6214,554 6228.2,537.1 6232.6,511.6 6233.8,493.73"];
+	7894 -> 7897 [style=solid, color="0.0 0.0 0.0", pos="e,5482.7,870.37 4806.5,925.23 4814.5,923.2 4823,921.31 4831,920 5061.8,882.16 5123,904.74 5356,884 5396.5,880.39 5443.2,875.07 5472.6\
+,871.57"];
+	316 -> 19382 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7363.7,1010.2 6144.1,1203.9 6397.3,1198.6 7011.2,1183.2 7216,1154 7327.4,1138.1 7392.5,1182.5 7462,1094 7471.3,1082.1 7470.3,1072.7\
+ 7462,1060 7442.6,1030.2 7401.9,1017.4 7373.8,1011.9"];
+	2980 -> 316 [style=solid, color="0.0 0.0 0.0", pos="e,6033,1223.5 6033,1260.3 6033,1253 6033,1242.9 6033,1233.5"];
+	8386 -> 8388 [style=solid, color="0.0 0.0 0.0", pos="e,3437,1018.7 3393.2,1061.2 3403.9,1050.8 3418.3,1036.8 3429.7,1025.8"];
+	7904 -> 400 [style=solid, color="0.0 0.0 0.0", pos="e,5471.7,785.73 4538.1,610.77 4542.7,611.91 4547.5,613.03 4552,614 4643.3,633.59 4667,633.83 4759,650 4934.2,680.79 4978.7,684.62\
+ 5153,720 5199.9,729.52 5211.2,734.14 5258,744 5340.8,761.43 5362.1,762.82 5445,780 5450.4,781.12 5456,782.32 5461.7,783.53"];
+	11471 -> 11470 [style=solid, color="0.0 0.0 0.0", pos="e,8639.3,1086.4 9150.7,1139 9075.1,1131.2 8796.4,1102.5 8649.7,1087.4"];
+	6030 -> 20607 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5235.4,473.42 4023.9,525.16 4036.1,523.14 4048.9,521.27 4061,520 4297,495.17 5064.5,477.19 5225.3,473.64"];
+	316 -> 19380 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1211.6,878.61 5920.6,1205.2 5205.3,1200.3 1318.4,1172.5 1295,1154 1267.7,1132.4 1276,1112.8 1276,1078 1276,1078 1276,1078 1276\
+,1006 1276,966.76 1276.7,953.36 1256,920 1247.1,905.6 1232.8,893.32 1220,884.31"];
+	316 -> 11148 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4534.5,878.65 5921.3,1204.3 5600.4,1199.2 4695.1,1182.4 4638,1154 4599,1134.6 4576,1121.6 4576,1078 4576,1078 4576,1078 4576,1006\
+ 4576,961.69 4553.7,913.6 4539.5,887.51"];
+	11079 -> 20828 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5020.8,741.67 4601.3,785.27 4613.8,783.39 4626.8,781.54 4639,780 4803.8,759.24 4848.1,776.43 5011,744 5011.1,743.98 5011.2,743.96\
+ 5011.3,743.94"];
+	316 -> 20090 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7325.5,609.51 6143,1203.1 6513.5,1193.3 7692.8,1161.5 7711,1154 7776.5,1127.2 7970.8,975.61 7927,920 7884.9,866.47 7837.9,916.5\
+ 7778,884 7718.9,851.91 7722.1,820.06 7668,780 7574.3,710.55 7546.4,697.91 7440,650 7405.3,634.35 7363.7,620.86 7335.3,612.39"];
+	316 -> 20091 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6797.5,483.51 6143.2,1203.3 6270.8,1198.6 6472.1,1186.3 6540,1154 6593.4,1128.6 6591.1,1100.7 6634,1060 6651.4,1043.5 6656.4,1040.2\
+ 6674,1024 6707.3,993.3 6715.8,985.8 6748,954 6778.9,923.53 6787.9,917.04 6816,884 6841.1,854.48 6855.8,850.8 6868,814 6872.7\
+,799.65 6872.5,794.42 6868,780 6860.2,755.18 6811.6,707.77 6801,684 6776.9,629.81 6777.7,612.92 6771,554 6769.3,538.99 6765.9,\
+534.21 6771,520 6774.9,509.08 6782.6,498.9 6790.2,490.83"];
+	11194 -> 12422 [style=solid, color="0.0 0.0 0.0", pos="e,8932.3,1018.5 8953.3,1060.6 8948.4,1050.8 8942.1,1038.2 8936.8,1027.7"];
+	466 -> 19913 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6141.4,604.67 5355.8,660.41 5542,647.2 6003.1,614.48 6131.4,605.38"];
+	2075 -> 20828 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5073.3,735.18 5724,789.05 5559.1,775.39 5198.9,745.57 5083.4,736.01"];
+	1060 -> 19380 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1212.3,871.24 1743.6,930.32 1645.9,921.73 1457.5,904.24 1298,884 1272.3,880.74 1243.3,876.25 1222.2,872.86"];
+	316 -> 19809 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1555,613.59 5920.7,1205 5234.2,1199 1632.6,1166.9 1608,1154 1571.3,1134.8 1554,1119.4 1554,1078 1554,1078 1554,1078 1554,1006 \
+1554,859.73 1554.7,683.59 1554.9,623.92"];
+	2075 -> 20825 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5319.1,740.82 5729.7,787.51 5596.1,773.01 5337.8,744.92 5333,744 5331.7,743.76 5330.4,743.49 5329.1,743.21"];
+	20692 -> 5384 [style=solid, color="0.0 0.0 0.0", pos="e,1107,420.41 1238.6,464.5 1210,454.93 1155.9,436.79 1116.7,423.64"];
+	19777 -> 20204 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6136.5,89.516 6005.7,133.1 6041.6,121.15 6094.1,103.62 6126.6,92.785"];
+	8387 -> 20797 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3397.3,737.43 3429.5,922.93 3411.2,914.79 3391.5,902.31 3381,884 3373.5,870.89 3372.6,862.53 3381,850 3404.9,814.62 3446.1,849.38\
+ 3470,814 3478.4,801.47 3478.1,792.77 3470,780 3456.2,758.24 3429.4,746.36 3407.1,739.98"];
+	8387 -> 20796 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2789.5,743.57 3414.2,925.73 3347.9,913.27 3244.2,892.84 3228,884 3209.2,873.78 3213.3,859.08 3194,850 3115.8,813.28 2871.1,871.87\
+ 2807,814 2790.4,799.06 2788.1,772.36 2788.8,753.71"];
+	8387 -> 20798 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2905,735.54 3415.9,925.25 3364.6,914.52 3291.7,897.71 3266,884 3246,873.34 3248.8,859.01 3228,850 3143.9,813.57 2878.9,881.6 2817\
+,814 2806.8,802.86 2808.6,792.56 2817,780 2834.2,754.24 2868.4,742.59 2894.9,737.32"];
+	316 -> 317 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9944.4,1145 6142.2,1202.8 6267.5,1199.1 6479,1193.4 6661,1190 8068.9,1164.1 8422.4,1219.2 9829,1154 9865.3,1152.3 9906.9,1148.7\
+ 9934.3,1146"];
+	11735 -> 6378 [style=solid, color="0.0 0.0 0.0", pos="e,230.86,1223.5 249.57,1260.3 245.72,1252.7 240.39,1242.2 235.51,1232.6"];
+	19232 -> 3362 [style=solid, color="0.0 0.0 0.0", pos="e,6850.7,553.47 6854.8,590.31 6854,582.97 6852.9,572.89 6851.8,563.54"];
+	20847 -> 20848 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8889.6,613.53 8966.5,652.95 8946.7,642.82 8919.3,628.77 8898.6,618.15"];
+	11470 -> 12428 [style=solid, color="0.0 0.0 0.0", pos="e,8500.6,1018.6 8542.9,1060.9 8532.6,1050.6 8518.8,1036.8 8508,1026"];
+	12322 -> 12291 [style=solid, color="0.0 0.0 0.0", pos="e,12773,1093.5 12742,1130.3 12749,1122.3 12758,1111.1 12767,1101.1"];
+	11466 -> 11468 [style=solid, color="0.0 0.0 0.0", pos="e,8713.7,1153.9 8712.5,1190.4 8712.7,1182.4 8713.1,1172.6 8713.3,1163.9"];
+	2737 -> 20597 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1735.2,741.91 2191.4,785.23 2179.4,783.32 2166.8,781.48 2155,780 1976.3,757.61 1925.6,778.92 1745,743.85"];
+	316 -> 19930 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2370,93.62 5920.6,1205.1 5306.5,1200.4 2382.9,1176.6 2343,1154 2308.4,1134.4 2296,1117.7 2296,1078 2296,1078 2296,1078 2296,1006\
+ 2296,880.29 2370,858.71 2370,733 2370,733 2370,733 2370,211 2370,173.23 2370,129.19 2370,103.85"];
+	8686 -> 19913 [style=solid, color="0.0 0.0 0.0", pos="e,6180.3,613.6 6234.9,651.39 6221.1,641.82 6203,629.29 6188.7,619.38"];
+	8440 -> 19981 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1853.5,1008.2 3995.8,1064.9 3981.4,1063 3966.2,1061.2 3952,1060 3519.9,1024.2 2087.3,1010.2 1863.5,1008.3"];
+	1580 -> 20699 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5960.5,344.52 5347.4,398.61 5373.5,395.8 5403.6,392.63 5431,390 5629.2,370.95 5868.1,351.8 5950.4,345.31"];
+	234 -> 5484 [style=solid, color="0.0 0.0 0.0", pos="e,7658.5,1138.1 7642.8,952.86 7671.6,973.09 7719.6,1012.3 7739,1060 7744.7,1074 7747.1,1081.2 7739,1094 7723.6,1118.3 7692,1130.2\
+ 7668.4,1136"];
+	4072 -> 4071 [style=solid, color="0.0 0.0 0.0", pos="e,4724.4,813.02 2721.4,1140.8 2884.9,1139.5 4028.9,1129 4177,1094 4402.3,1040.8 4636.7,877.98 4715.9,819.33"];
+	8441 -> 8440 [style=solid, color="0.0 0.0 0.0", pos="e,3995.8,1089.1 2229.4,1140.5 2414.2,1136.2 3861.7,1101.6 3952,1094 3962.9,1093.1 3974.3,1091.8 3985.6,1090.4"];
+	9748 -> 9747 [style=solid, color="0.0 0.0 0.0", pos="e,11417,1093.2 11376,1130.3 11385,1122 11398,1110.3 11410,1100"];
+	316 -> 4995 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,11148,1144.7 6142.2,1202.6 6267.4,1198.9 6479,1193.1 6661,1190 8591.5,1157.4 9075.7,1227.4 11005,1154 11051,1152.2 11105,1148.2\
+ 11137,1145.5"];
+	7578 -> 7548 [style=solid, color="0.0 0.0 0.0", pos="e,9376,1093.5 9411.7,1130.3 9403.9,1122.3 9392.9,1110.9 9383.1,1100.8"];
+	19158 -> 19156 [style=solid, color="0.0 0.0 0.0", pos="e,5879,953.35 5879,995.38 5879,986.83 5879,974.46 5879,963.39"];
+	20576 -> 20581 [style=solid, color="0.0 0.0 0.0", pos="e,6386,743.51 6306,781.7 6327.1,771.63 6355.3,758.17 6376.7,747.95"];
+	4066 -> 4067 [style=solid, color="0.0 0.0 0.0", pos="e,5788.7,876.95 5689.3,922.89 5715.2,910.91 5753.3,893.29 5779.3,881.26"];
+	316 -> 11947 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,11549,1144.6 6142.2,1202.6 6267.4,1198.9 6479,1193 6661,1190 8763.4,1155.2 9290.6,1227.6 11392,1154 11444,1152.2 11504,1148 11539\
+,1145.3"];
+	316 -> 4998 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,10761,1144.5 6142.2,1202.7 6267.4,1199 6479,1193.2 6661,1190 8410.1,1159.7 8848.6,1214.5 10597,1154 10651,1152.1 10714,1147.9 \
+10750,1145.3"];
+	1060 -> 20597 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1686.6,743.55 1758.6,925.46 1732,917.79 1700.8,904.95 1679,884 1644.2,850.57 1626.7,823.28 1648,780 1654.4,767 1666.3,756.58 1677.9\
+,748.89"];
+	19808 -> 19809 [style=solid, color="0.0 0.0 0.0", pos="e,1568.7,613.51 1618.4,651.7 1606,642.17 1589.6,629.61 1576.7,619.64"];
+	1060 -> 20595 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1753.6,740.54 1779.6,922.22 1742.7,903.62 1682.4,866.65 1657,814 1650.4,800.39 1648.6,792.53 1657,780 1658.3,778.06 1710.2,757.51\
+ 1744.2,744.23"];
+	1060 -> 20596 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1857.3,743.79 1813.8,920.74 1822.6,884.76 1844.8,794.57 1854.9,753.7"];
+	316 -> 19385 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7225.9,1016.5 6143.2,1203.1 6375.3,1196.5 6899.6,1179.1 6977,1154 7049.7,1130.4 7053.3,1095.5 7121,1060 7152,1043.7 7189.3,1029.4\
+ 7216.2,1019.9"];
+	224 -> 227 [style=solid, color="0.0 0.0 0.0", pos="e,6963.4,1018.5 6952.9,1060.6 6955.2,1051 6958.3,1038.7 6960.9,1028.3"];
+	2634 -> 19774 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3878.7,603.71 1932.6,663.2 2297.5,652.05 3639.8,611.02 3868.7,604.02"];
+	6122 -> 20699 [style=solid, color="0.0 0.0 0.0", pos="e,5960.5,350.17 5842.4,393.7 5874,382.06 5921,364.75 5951,353.67"];
+	10438 -> 19918 [style=solid, color="0.0 0.0 0.0", pos="e,8686.7,223.51 8736.4,261.7 8724,252.17 8707.6,239.61 8694.7,229.64"];
+	9642 -> 20833 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5002.3,741.64 5247.8,785.51 5186.3,776.7 5098.5,762.85 5012.3,743.86"];
+	316 -> 737 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9781.5,1145 6142.2,1202.8 6267.5,1199.2 6479,1193.4 6661,1190 7995.5,1165 8330.7,1215.4 9664,1154 9701,1152.3 9743.6,1148.6 9771.3\
+,1146"];
+	6378 -> 11728 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,156.57,1153.7 204.04,1191.1 192.18,1181.7 176.86,1169.7 164.54,1160"];
+	11079 -> 20801 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3730.5,735.37 4450.9,790.05 4318.5,780.71 4055.3,761.84 3832,744 3801.1,741.53 3766.1,738.51 3740.5,736.25"];
+	316 -> 19924 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9612.9,223.59 6142.5,1202.8 6267.8,1199.2 6479.2,1193.5 6661,1190 6738.5,1188.5 9382.4,1191.8 9450,1154 9494.7,1129 9648,757.12\
+ 9648,473 9648,473 9648,473 9648,341 9648,301.01 9629.6,257.19 9617.5,232.6"];
+	20606 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1838.1,223.54 1737.6,520.8 1751.7,482.78 1789,380.43 1817,294 1823.7,273.4 1830.6,249.61 1835.3,233.17"];
+	8713 -> 8630 [style=solid, color="0.0 0.0 0.0", pos="e,6373.1,553.47 6390.1,590.31 6386.6,582.73 6381.8,572.23 6377.3,562.63"];
+	20606 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1098.7,223.65 1711.6,521.31 1688.9,505.26 1650.8,479.25 1616,460 1550.9,423.97 1533.6,416.16 1464,390 1323,337.03 1255.6,389.29\
+ 1139,294 1119.8,278.34 1108.1,251.82 1101.8,233.41"];
+	8440 -> 19218 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3677.4,1018.3 3991.5,1065.6 3978.3,1063.7 3964.8,1061.8 3952,1060 3836.5,1043.8 3803.8,1057.2 3692,1024 3690.3,1023.5 3688.6,1022.9\
+ 3686.9,1022.3"];
+	19808 -> 19810 [style=solid, color="0.0 0.0 0.0", pos="e,1808.8,611.35 1672.4,654.74 1708.2,643.35 1763.2,625.84 1799.2,614.4"];
+	8686 -> 19914 [style=solid, color="0.0 0.0 0.0", pos="e,6442.7,611.53 6295.9,654.37 6334.9,642.98 6394.1,625.73 6432.9,614.42"];
+	2075 -> 20840 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7139.7,480.49 5869.7,784.45 5963,767.46 6145.5,736.04 6302,720 6379,712.1 6933.3,726.56 6998,684 7065.9,639.32 7023.6,579.53 7079\
+,520 7093.3,504.62 7113.8,492.71 7130.5,484.73"];
+	1581 -> 20090 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7312.7,613.68 7350.1,651.07 7341,642 7329.4,630.36 7319.8,620.81"];
+	316 -> 4832 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6929.7,1144.3 6132.3,1199.2 6337.4,1185.1 6798.4,1153.4 6919.4,1145"];
+	7577 -> 7578 [style=solid, color="0.0 0.0 0.0", pos="e,9434.3,1153.8 9477.3,1191.4 9466.7,1182.1 9453,1170.1 9441.9,1160.4"];
+	20803 -> 938 [style=solid, color="0.0 0.0 0.0", pos="e,3414.5,681.12 3554,723.15 3521.6,713.41 3465.7,696.56 3424.2,684.04"];
+	9746 -> 9748 [style=solid, color="0.0 0.0 0.0", pos="e,11364,1153.9 11364,1190.4 11364,1182.4 11364,1172.6 11364,1163.9"];
+	316 -> 7578 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9402.6,1151.4 6142.5,1202.8 6267.8,1199.2 6479.2,1193.5 6661,1190 6810.2,1187.1 9161.5,1182.5 9392.5,1153"];
+	20156 -> 20157 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4710.2,92.069 4828.3,132.95 4796.4,121.92 4751.1,106.24 4719.8,95.405"];
+	1060 -> 19917 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5308.6,868.45 1867.2,926.96 1887.1,924.2 1909.5,921.5 1930,920 2512.1,877.36 3972.5,894.05 4556,884 4845.4,879.02 5195.7,871.06\
+ 5298.4,868.69"];
+	316 -> 10581 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,10331,1144.5 6142.2,1202.7 6267.4,1199.1 6479,1193.3 6661,1190 8221.3,1162.1 8612.5,1210.1 10172,1154 10224,1152.1 10285,1147.9\
+ 10320,1145.3"];
+	19981 -> 1060 [style=solid, color="0.0 0.0 0.0", pos="e,1815.4,953.35 1830.2,995.38 1827.2,986.74 1822.8,974.2 1818.8,963.05"];
+	316 -> 2981 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6194.7,1149.7 6074.1,1191.7 6108,1179.9 6155.3,1163.4 6185.3,1153"];
+	20257 -> 20840 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7178.7,480.61 7287.4,522.64 7258,511.25 7216.1,495.07 7188.3,484.31"];
+	20155 -> 20154 [style=solid, color="0.0 0.0 0.0", pos="e,4734.8,33.472 4758.2,70.313 4753.3,62.572 4746.5,51.796 4740.3,42.035"];
+	8686 -> 8737 [style=solid, color="0.0 0.0 0.0", pos="e,6308.3,613.68 6270.9,651.07 6280,642 6291.6,630.36 6301.2,620.81"];
+	316 -> 20258 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8016.9,743.64 6142.9,1203.2 6545.8,1192.7 7919.3,1157 7924,1154 7963.7,1129 7943.4,1097.2 7972,1060 7986.6,1041 7998.7,1043.9 \
+8012,1024 8030.4,996.56 8030.8,986.45 8037,954 8051.6,878.02 8067.3,853.1 8042,780 8038.3,769.26 8031,759.1 8023.8,751"];
+	316 -> 20804 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3121.9,743.77 5919.9,1205.7 5432.8,1204.2 3526.1,1195.5 3261,1154 3145,1135.8 3008,1195.4 3008,1078 3008,1078 3008,1078 3008,1006\
+ 3008,926.83 2876.3,914.63 2922,850 2949.8,810.76 2981.5,836.5 3024,814 3058,795.97 3093.2,768.21 3114.3,750.33"];
+	316 -> 20805 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3490.3,739.03 5920.1,1205.8 5440.5,1204.5 3594.9,1196.8 3553,1154 3530.3,1130.8 3483.3,1183.6 3639,920 3649.4,902.31 3661.2,903.38\
+ 3668,884 3673,869.75 3675.6,863.08 3668,850 3631.8,787.5 3548.2,755.51 3500,741.7"];
+	316 -> 20803 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3606.4,736.16 5920.1,1205.5 5468.1,1203.3 3807.9,1192.5 3703,1154 3663.3,1139.4 3647.2,1132.2 3629,1094 3609.1,1052.3 3617.9,1034.9\
+ 3629,990 3637.5,955.85 3645.1,948.31 3666,920 3679.4,901.79 3693.3,904.91 3702,884 3710.6,863.16 3699.5,787.29 3694,780 3675.6\
+,755.57 3642.1,743.76 3616.2,738.11"];
+	316 -> 20801 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3730.2,736.36 5920.9,1204.8 5550.5,1200.5 4384.4,1184.8 4310,1154 4253.6,1130.7 4260.4,1094.4 4210,1060 4179.1,1038.9 4164.2,1046.1\
+ 4134,1024 4048.7,961.6 4049.6,921.75 3972,850 3970.9,848.94 3885.4,780.7 3884,780 3837.3,756.63 3777.7,744.03 3740.2,737.92"];
+	316 -> 1831 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3601.5,1150.4 5920.4,1205.5 5474.3,1203.3 3844.3,1192.5 3616,1154 3614.5,1153.7 3613,1153.4 3611.5,1153.1"];
+	316 -> 20157 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4657.8,83.813 5920,1205.7 5369.4,1204.2 2981.5,1195.4 2652,1154 2507.8,1135.9 2334,1223.3 2334,1078 2334,1078 2334,1078 2334,1006\
+ 2334,897.38 2343.4,849.31 2427,780 3159.8,172.71 4418.7,93.682 4647.7,84.213"];
+	316 -> 20155 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4764.5,93.691 5920.7,1204.8 5563.4,1200.6 4471.8,1185.5 4403,1154 4331.5,1121.3 4335.7,1082.3 4283,1024 4255.1,993.17 4248,985.61\
+ 4221,954 4156,877.85 4155.9,842.92 4078,780 4005.6,721.53 3952.3,754.8 3892,684 3561.6,296.4 4197.8,540.9 4542,354 4596.4,324.44\
+ 4714.9,217.59 4746,164 4756.8,145.35 4761.5,120.9 4763.5,103.76"];
+	316 -> 20153 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2565.5,874.13 5920.5,1205.2 5339.5,1200.9 2705.5,1179.8 2673,1154 2645.7,1132.4 2654,1112.8 2654,1078 2654,1078 2654,1078 2654\
+,1006 2654,966.86 2658.1,951.64 2635,920 2620.2,899.71 2594.9,886.04 2575,877.83"];
+	316 -> 11306 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9345.5,1150.4 6142.5,1202.8 6267.8,1199.3 6479.2,1193.5 6661,1190 6957.6,1184.2 9038.2,1202.2 9331,1154 9332.5,1153.8 9334,1153.5\
+ 9335.5,1153.1"];
+	466 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1095.5,223.56 5206,657.78 5048.7,639.68 4674.3,597.4 4547,590 4386.8,580.68 1813.3,598.09 1659,554 1523.6,515.32 1519.7,439.8 \
+1388,390 1303.9,358.2 1271.3,390.18 1189,354 1148.6,336.25 1132.9,331.67 1110,294 1098.9,275.69 1096,251 1095.5,233.71"];
+	316 -> 10578 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,10549,1144.4 6142.2,1202.7 6267.4,1199 6479,1193.2 6661,1190 8312.8,1161 8726.9,1209.5 10378,1154 10435,1152.1 10502,1147.8 10539\
+,1145.2"];
+	466 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1860.3,212.93 5214.9,655.64 5202.4,653.67 5189.3,651.69 5177,650 5039.6,631.04 4992.2,673.61 4867,614 4854.3,607.95 4517,265.42\
+ 4504,260 4376.1,206.66 2153.5,212 1870.6,212.9"];
+	11731 -> 6378 [style=solid, color="0.0 0.0 0.0", pos="e,215.39,1223.5 197.26,1260.3 200.99,1252.7 206.15,1242.2 210.88,1232.6"];
+	19917 -> 9642 [style=solid, color="0.0 0.0 0.0", pos="e,5326.5,813.35 5327.7,855.38 5327.4,846.83 5327.1,834.46 5326.7,823.39"];
+	3670 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1069.7,213.78 1243.3,785.92 1154.6,769.74 981.67,734.59 841,684 808.45,672.29 803.74,661.14 771,650 696.24,624.55 655.61,666.93\
+ 597,614 570.71,590.26 573,573.42 573,538 573,538 573,538 573,341 573,303.45 568,283.85 597,260 632.57,230.75 950.55,217.73 1059.5\
+,214.11"];
+	20258 -> 574 [style=solid, color="0.0 0.0 0.0", pos="e,8029.1,683.47 8010.4,720.31 8014.3,712.73 8019.6,702.23 8024.5,692.63"];
+	3670 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1832.8,223.76 1329.6,781.54 1345.7,772.21 1365.9,759.04 1381,744 1439.4,685.99 1419.6,641.36 1484,590 1519,562.1 1542.1,580.69\
+ 1578,554 1695.2,466.87 1689.9,409.77 1779,294 1795.3,272.8 1814,248.42 1826.5,231.99"];
+	10632 -> 10589 [style=solid, color="0.0 0.0 0.0", pos="e,836.42,1093.5 846.95,1130.3 844.83,1122.9 841.91,1112.7 839.21,1103.2"];
+	316 -> 2851 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9616.5,1145.7 6142.5,1202.8 6267.8,1199.2 6479.2,1193.5 6661,1190 7299.8,1177.9 8898.3,1193 9536,1154 9559.8,1152.5 9586.6,1149.5\
+ 9606.5,1147"];
+	316 -> 1834 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3751.5,1150.4 5920.5,1205.3 5492.5,1202.5 3978.9,1190.1 3766,1154 3764.5,1153.7 3763,1153.4 3761.5,1153.1"];
+	6122 -> 20700 [style=solid, color="0.0 0.0 0.0", pos="e,5722.5,353.62 5785.9,392.02 5769.8,382.23 5748.1,369.13 5731.3,358.94"];
+	3361 -> 19232 [style=solid, color="0.0 0.0 0.0", pos="e,6857.4,613.85 6862,650.43 6861,642.43 6859.8,632.58 6858.7,623.93"];
+	20376 -> 20377 [style=solid, color="0.0 0.0 0.0", pos="e,4843,223.85 4843,260.43 4843,252.43 4843,242.58 4843,233.93"];
+	19842 -> 1581 [style=solid, color="0.0 0.0 0.0", pos="e,7365,683.47 7365,720.31 7365,712.97 7365,702.89 7365,693.54"];
+	20805 -> 938 [style=solid, color="0.0 0.0 0.0", pos="e,3392.8,682.76 3448.2,720.31 3435.4,711.6 3416.8,699.05 3401.2,688.43"];
+	12410 -> 20825 [style=solid, color="0.0 0.0 0.0", pos="e,5267,739.66 5093.3,784.15 5140.8,771.97 5213.8,753.28 5257.2,742.18"];
+	8440 -> 19845 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4862.7,1009.6 4153.6,1068.6 4334.7,1053.6 4739.7,1019.8 4852.4,1010.5"];
+	12410 -> 20828 [style=solid, color="0.0 0.0 0.0", pos="e,5047,743.85 5047,780.43 5047,772.43 5047,762.58 5047,753.93"];
+	20607 -> 1580 [style=solid, color="0.0 0.0 0.0", pos="e,5274.6,423.47 5259.4,460.31 5262.5,452.81 5266.8,442.45 5270.7,432.93"];
+	2075 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1860.5,213.1 5742.4,785.09 5538.4,750.99 4924.1,646.73 4839,614 4670.9,549.33 4490,588.12 4490,408 4490,408 4490,408 4490,341 \
+4490,321.09 4742.1,336.44 4207,260 3964.9,225.41 2126.8,214.51 1870.6,213.15"];
+	316 -> 20699 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5999.5,343.04 6143,1203.2 6549.6,1192.7 7945,1156.7 7950,1154 7978.3,1139 8097.3,944.45 8118,920 8160.8,869.35 8196,874.58 8223\
+,814 8261.2,728.19 8235,696.93 8235,603 8235,603 8235,603 8235,471 8235,354 6274.6,343.9 6009.5,343.07"];
+	316 -> 20828 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5073.5,741.67 5923.7,1202.7 5725.5,1196.3 5314.6,1180.2 5174,1154 5087.4,1137.9 5037,1165.1 4985,1094 4949.6,1045.7 4984.5,1019.2\
+ 5051,920 5086.6,866.97 5124.9,873.53 5148,814 5153.5,799.91 5156.1,792.74 5148,780 5140.4,768.14 5108.9,754.59 5083,745.09"];
+	316 -> 8441 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2229.5,1150.4 5920.2,1205.4 5310.4,1202 2429.7,1184.6 2244,1154 2242.5,1153.8 2241,1153.5 2239.5,1153.1"];
+	2738 -> 2737 [style=solid, color="0.0 0.0 0.0", pos="e,2253,813.35 2253,855.38 2253,846.83 2253,834.46 2253,823.39"];
+	316 -> 20375 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6001.8,223.8 6044.8,1190.8 6061.5,1167.8 6090,1122 6090,1078 6090,1078 6090,1078 6090,1006 6090,767.51 6028,711.49 6028,473 6028\
+,473 6028,473 6028,406 6028,342.71 6012.6,269.03 6004.2,233.82"];
+	4068 -> 4072 [style=solid, color="0.0 0.0 0.0", pos="e,2702,1153.9 2702,1190.4 2702,1182.4 2702,1172.6 2702,1163.9"];
+	316 -> 8301 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,10124,1144.8 6142.2,1202.7 6267.4,1199.1 6479,1193.3 6661,1190 8141.3,1163.1 8512.7,1215.5 9992,1154 10035,1152.2 10084,1148.3\
+ 10114,1145.7"];
+	4504 -> 10068 [style=solid, color="0.0 0.0 0.0", pos="e,13280,1150.3 13397,1194.2 13366,1182.6 13319,1165.1 13290,1153.8"];
+	7548 -> 19203 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9218.7,1016.3 9327,1061.7 9297.8,1049.5 9256,1031.9 9228.2,1020.3"];
+	1568 -> 1570 [style=solid, color="0.0 0.0 0.0", pos="e,11941,1153.9 11941,1190.4 11941,1182.4 11941,1172.6 11941,1163.9"];
+	20157 -> 20154 [style=solid, color="0.0 0.0 0.0", pos="e,4714.9,33.472 4691,70.313 4696,62.572 4703,51.796 4709.4,42.035"];
+	316 -> 20377 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4823.6,221.86 5920.2,1205.5 5579.4,1203.6 4580.4,1194.6 4524,1154 4460.9,1108.5 4520.7,1042.1 4463,990 4415.6,947.25 4363.1,1004.5\
+ 4324,954 4308.1,933.44 4267.7,759.14 4400,590 4421.8,562.14 4440,570.98 4471,554 4583.2,492.6 4719,535.9 4719,408 4719,408 \
+4719,408 4719,341 4719,286.47 4777.8,246.35 4814.4,226.65"];
+	316 -> 20798 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2904.8,735.63 5920.1,1205.4 5372.7,1202.1 3018.6,1186 2950,1154 2832.8,1099.2 2763.4,1048.6 2777,920 2783.7,856.72 2765.5,828.27\
+ 2807,780 2829,754.37 2866.5,742.68 2894.6,737.37"];
+	316 -> 20825 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5319.1,740.74 5919.8,1206.8 5734.1,1205.4 5378.3,1189.9 5307,1094 5234.7,996.75 5303.6,1110.5 5502,954 5534.9,928.08 5539.9,917.53\
+ 5565,884 5594.9,843.94 5641,817.59 5608,780 5567.3,733.68 5393.4,756.2 5333,744 5331.7,743.74 5330.4,743.47 5329.1,743.18"];
+	735 -> 737 [style=solid, color="0.0 0.0 0.0", pos="e,9801,1153.9 9801,1190.4 9801,1182.4 9801,1172.6 9801,1163.9"];
+	316 -> 20797 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3397,738.12 5920.6,1205 5544,1201.2 4345.8,1186.7 4270,1154 4235.4,1139.1 4236.5,1120.9 4210,1094 4195.2,1079 4194.4,1071.9 4177\
+,1060 4142.8,1036.7 4124.6,1048.2 4091,1024 4080.6,1016.5 3950.1,856.47 3939,850 3927.2,843.15 3530.2,764.42 3407.1,740.11"];
+	316 -> 20796 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2788.3,743.5 5920.7,1205 5369.5,1199.9 2973.7,1176.4 2900,1154 2823.3,1130.7 2793.7,1101.9 2775,1024 2751.1,924.73 2774.8,801.16\
+ 2785.9,753.27"];
+	3366 -> 3365 [style=solid, color="0.0 0.0 0.0", pos="e,11026,1093 10988,1130.3 10996,1122.1 11008,1110.4 11019,1100.1"];
+	19203 -> 2208 [style=solid, color="0.0 0.0 0.0", pos="e,9199,953.35 9199,995.38 9199,986.83 9199,974.46 9199,963.39"];
+	12410 -> 20835 [style=solid, color="0.0 0.0 0.0", pos="e,4921.2,743.52 5014.2,782.33 4989.6,772.04 4955.9,757.97 4930.7,747.49"];
+	1778 -> 19157 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5802.6,1018.4 5475.6,1067.5 5578.4,1055.1 5758.8,1032.6 5788,1024 5789.7,1023.5 5791.4,1022.9 5793.1,1022.3"];
+	7897 -> 400 [style=solid, color="0.0 0.0 0.0", pos="e,5513.6,813.35 5504.3,855.38 5506.2,846.83 5509,834.46 5511.4,823.39"];
+	12410 -> 20833 [style=solid, color="0.0 0.0 0.0", pos="e,4985.6,743.68 5029.5,781.07 5018.6,771.82 5004.6,759.9 4993.3,750.24"];
+	316 -> 2193 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7168.5,1146.5 6144.8,1204.4 6341.5,1200.9 6762.5,1189.4 7116,1154 7130,1152.6 7145.3,1150.4 7158.3,1148.2"];
+	316 -> 20692 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1264.6,483.51 5920.5,1205.1 5187,1198.9 1115.6,1164.4 1104,1154 980.06,1042 1004.5,935.36 1066,780 1078.7,747.98 1265.3,586.02\
+ 1278,554 1286.1,533.62 1277.6,509.04 1269.3,492.34"];
+	20804 -> 938 [style=solid, color="0.0 0.0 0.0", pos="e,3323.3,680.67 3160.3,724.02 3197,714.25 3264.8,696.24 3313.5,683.28"];
+	3766 -> 20614 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8345.3,613.72 8389.1,850.46 8374,819.67 8341.5,748.31 8330,684 8327.3,669.12 8326.7,664.75 8330,650 8332.1,640.62 8336.3,630.9\
+ 8340.4,622.75"];
+	316 -> 20581 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6405.3,743.58 6138.8,1201.1 6225.8,1191.7 6347.2,1165.6 6426,1094 6486.7,1038.9 6513.5,997.55 6487,920 6467.7,863.64 6424.3,870.36\
+ 6405,814 6398.2,794.23 6400.3,770.14 6403.3,753.4"];
+	316 -> 20835 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4891.7,743.74 5921.5,1204.3 5611.8,1199.1 4760.1,1182.4 4707,1154 4670.2,1134.3 4652,1119.7 4652,1078 4652,1078 4652,1078 4652\
+,1006 4652,883.74 4764.9,902.74 4849,814 4866.1,795.95 4879.6,770.55 4887.6,753.03"];
+	20766 -> 11350 [style=solid, color="0.0 0.0 0.0", pos="e,4084.5,680.35 3880.5,726.57 3920.3,717.57 4011.9,696.8 4074.7,682.58"];
+	7894 -> 7904 [style=solid, color="0.0 0.0 0.0", pos="e,4502.6,613.58 4741.3,923.41 4700.5,905.79 4623.3,873.33 4556,850 4502.2,831.36 4467.2,859.58 4433,814 4409.3,782.36 4471,668.16\
+ 4497.6,622.28"];
+	316 -> 20833 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4967.8,743.71 5921.3,1204.5 5679.5,1200.6 5114.5,1188.2 4926,1154 4817.6,1134.4 4690,1188.2 4690,1078 4690,1078 4690,1078 4690\
+,1006 4690,966.86 4683,949.27 4709,920 4741.2,883.73 4768.5,905.34 4812,884 4863.4,858.83 4879.5,854.36 4920,814 4938.2,795.86 4953.6\
+,770.48 4963,752.98"];
+	20258 -> 20257 [style=solid, color="0.0 0.0 0.0", pos="e,7374.9,548.42 7990.4,720.31 7965.9,702.91 7914.5,668.56 7866,650 7843.5,641.38 7523.4,577.72 7385,550.4"];
+	6030 -> 20700 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,5690.4,353.66 4024.9,525.32 4036.8,523.34 4049.3,521.44 4061,520 4273.8,493.8 4328.4,502.28 4542,484 4652.8,474.52 4680.1,467.96\
+ 4791,460 4960.1,447.86 5389.5,468.96 5553,424 5602.2,410.48 5653.3,379.02 5681.9,359.53"];
+	12063 -> 12065 [style=solid, color="0.0 0.0 0.0", pos="e,1324,1153.9 1324,1190.4 1324,1182.4 1324,1172.6 1324,1163.9"];
+	11306 -> 11194 [style=solid, color="0.0 0.0 0.0", pos="e,9028.3,1088.5 9345.5,1138 9290.9,1129.4 9133.9,1105 9038.2,1090"];
+	20377 -> 20156 [style=solid, color="0.0 0.0 0.0", pos="e,4860.4,163.47 4846.9,200.31 4849.6,192.81 4853.4,182.45 4856.9,172.93"];
+	3281 -> 19930 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2350.4,85.34 1906.4,138.21 2021.9,124.46 2257.5,96.401 2340.4,86.53"];
+	20152 -> 20153 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2526.7,878.09 2441.7,922.57 2463.6,911.12 2495,894.69 2517.6,882.85"];
+	316 -> 20573 [style=solid, color="0.0 0.0 0.0", pos="e,954.48,878.78 5920.6,1205.1 5175.4,1199.2 976.46,1165.2 965,1154 927.73,1117.5 945.54,948.49 953.15,888.88"];
+	316 -> 20848 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8845.6,613.54 6142.8,1202.9 6268.1,1199.5 6479.3,1193.9 6661,1190 6718.8,1188.8 8693.5,1185.4 8742,1154 8780.7,1128.9 8749.9,1088.7\
+ 8786,1060 8846.1,1012.2 8906.7,1083.7 8955,1024 9044.2,913.79 8822.1,739.51 8806,684 8801.8,669.48 8799.2,663.51 8806,650 \
+8812.6,636.88 8824.8,626.48 8836.7,618.84"];
+	12418 -> 550 [style=solid, color="0.0 0.0 0.0", pos="e,6636.3,683.47 6656.2,720.31 6652.1,712.65 6646.4,702.02 6641.1,692.33"];
+	3718 -> 19590 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9035.7,213.68 6325.5,274.58 6635.5,269.13 7770.2,248.56 8705,224 8823.7,220.88 8965,216.12 9025.4,214.03"];
+	19563 -> 12576 [style=solid, color="0.0 0.0 0.0", pos="e,1074.3,553.47 1065.5,590.31 1067.3,582.89 1069.7,572.67 1072,563.23"];
+	316 -> 20575 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2868.6,878.58 5920.3,1205.4 5378.2,1202.2 3061.1,1186.5 2994,1154 2954.8,1135 2932,1121.6 2932,1078 2932,1078 2932,1078 2932,1006\
+ 2932,966.86 2933.4,953.39 2913,920 2904.2,905.55 2889.9,893.27 2877.1,884.27"];
+	2736 -> 2738 [style=solid, color="0.0 0.0 0.0", pos="e,2241.8,878.72 2197.4,921.25 2208.3,910.84 2222.9,896.84 2234.4,885.81"];
+	3457 -> 20692 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1238.4,476.38 957,524.95 1036.7,511.2 1169.5,488.28 1228.3,478.12"];
+	10579 -> 10581 [style=solid, color="0.0 0.0 0.0", pos="e,10350,1153.9 10350,1190.4 10350,1182.4 10350,1172.6 10350,1163.9"];
+	1060 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1069.9,213.8 1762.5,924.72 1680.1,905.66 1505.1,867.47 1355,850 1266.5,839.7 622.56,870.89 554,814 525.54,790.39 535,769.98 535\
+,733 535,733 535,733 535,341 535,301.6 538.96,282.92 571,260 610.61,231.67 947.39,217.95 1059.7,214.14"];
+	1060 -> 20906 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1840.7,223.76 1747.8,928.6 1714.5,921.82 1674.8,908.84 1647,884 1541.6,789.86 1432.7,696.14 1526,590 1608.2,496.42 1711.1,636.97\
+ 1804,554 1831.7,529.31 1824,510.08 1824,473 1824,473 1824,473 1824,406 1824,355.89 1832.9,343.94 1837,294 1838.7,273.59 1839.7\
+,250.23 1840.3,233.86"];
+	5383 -> 20692 [style=solid, color="0.0 0.0 0.0", pos="e,1251.5,483.58 1228.4,520.75 1233.7,512.21 1240.4,501.47 1246,492.35"];
+	3364 -> 3366 [style=solid, color="0.0 0.0 0.0", pos="e,10977,1153.9 10977,1190.4 10977,1182.4 10977,1172.6 10977,1163.9"];
+	316 -> 20840 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7178.4,474.31 6143,1203.1 6539.1,1192.5 7869.3,1156.8 7874,1154 7922.8,1124.7 7995.1,974.28 7978,920 7960.8,865.19 7927.4,866.46\
+ 7904,814 7888.9,780.24 7885,769.98 7885,733 7885,733 7885,733 7885,601 7885,529.04 7324.6,484.72 7188.5,475.02"];
+	2851 -> 2775 [style=solid, color="0.0 0.0 0.0", pos="e,9644.3,1093.5 9637.9,1130.3 9639.1,1123 9640.9,1112.9 9642.5,1103.5"];
+	316 -> 11471 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,9150.5,1150.4 6142.5,1202.8 6267.8,1199.3 6479.2,1193.6 6661,1190 6936,1184.5 8864.6,1198.8 9136,1154 9137.5,1153.8 9139,1153.5\
+ 9140.5,1153.1"];
+	316 -> 20766 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3880.3,735.23 5920.1,1205.7 5551.1,1204.3 4400.9,1196.4 4334,1154 4294.4,1128.9 4321.4,1090.8 4286,1060 4249.1,1027.9 4224.7,1047.8\
+ 4182,1024 4171.2,1018 4102.6,964.39 4096,954 4053.1,886.74 4108.6,836.22 4052,780 4029.4,757.51 3938,742.81 3890.3,736.51"];
+	20256 -> 20258 [style=solid, color="0.0 0.0 0.0", pos="e,8028.5,743.08 8121.2,782.79 8096.8,772.35 8062.8,757.79 8037.9,747.11"];
+	20151 -> 20153 [style=solid, color="0.0 0.0 0.0", pos="e,2547.7,878.51 2554.5,920.57 2553,911.13 2551,898.94 2549.3,888.67"];
+	466 -> 20155 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4784.3,85.476 5220.1,654.67 5130.6,635.18 4967,592.15 4967,538 4967,538 4967,538 4967,211 4967,173.92 4973.1,156.36 4947,130 4925.8\
+,108.53 4840.1,93.539 4794.3,86.88"];
+	466 -> 20157 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,4661,93.629 5213.9,655.86 5148.4,644.92 5050.7,627.27 5015,614 4950.8,590.14 4881,606.47 4881,538 4881,538 4881,538 4881,406 4881\
+,366.62 4637.7,200.13 4622,164 4616,150.14 4615.3,143.53 4622,130 4628.5,116.99 4640.4,106.61 4652.2,98.954"];
+	2737 -> 20798 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,2904.7,735.86 2330.5,788.84 2360.6,786.07 2395.4,782.88 2427,780 2604.3,763.85 2648.8,761.28 2826,744 2848.8,741.77 2874.4,739.09\
+ 2894.7,736.94"];
+	19841 -> 5781 [style=solid, color="0.0 0.0 0.0", pos="e,7772.4,683.47 7756.6,720.31 7759.8,712.81 7764.2,702.45 7768.3,692.93"];
+	12065 -> 12064 [style=solid, color="0.0 0.0 0.0", pos="e,3566.4,883.43 1343.5,1140.6 1555.4,1136.5 3426.6,1100.2 3439,1094 3491.3,1067.7 3481.2,1033.9 3520,990 3535,973.04 3546.3,974.43\
+ 3556,954 3565,935.15 3566.9,911.39 3566.7,893.62"];
+	12576 -> 16227 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,933.23,483.58 1041.5,522.79 1012.6,512.32 972.29,497.73 942.78,487.04"];
+	4613 -> 20766 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,3859.5,743.82 3844.2,850.48 3847.6,826.62 3854.2,780.87 3858,754.04"];
+	1495 -> 8737 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6337.6,613.54 6404,651.23 6386.8,641.47 6364.3,628.7 6346.7,618.74"];
+	1060 -> 20102 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7614.5,868.37 1866.9,926.93 1886.8,924.15 1909.3,921.45 1930,920 2451.1,883.41 6108.7,890.17 6631,884 7015.6,879.46 7483.1,870.84\
+ 7604.2,868.57"];
+	19202 -> 19203 [style=solid, color="0.0 0.0 0.0", pos="e,9199,1018.5 9199,1060.6 9199,1051.1 9199,1038.9 9199,1028.7"];
+	1302 -> 16227 [style=solid, color="0.0 0.0 0.0", pos="e,874.58,483.59 761.51,524.3 790.76,513.77 833.81,498.27 864.93,487.07"];
+	400 -> 19841 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,7732.5,733.89 5573.9,790.13 5610.7,786.58 5659.6,782.3 5703,780 6487.4,738.32 6684.8,767.31 7470,744 7562.1,741.26 7671.1,736.61\
+ 7722.5,734.33"];
+	1060 -> 20508 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,6583.7,868.48 1867.2,926.91 1887.1,924.15 1909.5,921.46 1930,920 2362.9,889.26 5402,890.53 5836,884 6123.5,879.68 6471.6,871.27\
+ 6573.6,868.74"];
+	316 -> 12322 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,12714,1144.6 6141.9,1202.6 6267.1,1198.8 6478.9,1192.9 6661,1190 7972.9,1169.3 11254,1200.9 12565,1154 12614,1152.3 12670,1148.1\
+ 12704,1145.5"];
+	316 -> 11468 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,8694.5,1150.4 6142.8,1202.9 6268.1,1199.5 6479.3,1193.9 6661,1190 6885.3,1185.1 8458.7,1190.9 8680,1154 8681.5,1153.8 8683,1153.4\
+ 8684.5,1153.1"];
+	8686 -> 8713 [style=solid, color="0.0 0.0 0.0", pos="e,6371.5,613.63 6285.5,652.64 6308,642.42 6339.1,628.33 6362.4,617.77"];
+	4071 -> 20907 [style=dashed, color="0.68478256 0.9019608 1.0", pos="e,1069.9,214.2 4677.7,785.17 4664.9,783.28 4651.5,781.46 4639,780 4306.8,741.45 4223,735.37 3889,720 3559,704.82 1241.2,741.92 916\
+,684 871.44,676.06 862.7,665.02 820,650 774.26,633.91 760.03,636.36 717,614 665.56,587.28 611,595.97 611,538 611,538 611,538 611\
+,341 611,248.2 947.15,221.2 1059.7,214.76"];
+	8040 -> 19841 [style=solid, color="0.0 0.0 0.0", pos="e,7761,743.68 7792.4,781.07 7785,772.18 7775.4,760.82 7767.5,751.38"];
+	6238 -> 4613 [style=solid, color="0.0 0.0 0.0", pos="e,3798.9,881.22 1944.5,1139.7 1980.1,1137.5 2058.1,1132.7 2124,1130 2273.7,1123.9 3330.1,1142 3472,1094 3572.7,1060 3581.2,1018.1\
+ 3666,954 3685.4,939.31 3687.9,932.12 3709,920 3734.2,905.57 3764.1,893.47 3789.2,884.58"];
+	20575 -> 12075 [style=solid, color="0.0 0.0 0.0", pos="e,2905.2,813.09 2861.1,855.38 2870.9,845.97 2885.6,831.94 2897.9,820.11"];
+	1302 -> 16215 [style=solid, color="0.0 0.0 0.0", pos="e,729,483.85 729,520.43 729,512.43 729,502.58 729,493.93"];
+}
+
