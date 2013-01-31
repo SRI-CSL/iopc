@@ -5,8 +5,9 @@
   <property name="src" location="src"/>
   <property name="gen" location="src/antlr4"/>
   <property name="classes" location="classes"/>
-  <property name="lib"  location="lib"/>
-  <property name="HOME"  location="/Users/iam/"/>
+  <property name="lib"     location="lib"/>
+  <property name="HOME"    location="/Users/iam"/>
+  <property name="ANTLR4"  location="${HOME}/Repositories/IOP++/lib/antlr-4.0-complete.jar"/>
 
   <path id="classpath">
     <pathelement location="${HOME}/Software/antlr4/antlr-4.0-complete.jar"/>
@@ -32,7 +33,6 @@
 
   <target name="compile" depends="antlr4" 
         description="compile the source " >
-    <!-- Compile the java code from ${src} into ${classes} -->
     <javac includeantruntime="false" 
            srcdir="${src}" 
            destdir="${classes}"
@@ -40,12 +40,8 @@
            />
   </target>
 
-  <target name="jar" depends="compile"
-        description="generate the distribution" >
-    <!-- Create the distribution directory -->
+  <target name="jar" depends="compile" description="generate the jar" >
     <mkdir dir="${lib}"/>
-
-    <!-- Put everything in ${classes} into the MyProject-${DSTAMP}.jar file -->
     <jar jarfile="${lib}/antlr4.jar" basedir="${classes}">
             <fileset dir="${classes}">
                 <include name="antlr4/**"/>
