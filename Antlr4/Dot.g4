@@ -16,7 +16,7 @@ attr_list   :   ('[' a_list? ']')+ ;
 a_list      :   (id ('=' id)? ','?)+ ;
 edge_stmt   :   (node_id | subgraph) edgeRHS attr_list? ;
 edgeRHS     :   ( edgeop (node_id | subgraph) )+ ;
-edgeop      :   '->' | '--' ;
+edgeop      :   ARROW | LINE ;
 node_stmt   :   node_id attr_list? ;
 node_id     :   id port? ;
 port        :   ':' id (':' id)? ;
@@ -26,6 +26,10 @@ id          :   ID
             |   HTML_STRING
             |   NUMBER
             ;
+
+ARROW       : '->' ;
+LINE        : '--' ;
+
 
 // "The keywords node, edge, graph, digraph, subgraph, and strict are
 // case-independent"
