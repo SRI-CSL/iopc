@@ -6,6 +6,13 @@ import org.antlr.v4.runtime.tree.*;
 import g2d.graph.*;
 
 import antlr4.*;
+
+import java.awt.*;
+
+//these next  two are the most relevant to grokking.
+import antlr4.DotBaseVisitor;
+import antlr4.DotParser;
+
 import antlr4.DotParser.IdContext;
 import antlr4.DotParser.A_listContext;
 import antlr4.DotParser.SubgraphContext;
@@ -15,23 +22,55 @@ import antlr4.DotParser.Node_idContext;
 import java.util.List;
 import java.util.HashMap;
 
-// we start of just parsing the types of dot files we will write via makeDotInput
+// we start of restricting our attention to parsing the kinds of dot files we will write via makeDotInput
 // then ...
+//
+//
+
 public class Visitor extends DotBaseVisitor<Object>  {
     public final IOPGraph graph;
+    public final boolean isNew;
 
     public Visitor(IOPGraph graph){
         if(graph != null){
             this.graph = graph;
+            this.isNew = false;
         } else {
             this.graph = new IOPGraph();
+            this.isNew = true;
         }
     }
 
     public Object visitGraph(DotParser.GraphContext ctx) { 
+
+
         Object retval = super.visitChildren(ctx);
         System.err.println("Visited graph: " + ctx.id().getText());
         return  retval;
+
+
+    }
+    
+    public Object visitAttr_stmt(DotParser.Attr_stmtContext ctx) { 
+        Object attrs = visit(ctx.attr_list());
+        if(ctx.GRAPH() != null && attrs instanceof Attributes){
+            Attributes attributes = (Attributes)attrs;
+            //System.err.println("GRAPH!!!!: " + attrs);
+            String bboxAttr = attributes.get("bb");
+                // There are two "graph" statements in the file, only the second
+                // gives the bounding box.
+                if (bboxAttr != null) {
+                   Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
+                   graph.setWidth(dim.getWidth());
+                   graph.setHeight(dim.getHeight()); 
+                   System.err.println("Graph size = " + dim);
+                   //   	          if(parser.graph.size() > Manifold.THRESHOLD){
+                   //	             //System.err.println("Creating manifold");
+                   //                     parser.graph.createManifold();
+                }
+
+        }
+        return attrs; 
     }
 
     public Object visitEdge_stmt(DotParser.Edge_stmtContext ctx) {
@@ -73,11 +112,11 @@ public class Visitor extends DotBaseVisitor<Object>  {
 
     
     public Object visitNode_stmt(DotParser.Node_stmtContext ctx) { 
-        Object id = visit(ctx.node_id());
+        String nid = ctx.node_id().getText();
         Object attrs = visit(ctx.attr_list());
-        System.err.println("Node: " + ctx.node_id().getText());
+        System.err.println("Node: " + nid);
         System.err.println("\tattributes: " + attrs);
-        return id;
+        return nid;
     }
 
     public Object visitAttr_list(DotParser.Attr_listContext ctx) { 
