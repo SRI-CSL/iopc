@@ -7,7 +7,9 @@ import g2d.graph.*;
 
 import antlr4.*;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.Color;
+import java.awt.Dimension;
 
 //these next  two are the most relevant to grokking.
 import antlr4.DotBaseVisitor;
@@ -53,26 +55,24 @@ public class Visitor extends DotBaseVisitor<Object>  {
     
     public Object visitAttr_stmt(DotParser.Attr_stmtContext ctx) { 
         Object attrs = visit(ctx.attr_list());
+        //graph attributes are at top level
         if(ctx.GRAPH() != null && attrs instanceof Attributes){
             Attributes attributes = (Attributes)attrs;
-            //System.err.println("GRAPH!!!!: " + attrs);
             String bboxAttr = attributes.get("bb");
-                // There are two "graph" statements in the file, only the second
-                // gives the bounding box.
                 if (bboxAttr != null) {
                    Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
-                   graph.setWidth(dim.getWidth());
-                   graph.setHeight(dim.getHeight()); 
-                   System.err.println("Graph size = " + dim);
-                   //   	          if(parser.graph.size() > Manifold.THRESHOLD){
-                   //	             //System.err.println("Creating manifold");
-                   //                     parser.graph.createManifold();
+                   this.graph.setWidth(dim.getWidth());
+                   this.graph.setHeight(dim.getHeight()); 
+                   System.err.println("Visitor.visitAttr_stmt: graph dimension = " + dim);
+                   if(this.graph.size() > Manifold.THRESHOLD){
+                       System.err.println("Visitor.visitAttr_stmt: creating manifold");
+                       this.graph.createManifold();
+                   }
                 }
-
         }
         return attrs; 
     }
-
+    
     public Object visitEdge_stmt(DotParser.Edge_stmtContext ctx) {
         Object retval = super.visitChildren(ctx); 
         String kind = "?";
@@ -81,10 +81,26 @@ public class Visitor extends DotBaseVisitor<Object>  {
         } else if(ctx.node_id() != null){  
             kind = "node_id";
         }
-        Object rhs = visit(ctx.edgeRHS());
-        Object attrs = visit(ctx.attr_list());
-        System.err.println("Edge: " + kind + " " + ctx.node_id().id().getText() + " " + rhs);        
-        System.err.println("\tattributes: " + attrs);
+        EdgeRHS rhs = (EdgeRHS)visit(ctx.edgeRHS());
+        String source = ctx.node_id().id().getText();
+        String target = rhs.node;
+        Attributes attributes = (Attributes)visit(ctx.attr_list());
+        //do the edge stuff here ...
+        IOPEdge edge;
+        IOPNode n1, n2;
+        n1 = this.graph.getNode(source);
+        n2 = this.graph.getNode(target);
+        if(this.isNew) {
+            edge = new IOPEdge(n1, n2);
+            this.graph.addEdge(edge);
+        } else {
+            edge = this.graph.getEdge(n1, n2);
+        }
+        double graphHeight = this.graph.getHeight();
+        boolean ok = DotParserUtils.parseEdgeAttributes(edge,  attributes, graphHeight);
+        this.graph.add2Manifold(edge);
+        System.err.println("Edge: " + kind + " " + source + " " + rhs);        
+        System.err.println("\tattributes: " + attributes);
         return retval;
     }
 
@@ -113,12 +129,25 @@ public class Visitor extends DotBaseVisitor<Object>  {
     
     public Object visitNode_stmt(DotParser.Node_stmtContext ctx) { 
         String nid = ctx.node_id().getText();
-        Object attrs = visit(ctx.attr_list());
-        System.err.println("Node: " + nid);
-        System.err.println("\tattributes: " + attrs);
+        //do the node stuff here
+        try {
+            Attributes attributes = (Attributes)visit(ctx.attr_list());
+            double graphHeight = this.graph.getHeight();
+            IOPNode node = null;
+            if(this.isNew) {
+                node = DotParserUtils.parseNodeAttributes(null,  nid, attributes, graphHeight);
+                this.graph.addNode(node);
+            } else {
+                node = DotParserUtils.parseNodeAttributes(this.graph.getNode(nid),  nid, attributes, graphHeight);
+            }
+            this.graph.add2Manifold(node);
+            System.err.println("Node: " + nid);
+            System.err.println("\tattributes: " + attributes);
+        } catch(Exception e){ System.err.println(e);  e.printStackTrace(java.lang.System.err); }
         return nid;
     }
 
+    
     public Object visitAttr_list(DotParser.Attr_listContext ctx) { 
         List<A_listContext> list = ctx.a_list();
         //usually only one of these; but if more we'll need to join them
