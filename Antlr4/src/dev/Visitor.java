@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import g2d.graph.*;
+import g2d.swing.*;
 
 import antlr4.*;
 
@@ -181,14 +182,6 @@ public class Visitor extends DotBaseVisitor<Object>  {
         return null;
     }
     
-    public static void main(String[] args){
-        DotParser parser = DotUtil.parse(args[0]);
-        if(parser != null){
-            ParseTree tree = parser.graph();
-            Visitor v = new Visitor(null);
-            v.visit(tree);
-        }
-    }
 
     public static class Attributes extends HashMap<String,String> {
         public Attributes(){
@@ -210,5 +203,20 @@ public class Visitor extends DotBaseVisitor<Object>  {
         }
     }
     
-
+    public static void main(String[] args){
+        DotParser parser = DotUtil.parse(args[0]);
+        Visitor v = null;
+        if(parser != null){
+            ParseTree tree = parser.graph();
+            v = new Visitor(null);
+            v.visit(tree);
+        }
+        IOPGraph graph = v.graph;
+        IOPView view = new IOPView(true, true);
+        IOPFrame frame = new IOPFrame("Layout by dot, Parsing by Antl4", view);
+        view.add(graph);
+        frame.setVisible(true);
+        view.repaint();
+    }
+    
 }
