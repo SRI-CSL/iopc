@@ -202,6 +202,7 @@ public class Visitor extends DotBaseVisitor<Object>  {
         }
     }
     
+    //for returning two things out of a rhs context
     public static class EdgeRHS {
         public final String node;
         public final String op;
