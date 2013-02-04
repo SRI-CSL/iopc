@@ -45,6 +45,7 @@ NUMBER      :   '-'? ('.' DIGIT+ | DIGIT+ ('.' DIGIT*)? ) ;
 fragment
 DIGIT       :   [0-9] ;
 
+
 /** "any double-quoted string ("...") possibly containing escaped quotes" */
 STRING      :   '"' ('\\"'|.)*? '"' ;
 
@@ -62,6 +63,7 @@ HTML_STRING :   '<' (TAG|~[<>])* '>' ;
 fragment
 TAG         :   '<' .*? '>' ;
 
+
 COMMENT     :   '/*' .*? '*/'       -> skip ;
 LINE_COMMENT:   '//' .*? '\r'? '\n' -> skip ;
 
@@ -71,3 +73,7 @@ LINE_COMMENT:   '//' .*? '\r'? '\n' -> skip ;
 PREPROC     :   '#' .*? '\n' -> skip ;
 
 WS          :   [ \t\n\r]+ -> skip ;
+
+//not enough to fix Dot's braindamage
+//LINE_ESCAPE :    '\\' '\r'? '\n'   -> skip ;
+

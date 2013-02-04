@@ -55,7 +55,7 @@
 
   <target name="run">
     <java classname="dev.Visitor" fork="true" classpathref="classpath">
-      <arg value="samples/test.xdot"/>
+      <arg value="samples/TB-mycolic-acid.xdot"/>
     </java>
   </target>
 

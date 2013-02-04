@@ -31,6 +31,9 @@ import java.util.HashMap;
 //
 
 public class Visitor extends DotBaseVisitor<Object>  {
+
+    public static final boolean DEBUG = false;
+
     public final IOPGraph graph;
     public final boolean isNew;
 
@@ -48,7 +51,7 @@ public class Visitor extends DotBaseVisitor<Object>  {
 
 
         Object retval = super.visitChildren(ctx);
-        System.err.println("Visited graph: " + ctx.id().getText());
+        if(DEBUG){ System.err.println("Visited graph: " + ctx.id().getText()); }
         return  retval;
 
 
@@ -64,9 +67,9 @@ public class Visitor extends DotBaseVisitor<Object>  {
                    Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
                    this.graph.setWidth(dim.getWidth());
                    this.graph.setHeight(dim.getHeight()); 
-                   System.err.println("Visitor.visitAttr_stmt: graph dimension = " + dim);
+                   if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: graph dimension = " + dim); }
                    if(this.graph.size() > Manifold.THRESHOLD){
-                       System.err.println("Visitor.visitAttr_stmt: creating manifold");
+                       if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: creating manifold"); }
                        this.graph.createManifold();
                    }
                 }
@@ -86,6 +89,10 @@ public class Visitor extends DotBaseVisitor<Object>  {
         String source = ctx.node_id().id().getText();
         String target = rhs.node;
         Attributes attributes = (Attributes)visit(ctx.attr_list());
+        if(DEBUG){
+            System.err.println("Edge: " + kind + " " + source + " " + rhs);        
+            System.err.println("\tattributes: " + attributes);
+        }
         //do the edge stuff here ...
         IOPEdge edge;
         IOPNode n1, n2;
@@ -100,8 +107,6 @@ public class Visitor extends DotBaseVisitor<Object>  {
         double graphHeight = this.graph.getHeight();
         boolean ok = DotParserUtils.parseEdgeAttributes(edge,  attributes, graphHeight);
         this.graph.add2Manifold(edge);
-        System.err.println("Edge: " + kind + " " + source + " " + rhs);        
-        System.err.println("\tattributes: " + attributes);
         return retval;
     }
 
@@ -134,6 +139,10 @@ public class Visitor extends DotBaseVisitor<Object>  {
         try {
             Attributes attributes = (Attributes)visit(ctx.attr_list());
             double graphHeight = this.graph.getHeight();
+            if(DEBUG){
+                System.err.println("Node: " + nid);
+                System.err.println("\tattributes: " + attributes);
+            }
             IOPNode node = null;
             if(this.isNew) {
                 node = DotParserUtils.parseNodeAttributes(null,  nid, attributes, graphHeight);
@@ -142,8 +151,6 @@ public class Visitor extends DotBaseVisitor<Object>  {
                 node = DotParserUtils.parseNodeAttributes(this.graph.getNode(nid),  nid, attributes, graphHeight);
             }
             this.graph.add2Manifold(node);
-            System.err.println("Node: " + nid);
-            System.err.println("\tattributes: " + attributes);
         } catch(Exception e){ System.err.println(e);  e.printStackTrace(java.lang.System.err); }
         return nid;
     }
@@ -163,7 +170,9 @@ public class Visitor extends DotBaseVisitor<Object>  {
         List<IdContext> list = ctx.id();
         Attributes attributes = new Attributes();
         for(int i = 0; i < list.size(); i = i + 2){
-            attributes.put(value(list.get(i)), value(list.get(i + 1)));
+            String k = value(list.get(i));
+            String v = value(list.get(i + 1));
+            attributes.put(k, v);
         }
         return attributes; 
     }
@@ -174,7 +183,11 @@ public class Visitor extends DotBaseVisitor<Object>  {
         v = id.ID();
         if(v != null){ return v.toString(); }
         v = id.STRING();
-        if(v != null){ return v.toString(); }
+        if(v != null){ 
+            //pretty ugly place to fix Dot's brain damage
+            String s = v.toString();
+            return s.replaceAll("\\\\\n", ""); 
+        }
         v = id.NUMBER();
         if(v != null){ return v.toString(); }
         v = id.HTML_STRING();
