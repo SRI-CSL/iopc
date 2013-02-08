@@ -10,7 +10,8 @@
 
   <path id="classpath">
     <pathelement location="${user.home}/Software/antlr4/antlr-4.0-complete.jar"/>
-    <pathelement location="${user.home}/bin/IOP/iop.jar"/>
+    <!-- <pathelement location="${user.home}/bin/IOP/iop.jar"/>  -->
+    <pathelement location="${user.home}/Repositories/IOP++/build/lib/iop.jar"/>
     <pathelement location="${user.home}/Repositories/IOP++/Antlr4/lib/antlr4.jar"/>
   </path>
 
@@ -55,7 +56,7 @@
 
   <target name="run">
     <java classname="dev.Visitor" fork="true" classpathref="classpath">
-      <arg value="samples/TB-mycolic-acid.xdot"/>
+      <arg value="samples/records.xdot"/>
     </java>
   </target>
 

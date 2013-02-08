@@ -37,6 +37,11 @@ public class Visitor extends DotBaseVisitor<Object>  {
     public final IOPGraph graph;
     public final boolean isNew;
 
+    private Attributes globalNodeAttributes;
+    private Attributes globaEdgeAttributes;
+    private Attributes globaGraphAttributes;
+    
+
     public Visitor(IOPGraph graph){
         if(graph != null){
             this.graph = graph;
@@ -46,6 +51,34 @@ public class Visitor extends DotBaseVisitor<Object>  {
             this.isNew = true;
         }
     }
+    
+    private void setGlobalGraphAttributes(Attributes attributes){
+        /* N.B. THERE CAN BE MORE THAN ONE OF THESE -- NEED TO TAKE UNIONS */
+        String bboxAttr = attributes.get("bb");
+        if (bboxAttr != null) {
+            Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
+            this.graph.setWidth(dim.getWidth());
+            this.graph.setHeight(dim.getHeight()); 
+            if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: graph dimension = " + dim); }
+            if(this.graph.size() > Manifold.THRESHOLD){
+                if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: creating manifold"); }
+                this.graph.createManifold();
+            }
+        }
+    }
+    
+    private void setGlobalNodeAttributes(Attributes attributes){
+        /* N.B. THERE CAN BE MORE THAN ONE OF THESE -- NEED TO TAKE UNIONS */
+        if(DEBUG){ System.err.println("globalNodeAttributes: " + attributes); }
+        this.globalNodeAttributes = attributes;
+    }
+    
+    private void setGlobalEdgeAttributes(Attributes attributes){
+        /* N.B. THERE CAN BE MORE THAN ONE OF THESE -- NEED TO TAKE UNIONS */
+        if(DEBUG){ System.err.println("globalEdgeAttributes: " + attributes); }
+        this.globaEdgeAttributes = attributes;
+    }
+    
 
     public Object visitGraph(DotParser.GraphContext ctx) { 
 
@@ -58,23 +91,16 @@ public class Visitor extends DotBaseVisitor<Object>  {
     }
     
     public Object visitAttr_stmt(DotParser.Attr_stmtContext ctx) { 
-        Object attrs = visit(ctx.attr_list());
-        //graph attributes are at top level
-        if(ctx.GRAPH() != null && attrs instanceof Attributes){
-            Attributes attributes = (Attributes)attrs;
-            String bboxAttr = attributes.get("bb");
-                if (bboxAttr != null) {
-                   Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
-                   this.graph.setWidth(dim.getWidth());
-                   this.graph.setHeight(dim.getHeight()); 
-                   if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: graph dimension = " + dim); }
-                   if(this.graph.size() > Manifold.THRESHOLD){
-                       if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: creating manifold"); }
-                       this.graph.createManifold();
-                   }
-                }
+        Attributes attributes = (Attributes)visit(ctx.attr_list());
+        //global attributes are at top level
+        if(ctx.GRAPH() != null){
+            setGlobalGraphAttributes(attributes);
+        } else if(ctx.NODE() != null){
+            setGlobalNodeAttributes(attributes);
+        } else if(ctx.EDGE() != null){
+            setGlobalEdgeAttributes(attributes);
         }
-        return attrs; 
+        return attributes; 
     }
     
     public Object visitEdge_stmt(DotParser.Edge_stmtContext ctx) {
@@ -145,10 +171,10 @@ public class Visitor extends DotBaseVisitor<Object>  {
             }
             IOPNode node = null;
             if(this.isNew) {
-                node = DotParserUtils.parseNodeAttributes(null,  nid, attributes, graphHeight);
+                node = DotParserUtils.parseNodeAttributes(null,  nid, attributes, graphHeight, globalNodeAttributes);
                 this.graph.addNode(node);
             } else {
-                node = DotParserUtils.parseNodeAttributes(this.graph.getNode(nid),  nid, attributes, graphHeight);
+                node = DotParserUtils.parseNodeAttributes(this.graph.getNode(nid), nid, attributes, graphHeight, globalNodeAttributes);
             }
             this.graph.add2Manifold(node);
         } catch(Exception e){ System.err.println(e);  e.printStackTrace(java.lang.System.err); }
