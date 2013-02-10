@@ -38,8 +38,8 @@ public class Visitor extends DotBaseVisitor<Object>  {
     public final boolean isNew;
 
     private Attributes globalNodeAttributes;
-    private Attributes globaEdgeAttributes;
-    private Attributes globaGraphAttributes;
+    private Attributes globalEdgeAttributes;
+    private Attributes globalGraphAttributes;
     
 
     public Visitor(IOPGraph graph){
@@ -53,7 +53,6 @@ public class Visitor extends DotBaseVisitor<Object>  {
     }
     
     private void setGlobalGraphAttributes(Attributes attributes){
-        /* N.B. THERE CAN BE MORE THAN ONE OF THESE -- NEED TO TAKE UNIONS */
         String bboxAttr = attributes.get("bb");
         if (bboxAttr != null) {
             Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
@@ -65,18 +64,32 @@ public class Visitor extends DotBaseVisitor<Object>  {
                 this.graph.createManifold();
             }
         }
+        if(this.globalGraphAttributes == null){
+            this.globalGraphAttributes = attributes;
+        } else {
+            // add/replace the old with the new
+            this.globalGraphAttributes.putAll(attributes);
+        }
     }
     
     private void setGlobalNodeAttributes(Attributes attributes){
-        /* N.B. THERE CAN BE MORE THAN ONE OF THESE -- NEED TO TAKE UNIONS */
         if(DEBUG){ System.err.println("globalNodeAttributes: " + attributes); }
-        this.globalNodeAttributes = attributes;
+        if(this.globalNodeAttributes == null){
+            this.globalNodeAttributes = attributes;
+        } else {
+            // add/replace the old with the new
+            this.globalNodeAttributes.putAll(attributes);
+        }
     }
     
     private void setGlobalEdgeAttributes(Attributes attributes){
-        /* N.B. THERE CAN BE MORE THAN ONE OF THESE -- NEED TO TAKE UNIONS */
         if(DEBUG){ System.err.println("globalEdgeAttributes: " + attributes); }
-        this.globaEdgeAttributes = attributes;
+        if(this.globalEdgeAttributes == null){
+            this.globalEdgeAttributes = attributes;
+        } else {
+            // add/replace the old with the new
+            this.globalEdgeAttributes.putAll(attributes);
+        }
     }
     
 
@@ -181,15 +194,19 @@ public class Visitor extends DotBaseVisitor<Object>  {
         return nid;
     }
 
-    
     public Object visitAttr_list(DotParser.Attr_listContext ctx) { 
         List<A_listContext> list = ctx.a_list();
         //usually only one of these; but if more we'll need to join them
-        Object entry = null;
+        Attributes attrs = null;
         for(A_listContext al : list){
-            entry = visit(al);
+            Attributes attrs0 = (Attributes)visit(al);
+            if(attrs == null){
+                attrs = attrs0;
+            } else {
+                attrs.putAll(attrs0);
+            }
         }
-        return entry; 
+        return attrs; 
     }
 
     public Object visitA_list(DotParser.A_listContext ctx) { 
