@@ -1,4 +1,4 @@
-package dev;
+package dot;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
