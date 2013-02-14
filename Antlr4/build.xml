@@ -55,8 +55,8 @@
   </target>
 
   <target name="run">
-    <java classname="dev.Visitor" fork="true" classpathref="classpath">
-      <arg value="samples/mrecord2.xdot"/>
+    <java classname="dot.Visitor" fork="true" classpathref="classpath">
+      <arg value="samples/test.xdot"/>
     </java>
   </target>
 

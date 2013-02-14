@@ -15,15 +15,12 @@ public class Main {
         String inputfile = null;
         if(args.length > 0) inputfile = args[0];
         if(inputfile != null){
-            DotParser parser = DotUtil.parse(inputfile);
+            DotParser parser = Visitor.parse(inputfile);
             if(parser != null){
                 ParseTree tree = parser.graph();
                 System.out.println(tree.toStringTree(parser));
             }
-            System.err.println("Yikes Yay 2");
-        } else {
-            System.err.println("Yikes Nay 2");
-        }
+        } 
     }
 
 

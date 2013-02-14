@@ -8,6 +8,9 @@ import g2d.swing.*;
 
 import antlr4.*;
 
+import java.io.InputStream;
+import java.io.FileInputStream;
+
 import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -41,6 +44,21 @@ public class Visitor extends DotBaseVisitor<Object>  {
     private Attributes globalEdgeAttributes;
     private Attributes globalGraphAttributes;
     
+    public static DotParser parse(String file){
+        DotParser parser  = null;
+        if(file != null){
+            try {
+                InputStream is = new FileInputStream(file);
+                ANTLRInputStream input = new ANTLRInputStream(is);
+                DotLexer lexer = new DotLexer(input);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                parser = new DotParser(tokens);
+            } catch(Exception e){
+                System.err.println(e);
+            }
+        }
+        return parser;
+    }
 
     public Visitor(IOPGraph graph){
         if(graph != null){
@@ -261,7 +279,7 @@ public class Visitor extends DotBaseVisitor<Object>  {
     }
     
     public static void main(String[] args){
-        DotParser parser = DotUtil.parse(args[0]);
+        DotParser parser = Visitor.parse(args[0]);
         Visitor v = null;
         if(parser != null){
             ParseTree tree = parser.graph();
