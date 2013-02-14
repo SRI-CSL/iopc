@@ -1,0 +1,36 @@
+digraph G {
+rankdir=LR;
+Ubus[shape=box,label="Ubus\nm22",color=black,fontsize=10];
+U10[shape=box,label="U10\nmb21",color=black,fontsize=10];
+U20[shape=box,label="U20\nm1b8",color=black,fontsize=10];
+U11[shape=box,label="U11\nm22",color=black,fontsize=10];
+U30[shape=box,label="U30\nm11",color=black,fontsize=10];
+U31[shape=box,label="U31\nm11",color=black,fontsize=10];
+Uafter20[shape=box,label="Uafter20\nmb8b8",color=black,fontsize=10];
+U21[shape=box,label="U21\nm12",color=black,fontsize=10];
+   "mainin0"->"U10" [arrowsize=.5,fontsize=8,headlabel="in0",constraint=true];
+   "mainin1"->"U11" [arrowsize=.5,fontsize=8,headlabel="in0",constraint=true];
+   "mainin2"->"U30" [arrowsize=.5,fontsize=8,headlabel="in0",constraint=true];
+   "Uafter20"->"mainout0" [arrowsize=.5,fontsize=8,taillabel="out0",constraint=true];
+   "U21"->"mainout1" [arrowsize=.5,fontsize=8,taillabel="out0",constraint=true];
+   "U11"->"Ubus" [arrowsize=.5,fontsize=8,headlabel="in1",taillabel="out0"];
+   "Ubus"->"U20" [arrowsize=.5,fontsize=8,headlabel="in0",taillabel="out0"];
+   "Ubus"->"U21" [arrowsize=.5,fontsize=8,headlabel="in0",taillabel="out1"];
+n_u_l_l_0 [shape=point];
+   "n_u_l_l_0"->"U11" [arrowsize=.5,fontsize=8,headlabel="in1"];
+   "U30"->"n_u_l_l_0" [arrowsize=.5,fontsize=8,taillabel="out0"];
+   "n_u_l_l_0"->"U31" [arrowsize=.5,fontsize=8,headlabel="in0"];
+n_u_l_l_1 [shape=point];
+   "U10"->"n_u_l_l_1" [arrowsize=.5,fontsize=8,taillabel="out0"];
+   "n_u_l_l_1"->"Uafter20" [arrowsize=.5,fontsize=8,headlabel="in0"];
+   "U20"->"n_u_l_l_1" [arrowsize=.5,fontsize=8,taillabel="out0"];
+subgraph clusterInput { label="Inputs"; rank=source;
+   "mainin0" [shape=oval,fontsize=8,rank=source];
+   "mainin1" [shape=oval,fontsize=8,rank=source];
+   "mainin2" [shape=oval,fontsize=8,rank=source];
+}
+subgraph clusterOutput { label="Outputs"; rank=sink;
+   "mainout0" [shape=oval,fontsize=8,rank=sink];
+   "mainout1" [shape=oval,fontsize=8,rank=sink];
+}
+}

@@ -1,0 +1,5 @@
+digraph G {
+	node [shape=Mrecord];
+	d ;
+	c [ label ="<p1>   | c |<p2>   " ];
+}
