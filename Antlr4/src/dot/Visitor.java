@@ -15,7 +15,7 @@ import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.Dimension;
 
-//these next  two are the most relevant to grokking.
+//these next two are the most relevant to grokking.
 import antlr4.DotBaseVisitor;
 import antlr4.DotParser;
 
