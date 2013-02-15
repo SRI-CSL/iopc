@@ -3,7 +3,7 @@
 
   <property name="grammar" location="${user.home}/Repositories/IOP++/Antlr4/src/dotparser/grammar/Dot.g4"/>
   <property name="src" location="src"/>
-  <property name="gen" location="src/antlr4"/>
+  <property name="gen" location="src/dotparser/antlr4"/>
   <property name="classes" location="classes"/>
   <property name="lib"     location="lib"/>
   <property name="ANTLR4"  location="${user.home}/Repositories/IOP++/lib/antlr-4.0-complete.jar"/>
@@ -27,7 +27,7 @@
     <exec executable="java"
           dir="."
           failifexecutionfails="true">
-      <arg line="-jar ${user.home}/Repositories/IOP++/lib/antlr-4.0-complete.jar ${grammar} -no-listener -visitor -package antlr4 -o ${gen}"/>
+      <arg line="-jar ${user.home}/Repositories/IOP++/lib/antlr-4.0-complete.jar ${grammar} -no-listener -visitor -package dotparser.antlr4 -o ${gen}"/>
     </exec>
   </target>
 

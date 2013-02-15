@@ -1,5 +1,5 @@
 // Generated from /Users/iam/Repositories/IOP++/Antlr4/src/dotparser/grammar/Dot.g4 by ANTLR 4.0
-package antlr4;
+package dotparser.antlr4;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

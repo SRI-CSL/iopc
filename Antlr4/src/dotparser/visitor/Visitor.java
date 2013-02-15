@@ -1,4 +1,4 @@
-package dot;
+package dotparser.visitor;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.tree.*;
 import g2d.graph.*;
 import g2d.swing.*;
 
-import antlr4.*;
 
 import java.io.InputStream;
 import java.io.FileInputStream;
@@ -15,15 +14,16 @@ import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import dotparser.antlr4.*;
 //these next two are the most relevant to grokking.
-import antlr4.DotBaseVisitor;
-import antlr4.DotParser;
+import dotparser.antlr4.DotBaseVisitor;
+import dotparser.antlr4.DotParser;
 
-import antlr4.DotParser.IdContext;
-import antlr4.DotParser.A_listContext;
-import antlr4.DotParser.SubgraphContext;
-import antlr4.DotParser.EdgeopContext;
-import antlr4.DotParser.Node_idContext;
+import dotparser.antlr4.DotParser.IdContext;
+import dotparser.antlr4.DotParser.A_listContext;
+import dotparser.antlr4.DotParser.SubgraphContext;
+import dotparser.antlr4.DotParser.EdgeopContext;
+import dotparser.antlr4.DotParser.Node_idContext;
 
 import java.util.List;
 import java.util.HashMap;

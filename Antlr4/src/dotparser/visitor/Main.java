@@ -1,4 +1,4 @@
-package dot;
+package dotparser.visitor;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.*;
 import java.io.InputStream;
 import java.io.FileInputStream;
 
-import antlr4.*;
+import dotparser.antlr4.*;
 
 public class Main {
 
