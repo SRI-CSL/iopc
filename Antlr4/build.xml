@@ -1,7 +1,7 @@
 <project name="antlr4" default="jar" basedir=".">
 
 
-  <property name="grammar" location="Dot.g4"/>
+  <property name="grammar" location="${user.home}/Repositories/IOP++/Antlr4/src/dotparser/grammar/Dot.g4"/>
   <property name="src" location="src"/>
   <property name="gen" location="src/antlr4"/>
   <property name="classes" location="classes"/>
@@ -55,8 +55,8 @@
   </target>
 
   <target name="run">
-    <java classname="dot.Visitor" fork="true" classpathref="classpath">
-      <arg value="samples/test.xdot"/>
+    <java classname="dotparser.visitor.Visitor" fork="true" classpathref="classpath">
+      <arg value="samples/circuit.xdot"/>
     </java>
   </target>
 
