@@ -43,8 +43,23 @@ public class Visitor extends DotBaseVisitor<Object>  {
     private Attributes globalNodeAttributes;
     private Attributes globalEdgeAttributes;
     private Attributes globalGraphAttributes;
+
+    public static DotParser parseString(String string){
+        DotParser parser  = null;
+        if(string != null){
+            try {
+                ANTLRInputStream input = new ANTLRInputStream(string);
+                DotLexer lexer = new DotLexer(input);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                parser = new DotParser(tokens);
+            } catch(Exception e){
+                System.err.println(e);
+            }
+        }
+        return parser;
+    }
     
-    public static DotParser parse(String file){
+    public static DotParser parseFile(String file){
         DotParser parser  = null;
         if(file != null){
             try {
@@ -278,8 +293,17 @@ public class Visitor extends DotBaseVisitor<Object>  {
         }
     }
     
-    public static void main(String[] args){
-        DotParser parser = Visitor.parse(args[0]);
+    private static void testFromFile(String file){
+        DotParser parser = Visitor.parseFile(file);
+        test(parser);
+    }
+
+    private static void testFromString(String string){
+        DotParser parser = Visitor.parseString(string);
+        test(parser);
+    }
+
+    private static void test(DotParser parser){
         Visitor v = null;
         if(parser != null){
             ParseTree tree = parser.graph();
@@ -292,6 +316,13 @@ public class Visitor extends DotBaseVisitor<Object>  {
         view.add(graph);
         frame.setVisible(true);
         view.repaint();
+    }
+
+    public static void main(String[] args){
+        //testFromFile(args[0]);
+        String string = g2d.util.IO.file2String(args[0]);
+        //System.err.println(string);
+        testFromString(string);
     }
     
 }
