@@ -362,6 +362,7 @@ static char* iop_alloc_jarpath_aux(char* code_dir, char* who, char* classpath){
 char* iop_alloc_jarpath(char* code_dir, char* who, char* classpath){
   char* new_code_dir = NULL;
   char* new_classpath = NULL;
+  //fprintf(stderr, "iop_alloc_jarpath(%s, %s, %s)\n", code_dir, who, classpath);
   int tilde = interpretTildes(code_dir, &new_code_dir);
   if(!tilde){
     new_code_dir = code_dir;

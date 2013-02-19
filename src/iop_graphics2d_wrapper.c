@@ -115,9 +115,11 @@ int main(int argc, char** argv){
   self_debug_flag  = G2D_ACTOR_DEBUG;
   self = argv[0];
 
+  //printArgv(stderr, argc, argv, "argv");   
+
   g2dargc = make_arguments(argc, argv, &g2dargv);
 
-  /* printArgv(stderr, g2dargc, g2dargv, "g2dargv");   */
+  //printArgv(stderr, g2dargc, g2dargv, "g2dargv");   
 
   /*
     ec_null( g2dargv = calloc(argc + 4, sizeof(char*)) );
