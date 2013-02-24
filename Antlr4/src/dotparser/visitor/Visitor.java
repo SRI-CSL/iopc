@@ -158,10 +158,13 @@ public class Visitor extends DotBaseVisitor<Object>  {
         String parentSubGraph = this.currentSubGraph;
         Attributes attributes = new Attributes();
         this.subGraphAttributes.put(id, attributes);
+        if(DEBUG){ System.err.println("Visiting subgraph: " + id); }
         //push
         this.currentSubGraph = id;
         Object retval = visitChildren(ctx); 
         //pop
+        if(DEBUG){ System.err.println("Visited subgraph: " + id); }
+        if(DEBUG){ System.err.println("\n\tattributes = " + attributes); }
         this.currentSubGraph = parentSubGraph;
         return retval;
     }
