@@ -85,15 +85,21 @@ public class Visitor extends DotBaseVisitor<Object>  {
         }
     }
     
+    private boolean repeat = false;
+
     private void setGlobalGraphAttributes(Attributes attributes){
         String bboxAttr = attributes.get("bb");
         if (bboxAttr != null) {
+            if(DEBUG){ System.err.println("antlr.jar - Visitor.setGlobalGraphAttributes: bb = " + bboxAttr); }
             Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
-            this.graph.setWidth(dim.getWidth());
-            this.graph.setHeight(dim.getHeight()); 
-            if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: graph dimension = " + dim); }
+            if(!repeat){
+                this.graph.setWidth(dim.getWidth());
+                this.graph.setHeight(dim.getHeight()); 
+                repeat = true;
+            }
+            if(DEBUG){ System.err.println("Visitor.setGlobalGraphAttributes: graph dimension = " + dim); }
             if(this.graph.size() > Manifold.THRESHOLD){
-                if(DEBUG){ System.err.println("Visitor.visitAttr_stmt: creating manifold"); }
+                if(DEBUG){ System.err.println("Visitor.setGlobalGraphAttributes: creating manifold"); }
                 this.graph.createManifold();
             }
         }
