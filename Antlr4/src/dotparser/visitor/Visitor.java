@@ -40,6 +40,10 @@ public class Visitor extends DotBaseVisitor<Object>  {
     public final IOPGraph graph;
     public final boolean isNew;
 
+    private String currentSubGraph = null;
+    
+    private HashMap<String, Attributes> subGraphAttributes = new HashMap<String, Attributes>();
+
     private Attributes globalNodeAttributes;
     private Attributes globalEdgeAttributes;
     private Attributes globalGraphAttributes;
@@ -85,17 +89,15 @@ public class Visitor extends DotBaseVisitor<Object>  {
         }
     }
     
-    private boolean repeat = false;
-
     private void setGlobalGraphAttributes(Attributes attributes){
         String bboxAttr = attributes.get("bb");
         if (bboxAttr != null) {
             if(DEBUG){ System.err.println("antlr.jar - Visitor.setGlobalGraphAttributes: bb = " + bboxAttr); }
             Dimension dim = DotParserUtils.parseBoundingBoxAttribute(bboxAttr);
-            if(!repeat){
+            //parsing at the top level
+            if(currentSubGraph == null){
                 this.graph.setWidth(dim.getWidth());
                 this.graph.setHeight(dim.getHeight()); 
-                repeat = true;
             }
             if(DEBUG){ System.err.println("Visitor.setGlobalGraphAttributes: graph dimension = " + dim); }
             if(this.graph.size() > Manifold.THRESHOLD){
@@ -103,11 +105,20 @@ public class Visitor extends DotBaseVisitor<Object>  {
                 this.graph.createManifold();
             }
         }
-        if(this.globalGraphAttributes == null){
-            this.globalGraphAttributes = attributes;
+        if(currentSubGraph == null){
+            if(this.globalGraphAttributes == null){
+                this.globalGraphAttributes = attributes;
+            } else {
+                // add/replace the old with the new
+                this.globalGraphAttributes.putAll(attributes);
+            }
         } else {
-            // add/replace the old with the new
-            this.globalGraphAttributes.putAll(attributes);
+            Attributes current = subGraphAttributes.get(currentSubGraph);
+            if(current != null){
+                current.putAll(attributes);
+            } else {
+                System.err.println("This graph is crazy. No comprendo esta graph.");
+            }
         }
     }
     
@@ -141,6 +152,20 @@ public class Visitor extends DotBaseVisitor<Object>  {
 
 
     }
+
+    public Object visitSubgraph(DotParser.SubgraphContext ctx) { 
+        String id = ctx.id().getText();
+        String parentSubGraph = this.currentSubGraph;
+        Attributes attributes = new Attributes();
+        this.subGraphAttributes.put(id, attributes);
+        //push
+        this.currentSubGraph = id;
+        Object retval = visitChildren(ctx); 
+        //pop
+        this.currentSubGraph = parentSubGraph;
+        return retval;
+    }
+    
     
     public Object visitAttr_stmt(DotParser.Attr_stmtContext ctx) { 
         Attributes attributes = (Attributes)visit(ctx.attr_list());
