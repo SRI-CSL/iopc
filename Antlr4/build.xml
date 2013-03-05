@@ -56,7 +56,7 @@
 
   <target name="run">
     <java classname="dotparser.visitor.Visitor" fork="true" classpathref="classpath">
-      <arg value="samples/circuit.xdot"/>
+      <arg value="samples/pathway.xdot"/>
     </java>
   </target>
 
