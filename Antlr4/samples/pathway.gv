@@ -1,6 +1,0 @@
-digraph G {
-    node [shape=Mrecord];
-    a [label = " erk "];
-    c [label = "{ Egf | EgfR-act }"];
-    a -> c 
-}
