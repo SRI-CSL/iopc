@@ -14,7 +14,7 @@ debug: c
 	ant -DDEBUG=on
 
 java:
-	ant java_cup
+	ant antlr4
 	ant
 
 src-zip:
