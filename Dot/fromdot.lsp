@@ -37,8 +37,8 @@
         (invoke view "repaint")))
      )
    )
-; (apply display "rasDish.xdot")
-; (apply display "circuit.xdot")
-; (apply display "rasDish.xdot")
+ ;;turn on verbose toStrings for clicking and debugging
+ (supdate "g2d.glyph.GlyphList" "debug" (boolean true))
+ (supdate "g2d.glyph.ImageGlyph" "debug" (boolean true))
  (apply display "table.dot")
 )
