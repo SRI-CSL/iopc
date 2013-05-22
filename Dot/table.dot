@@ -1,15 +1,15 @@
 digraph structs {
 
-     struct1 [margin=0 shape=ellipse, style=filled, fillcolor=white, label=<<TABLE border="0" cellborder="0">
+     struct1 [margin=0 shape=ellipse, style=filled, fillcolor=white, color=blue, label=<<TABLE border="0" cellborder="0">
                        <TR><TD><IMG SRC="g0.png"/></TD><td><font point-size="20">protein2ppw</font></td></TR>
               </TABLE>>];
 
 
-     struct2 [margin=0 shape=ellipse, style=filled, fillcolor=white, label=<<TABLE border="0" cellborder="0">
+     struct2 [margin=0 shape=ellipse, style=filled, fillcolor=white, color=red, label=<<TABLE border="0" cellborder="0">
                        <TR><TD><IMG SRC="g0.png"/></TD><td><font point-size="20">Dol@GOL-2.1</font></td></TR>
               </TABLE>>];
 
-     struct3 [margin=0 shape=octagon, style=filled, fillcolor=white, label=<<TABLE border="0" cellborder="0">
+     struct3 [margin=0 shape=octagon, style=filled, fillcolor=white, color=green, label=<<TABLE border="0" cellborder="0">
                        <TR><TD><IMG SRC="g1.png"/></TD><td><font point-size="20">Dol@GOL-3</font></td></TR>
               </TABLE>>];
 
