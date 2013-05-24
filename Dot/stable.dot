@@ -1,19 +1,16 @@
 digraph structs {
 
      struct1 [margin=0 shape=box, style=filled, fillcolor=white, color=blue, label=<<TABLE border="0" cellborder="0">
-                       <TR><TD width="60" height="50" fixedsize="true"><IMG SRC="g0.png" scale="true"/>
-                           </TD><td><font point-size="10">protein2ppw</font></td></TR>
+                       <TR><TD width="60" height="50" fixedsize="true"><IMG SRC="g0.png" scale="true"/></TD><td width="60" height="50" ><font point-size="8">protein2ppw</font></td></TR>
               </TABLE>>];
 
 
      struct2 [margin=0 shape=box, style=filled, fillcolor=white, color=red, label=<<TABLE border="0" cellborder="0">
-                       <TR><TD width="60" height="50" fixedsize="true"><IMG SRC="g0.png" scale="true"/></TD>
-                       <td><font point-size="10">Dol@GOL-2.1</font></td></TR>
+                       <TR><TD width="60" height="50" fixedsize="true"><IMG SRC="g0.png" scale="true"/></TD><td width="60" height="50"  ><font point-size="8">Dol@GOL-2.1</font></td></TR>
               </TABLE>>];
 
      struct3 [margin=0 shape=box, style=filled, fillcolor=white, color=green, label=<<TABLE border="0" cellborder="0">
-                       <TR><TD width="60" height="50" fixedsize="true"><IMG SRC="g0.png" scale="true"/></TD>
-                       <td><font point-size="10">Dol@GOL-3</font></td></TR>
+                       <TR><TD width="60" height="50" fixedsize="true"><IMG SRC="g0.png" scale="true"/></TD><td><font point-size="8">Dol@GOL-3</font></td></TR>
               </TABLE>>];
 
     struct1 -> struct2;

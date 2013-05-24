@@ -40,5 +40,5 @@
  ;;turn on verbose toStrings for clicking and debugging
  (supdate "g2d.glyph.GlyphList" "debug" (boolean true))
  (supdate "g2d.glyph.ImageGlyph" "debug" (boolean true))
- (apply display "table.dot")
+ (apply display "stable.dot")
 )
