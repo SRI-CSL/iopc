@@ -1,0 +1,29 @@
+http://rings.t.soka.ac.jp/help/kcf.html
+
+KCF Format
+
+KCF (KEGG Chemical Function) format is the standard format used by RINGS and KEGG. An example of the KCF text for the fucosylated N-glycan core with a bisecting GlcNAc is given below.
+ENTRY       Fuc_Bis_N        Glycan
+NODE        7
+            1     fuc     12.0     7.0
+            2     glcnac     19.0     2.0
+            3     glcnac     12.0     2.0
+            4     man     5.0     2.0
+            5     man     -2.0     7.0
+            6     glcnac     -2.0     2.0
+            7     man     -2.0     -3.0
+EDGE        6
+            1     1:a1     2:6
+            2     3:b1     2:4
+            3     4:b1     3:4
+            4     5:a1     4:6
+            5     6:b1     4:4
+            6     7:a1     4:3
+///
+There are three major sections: ENTRY, NODE and EDGE.
+
+The ENTRY section consists of one line and may specify a name for the structure followed by the keyword Glycan.
+The NODE section consists of several lines. The first line contains the number of monosaccharides or aglycon entities, and the following lines consist of the details of these entities numbered consecutively. For each entity line, the name and x- and y-coordinates (to draw on a 2D plane) must be specified.
+Similarly, the EDGE section consists of several lines, the first line containing the number of bonds (usually one less than the number of NODEs), followed by the details of the bond information. The format for the bond information is as follows:
+num <donor node#>:<anomeric configuration (a or b)><donor carbon#> <acceptor node#>:<acceptor carbon#>http://rings.t.soka.ac.jp/help/kcf.html
+http://rings.t.soka.ac.jp/help/kcf.html
