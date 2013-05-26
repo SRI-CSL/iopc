@@ -1,6 +1,6 @@
 digraph fucbn {
 	rankdir=LR;
-  edge [dir=none];
+  edge [dir=none, style=bold];
 
 root0  [ label="" shape=plaintext margin=0 ];
 fuc1    [label="" shape=triangle fillcolor=red style=filled ];
