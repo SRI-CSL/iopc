@@ -1,8 +1,14 @@
+KCF documentation
+http://rings.t.soka.ac.jp/help/kcf.html
+
+
+
 op G108 : -> Gcode [ctor metadata "(\
   (KeggID G00108))"] .
 
 
 http://www.genome.jp/dbget-bin/www_bget?-f+k+glycan+G00108
+
 ENTRY       G00108                      Glycan
 NODE        4
             1   Cer        13     0
