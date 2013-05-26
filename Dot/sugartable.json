@@ -1,0 +1,22 @@
+{
+ "fuc" : { "name" : "Fucose", "shape" : "triangle", "color" : "red"},
+ "man" : { "name" : "Manose", "shape" : "circle", "color" : "green"},
+ "gal" : { "name" : "Galactose", "shape" : "square", "color" : "yellow"},
+ "hex" : { "name" : "Hexose", "shape" : "circle", "color" : "white"},
+ "xyl" : { "name" : "Xylose", "shape" : "star", "color" : "star"},
+ "glcnac" : 
+   { "name":"N-acetyl glucosamine", "shape" : "square", "color" : "purple"},
+ "galnac" : 
+   { "name":"N-acetyl galactosamine", "shape" : "square", "color" : "yellow"},
+ "neu5ac" : 
+   { "name":"N-acetyl neuraminic acid", "shape" : "diamond", "color" : "red"},
+ "neu5gc" : 
+   { "name":"N-gycolyl neuraminic acid", "shape" : "diamond", "color" : "white"},
+ "kdn" : 
+   { "name":"2-Keto-3-deoxynonic acid", "shape" : "diamond", "color" : "green"},
+ "cer" : 
+   { "name":"Ceramide", "shape" : "text", "color" : "n/a"}
+}
+
+Glucosamine   square white\yellow
+Galactosamin  square white\purple
