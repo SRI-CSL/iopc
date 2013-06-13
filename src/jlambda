@@ -1,19 +1,25 @@
-#!/usr/bin/perl
-use warnings;
+#!/bin/bash
 
-my $jlambdaClasses = "";
-if(defined($ENV{JLAMBDA_CLASSES})){
-    $jlambdaClasses = ":$ENV{JLAMBDA_CLASSES}";
-}
+JLAMBDAJAR=iop.jar
 
-if(!defined($ENV{IOPBINDIR})){
-    print "You must set envionment variable IOPBINDIR!\n";
-} else {
-    #putting in the talkies prevents white spaces from confounding.
-    my $iop = "\"$ENV{IOPBINDIR}\"";
-    if($ARGV[0]){
-	system "java  -Dcom.apple.mrj.application.apple.menu.about.name=jlambda -Xms256m -Xmx1024m  -ea -cp ${iop}/iop.jar${jlambdaClasses}  g2d/jlambda/ReadEvalPrintLoop $iop $ARGV[0]";
-    } else {
-	system "java  -Dcom.apple.mrj.application.apple.menu.about.name=jlambda -Xms256m -Xmx1024m -ea  -cp ${iop}/iop.jar${jlambdaClasses}  g2d/jlambda/ReadEvalPrintLoop $iop";
-    }
-}
+: ${IOPBINDIR?"Need to set IOPBINDIR (where iop.jar and jlambda.jar live)!"}
+
+IOP="${IOPBINDIR}"
+
+#echo "Using ${IOP} to locate classes!"         
+
+JLPATH=""
+
+if [ -n  "$JLAMBDA_CLASSES" ]
+then
+    #echo "Using ${JLAMBDA_CLASSES} to augment classes!" 
+    JLPATH=":${JLAMBDA_CLASSES}"
+fi
+
+CMD="java  -Dcom.apple.mrj.application.apple.menu.about.name=jlambda -Xms256m -Xmx1024m  -ea -cp ${IOP}/${JLAMBDAJAR}${JLPATH}  g2d/jlambda/ReadEvalPrintLoop ${IOP}"
+
+if [ $1 ]; then 
+    $CMD $1
+else
+    $CMD
+fi
