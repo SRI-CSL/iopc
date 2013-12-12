@@ -35,3 +35,5 @@ pid_t spawnProcess(char*, char*[]);
 int parseActorMsg(char*, char**, char**);
 int getNextToken(char *, char**, char**);
 char* iop_alloc_jarpath(char*, char*, char*);
+
+void iop_usleep(uint32_t msec);

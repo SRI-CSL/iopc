@@ -85,12 +85,16 @@ static void _log2File(const int locking, const char *format, va_list arg){
   if(self_debug_flag && (format != NULL) && (errorsFileName != NULL)){
     if(locking)pthread_mutex_lock(&iop_errlog_mutex);
     if((errorsFile = fopen(errorsFileName, "a")) != NULL){
-      fprintf(errorsFile, "%s[%lu]\t:\t", self, (unsigned long)pthread_self());
+#if defined(_LINUX)
+      fprintf(errorsFile, "%s<%lu>\t:\t", self, (unsigned long)pthread_self());
+#elif defined(_MAC)
+      fprintf(errorsFile, "%s<%p>\t:\t", self, (void *)pthread_self());
+#endif
       vfprintf(errorsFile, format, arg);
       fflush(errorsFile);
       fclose(errorsFile);
     }
-     if(locking)pthread_mutex_unlock(&iop_errlog_mutex);
+    if(locking)pthread_mutex_unlock(&iop_errlog_mutex);
   }
   return;
 }
@@ -906,6 +910,8 @@ static void processRegisterCommand(int inFd, int outFd, int notifyGUI){
   return;
 }
 
+
+
 void processUnregisterCommand(int inFd, int outFd);
 void processUnregisterCommand(int inFd, int outFd){
   char name[PATH_MAX + 1];
@@ -931,7 +937,7 @@ void processUnregisterCommand(int inFd, int outFd){
   }
   log2File("UNREGISTER clause, sent slotNumber = %d\n", slotNumber);
   /* give victim time to exit by relinquishing CPU */
-  usleep(1);
+  iop_usleep(1);
   if(victim != NULL){
     deleteActor(victim);
     freeActor(victim);

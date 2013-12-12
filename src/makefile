@@ -16,8 +16,9 @@ CFLAGS = -Wall -D_MAC -arch i386 -g
 LIBS = -lpthread -lm  -arch i386 
 else
 LIBS =  -lm -pthread 
-CFLAGS =  -Wall -D_LINUX -D_POSIX_SOURCE -D_BSD_SOURCE -pedantic -Wno-unused-but-set-variable
+CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic -Wno-unused-but-set-variable
 # add to CFLAGS for debugging:
+# -D_POSIX_SOURCE -D_BSD_SOURCE _POSIX_C_SOURCE >= 199309L 199506L
 # -g 
 endif
 

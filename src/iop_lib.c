@@ -91,7 +91,11 @@ void announce(const char *format, ...){
   va_start(arg, format);
   if(self_debug_flag  && (format != NULL)){
     pthread_mutex_lock(&iop_err_mutex);
+#if defined(_LINUX)
     fprintf(stderr, "%s<%lu>\t:\t", self, (unsigned long)pthread_self());
+#elif defined(_MAC)
+    fprintf(stderr, "%s<%p>\t:\t", self, (void *)pthread_self());
+#endif
     vfprintf(stderr, format, arg);
     pthread_mutex_unlock(&iop_err_mutex);
   }
@@ -1115,4 +1119,22 @@ int waitForRegistry(void){
   fprintf(stderr, "failure in waitForRegistry: %s\n", strerror(errno));
   return 0;
   
+}
+
+
+void iop_usleep(uint32_t msec){
+  struct timespec timeout0;
+  struct timespec timeout1;
+  struct timespec* tmp;
+  struct timespec* t0 = &timeout0;
+  struct timespec* t1 = &timeout1;
+  
+  t0->tv_sec = msec / 1000;
+  t0->tv_nsec = (msec % 1000) * (1000 * 1000);
+
+  while ((nanosleep(t0, t1) == (-1)) && (errno == EINTR)){
+    tmp = t0;
+    t0 = t1;
+    t1 = tmp;
+  }
 }

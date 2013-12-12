@@ -135,7 +135,7 @@ int main(int argc, char** argv){
 	sendFormattedMsgFD(STDOUT_FILENO, "%s\n%s\n%s\n", sender, self, response->data);
       }
     }
-    usleep(100);
+    iop_usleep(100);
     sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
   }
 

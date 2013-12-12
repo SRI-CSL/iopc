@@ -47,7 +47,11 @@ static void eM(const char *format, ...){
   if(format != NULL){
     if(MSG_DEBUG && self_debug_flag){
       ec_rv( pthread_mutex_lock(&iop_err_mutex) );
+#if defined(_LINUX)
+      fprintf(stderr, "MSG(%lu)\t:\t", (unsigned long)pthread_self());
+#elif defined(_MAC)
       fprintf(stderr, "MSG(%p)\t:\t", (void *)pthread_self());
+#endif
       vfprintf(stderr, format, arg);
       ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
     }
@@ -336,7 +340,7 @@ msg* readMsg(int fd){
     goto exit;
   }
   eM("readMsg in %d added  buff to Msg\n", getpid());
-  while(usleep(1), (bytes = read(fd, buff, BUFFSZ)) > 0){
+  while(iop_usleep(1), (bytes = read(fd, buff, BUFFSZ)) > 0){
     eM("readMsg in %d read in non-blocking mode (bytes = %d)\n", getpid(), bytes);
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg  in %d failed\n", getpid());
@@ -430,7 +434,7 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     return NULL;
   }
-  while(usleep(1), 
+  while(iop_usleep(1), 
 	(bytes = read(fd, buff, BUFFSZ)) > 0){
     if(*exitFlag){ 
       eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);

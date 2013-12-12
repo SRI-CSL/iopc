@@ -201,7 +201,7 @@ int main(int argc, char** argv){
 	}
         announce("%s\n%s\ncloseOK\n", sender, self);
         sendFormattedMsgFP(stdout, "%s\n%s\ncloseOK\n", sender, self);
-	usleep(1);
+	iop_usleep(1);
         announce("Socket called %s unregistering\n", self);
 	slotNumber = deleteFromRegistry(self);
         announce("Socket called %s removed from slot %d, now exiting\n", 
