@@ -60,7 +60,7 @@ static void *netrequest_cmd_thread(void *arg){
 }
 
 
-static char* time2string(){
+static char* time2string(void){
   time_t t;
   char *date;
   time(&t);
@@ -95,7 +95,7 @@ EC_CLEANUP_END
 #endif
 }
 
-int msg2netlog(msg* message){
+static int msg2netlog(msg* message){
   if(message != NULL){
     FILE* fp = fopen(logFile,"aw");
     if(fp != NULL){
@@ -115,7 +115,7 @@ static void iop_netrequest_sigchild_handler(int sig){
   child = wait(&status);
 }
 
-static int iop_netrequest_installHandler(){
+static int iop_netrequest_installHandler(void){
   struct sigaction sigactchild;
   sigactchild.sa_handler = iop_netrequest_sigchild_handler;
   sigactchild.sa_flags = 0;
@@ -126,7 +126,7 @@ static int iop_netrequest_installHandler(){
 
 
 
-
+void* handleRequest(void* args);
 void* handleRequest(void* args){
   int from, to;
   echofds* fds = (echofds*)args;

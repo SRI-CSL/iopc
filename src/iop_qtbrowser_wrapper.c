@@ -61,12 +61,12 @@ static void chld_handler(int sig){
 }
 
 /* beef this up when relaxed */
-void forward(int fd, char* body){
+static void forward(int fd, char* body){
   write(fd, body, strlen(body));
   write(fd, "\n", sizeof(char));
 }
 
-void *handleBrowserResponses(void *arg){
+static void *handleBrowserResponses(void *arg){
   int outfd;
   if(arg == NULL){
     fprintf(stderr, "Bad arg to handleBrowserResponses\n");

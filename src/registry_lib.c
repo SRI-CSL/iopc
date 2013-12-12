@@ -74,7 +74,7 @@ static void parseOut(msg*);
 static char* cmd2str(registry_cmd_t);
 static void shutdownActor(actor_id *);
 static void deleteActor(actor_id*);
-static void shutdownRegistry();
+static void shutdownRegistry(void);
 static void freeActor(actor_id*);
 
 /* externs used in the log2File routine */
@@ -121,10 +121,10 @@ static void registry_sig_handler(int sig){
 static void registry_sigchld_handler(int sig){
   int status;
   pid_t child = waitpid(-1, &status, WNOHANG);
-  log2FileVolatile("waited on child with pid %d with exit status %d\n",  child, status);
+  log2FileVolatile("waited on (sig = %d) child with pid %d with exit status %d\n",  sig, child, status);
 }
 
-int registry_installHandler(){
+int registry_installHandler(void){
   struct sigaction sigactInt;
   struct sigaction sigactSegv;
   struct sigaction sigactChld;
@@ -152,7 +152,7 @@ int registry_installHandler(){
     }
 
 
-int makeRegistryFifos(){
+int makeRegistryFifos(void){
   log2File("Unlinking %s\n", registry_fifo_in);  
   /* try and clean up old copies, ignore failure */
   (void)unlink(registry_fifo_in);
@@ -193,7 +193,7 @@ int registryInit(int *fifo_in_fd, int *fifo_out_fd){
     }
 
 
-int errorsInit(){
+int errorsInit(void){
   ec_null( errorsFileName = calloc(PATH_MAX, sizeof(char)) );
   snprintf(errorsFileName, PATH_MAX, "/tmp/iop_%d_c_errors", iop_pid);
   snprintf(javaErrorsFileName, PATH_MAX, "/tmp/iop_%d_java_errors", iop_pid);
@@ -360,7 +360,7 @@ static int _allocateUniqueName(actor_spec *acts){
   }
 }
 
-static int _getEmptyRegistrySlot(){
+static int _getEmptyRegistrySlot(void){
   int retval = -1, i;
   for(i = 0; i < theRegistrySize; i++){
     if(theRegistry[i] == NULL){
@@ -783,14 +783,14 @@ void deleteActor(actor_id *act){
   }
 }
 
-static void shutdownRegistry(){
+static void shutdownRegistry(void){
   pthread_mutex_lock(&theRegistryMutex);
   bail();
   pthread_mutex_unlock(&theRegistryMutex);
   exit(EXIT_SUCCESS);
 }
 
-void bail(){
+void bail(void){
   int i;
   for(i = 0; i < theRegistrySize; i++){
     if(theRegistry[i] != NULL){
@@ -823,7 +823,8 @@ static void freeActor(actor_id* act){
   free(act);
 }
 
-void processSendCommand(int inFd, int outFd){
+static void processSendCommand(int inFd, int outFd);
+static void processSendCommand(int inFd, int outFd){
   int bytesin, actorId;
   char *buffin;
   actor_id* target;
@@ -866,7 +867,8 @@ void processSendCommand(int inFd, int outFd){
   return;
 }
 
-void processRegisterCommand(int inFd, int outFd, int notifyGUI){
+static void processRegisterCommand(int inFd, int outFd, int notifyGUI);
+static void processRegisterCommand(int inFd, int outFd, int notifyGUI){
   int slotNumber;
   actor_spec *acts = NULL;
   log2File("Reading actor spec\n");
@@ -904,6 +906,7 @@ void processRegisterCommand(int inFd, int outFd, int notifyGUI){
   return;
 }
 
+void processUnregisterCommand(int inFd, int outFd);
 void processUnregisterCommand(int inFd, int outFd){
   char name[PATH_MAX + 1];
   int len, slotNumber;
@@ -944,7 +947,8 @@ void processUnregisterCommand(int inFd, int outFd){
 
 }
 
-void processNameCommand(int cmd, int inFd, int outFd){
+static void processNameCommand(int cmd, int inFd, int outFd);
+static void processNameCommand(int cmd, int inFd, int outFd){
   int actorId, len;
   actor_id* target;
   char unk[] = UNKNOWNNAME;
@@ -1089,7 +1093,8 @@ static int sendMsg2Input(msg *message, output_cmd_t type){
 }
 
 
-char* registryLaunchActor(char* name, int argc, char** argv){
+static char* registryLaunchActor(char* name, int argc, char** argv);
+static char* registryLaunchActor(char* name, int argc, char** argv){
   int slot, i, errcode;
   char* retval = NULL;
   char* executable;
@@ -1189,7 +1194,8 @@ char* registryLaunchActor(char* name, int argc, char** argv){
 }
 
 
-void  processRegistryStartMessage(char *sender, char *rest, int notify){
+static void  processRegistryStartMessage(char *sender, char *rest, int notify);
+static void  processRegistryStartMessage(char *sender, char *rest, int notify){
   char *name, *args;
   if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistryStartMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
@@ -1226,7 +1232,8 @@ void  processRegistryStartMessage(char *sender, char *rest, int notify){
   }
 }
 
-void  processRegistryStopMessage(char *sender, char *rest){
+static void  processRegistryStopMessage(char *sender, char *rest);
+static void  processRegistryStopMessage(char *sender, char *rest){
   char *name, *args;
   log2File("Stopping %s\n", sender);
   if(getNextToken(rest, &name, &args) <= 0){
@@ -1266,7 +1273,8 @@ void  processRegistryStopMessage(char *sender, char *rest){
   }
 }
 
-void  processRegistrySelectMessage(char *sender, char *rest){
+static void  processRegistrySelectMessage(char *sender, char *rest);
+static void  processRegistrySelectMessage(char *sender, char *rest){
   char *name, *args;
   if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistrySelectMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
@@ -1285,7 +1293,8 @@ void  processRegistrySelectMessage(char *sender, char *rest){
   }
 }
 
-void  processRegistryNameMessage(char *sender, char *rest){
+static void  processRegistryNameMessage(char *sender, char *rest);
+static void  processRegistryNameMessage(char *sender, char *rest){
   char *name, *args;
   int slot = -1;
   if(getNextToken(rest, &name, &args) <= 0){
@@ -1361,7 +1370,8 @@ void  processRegistryNameMessage(char *sender, char *rest){
 }
 
 
-int parseActorSpec(actor_spec* acts, char* args){
+static int parseActorSpec(actor_spec* acts, char* args);
+static int parseActorSpec(actor_spec* acts, char* args){
   int retval = -1;
   if(acts->pid > 0){
     fprintf(stderr, "parseActorSpec: acts already complete\n");
@@ -1387,7 +1397,8 @@ int parseActorSpec(actor_spec* acts, char* args){
   return retval;
 }
 
-void  processRegistryEnrollMessage(char *sender, char *rest){
+static void  processRegistryEnrollMessage(char *sender, char *rest);
+static void  processRegistryEnrollMessage(char *sender, char *rest){
   char *name, *args;
   actor_id* subject = NULL;
   int slot = -1, errcode = -1;
@@ -1436,7 +1447,8 @@ void  processRegistryEnrollMessage(char *sender, char *rest){
 
 }
 
-void  processRegistryUnenrollMessage(char *sender, char *rest){
+static void  processRegistryUnenrollMessage(char *sender, char *rest);
+static void  processRegistryUnenrollMessage(char *sender, char *rest){
   char *name, *args;
   actor_id* victim = NULL;
   int slot = -1, errcode = -1;
@@ -1572,7 +1584,7 @@ static int registryProcessFile(FILE* filep){
   return counter;
 }
 
-int registryProcessConfigFile(){
+int registryProcessConfigFile(void){
   char ioprc[BUFFSZ];
   char* homedir = getenv(HOME);
   if(homedir == NULL){

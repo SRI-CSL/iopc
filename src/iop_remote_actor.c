@@ -44,7 +44,7 @@ static void remote_actor_sigpipe_handler(int sig){
   terminateIOP();
 }
 
-static int remote_actor_installHandler(){
+static int remote_actor_installHandler(void){
   struct sigaction sigactpipe;
   sigactpipe.sa_handler = remote_actor_sigpipe_handler;
   sigactpipe.sa_flags = 0;

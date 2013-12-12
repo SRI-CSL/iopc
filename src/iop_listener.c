@@ -99,7 +99,7 @@ static void listener_sigchild_handler(int sig){
   announce("Listener waited on child with pid %d with exit status %d\n", child, status);
 }
 
-static int listener_installHandler(){
+static int listener_installHandler(void){
   struct sigaction sigactchild;
   sigactchild.sa_handler = listener_sigchild_handler;
   sigactchild.sa_flags = 0;

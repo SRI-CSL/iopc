@@ -32,7 +32,8 @@ static struct {
   { NULL, 0, NULL, NULL}
 };
 
-void macrostr_init(void){
+static void macrostr_init(void);
+static void macrostr_init(void){
   if (macrostr_db[0].ms_code == 0) {
 #include "macrostr2.incl"
   }

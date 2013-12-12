@@ -67,7 +67,7 @@ actor_spec* newActor(int notify, char* executable, char** argv){
    that we get created by it.
 */
 
-static int nullifyHandler(){
+static int nullifyHandler(void){
   sigset_t sigmask;
   struct sigaction sigact;
   ec_neg1( sigfillset(&sigmask) );

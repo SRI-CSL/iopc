@@ -12,7 +12,8 @@
 #include "macrostr.h"
 #include "cheaders.h"
 
-const char *getdate_strerror(int e){
+static const char *getdate_strerror(int e);
+static const char *getdate_strerror(int e){
   const char *s[] = {
     "Invalid getdate_err value",
     "DATEMSK environment variable null or undefined",
@@ -28,7 +29,8 @@ const char *getdate_strerror(int e){
   return s[e];
 }
 
-char *syserrmsgtype(char *buf, size_t buf_max, const char *msg, int errno_arg, EC_ERRTYPE type){
+static char *syserrmsgtype(char *buf, size_t buf_max, const char *msg, int errno_arg, EC_ERRTYPE type);
+static char *syserrmsgtype(char *buf, size_t buf_max, const char *msg, int errno_arg, EC_ERRTYPE type){
 	const char *errmsg;
 	char *cat = "?";
 	if (msg == NULL)

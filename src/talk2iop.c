@@ -33,17 +33,17 @@ int main(int argc, char** argv){
   pthread_t inThreadhandle;
   unsigned short port;  
   char *host;
-  int socket;
+  int lsocket;
   if(argc != 3) {
     fprintf(stderr, "Usage: %s host port\n", argv[0]);
     return -1;
   }
   host = argv[1];
   port = atoi(argv[2]);
-  if(allocateSocket(port, host, &socket) != 1)
+  if(allocateSocket(port, host, &lsocket) != 1)
     return 0;
-  pthread_create(&outThreadhandle, NULL, in2socket, &socket);
-  pthread_create(&inThreadhandle, NULL, socket2outViolent, &socket);
+  pthread_create(&outThreadhandle, NULL, in2socket, &lsocket);
+  pthread_create(&inThreadhandle, NULL, socket2outViolent, &lsocket);
 
   pthread_join(outThreadhandle, NULL);
   pthread_join(inThreadhandle, NULL);

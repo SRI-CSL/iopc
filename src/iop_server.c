@@ -37,7 +37,7 @@ static char outputFile[] = "/tmp/iop_server_output.txt";
 static pthread_mutex_t server_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 
-static char* time2string(){
+static char* time2string(void){
   time_t t;
   char *date;
   time(&t);
@@ -49,6 +49,7 @@ static char* time2string(){
   return date;
 }
 
+void serverLog(const char *format, ...);
 void serverLog(const char *format, ...){
   FILE* logfp = NULL;
   va_list arg;
@@ -80,7 +81,7 @@ static void iop_server_sigchild_handler(int sig){
 	    child, status);
 }
 
-static int iop_server_installHandler(){
+static int iop_server_installHandler(void){
   struct sigaction sigactchild;
   sigactchild.sa_handler = iop_server_sigchild_handler;
   sigactchild.sa_flags = 0;

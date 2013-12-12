@@ -22,6 +22,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _IOP_ACTOR_H
+#define _IOP_ACTOR_H
+
 #include "types.h"
 
 actor_spec* makeActorSpec(char *);
@@ -34,3 +37,5 @@ int unlockFD(struct flock*, int, char*);
 int deleteFromRegistry(char *);
 int sendRequest(int, int, char*);
 int terminateIOP(void);
+
+#endif /* _IOP_ACTOR_H */

@@ -42,7 +42,7 @@ static void chld_handler(int sig){
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }
 
-int make_arguments(int argcIn, char** argvIn, char*** argvOut){
+static int make_arguments(int argcIn, char** argvIn, char*** argvOut){
   int i, cpIndex = -1, argcO;
   char *classpath = NULL;
   char** argvO = NULL;

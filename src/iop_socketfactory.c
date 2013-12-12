@@ -53,7 +53,7 @@ static void socketfactory_sigchild_handler(int sig){
   announce("Waited on child with pid %d with exit status %d\n", child, status);
 }
 
-static int socketfactory_installHandler(){
+static int socketfactory_installHandler(void){
   struct sigaction sigactchild;
   sigactchild.sa_handler = socketfactory_sigchild_handler;
   sigactchild.sa_flags = 0;

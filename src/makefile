@@ -22,6 +22,48 @@ CFLAGS =  -Wall -D_LINUX -pedantic -Wno-unused-but-set-variable
 endif
 
 
+# Standard Warnings
+CFLAGS	+=	-Wall 
+CFLAGS	+=	-Werror
+
+
+
+# Extended warnings
+#CFLAGS  +=     -Wextra
+#CFLAGS	+=	-Wshadow 
+CFLAGS	+=	-Wpointer-arith 
+CFLAGS	+=	-Wcast-align 
+#CFLAGS	+=	-Wwrite-strings
+CFLAGS	+=	-Waggregate-return 
+CFLAGS	+=	-Wstrict-prototypes 
+CFLAGS	+=	-Wmissing-prototypes
+CFLAGS	+=	-Wmissing-declarations 
+CFLAGS	+=	-Wredundant-decls 
+CFLAGS	+=	-Wnested-externs
+CFLAGS	+=	-Winline 
+CFLAGS	+=	-Wbad-function-cast 
+CFLAGS	+=	-fstrict-aliasing
+CFLAGS	+=	-fno-common 
+CFLAGS	+=	-Wno-packed 
+CFLAGS	+=	-Wswitch-default
+CFLAGS	+=	-Wformat=2 
+CFLAGS	+=	-Wformat-security
+#CFLAGS	+=	-Wmissing-format-attribute
+CFLAGS	+=	-D_REENTRANT 
+CFLAGS	+=	-D_THREAD_SAFE 
+CFLAGS	+=	-pipe 
+CFLAGS	+=	-Wunused 
+CFLAGS	+=	-Winit-self
+CFLAGS	+=	-Wno-long-long 
+CFLAGS	+=	-Wmissing-include-dirs
+CFLAGS	+=	-Wno-variadic-macros
+CFLAGS	+=	-ansi 
+CFLAGS	+=	-std=c99
+CFLAGS	+=	-pedantic
+
+
+
+
 EXE = talk2iop\
       iop_executor\
       iop_registry\

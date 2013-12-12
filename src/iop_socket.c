@@ -45,7 +45,7 @@ static void socket_sigpipe_handler(int sig){
   exit(EXIT_FAILURE);
 }
 
-static int socket_installHandler(){
+static int socket_installHandler(void){
   struct sigaction sigactpipe;
   sigactpipe.sa_handler = socket_sigpipe_handler;
   sigactpipe.sa_flags = 0;

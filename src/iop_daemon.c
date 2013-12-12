@@ -38,7 +38,7 @@ static char outputFile[]  =   "/var/log/iop/output.log";
 static pthread_mutex_t daemon_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 
-static char* time2string(){
+static char* time2string(void){
   time_t t;
   char *date;
   time(&t);
@@ -50,7 +50,7 @@ static char* time2string(){
   return date;
 }
 
-void daemonLog(const char *format, ...){
+static void daemonLog(const char *format, ...){
   FILE* logfp = NULL;
   va_list arg;
   va_start(arg, format);
@@ -82,7 +82,7 @@ static void iop_daemon_sigchild_handler(int sig){
 }
 
 
-static int iop_daemon_installHandler(){
+static int iop_daemon_installHandler(void){
   struct sigaction sigactchild;
   sigactchild.sa_handler = iop_daemon_sigchild_handler;
   sigactchild.sa_flags = 0;
@@ -90,7 +90,7 @@ static int iop_daemon_installHandler(){
   return sigaction(SIGCHLD, &sigactchild, NULL);
 }
 
-int iop_daemon_io_config(){
+static int iop_daemon_io_config(void){
   int outfd = open(outputFile, O_CREAT|O_RDWR|O_APPEND, S_IRWXU);
   if(outfd < 0){
     return 1;

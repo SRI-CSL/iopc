@@ -56,7 +56,7 @@ extern pid_t iop_pid;
 extern char* iop_bin_dir;
 
 /* statics */
-static void wait4shutdown();
+static void wait4shutdown(void);
 static actor_spec *launchActor(int notify, char* name, char* exe, char** argv);
 
 static actor_spec *launchMaude(int argc, char** argv);
@@ -71,14 +71,14 @@ static actor_spec *launchRemoteActor(int remoteFd);
 static char** mkRegistryArgv(int, char**, char*, char*, char*, char*, char*);
 static void iop_sigint_handler(int);
 static void iop_sigchld_handler(int);
-static int iop_installHandler();
+static int iop_installHandler(void);
 static int findListeningPort4In2Reg(int *, int *);
-static void chatter();
+static void chatter(void);
 static void registryDump(FILE*);
-static void killActors();
+static void killActors(void);
 static char* fetchActorName(int);
 /* static int fetchRegistrySize(); */
-static int waitForRegistry();
+static int waitForRegistry(void);
 
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -298,7 +298,7 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
 }
 
-static void wait4shutdown(){
+static void wait4shutdown(void){
   while(1){
     int status;
     int retval = waitpid(registry_pid, &status, 0);
@@ -805,11 +805,11 @@ int getNextToken(char *buff, char** next, char** rest){
 }
 
 
-static void  intructions(){
+static void  intructions(void){
   fprintf(stderr, INSTRUCTIONS);
 }
 
-static void scursor(){
+static void scursor(void){
   fprintf(stderr, "selection> ");
 }
 
@@ -825,7 +825,7 @@ static int isNumber(char* str){
   return 1;
 }
 
-void chatter(){
+void chatter(void){
   char buff[BUFFSZ + 1];
   int bytesin, actorId;
   intructions();

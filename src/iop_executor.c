@@ -41,7 +41,7 @@ static void executor_sigchild_handler(int sig){
   child = waitpid(-1, &status, WNOHANG); 
 }
 
-static int executor_installHandler(){
+static int executor_installHandler(void){
   struct sigaction sigactchild;
   sigactchild.sa_handler = executor_sigchild_handler;
   sigactchild.sa_flags = 0;
