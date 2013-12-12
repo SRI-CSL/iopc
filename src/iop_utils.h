@@ -22,25 +22,19 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#ifndef _IOP_REGISTRY_LIB_H
-#define _IOP_REGISTRY_LIB_H
 
-#include "actor.h"
-#include "constants.h"
+#ifndef _IOP_UTILS_H
+#define _IOP_UTILS_H
 
-int registry_install_handlers(void);
-int makeRegistryFifos(void);
-int registryInit(int *, int *);
-int errorsInit(void);
-/* does locking */
-void log2File(const char *format, ...);
-/* doesn't do locking (used in signal handlers) */
-void log2FileVolatile(const char *format, ...);
-void bail(void);
-void processRegistryCommand(int, int, int);
-void *monitorInSocket(void *);
-void processRegistryMessage(char*, char*);
-int registryProcessConfigFile(void);
-int registryProcessStartupFile(char*);
+#include <inttypes.h>
 
-#endif /* _IOP_REGISTRY_LIB_H */
+int iop_install_handler(int sig, int flags, void (*sig_handler)(int));
+
+int iop_install_handlers(void (*chld_fun)(int), void (*intr_fun)(int));
+
+void iop_usleep(uint32_t msec);
+
+char* time2string(void);
+
+
+#endif /* _IOP_UTILS_H */

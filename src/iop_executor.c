@@ -27,6 +27,7 @@
 #include "types.h"
 #include "actor.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "msg.h"
 #include "externs.h"
 #include "dbugflags.h"
@@ -41,17 +42,6 @@ static void executor_sigchild_handler(int sig){
   child = waitpid(-1, &status, WNOHANG); 
 }
 
-static int executor_installHandler(void){
-  struct sigaction sigactchild;
-  sigactchild.sa_handler = executor_sigchild_handler;
-  sigactchild.sa_flags = 0;
-  ec_neg1( sigfillset(&sigactchild.sa_mask) );
-  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
-  return 0;
-EC_CLEANUP_BGN
-  return -1;
-EC_CLEANUP_END
-}
 
 
 int main(int argc, char** argv){
@@ -62,7 +52,7 @@ int main(int argc, char** argv){
   self = argv[0];
   self_debug_flag = EXECUTOR_DEBUG;
 
-  if(executor_installHandler() < 0){
+  if(iop_install_handler(SIGCHLD, 0, executor_sigchild_handler) < 0){
     fprintf(stderr, "couldn't install handler\n");
     exit(EXIT_FAILURE);
   }

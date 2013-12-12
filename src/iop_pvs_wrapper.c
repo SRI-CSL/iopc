@@ -28,6 +28,7 @@
 #include "dbugflags.h"
 #include "wrapper_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "externs.h"
 #include "ec.h"
 
@@ -59,7 +60,7 @@ int main(int argc, char** argv){
   self_debug_flag  = PVS_ACTOR_DEBUG;
   self = argv[0];
 
-  ec_neg1( wrapper_installHandler(chld_handler, intr_handler) );
+  ec_neg1( iop_install_handlers(chld_handler, intr_handler) );
 
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );

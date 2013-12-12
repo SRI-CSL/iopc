@@ -11,6 +11,7 @@
 #include "actor.h"
 #include "msg.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
@@ -52,7 +53,7 @@ int main(int argc, char** argv){
   self_debug_flag  = SAL_ACTOR_DEBUG;
   self = argv[0];
 
-  ec_neg1( wrapper_installHandler(chld_handler, intr_handler) );
+  ec_neg1( iop_install_handlers(chld_handler, intr_handler) );
 
 
   while(1){

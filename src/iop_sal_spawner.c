@@ -4,6 +4,7 @@
 #include "actor.h"
 #include "msg.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "externs.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h"
@@ -47,7 +48,7 @@ int main(int argc, char** argv){
   registry_fifo_out = argv[2];
 
   
-  ec_neg1( wrapper_installHandler(child_handler, wrapper_sigint_handler) );
+  ec_neg1( iop_install_handlers(child_handler, wrapper_sigint_handler) );
 
   while(1){
     requestNo++;

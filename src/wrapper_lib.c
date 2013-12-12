@@ -30,6 +30,7 @@
 #include "dbugflags.h"
 #include "wrapper_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "ec.h"
 
 extern pid_t child;
@@ -40,28 +41,6 @@ void wrapper_sigint_handler(int sig){
   /* don't think it used to?                                */
   _exit(EXIT_FAILURE);
 }
-
-int wrapper_installHandler(void (*chld_fun)(int), void (*intr_fun)(int)){
-  struct sigaction sigactchild;
-  struct sigaction sigactint;
-  sigactchild.sa_handler = chld_fun;
-  sigactchild.sa_flags = SA_NOCLDSTOP;
-  ec_neg1( sigfillset(&sigactchild.sa_mask) );
-  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
-
-  sigactint.sa_handler = intr_fun;
-  sigactint.sa_flags = 0;
-  ec_neg1( sigfillset(&sigactint.sa_mask) );
-  ec_neg1( sigaction(SIGINT, &sigactint, NULL) );
-
-  return 0;
-
-EC_CLEANUP_BGN
-  return -1;
-EC_CLEANUP_END
-
-}
-
 
 void parseMaudeThenEcho(int from, int to){
   msg* message;

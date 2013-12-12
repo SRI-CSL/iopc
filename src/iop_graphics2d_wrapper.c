@@ -29,6 +29,7 @@
 #include "dbugflags.h"
 #include "wrapper_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "ec.h"
 #include "externs.h"
 
@@ -136,7 +137,7 @@ int main(int argc, char** argv){
     g2dargv[argc + 3] = NULL;
   */
 
-  ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
+  ec_neg1( iop_install_handlers(chld_handler, wrapper_sigint_handler) );
 
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );

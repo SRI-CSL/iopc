@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "msg.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "dbugflags.h"
 #include "wrapper_lib.h" 
 #include "externs.h"
@@ -22,7 +23,7 @@ int main(int argc, char** argv){
   self_debug_flag  = SALWRAPPER_DEBUG;
   self = argv[0];
   
-  ec_neg1( wrapper_installHandler(chld_handler, wrapper_sigint_handler) );
+  ec_neg1( iop_install_handlers(chld_handler, wrapper_sigint_handler) );
   
   ec_neg1( pipe(pin) );
   ec_neg1( pipe(perr) );

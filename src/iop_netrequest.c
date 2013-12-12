@@ -28,6 +28,7 @@
 #include "msg.h"
 #include "socket_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "externs.h"
 #include "dbugflags.h"
 #include "ec.h"
@@ -59,18 +60,6 @@ static void *netrequest_cmd_thread(void *arg){
   return NULL;
 }
 
-
-static char* time2string(void){
-  time_t t;
-  char *date;
-  time(&t);
-  date = ctime(&t);
-  if(date != NULL){
-    char* cr = strchr(date, '\n');
-    if(cr != NULL){ cr[0] = '\t';  }
-  }
-  return date;
-}
 
 void netlog(const char *format, ...){
 #if NETREQUEST_DEBUG == 1
@@ -115,17 +104,6 @@ static void iop_netrequest_sigchild_handler(int sig){
   child = wait(&status);
 }
 
-static int iop_netrequest_installHandler(void){
-  struct sigaction sigactchild;
-  sigactchild.sa_handler = iop_netrequest_sigchild_handler;
-  sigactchild.sa_flags = 0;
-  sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
-}
-
-
-
-
 void* handleRequest(void* args);
 void* handleRequest(void* args){
   int from, to;
@@ -169,7 +147,7 @@ int main(int argc, char *argv[]){
   port = atoi(argv[1]);
   self = argv[2];
 
-  if(iop_netrequest_installHandler() != 0){
+  if(iop_install_handler(SIGCHLD, 0, iop_netrequest_sigchild_handler) != 0){
     netlog("iop_netrequest could not install signal handler");
     exit(EXIT_FAILURE);
   }

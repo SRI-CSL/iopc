@@ -44,7 +44,7 @@ static void remote_actor_sigpipe_handler(int sig){
   terminateIOP();
 }
 
-static int remote_actor_installHandler(void){
+static int remote_actor_install_handler(void){
   struct sigaction sigactpipe;
   sigactpipe.sa_handler = remote_actor_sigpipe_handler;
   sigactpipe.sa_flags = 0;
@@ -71,7 +71,7 @@ int main(int argc, char** argv){
   registry_fifo_in  = argv[2];
   registry_fifo_out = argv[3];
 
-  if(remote_actor_installHandler() != 0){
+  if(remote_actor_install_handler() != 0){
     perror("remote_actor couldn't install handler\n");
     goto fail;
   }

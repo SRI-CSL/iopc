@@ -28,6 +28,7 @@
 #include "actor.h"
 #include "msg.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
@@ -45,7 +46,7 @@ static void socket_sigpipe_handler(int sig){
   exit(EXIT_FAILURE);
 }
 
-static int socket_installHandler(void){
+static int socket_install_handler(void){
   struct sigaction sigactpipe;
   sigactpipe.sa_handler = socket_sigpipe_handler;
   sigactpipe.sa_flags = 0;
@@ -76,7 +77,7 @@ int main(int argc, char** argv){
   registry_fifo_in  = argv[2];
   registry_fifo_out = argv[3];
 
-  if(socket_installHandler() != 0){
+  if(socket_install_handler() != 0){
     perror("socket couldn't install handler\n");
     exit(EXIT_FAILURE);
   }

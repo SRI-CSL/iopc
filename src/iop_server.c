@@ -27,6 +27,7 @@
 #include "types.h"
 #include "socket_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "externs.h"
 #include "dbugflags.h"
 #include "ec.h"
@@ -36,18 +37,6 @@ static char outputFile[] = "/tmp/iop_server_output.txt";
 
 static pthread_mutex_t server_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
-static char* time2string(void){
-  time_t t;
-  char *date;
-  time(&t);
-  date = ctime(&t);
-  if(date != NULL){
-    char* cr = strchr(date, '\n');
-    if(cr != NULL){ cr[0] = '\t';  }
-  }
-  return date;
-}
 
 void serverLog(const char *format, ...);
 void serverLog(const char *format, ...){
@@ -79,14 +68,6 @@ static void iop_server_sigchild_handler(int sig){
   child = wait(&status);
   serverLog("Server waited on child with pid %d with exit status %d\n", 
 	    child, status);
-}
-
-static int iop_server_installHandler(void){
-  struct sigaction sigactchild;
-  sigactchild.sa_handler = iop_server_sigchild_handler;
-  sigactchild.sa_flags = 0;
-  sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
 }
 
 int main(int argc, char *argv[]){
@@ -146,7 +127,7 @@ int main(int argc, char *argv[]){
 
   /* N.B. all errors should now go to outputFile */
   
-  if(iop_server_installHandler() != 0){
+  if(iop_install_handler(SIGCHLD, 0, iop_server_sigchild_handler) != 0){
     perror("iop_server could not install signal handler");
     exit(EXIT_FAILURE);
   }

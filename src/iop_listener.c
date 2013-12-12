@@ -28,6 +28,7 @@
 #include "actor.h"
 #include "msg.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
@@ -99,18 +100,6 @@ static void listener_sigchild_handler(int sig){
   announce("Listener waited on child with pid %d with exit status %d\n", child, status);
 }
 
-static int listener_installHandler(void){
-  struct sigaction sigactchild;
-  sigactchild.sa_handler = listener_sigchild_handler;
-  sigactchild.sa_flags = 0;
-  ec_neg1( sigfillset(&sigactchild.sa_mask) );
-  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
-  return 0;
-EC_CLEANUP_BGN
-  return -1;
-EC_CLEANUP_END
-}
-
 int main(int argc, char** argv){
   char *description, socketName[SIZE], fdName[SIZE];
   int *msgsock;
@@ -134,7 +123,7 @@ int main(int argc, char** argv){
   registry_fifo_out = argv[4];
   iop_pid = atoi(argv[5]);
 
-  if(listener_installHandler() != 0){
+  if(iop_install_handler(SIGCHLD, 0, listener_sigchild_handler) != 0){
     perror("Could not install signal handler");
     exit(EXIT_FAILURE);
   }

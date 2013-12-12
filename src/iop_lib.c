@@ -27,6 +27,7 @@
 #include "types.h"
 #include "registry_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "msg.h"
 #include "argv.h"
 #include "socket_lib.h"
@@ -71,7 +72,6 @@ static actor_spec *launchRemoteActor(int remoteFd);
 static char** mkRegistryArgv(int, char**, char*, char*, char*, char*, char*);
 static void iop_sigint_handler(int);
 static void iop_sigchld_handler(int);
-static int iop_installHandler(void);
 static int findListeningPort4In2Reg(int *, int *);
 static void chatter(void);
 static void registryDump(FILE*);
@@ -172,9 +172,9 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
 
 
-  announce("installing signal handler\n");
-  if(iop_installHandler() != 0){
-    perror("could not install signal handler");
+  announce("installing signal handlers\n");
+  if(iop_install_handlers(iop_sigchld_handler, iop_sigint_handler) != 0){
+    perror("could not install signal handlers");
     exit(EXIT_FAILURE);
   }
   announce("installed signal handler\n");
@@ -697,21 +697,6 @@ void iop_sigchld_handler(int sig){
   return;
 }
 
-
-int iop_installHandler(){
-  struct sigaction sigactInt;
-  struct sigaction sigactChld;
-  sigactInt.sa_handler = iop_sigint_handler;
-  sigactInt.sa_flags = SA_NOCLDSTOP;
-  sigfillset(&sigactInt.sa_mask);
-  if(sigaction(SIGINT, &sigactInt, NULL) != 0){ return -1; }
-  sigactChld.sa_handler = iop_sigchld_handler;
-  sigactChld.sa_flags = 0;
-  sigfillset(&sigactChld.sa_mask);
-  return sigaction(SIGCHLD, &sigactChld, NULL);
-}
-
-
 /* 
    N.B. A Mac OS X bug makes it necessary that C looks for odd ports, while Java
    looks for even ports.
@@ -1122,19 +1107,3 @@ int waitForRegistry(void){
 }
 
 
-void iop_usleep(uint32_t msec){
-  struct timespec timeout0;
-  struct timespec timeout1;
-  struct timespec* tmp;
-  struct timespec* t0 = &timeout0;
-  struct timespec* t1 = &timeout1;
-  
-  t0->tv_sec = msec / 1000;
-  t0->tv_nsec = (msec % 1000) * (1000 * 1000);
-
-  while ((nanosleep(t0, t1) == (-1)) && (errno == EINTR)){
-    tmp = t0;
-    t0 = t1;
-    t1 = tmp;
-  }
-}

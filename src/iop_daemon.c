@@ -27,6 +27,7 @@
 #include "types.h"
 #include "socket_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "externs.h"
 #include "dbugflags.h"
 #include "ec.h"
@@ -37,18 +38,6 @@ static char outputFile[]  =   "/var/log/iop/output.log";
 
 static pthread_mutex_t daemon_log_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
-static char* time2string(void){
-  time_t t;
-  char *date;
-  time(&t);
-  date = ctime(&t);
-  if(date != NULL){
-    char* cr = strchr(date, '\n');
-    if(cr != NULL){ cr[0] = '\t';  }
-  }
-  return date;
-}
 
 static void daemonLog(const char *format, ...){
   FILE* logfp = NULL;
@@ -82,13 +71,6 @@ static void iop_daemon_sigchild_handler(int sig){
 }
 
 
-static int iop_daemon_installHandler(void){
-  struct sigaction sigactchild;
-  sigactchild.sa_handler = iop_daemon_sigchild_handler;
-  sigactchild.sa_flags = 0;
-  sigfillset(&sigactchild.sa_mask);
-  return sigaction(SIGCHLD, &sigactchild, NULL);
-}
 
 static int iop_daemon_io_config(void){
   int outfd = open(outputFile, O_CREAT|O_RDWR|O_APPEND, S_IRWXU);
@@ -118,7 +100,7 @@ int main(int argc, char *argv[]){
   /* we want to be a daemon, so lets do that first */
 
   /* N.B. all errors should now go to outputFile */
-  if(iop_daemon_installHandler() != 0){
+  if(iop_install_handler(SIGCHLD, 0, iop_daemon_sigchild_handler) != 0){
     fprintf(stderr, "iop_daemon could not install signal handler");
     exit(EXIT_FAILURE);
   }

@@ -90,7 +90,7 @@ int main(int argc, char** argv){
   assert(strlen(iop_bin_dir)       < PATH_MAX);
   
   /* install signal handlers */
-  if(registry_installHandler() != 0){
+  if(registry_install_handlers() != 0){
     perror("could not install signal handler");
     goto killIOP;
   }

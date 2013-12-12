@@ -28,6 +28,7 @@
 #include "actor.h"
 #include "msg.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "socket_lib.h"
 #include "externs.h"
 #include "dbugflags.h"
@@ -53,18 +54,6 @@ static void socketfactory_sigchild_handler(int sig){
   announce("Waited on child with pid %d with exit status %d\n", child, status);
 }
 
-static int socketfactory_installHandler(void){
-  struct sigaction sigactchild;
-  sigactchild.sa_handler = socketfactory_sigchild_handler;
-  sigactchild.sa_flags = 0;
-  ec_neg1( sigfillset(&sigactchild.sa_mask) );
-  ec_neg1( sigaction(SIGCHLD, &sigactchild, NULL) );
-  return 0;
-EC_CLEANUP_BGN
-  return -1;
-EC_CLEANUP_END
-}
-
 int main(int argc, char** argv){
   msg *message = NULL;
   char childName[SIZE], fdName[SIZE], iopPid[SIZE];
@@ -86,7 +75,7 @@ int main(int argc, char** argv){
   registry_fifo_in  = argv[1];
   registry_fifo_out = argv[2];
 
-  if(socketfactory_installHandler() != 0){
+  if(iop_install_handler(SIGCHLD, 0, socketfactory_sigchild_handler) != 0){
     perror("socketfactory could not install signal handler");
     exit(EXIT_FAILURE);
   }

@@ -27,6 +27,7 @@
 #include "types.h"
 #include "msg.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "actor.h"
 #include "dbugflags.h"
 #include "ec.h"

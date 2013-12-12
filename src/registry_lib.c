@@ -27,6 +27,7 @@
 #include "types.h"
 #include "registry_lib.h"
 #include "iop_lib.h"
+#include "iop_utils.h"
 #include "socket_lib.h"
 #include "msg.h"
 #include "dbugflags.h"
@@ -128,7 +129,7 @@ static void registry_sigchld_handler(int sig){
   log2FileVolatile("waited on (sig = %d) child with pid %d with exit status %d\n",  sig, child, status);
 }
 
-int registry_installHandler(void){
+int registry_install_handlers(void){
   struct sigaction sigactInt;
   struct sigaction sigactSegv;
   struct sigaction sigactChld;
