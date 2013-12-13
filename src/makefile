@@ -45,8 +45,8 @@ CFLAGS	+=	-fstrict-aliasing
 CFLAGS	+=	-fno-common 
 CFLAGS	+=	-Wno-packed 
 CFLAGS	+=	-Wswitch-default
-CFLAGS	+=	-Wformat=2 
-CFLAGS	+=	-Wformat-security
+#CFLAGS	+=	-Wformat=2 
+#CFLAGS	+=	-Wformat-security
 #CFLAGS	+=	-Wmissing-format-attribute
 CFLAGS	+=	-D_REENTRANT 
 CFLAGS	+=	-D_THREAD_SAFE 
