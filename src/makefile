@@ -23,41 +23,43 @@ endif
 
 
 # Standard Warnings
-CFLAGS	+=	-Wall 
-CFLAGS	+=	-Werror
+CWFLAGS	+=	-Wall 
+CWFLAGS	+=	-Werror
 
 # Extended warnings
-CFLAGS  +=     -Wextra
-#CFLAGS	+=	-Wshadow 
-CFLAGS	+=	-Wpointer-arith 
-CFLAGS	+=	-Wcast-align 
-#CFLAGS	+=	-Wwrite-strings
-CFLAGS	+=	-Waggregate-return 
-CFLAGS	+=	-Wstrict-prototypes 
-CFLAGS	+=	-Wmissing-prototypes
-CFLAGS	+=	-Wmissing-declarations 
-CFLAGS	+=	-Wredundant-decls 
-CFLAGS	+=	-Wnested-externs
-CFLAGS	+=	-Winline 
-CFLAGS	+=	-Wbad-function-cast 
-CFLAGS	+=	-fstrict-aliasing
-CFLAGS	+=	-fno-common 
-CFLAGS	+=	-Wno-packed 
-CFLAGS	+=	-Wswitch-default
-#CFLAGS	+=	-Wformat=2 
-#CFLAGS	+=	-Wformat-security
-#CFLAGS	+=	-Wmissing-format-attribute
-CFLAGS	+=	-D_REENTRANT 
-CFLAGS	+=	-D_THREAD_SAFE 
-CFLAGS	+=	-pipe 
-CFLAGS	+=	-Wunused 
-CFLAGS	+=	-Winit-self
-CFLAGS	+=	-Wno-long-long 
-CFLAGS	+=	-Wmissing-include-dirs
-CFLAGS	+=	-Wno-variadic-macros
-CFLAGS	+=	-ansi 
-CFLAGS	+=	-std=c99
-CFLAGS	+=	-pedantic
+CWFLAGS  +=     -Wextra
+#CWFLAGS	+=	-Wshadow 
+CWFLAGS	+=	-Wpointer-arith 
+CWFLAGS	+=	-Wcast-align 
+#CWFLAGS	+=	-Wwrite-strings
+CWFLAGS	+=	-Waggregate-return 
+CWFLAGS	+=	-Wstrict-prototypes 
+CWFLAGS	+=	-Wmissing-prototypes
+CWFLAGS	+=	-Wmissing-declarations 
+CWFLAGS	+=	-Wredundant-decls 
+CWFLAGS	+=	-Wnested-externs
+CWFLAGS	+=	-Winline 
+CWFLAGS	+=	-Wbad-function-cast 
+CWFLAGS	+=	-fstrict-aliasing
+CWFLAGS	+=	-fno-common 
+CWFLAGS	+=	-Wno-packed 
+CWFLAGS	+=	-Wswitch-default
+#CWFLAGS	+=	-Wformat=2 
+#CWFLAGS	+=	-Wformat-security
+#CWFLAGS	+=	-Wmissing-format-attribute
+CWFLAGS	+=	-D_REENTRANT 
+CWFLAGS	+=	-D_THREAD_SAFE 
+CWFLAGS	+=	-pipe 
+CWFLAGS	+=	-Wunused 
+CWFLAGS	+=	-Winit-self
+CWFLAGS	+=	-Wno-long-long 
+CWFLAGS	+=	-Wmissing-include-dirs
+CWFLAGS	+=	-Wno-variadic-macros
+CWFLAGS	+=	-ansi 
+CWFLAGS	+=	-std=c99
+CWFLAGS	+=	-pedantic
+
+CFLAGS += ${CWFLAGS}
 
 EXE = talk2iop\
       iop_executor\
@@ -115,8 +117,6 @@ all:  scripts ${EXE}
 
 ${EXE}: %: %.o ${COBJS} ${HEADERS} ${MISC}
 	${COMPILER}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
-
-#${CFLAGS}
 
 %.o: %.c %.h ${HEADERS} ${MISC}
 	${COMPILER} ${CFLAGS} $< -c 
