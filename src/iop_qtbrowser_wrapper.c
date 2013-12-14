@@ -51,7 +51,7 @@ static  int child_died = 0;
 static  int exiting    = 0;
 
 static void chld_handler(int sig){
-  fprintf(stderr, "%s died! exiting = %d\n", self, exiting);
+  fprintf(stderr, "%s died (%d)! exiting = %d\n", self, sig, exiting);
   child_died = 1;
   if(exiting){
     /* don't restart */

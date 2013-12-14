@@ -39,6 +39,7 @@ void wrapper_sigint_handler(int sig){
   if(child > 0){  kill(child, SIGKILL);   }
   /* calling exit rather than _exit causes a SIGSEGV in RH9 */
   /* don't think it used to?                                */
+  fprintf(stderr, "Caught %d\n", sig);
   _exit(EXIT_FAILURE);
 }
 

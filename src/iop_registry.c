@@ -41,6 +41,9 @@ static void *registryCommandThread(void* arg){
   while(1){
     processRegistryCommand(fifoIn, fifoOut, 1);
   }
+  if(REGISTRY_DEBUG){
+    fprintf(stderr, "registryCommandThread %p\n", arg);
+  }
   return NULL;
 }
 

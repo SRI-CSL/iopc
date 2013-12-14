@@ -22,6 +22,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _IOP_LIB_H
+#define _IOP_LIB_H
+
 void announce(const char *format, ...);
 void spawnServer(int argc, char** argv, int no_windows);
 void spawnDaemon(int argc, char** argv);
@@ -35,3 +38,5 @@ pid_t spawnProcess(char*, char*[]);
 int parseActorMsg(char*, char**, char**);
 int getNextToken(char *, char**, char**);
 char* iop_alloc_jarpath(char*, char*, char*);
+
+#endif /* _IOP_LIB_H */

@@ -25,6 +25,7 @@
 #include "cheaders.h"
 #include "constants.h"
 #include "types.h"
+#include "argv.h"
 #include "actor.h"
 #include "iop_lib.h"
 #include "iop_utils.h"
@@ -39,6 +40,7 @@ static void executor_sigchild_handler(int sig){
   /* for the prevention of zombies */
   pid_t child;
   int status;
+  fprintf(stderr, "Caught %d\n", sig);
   child = waitpid(-1, &status, WNOHANG); 
 }
 
@@ -48,9 +50,12 @@ int main(int argc, char** argv){
   msg* message = NULL;
   char *sender, *body;
   int retval, errcode;
-
+  
   self = argv[0];
   self_debug_flag = EXECUTOR_DEBUG;
+  if(EXECUTOR_DEBUG){
+    printArgv(stderr, argc, argv, self);
+  }
 
   if(iop_install_handler(SIGCHLD, 0, executor_sigchild_handler) < 0){
     fprintf(stderr, "couldn't install handler\n");

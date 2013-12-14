@@ -39,7 +39,7 @@ static char maude_exe[] = "maude";
 static char* maude_argv[] = {"maude", "-no-tecla", "-interactive", NULL};
 
 static void chld_handler(int sig){
-  fprintf(stderr, "%s died! Exiting\n", maude_exe);
+  fprintf(stderr, "%s died (%d)!\n",  maude_exe, sig);
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }
 
@@ -51,7 +51,7 @@ static int child_STDERR_FILENO = STDERR_FILENO;
 
 static void *echoMaude(void *arg){
   while(1){
-    announce("Listening to Maude\n");
+    announce("Listening to Maude; %p\n", arg);
     wait4IO(child_STDOUT_FILENO, child_STDERR_FILENO, parseMaudeThenEcho);
   }
   return NULL; 

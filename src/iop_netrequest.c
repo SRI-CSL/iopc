@@ -52,7 +52,7 @@ static void *netrequest_cmd_thread(void *arg){
     netlog("%s waiting to process request number %d\n", me, requestNo);
     message = acceptMsg(STDIN_FILENO);
     if(message == NULL){
-      netlog("%s readMsg failed", me);
+      netlog("%s readMsg failed; %p", me, arg);
       continue;
     }
     netlog("%s processing request:\n\"%s\"\n", me, message->data);
@@ -98,6 +98,7 @@ static int msg2netlog(msg* message){
 }
 
 static void iop_netrequest_sigchild_handler(int sig){
+  fprintf(stderr, "%s died (%d)!\n", self, sig);
   /* for the prevention of zombies */
   pid_t child;
   int status;
@@ -106,7 +107,7 @@ static void iop_netrequest_sigchild_handler(int sig){
 
 void* handleRequest(void* args);
 void* handleRequest(void* args){
-  int from, to;
+  int from = -1, to = -1;
   echofds* fds = (echofds*)args;
   if(fds == NULL) goto fail;
   from = fds->from;
@@ -126,7 +127,7 @@ void* handleRequest(void* args){
   }
   
  fail:
-  close(from);
+  if(from != -1){ close(from); }
   return NULL;
 }
 

@@ -22,6 +22,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _IOP_MSG_H
+#define _IOP_MSG_H
+
 #include "types.h"
 
 int mywrite(int fd, char *buff, int count, int verbose);
@@ -58,3 +61,5 @@ void* echoLoopDieOnFail(void* args);
 void* echoLoop(void* args);
 void wait4IO(int fdout, int fderr,void (*fp)(int ,int ));
 void echo2Input(int from, int to);
+
+#endif /* _IOP_MSG_H */

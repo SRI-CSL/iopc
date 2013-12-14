@@ -22,9 +22,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _IOP_WRAPPER_LIB_H
+#define _IOP_WRAPPER_LIB_H
+
 void  wrapper_sigint_handler(int sig);
 void *echoErrorsSilently(void *arg);
 void *wrapper_echoOutSilently(void *);
 void  parseMaudeThenEcho(int, int);
 void  parsePVSThenEcho(char* prompt, int from, int to);
 int   parseString(char*, int);
+
+
+#endif /* _IOP_WRAPPER_LIB_H */

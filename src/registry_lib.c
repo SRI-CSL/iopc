@@ -828,8 +828,8 @@ static void freeActor(actor_id* act){
   free(act);
 }
 
-static void processSendCommand(int inFd, int outFd);
-static void processSendCommand(int inFd, int outFd){
+static void processSendCommand(int inFd);
+static void processSendCommand(int inFd){
   int bytesin, actorId;
   char *buffin;
   actor_id* target;
@@ -986,7 +986,7 @@ void processRegistryCommand(int inFd, int outFd, int notifyGUI){
   log2File("Processing %s command (cmd = %d)\n", cmd2str(cmd), cmd);
   switch(cmd){
   case SEND : {
-    processSendCommand(inFd, outFd);
+    processSendCommand(inFd);
     break;
   }
   case REGISTER : {
@@ -1280,8 +1280,8 @@ static void  processRegistryStopMessage(char *sender, char *rest){
   }
 }
 
-static void  processRegistrySelectMessage(char *sender, char *rest);
-static void  processRegistrySelectMessage(char *sender, char *rest){
+static void  processRegistrySelectMessage(char *rest);
+static void  processRegistrySelectMessage(char *rest){
   char *name, *args;
   if(getNextToken(rest, &name, &args) <= 0){
     fprintf(stderr, "processRegistrySelectMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
@@ -1521,7 +1521,7 @@ void processRegistryMessage(char *sender, char *body){
   } else if (!strcmp(cmd, REGISTRY_STOP)){
     processRegistryStopMessage(sender, rest);
   } else if (!strcmp(cmd, REGISTRY_SELECT)){
-    processRegistrySelectMessage(sender, rest);
+    processRegistrySelectMessage(rest);
   } else if (!strcmp(cmd, REGISTRY_NAME)){
     processRegistryNameMessage(sender, rest);
   } else if (!strcmp(cmd, REGISTRY_ENROLL)){

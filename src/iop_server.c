@@ -66,8 +66,8 @@ static void iop_server_sigchild_handler(int sig){
   pid_t child;
   int status;
   child = wait(&status);
-  serverLog("Server waited on child with pid %d with exit status %d\n", 
-	    child, status);
+  serverLog("Server waited(%d) on child with pid %d with exit status %d\n", 
+	    sig, child, status);
 }
 
 int main(int argc, char *argv[]){

@@ -18,7 +18,6 @@ else
 LIBS =  -lm -pthread 
 CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic -Wno-unused-but-set-variable
 # add to CFLAGS for debugging:
-# -D_POSIX_SOURCE -D_BSD_SOURCE _POSIX_C_SOURCE >= 199309L 199506L
 # -g 
 endif
 
@@ -28,7 +27,7 @@ CFLAGS	+=	-Wall
 CFLAGS	+=	-Werror
 
 # Extended warnings
-#CFLAGS  +=     -Wextra
+CFLAGS  +=     -Wextra
 #CFLAGS	+=	-Wshadow 
 CFLAGS	+=	-Wpointer-arith 
 CFLAGS	+=	-Wcast-align 
@@ -59,9 +58,6 @@ CFLAGS	+=	-Wno-variadic-macros
 CFLAGS	+=	-ansi 
 CFLAGS	+=	-std=c99
 CFLAGS	+=	-pedantic
-
-
-
 
 EXE = talk2iop\
       iop_executor\

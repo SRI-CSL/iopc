@@ -22,8 +22,8 @@ static void child_handler(int sig){
   pid_t child;
   int status;
   child = waitpid(-1, &status, WNOHANG); 
-  announce("SALspawner waited on child with pid %d with exit status %d\n", 
-	   child, status);
+  announce("iop_sal_spawner waited on child(%d) with pid %d with exit status %d\n", 
+	   sig, child, status);
 }
 
 int main(int argc, char** argv){

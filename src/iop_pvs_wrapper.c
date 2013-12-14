@@ -40,6 +40,7 @@ static int child_died = 0;
 
 static void intr_handler(int sig){
   char pvs_exit[] = "(excl:exit)\n";
+  fprintf(stderr, "PVS: Caught(%d) Exiting\n", sig);
   if(child > 0){
     write(pin[1], pvs_exit, strlen(pvs_exit));
   }
@@ -47,7 +48,7 @@ static void intr_handler(int sig){
 }
 
 static void chld_handler(int sig){
-  fprintf(stderr, "PVS died! Exiting\n");
+  fprintf(stderr, "PVS: Caught(%d) Exiting\n", sig);
   child_died = 1;
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }

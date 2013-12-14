@@ -48,6 +48,10 @@ int main(int argc, char** argv){
   self_debug_flag  = FILEMANAGER_DEBUG;
   self = argv[0];
 
+  if(FILEMANAGER_DEBUG){
+    printArgv(stderr, argc, argv, self);
+  }
+
   while(1){
     requestNo++;
     announce("filemanager at top of loop\n");

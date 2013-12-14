@@ -22,6 +22,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _IOP_DBUGFLGAS_H
+#define _IOP_DBUGFLGAS_H
+
 #define WATCH_MAUDE               0
 #define MAUDE_LOGFILE             "/tmp/maude-out.txt"
 
@@ -58,3 +61,4 @@
 #define G2D_REMOTE_ACTOR_DEBUG    0
 
 
+#endif /* _IOP_DBUGFLGAS_H */

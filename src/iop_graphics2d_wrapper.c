@@ -38,7 +38,7 @@ static  int child_died = 0;
 static char  g2dexe[] = "java";
 
 static void chld_handler(int sig){
-  fprintf(stderr, "%s died! Exiting\n", self);
+  fprintf(stderr, "%s died (%d)! Exiting\n", self, sig);
   child_died = 1;
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }

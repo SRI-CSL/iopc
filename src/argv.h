@@ -21,6 +21,10 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+#ifndef _IOP_ARGV_H
+#define _IOP_ARGV_H
+
 #include <stdio.h>
 
 int interpretTildes(const char* filename, char **newfilenamep);
@@ -34,3 +38,5 @@ void printArgv(FILE* file, int argc, char** argv, char*);
 
 char *argv2String(int argc, char** argv, const char* seperator);
 
+
+#endif /* _IOP_ARGV_H */

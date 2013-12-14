@@ -67,7 +67,7 @@ static void iop_daemon_sigchild_handler(int sig){
   pid_t child;
   int status;
   child = wait(&status);
-  daemonLog("Daemon waited on child with pid %d with exit status %d\n", child, status);
+  daemonLog("Daemon waited(%d) on child with pid %d with exit status %d\n", sig, child, status);
 }
 
 

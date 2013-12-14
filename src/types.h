@@ -25,6 +25,8 @@
 #ifndef _IOPTYPES
 #define _IOPTYPES
 
+#define VERIFY __attribute__((__warn_unused_result__))
+
 #include <sys/types.h>
 
 #ifndef PATH_MAX

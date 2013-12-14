@@ -21,6 +21,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+#ifndef _IOP_CHEADERS_H
+#define _IOP_CHEADERS_H
 
 #include <limits.h>
 #include <stdio.h>
@@ -49,3 +51,5 @@
 #ifdef _LINUX
 #include <getopt.h>
 #endif
+
+#endif /* _IOP_CHEADERS_H */

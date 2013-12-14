@@ -30,6 +30,7 @@ static int sal_argc;
 
 static void intr_handler(int sig){
   char sal_exit[] = "(exit)\n";
+  fprintf(stderr, "SAL: Caught(%d) Exiting\n", sig);
   if(child > 0){
     write(pin[1], sal_exit, strlen(sal_exit));
   }
@@ -37,7 +38,7 @@ static void intr_handler(int sig){
 }
 
 static void chld_handler(int sig){
-  announce("\nSAL died! Exiting\n"); 
+  announce("\nSAL died (%d)! Exiting\n", sig); 
   child_died = 1;
 }
 
@@ -52,6 +53,11 @@ int main(int argc, char** argv){
 
   self_debug_flag  = SAL_ACTOR_DEBUG;
   self = argv[0];
+
+  if(SAL_ACTOR_DEBUG){
+    printArgv(stderr, argc, argv, self);
+  }
+
 
   ec_neg1( iop_install_handlers(chld_handler, intr_handler) );
 

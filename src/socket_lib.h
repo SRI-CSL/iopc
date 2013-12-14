@@ -22,6 +22,10 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _IOP_SOCKET_LIB_H
+#define _IOP_SOCKET_LIB_H
+
+
 int *acceptSocket(int, char **);
 int allocateSocket(unsigned short, char *, int*);
 int allocateListeningSocket(unsigned short, int*);
@@ -34,3 +38,4 @@ void *socket2outViolent(void *);
 #define SOCKET_ERROR -1
 #define INVALID_SOCKET -1
 
+#endif /* _IOP_SOCKET_LIB_H */

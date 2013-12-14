@@ -51,7 +51,7 @@ static void *listener_cmd_thread(void *arg){
   while(1){
     requestNo++;
     freeMsg(message);
-    announce("%s waiting to process request number %d\n", self, requestNo);
+    announce("%s waiting to process request number %d;  %p\n", self, requestNo, arg);
     message = acceptMsg(STDIN_FILENO);
     if(message == NULL){
       perror("listener readMsg failed");
@@ -97,7 +97,7 @@ static void listener_sigchild_handler(int sig){
   pid_t child;
   int status;
   child = waitpid(-1, &status, WNOHANG); 
-  announce("Listener waited on child with pid %d with exit status %d\n", child, status);
+  announce("Listener waited(%d) on child with pid %d with exit status %d\n", sig, child, status);
 }
 
 int main(int argc, char** argv){

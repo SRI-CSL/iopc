@@ -683,7 +683,7 @@ char** mkRegistryArgv(int argc, char** argv,
 void iop_sigint_handler(int sig){
   if(registry_pid > 0){
     if(IOP_DEBUG || iop_debug_flag)
-      fprintf(stderr, "sending %d SIGUSR1\n", registry_pid);
+      fprintf(stderr, "caught %d; sending %d SIGUSR1\n", sig, registry_pid);
     kill(registry_pid, SIGUSR1);
   }
   exit(EXIT_SUCCESS);
@@ -692,8 +692,8 @@ void iop_sigint_handler(int sig){
 void iop_sigchld_handler(int sig){
   int status;
   pid_t child = waitpid(-1, &status, WNOHANG);
-  announce("waited on child with pid %d with exit status %d\n", 
-           child, status);
+  announce("waited(%d) on child with pid %d with exit status %d\n", 
+           sig, child, status);
   return;
 }
 

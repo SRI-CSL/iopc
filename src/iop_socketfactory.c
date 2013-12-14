@@ -51,7 +51,7 @@ static void socketfactory_sigchild_handler(int sig){
   pid_t child;
   int status;
   child = waitpid(-1, &status, WNOHANG);
-  announce("Waited on child with pid %d with exit status %d\n", child, status);
+  announce("Waited(%d) on child with pid %d with exit status %d\n", sig, child, status);
 }
 
 int main(int argc, char** argv){

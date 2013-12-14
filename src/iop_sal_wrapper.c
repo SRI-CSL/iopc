@@ -1,5 +1,6 @@
 #include "cheaders.h"
 #include "constants.h"
+#include "argv.h"
 #include "msg.h"
 #include "iop_lib.h"
 #include "iop_utils.h"
@@ -13,7 +14,7 @@ static char sal_exe[] = "salenv";
 static char* sal_argv[] = {"salenv", NULL};
 
 static void chld_handler(int sig){
-  fprintf(stderr, "%s died! Exiting\n", sal_exe);
+  fprintf(stderr, "%s died (%d)! Exiting\n", sal_exe, sig);
   sendFormattedMsgFD(STDOUT_FILENO, "system\n%s\nstop %s\n", self, self);
 }
 
@@ -22,7 +23,11 @@ int main(int argc, char** argv){
   
   self_debug_flag  = SALWRAPPER_DEBUG;
   self = argv[0];
-  
+
+  if(SALWRAPPER_DEBUG){
+    printArgv(stderr, argc, argv, self);
+  }
+
   ec_neg1( iop_install_handlers(chld_handler, wrapper_sigint_handler) );
   
   ec_neg1( pipe(pin) );

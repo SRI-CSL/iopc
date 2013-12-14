@@ -22,6 +22,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _IOP_EXTERNS_H
+#define _IOP_EXTERNS_H
+
 pid_t registry_pid               = -1;
 pid_t iop_pid                    = -1;
 char* registry_fifo_in           = NULL;
@@ -51,3 +54,5 @@ pid_t child                      = -1;
 int   self_debug_flag = 0;
 char* self;
 
+
+#endif /* _IOP_EXTERNS_H */
