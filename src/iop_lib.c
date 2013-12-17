@@ -899,12 +899,12 @@ void registryDump(FILE* targ){
   {
     int i, reg_size;
     
-    if(readInt(reg_rd_fd, &reg_size) < 0 ) goto unlock;
+    if(readInt(reg_rd_fd, &reg_size, "registryDump") < 0 ) goto unlock;
     
     for(i = 0; i < reg_size; i++){
       int slot;
       char *actor;
-      readInt(reg_rd_fd, &slot);
+      readInt(reg_rd_fd, &slot, "registryDump");
       actor = readline(reg_rd_fd);
       fprintf(targ, "\tregistry[%d] = %s\n", slot, actor);
       free(actor);
@@ -1018,55 +1018,6 @@ char* fetchActorName(int index){
   
 }
 
-/*
-  int fetchRegistrySize(){
-  int reg_wr_fd, reg_rd_fd, rsize = -1;
-  struct flock wr_lock, rd_lock;
-  registry_cmd_t cmd = RSIZE;
-  if(IOP_LIB_DEBUG || iop_debug_flag)
-  fprintf(stderr, "opening Registry write fifo\n");  
-  if((reg_wr_fd = open(registry_fifo_in,  O_RDWR)) < 0) 
-  goto fail;
-  if(IOP_LIB_DEBUG || iop_debug_flag)
-  fprintf(stderr, "opened Registry write fifo\n");  
-  
-  
-  if(IOP_LIB_DEBUG || iop_debug_flag)
-  fprintf(stderr, "opening Registry read fifo\n");  
-  if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 
-  goto fail;
-  if(IOP_LIB_DEBUG || iop_debug_flag)
-  fprintf(stderr, "opened Registry read fifo\n");  
-
-
-  lockFD(&wr_lock, reg_wr_fd, "Registry write  fifo");
-
-  lockFD(&rd_lock, reg_rd_fd, "Registry read  fifo");
-
-  if(IOP_LIB_DEBUG || iop_debug_flag)
-  fprintf(stderr, "writing cmd\n");  
-  if(writeInt(reg_wr_fd, cmd) < 0) goto unlock;
-
-  if(readInt(reg_rd_fd, &rsize) < 0)  goto unlock;
-    
-  unlock:
-  
-  unlockFD(&rd_lock, reg_rd_fd, "Registry read fifo");
-  
-  unlockFD(&wr_lock, reg_wr_fd, "Registry write fifo");
-  
-  if((close(reg_wr_fd) == -1) || (close(reg_rd_fd) == -1)) 
-  goto fail;
-
-  return rsize;
-  
-  fail:
-  
-  fprintf(stderr, "failure in fetchRegistrySize: %s\n", strerror(errno));
-  return -1;
-  
-  }
-*/
 
 int waitForRegistry(void){
   int  reg_rd_fd;

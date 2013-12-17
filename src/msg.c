@@ -534,55 +534,15 @@ int writeInt(int fd, int number){
   }
   return 1;
 }
-/*
-int readInt(int fd, int* nump){
-  ssize_t retval;
-  if(nump == NULL){
-    return -1;
-  } else {
-    int i = 0;
-    char buff[SIZE];
-    while(i < SIZE){
-    restart:
-      errno = 0;
-      if((retval = read(fd, &buff[i], sizeof(char))) != sizeof(char)){
-        if(retval == 0){
-          buff[i] = '\0';
-          break;
-        } else {
-          if(errno == EINTR){
-            eM("readInt: restarting (errno == EINTR)\n");
-            goto restart;
-          }
-          fprintf(stderr, "readInt: read failed: %s\n", strerror(errno));
-          return -1;
-          if(errno == EBADF){
-            fprintf(stderr, "readInt: read failed because of a bad file descriptor\n");
-            return -1;
-          }
-        }
-      }
-      if(!isdigit(buff[i])){
-        buff[i] = '\0';
-        break;
-      }
-      i++;
-    }
-    if(i == SIZE) return -1;
-    *nump = atoi(buff);
-    return 1;
-  }
-}
-*/
 
-int readInt(int fd, int* nump){
+int readInt(int fd, int* nump, const char* caller){
   ssize_t retval;
   if(nump == NULL){
     return -1;
   } else {
     int i = 0, bad = 0;
     char buff[SIZE];
-
+    
   squareone:
     i = 0;
     while(i < SIZE){
@@ -597,12 +557,8 @@ int readInt(int fd, int* nump){
 	    eM("readInt: restarting (errno == EINTR)\n");
 	    goto restart;
 	  }
-	  fprintf(stderr, "readInt: read failed: %s\n", strerror(errno));
+	  fprintf(stderr, "readInt@%s: read failed: %s\n", caller, strerror(errno));
 	  return -1;
-	  if(errno == EBADF){
-	    fprintf(stderr, "readInt: read failed because of a bad file descriptor\n");
-	    return -1;
-	  }
 	}
       }
       if(buff[i] == '\n'){
@@ -641,7 +597,7 @@ int readIntVolatile(int fd, int* nump, volatile int* exitFlag){
 	  buff[i] = '\0';
 	  break;
 	} else {
-	  fprintf(stderr, "read failed in readInt: %s\n", strerror(errno));
+	  fprintf(stderr, "read failed in readIntVolatile: %s\n", strerror(errno));
 	  return -1;
 	}
       }
@@ -683,7 +639,7 @@ actor_spec *readActorSpec(int fd){
   if(tempLine == NULL) return NULL;
   strcpy(retval->name, tempLine);
   free(tempLine);
-  if(readInt(fd, &retval->pid) != 1) return NULL; 
+  if(readInt(fd, &retval->pid, "readActorSpec") != 1) return NULL; 
   for(i = 0; i < 3; i++){
     tempLine = readline(fd);
     if(tempLine == NULL) return NULL;
@@ -714,7 +670,7 @@ msg* acceptMsg(int fd){
   char buff[BUFFSZ];
   int bytes, bytesIncoming, bytesRemaining, errcode;
   msg* retval;
-  errcode = readInt(fd, &bytesIncoming);
+  errcode = readInt(fd, &bytesIncoming, "acceptMsg");
   if((errcode < 0) || (bytesIncoming <= 0)) return NULL;
   eM("acceptMsg: expecting %d bytes\n", bytesIncoming);
   retval = makeMsg(bytesIncoming + 1);
@@ -763,7 +719,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
   int bytes, bytesIncoming, bytesRemaining, errcode;
   msg* retval;
   eM("acceptMsgVolatile: calling readInt\n");
-  errcode = readInt(fd, &bytesIncoming);
+  errcode = readInt(fd, &bytesIncoming, "acceptMsgVolatile");
   if(*exitFlag || (errcode < 0) || (bytesIncoming <= 0)){
     eM("acceptMsgVolatile: (*exitFlag||(errcode < 0)||(bytesIncoming <= 0)) is true!\n");
     eM("\t*exitFlag = %d\n", *exitFlag);

@@ -229,7 +229,7 @@ int notifyRegistry(actor_spec *acts){
   {
     int slotNumber;
     announce("notifyRegistry\t:\tWaiting for registry slotNumber ACK\n");
-    if(readInt(reg_rd_fd, &slotNumber) < 0){ goto fail; }
+    if(readInt(reg_rd_fd, &slotNumber, "notifyRegistry") < 0){ goto fail; }
     announce("notifyRegistry\t:\tRead %d from registry\n", slotNumber);
   }
  unlock:
@@ -269,7 +269,7 @@ int deleteFromRegistry(char *name){
   {
     int slotNumber;
     announce("deleteFromRegistry\t:\tWaiting for registry slotNumber ACK\n");
-    if(readInt(reg_rd_fd, &slotNumber) < 0)
+    if(readInt(reg_rd_fd, &slotNumber, "deleteFromRegistry") < 0)
       goto fail;
     retval = slotNumber;
     announce("deleteFromRegistry\t:\tRead %d from registry\n", slotNumber);

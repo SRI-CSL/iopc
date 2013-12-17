@@ -41,7 +41,7 @@ int writeMsg(int fd, msg* m);
 int logMsg(char* filename, msg* m);
 
 int writeInt(int fd, int number);
-int readInt(int fd, int* nump);
+int readInt(int fd, int* nump, const char* caller);
 int readIntVolatile(int fd, int* nump, volatile int* exitFlag);
 int writeActorSpec(int fd, actor_spec *act);
 actor_spec *readActorSpec(int fd);

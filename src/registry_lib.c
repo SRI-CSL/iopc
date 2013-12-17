@@ -833,10 +833,10 @@ static void processSendCommand(int inFd){
   int bytesin, actorId;
   char *buffin;
   actor_id* target;
-  if(readInt(inFd, &actorId) < 0)
+  if(readInt(inFd, &actorId, "processSendCommand") < 0)
     return;
   log2File("SEND clause, actorId = %d\n", actorId);
-  if(readInt(inFd, &bytesin) < 0)
+  if(readInt(inFd, &bytesin, "processSendCommand") < 0)
     return;
   log2File("SEND clause, bytesin = %d\n", bytesin);
   if((buffin = (char *)calloc(bytesin + 1, sizeof(char))) == NULL){
@@ -959,7 +959,7 @@ static void processNameCommand(int cmd, int inFd, int outFd){
   int actorId, len;
   actor_id* target;
   char unk[] = UNKNOWNNAME;
-  if(readInt(inFd, &actorId) < 0) goto fail;
+  if(readInt(inFd, &actorId, "processNameCommand") < 0) goto fail;
   if((target = getActorBySlot(actorId)) == NULL){
     log2File("NAME clause, getActorBySlot failed\n");
     goto fail;
@@ -979,7 +979,7 @@ static void processNameCommand(int cmd, int inFd, int outFd){
 void processRegistryCommand(int inFd, int outFd, int notifyGUI){
   int cmd = -1;
   log2File("Awaiting a command \n");
-  if(readInt(inFd, &cmd) < 0){
+  if(readInt(inFd, &cmd, "processRegistryCommand") < 0){
     fprintf(stderr, "Read of cmd failed\n");
     return;
   }
