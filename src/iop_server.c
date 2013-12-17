@@ -69,7 +69,7 @@ static void iop_server_sigchild_handler(int sig){
   if(WIFEXITED(status)){
     serverLog("Server's child with pid %d exited normally with status %d\n", sig, child, WEXITSTATUS(status));
   } else if(WIFSIGNALED(status)){
-    serverLog("Server's child with pid %d exited after receiving signal %d\n", sig, child, WTERMSIG(status));
+    serverLog("Server's child with pid %d exited after receiving signal %d\n", child, WTERMSIG(status));
   } else {
     serverLog("Server waited(%d) on child with pid %d with raw exit status %d\n", sig, child, status);
   }
