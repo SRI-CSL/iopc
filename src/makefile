@@ -84,6 +84,7 @@ EXE = talk2iop\
 SCRIPTS = iop jlambda jl kill_iop
 HEADERS = actor.h\
 	  argv.h\
+	  authenticate.h\
 	  cheaders.h\
 	  constants.h\
 	  dbugflags.h\
@@ -105,6 +106,7 @@ MISC    = makefile
 vpath % ${BUILDDIR}
 
 COBJS = actor.o\
+        authenticate.o\
         registry_lib.o\
         iop_lib.o\
         iop_utils.o\

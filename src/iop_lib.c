@@ -22,6 +22,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include "authenticate.h"
 #include "cheaders.h"
 #include "constants.h"
 #include "types.h"
@@ -714,6 +715,29 @@ int findListeningPort4In2Reg(int *portFd, int* portNo){
   }
   return retval;
 }
+
+
+
+
+pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]){
+  pid_t retval = fork();
+  if(retval < 0){
+    perror("couldn't fork authentication process");
+    return -1;
+  } else if(retval == 0){
+    /* here is where we authenticate the client */
+    int auth = authenticate(socket);
+    if(auth){
+      pid_t retval = spawnProcess(exe, cmd);
+      if(retval < 0){
+        perror("couldn't fork authenticated process");
+        return -1;
+      }
+    }
+  }
+  return retval;
+}      
+
 
 pid_t spawnProcess(char* exe, char* cmd[]){
   pid_t retval;

@@ -179,12 +179,12 @@ int main(int argc, char *argv[]){
 			      iop_argv[5]);
     */
     
-    child = spawnProcess(iop_argv[0], iop_argv);
+    child = spawnAuthenticatedProcess(*sockp, iop_argv[0], iop_argv);
     close(*sockp);
     free(sockp);
     free(description);
     if(child > 0){
-      serverLog("Spawned iop process %d\n", child);
+      serverLog("Spawned iop authentication process %d\n", child);
     }
   }
 }
