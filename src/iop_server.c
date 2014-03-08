@@ -179,7 +179,8 @@ int main(int argc, char *argv[]){
 			      iop_argv[5]);
     */
     
-    child = spawnAuthenticatedProcess(*sockp, iop_argv[0], iop_argv);
+    //child = spawnAuthenticatedProcess(*sockp, iop_argv[0], iop_argv);
+    child = spawnProcess(iop_argv[0], iop_argv);
     close(*sockp);
     free(sockp);
     free(description);
