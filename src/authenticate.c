@@ -1,39 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <pthread.h>
+#include <string.h>
+#include <signal.h>
+#include <errno.h>
 #include "authenticate.h"
 #include "msg.h"
 
 
-void* timer(void* ptr);
-void* timer(void* ptr){
-  int socket = *(int*)ptr;
-  sleep(6);
-  close(socket);
-  exit(EXIT_FAILURE);
-  return NULL;
+static int exit_flag = 0;
+
+static void alarm_handler(int signum){
+  if(signum == SIGALRM){
+    exit_flag = 1;
+  }
 }
+
 
 int authenticate(int socket){
   int retval = 0;
   msg* token = NULL;
   if(socket >= 0){
-    pthread_t timer_thread;
-
-    pthread_create (&timer_thread, NULL, &timer, (void *) &socket);
-
-    msg* token = acceptMsg(socket);
-
+    struct sigaction act;
+    memset(&act, 0, sizeof(act));
+    act.sa_handler = alarm_handler;
+    if(sigaction(SIGALRM, &act, NULL) == -1){
+      fprintf(stderr, "authenticate: sigaction failed; errno = %d\n", errno);
+      return retval;
+    }
+    alarm(5);
+    token = acceptMsgVolatile(socket, &exit_flag);
     if(token == NULL){
       fprintf(stderr, "authenticate: got NULL token");
+      close(socket);
     } else {
       writeMsg(STDERR_FILENO, token);
+      alarm(0);
       retval = 1;  
     }
   }
   if(token != NULL){ freeMsg(token); }
-  close(socket);
   return retval;
 }
 
