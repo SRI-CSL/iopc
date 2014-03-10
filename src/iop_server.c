@@ -22,6 +22,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include "authenticate.h"
 #include "cheaders.h"
 #include "constants.h"
 #include "types.h"
@@ -74,6 +75,28 @@ static void iop_server_sigchild_handler(int sig){
     serverLog("Server waited(%d) on child with pid %d with raw exit status %d\n", sig, child, status);
   }
 }
+
+pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]){
+  pid_t retval = fork();
+  if(retval < 0){
+    perror("couldn't fork authentication process");
+    return -1;
+  } else if(retval == 0){
+    char token[1024];
+    /* here is where we authenticate the client */
+    int auth = authenticate(socket, token, 1024);
+    if(auth){
+      serverLog("Authenticated %s\n", token);
+      execvp(exe, cmd);
+      perror("couldn't execvp authenticated process");
+      return -1;
+    } else {
+      serverLog("Couldn't authenticate process -- exiting\n");
+      exit(EXIT_SUCCESS);
+    }
+  }
+  return retval;
+}      
 
 int main(int argc, char *argv[]){
   unsigned short port;

@@ -25,7 +25,7 @@
 #ifndef _AUTHENTICATE_H
 #define _AUTHENTICATE_H
 
-int authenticate(int socket);
+int authenticate(int socket, char* itoken, int itokensz);
 
 
 #endif /* _AUTHENTICATE_H */

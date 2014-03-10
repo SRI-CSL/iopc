@@ -718,8 +718,8 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
   char buff[BUFFSZ];
   int bytes, bytesIncoming, bytesRemaining, errcode;
   msg* retval;
-  eM("acceptMsgVolatile: calling readInt\n");
-  errcode = readInt(fd, &bytesIncoming, "acceptMsgVolatile");
+  eM("acceptMsgVolatile: calling readIntVolatile\n");
+  errcode =  readIntVolatile(fd, &bytesIncoming, exitFlag);
   if(*exitFlag || (errcode < 0) || (bytesIncoming <= 0)){
     eM("acceptMsgVolatile: (*exitFlag||(errcode < 0)||(bytesIncoming <= 0)) is true!\n");
     eM("\t*exitFlag = %d\n", *exitFlag);
