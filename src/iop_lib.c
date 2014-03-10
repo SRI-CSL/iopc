@@ -728,11 +728,9 @@ pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]){
     /* here is where we authenticate the client */
     int auth = authenticate(socket);
     if(auth){
-      pid_t retval = spawnProcess(exe, cmd);
-      if(retval < 0){
-        perror("couldn't fork authenticated process");
-        return -1;
-      }
+      execvp(exe, cmd);
+      perror("couldn't execvp authenticated process");
+      return -1;
     }
   }
   return retval;

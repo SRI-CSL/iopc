@@ -20,6 +20,7 @@ static void alarm_handler(int signum){
 int authenticate(int socket){
   int retval = 0;
   msg* token = NULL;
+  fprintf(stderr, "authenticate: got %d as socket\n", socket);
   if(socket >= 0){
     struct sigaction act;
     memset(&act, 0, sizeof(act));
@@ -34,6 +35,7 @@ int authenticate(int socket){
       fprintf(stderr, "authenticate: got NULL token");
       close(socket);
     } else {
+      /* accept anything at this point. desperate for users we are  */
       writeMsg(STDERR_FILENO, token);
       alarm(0);
       retval = 1;  
