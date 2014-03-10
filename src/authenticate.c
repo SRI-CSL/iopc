@@ -26,6 +26,17 @@ static void alarm_handler(int signum){
  *  "PLAClient_garuda <svn version number>"
  */
 
+int clientOK(msg* token);
+int clientOK(msg* token){
+  if(token != NULL){
+    return 
+      (strstr(token->data, "PLAClient_online ") == token->data) ||
+      (strstr(token->data, "PLAClient_garuda ") == token->data);
+  } else {
+    return 0;
+  } 
+}
+
 int authenticate(int socket, char* itoken, int itokensz){
   int retval = 0;
   msg* token = NULL;
@@ -51,10 +62,7 @@ int authenticate(int socket, char* itoken, int itokensz){
       if(itoken != NULL &&  token->bytesUsed <= itokensz){
         strncpy(itoken, token->data, itokensz);
       }
-      if(
-         (strstr(token->data, "PLAClient_online ") == token->data) ||
-         (strstr(token->data, "PLAClient_garuda ") == token->data) 
-         ){
+      if(clientOK(token)){
         retval = 1;  
       } else {
         retval = 0;  

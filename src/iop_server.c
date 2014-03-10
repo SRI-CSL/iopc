@@ -83,6 +83,7 @@ pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]){
     return -1;
   } else if(retval == 0){
     char token[1024];
+    memset(token, '\0', 1024);
     /* here is where we authenticate the client */
     int auth = authenticate(socket, token, 1024);
     if(auth){
@@ -91,7 +92,7 @@ pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]){
       perror("couldn't execvp authenticated process");
       return -1;
     } else {
-      serverLog("Couldn't authenticate process -- exiting\n");
+      serverLog("Couldn't authenticate process -- exiting: fyi token = %s\n", token);
       exit(EXIT_SUCCESS);
     }
   }
