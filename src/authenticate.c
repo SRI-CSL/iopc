@@ -19,6 +19,12 @@ static void alarm_handler(int signum){
   }
 }
 
+/*
+ *
+ * Current token looks like either:
+ *  "PLAClient_online <svn version number>"
+ *  "PLAClient_garuda <svn version number>"
+ */
 
 int authenticate(int socket, char* itoken, int itokensz){
   int retval = 0;
@@ -45,7 +51,14 @@ int authenticate(int socket, char* itoken, int itokensz){
       if(itoken != NULL &&  token->bytesUsed <= itokensz){
         strncpy(itoken, token->data, itokensz);
       }
-      retval = 1;  
+      if(
+         (strstr(token->data, "PLAClient_online ") == token->data) ||
+         (strstr(token->data, "PLAClient_garuda ") == token->data) 
+         ){
+        retval = 1;  
+      } else {
+        retval = 0;  
+      }
     }
   }
   if(token != NULL){ freeMsg(token); }
