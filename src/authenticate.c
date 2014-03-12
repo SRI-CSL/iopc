@@ -12,7 +12,7 @@ static int exit_flag = 0;
 
 #define AUTH_DEBUG   0
 
-#define MIN_VERSION  2037
+#define MIN_VERSION  2046
 #define OK           "true"
 #define UPDATE_URL   "http://pl.csl.sri.com/online.html"
 
