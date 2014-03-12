@@ -10,7 +10,11 @@
 
 static int exit_flag = 0;
 
-#define AUTH_DEBUG 0
+#define AUTH_DEBUG   0
+
+#define MIN_VERSION  2037
+#define OK           "true"
+#define UPDATE_URL   "http://pl.csl.sri.com/online.html"
 
 static void alarm_handler(int signum){
   if(signum == SIGALRM){
@@ -24,17 +28,51 @@ static void alarm_handler(int signum){
  * Current token looks like either:
  *  "PLAClient_online <svn version number>"
  *  "PLAClient_garuda <svn version number>"
+ * returns the svn version number of the client
  */
 
 int clientOK(msg* token);
 int clientOK(msg* token){
   if(token != NULL){
-    return 
-      (strstr(token->data, "PLAClient_online ") == token->data) ||
-      (strstr(token->data, "PLAClient_garuda ") == token->data);
-  } else {
-    return 0;
-  } 
+    char* version;
+    if(((strstr(token->data, "PLAClient_online ") == token->data) ||
+        (strstr(token->data, "PLAClient_garuda ") == token->data)) &&
+       ((version = strchr(token->data, ' ')) != NULL)){
+      return (int)strtol(version, (char **)NULL, 10);
+    }
+  }
+  return 0;
+}
+
+/*
+ * returns 1 if the version is ok and the reply was happy
+ * returns 0 if the version was too small and the reply was happy
+ * returns -1 if the reply was not happy otherwise
+ *
+ */
+int acknowledge(int socket, int version);
+int acknowledge(int socket, int version){
+  int retval = -1, version_ok;
+  if((socket > 0) && (version > 0)){
+    msg* reply =  makeMsg(1024);
+    int ok;
+    version_ok = (version >= MIN_VERSION);
+    if(version_ok){
+      ok = addToMsg(reply, strlen(OK), OK);
+    } else {
+      ok = addToMsg(reply, strlen(UPDATE_URL), UPDATE_URL);
+    }
+    if(ok == 0){
+      ok = sendMsg(socket, reply);
+      if(ok == reply->bytesUsed){
+        retval = (1 && version_ok);
+      } else {
+        retval = -1;
+      }
+    }
+    freeMsg(reply);
+  }
+  return retval;
 }
 
 int authenticate(int socket, char* itoken, int itokensz){
@@ -57,15 +95,18 @@ int authenticate(int socket, char* itoken, int itokensz){
       if(AUTH_DEBUG){ fprintf(stderr, "authenticate: got NULL token\n"); }
       close(socket);
     } else {
-      /* accept anything at this point. desperate for users we are  */
+      /* cancel alarm then check the token  */
       alarm(0);
       if(itoken != NULL &&  token->bytesUsed <= itokensz){
         strncpy(itoken, token->data, itokensz);
       }
-      if(clientOK(token)){
-        retval = 1;  
-      } else {
-        retval = 0;  
+      int version = clientOK(token);
+
+      if(version > 0){
+        int reply_ok = acknowledge(socket, version);
+        if(reply_ok == 1){
+          retval = 1;  
+        }
       }
     }
   }
