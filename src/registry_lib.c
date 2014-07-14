@@ -1508,26 +1508,85 @@ static void  processRegistryUnenrollMessage(char *sender, char *rest){
 }
 
 
+static void  processRegistryRelocateMessage(char *sender, char *rest);
+static void  processRegistryRelocateMessage(char *sender, char *rest){
+  char *path, *args;
+  int errcode = -1, errnumber = 0;
+  if(getNextToken(rest, &path, &args) <= 0){
+    fprintf(stderr, "processRegistryRelocateMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
+    goto exit;
+  } else {
+    if(path == NULL){ 
+      fprintf(stderr, "processRegistryRelocateMessage: path is NULL\n");
+      goto exit; 
+    } else {
+      if(strlen(path) + 1 > PATH_MAX){
+        fprintf(stderr, "processRegistryRelocateMessage: path is too long\n");
+        goto exit; 
+      } else {
+        errcode = chdir(path);
+        if(errcode == -1){
+          errnumber = errno;
+        }
+      }
+    }
+  }
+  
+ exit:
+
+  if(errcode == 0){
+
+    long maxpath = 0;
+    char *fullpath = NULL;
+    
+    if((maxpath = pathconf(".",  _PC_PATH_MAX)) != -1){
+      fullpath = (char *)calloc(maxpath, sizeof(char));
+      if(fullpath != NULL && getcwd(fullpath, maxpath) == NULL){
+        free(fullpath);
+        fullpath = NULL;
+      }
+    }
+    
+    if(fullpath != NULL){
+      fprintf(stderr, "%s\n%s\nrelocateOK %s\n", sender, REGISTRY_ACTOR, (fullpath != NULL ? fullpath :  path));
+    }
+
+    free(fullpath);
+  
+    if(!iop_no_windows_flag){
+      sendMsg2Input(NULL, UPDATE);
+    }
+    
+  } else {
+    fprintf(stderr, "%s\n%s\nrelocateFAILED %s %d\n", sender, REGISTRY_ACTOR, path, errnumber);
+  }
+  
+  return;
+}
+
+
 void processRegistryMessage(char *sender, char *body){
   char *cmd, *rest;
   if(getNextToken(body, &cmd, &rest) <= 0){
     fprintf(stderr, "processRegistryMessage: didn't understand: (cmd)\n\t \"%s\" \n", body);
     return;
   }
-  if(!strcmp(cmd, REGISTRY_STATUS)){
+  if(!strncmp(cmd, REGISTRY_STATUS, strlen(REGISTRY_STATUS))){
     fprintf(stderr, "STATUS\n");
-  } else if (!strcmp(cmd, REGISTRY_START)){
+  } else if (!strncmp(cmd, REGISTRY_START, strlen(REGISTRY_START))){
     processRegistryStartMessage(sender, rest, 1);
-  } else if (!strcmp(cmd, REGISTRY_STOP)){
+  } else if (!strncmp(cmd, REGISTRY_STOP, strlen(REGISTRY_STOP))){
     processRegistryStopMessage(sender, rest);
-  } else if (!strcmp(cmd, REGISTRY_SELECT)){
+  } else if (!strncmp(cmd, REGISTRY_SELECT, strlen(REGISTRY_SELECT))){
     processRegistrySelectMessage(rest);
-  } else if (!strcmp(cmd, REGISTRY_NAME)){
+  } else if (!strncmp(cmd, REGISTRY_NAME, strlen(REGISTRY_NAME))){
     processRegistryNameMessage(sender, rest);
-  } else if (!strcmp(cmd, REGISTRY_ENROLL)){
+  } else if (!strncmp(cmd, REGISTRY_ENROLL, strlen(REGISTRY_ENROLL))){
     processRegistryEnrollMessage(sender, rest);
-  } else if (!strcmp(cmd, REGISTRY_UNENROLL)){
+  } else if (!strncmp(cmd, REGISTRY_UNENROLL, strlen(REGISTRY_UNENROLL))){
     processRegistryUnenrollMessage(sender, rest);
+  } else if (!strncmp(cmd, REGISTRY_RELOCATE, strlen(REGISTRY_RELOCATE))){
+    processRegistryRelocateMessage(sender, rest);
   }
 }
 

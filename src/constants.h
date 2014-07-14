@@ -38,6 +38,7 @@
 #define REGISTRY_NAME     "name"
 #define REGISTRY_ENROLL   "enroll"
 #define REGISTRY_UNENROLL "unenroll"
+#define REGISTRY_RELOCATE "relocate"
 #define FIFO_IN           "*FIFO_IN*"
 #define FIFO_OUT          "*FIFO_OUT*"
 #define IOP_BIN_DIR       "*IOPBINDIR*"
