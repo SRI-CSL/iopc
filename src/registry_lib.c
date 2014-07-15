@@ -1535,22 +1535,12 @@ static void  processRegistryRelocateMessage(char *sender, char *rest){
  exit:
 
   if(errcode == 0){
-
-    long maxpath = 0;
     char *fullpath = NULL;
-    
-    if((maxpath = pathconf(".",  _PC_PATH_MAX)) != -1){
-      fullpath = (char *)calloc(maxpath, sizeof(char));
-      if(fullpath != NULL && getcwd(fullpath, maxpath) == NULL){
-        free(fullpath);
-        fullpath = NULL;
-      }
-    }
-    
-    if(fullpath != NULL){
-      fprintf(stderr, "%s\n%s\nrelocateOK %s\n", sender, REGISTRY_ACTOR, (fullpath != NULL ? fullpath :  path));
-    }
 
+    fullpath = iop_getcwd();
+    
+    fprintf(stderr, "%s\n%s\nrelocateOK %s\n", sender, REGISTRY_ACTOR, (fullpath != NULL ? fullpath :  path));
+    
     free(fullpath);
   
     if(!iop_no_windows_flag){

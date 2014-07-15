@@ -60,6 +60,7 @@ static void *echoMaude(void *arg){
 
 int main(int argc, char** argv){
   int pin[2], pout[2], perr[2];
+
   if((argc != 2)  && (argc != 3)){
     fprintf(stderr, "Usage: %s <maude bin dir>  [maude module]\n", argv[0]);
   }
@@ -85,6 +86,9 @@ int main(int argc, char** argv){
     ec_neg1( close(pin[0]) );
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
+
+    // this hack is needed to convince maude to move its idea of where it is.
+    unsetenv("PWD");
 
     ec_neg1( execvp(maude_exe, maude_argv) );
 
@@ -112,12 +116,14 @@ int main(int argc, char** argv){
       announce("%s\t:\tloading %s\n", argv[0], argv[2]); 
       
       sprintf(cmdBuff, "load %s\n", argv[2]);
+      
       len = strlen(cmdBuff);
       if(write(child_STDIN_FILENO, cmdBuff, len) !=  len){
         fprintf(stderr, "write failed of \"%s\" command", cmdBuff);
         /* forge on, notify registry, die calmly? */
         exit(EXIT_FAILURE);
       };
+      
       announce(cmdBuff);
     }
           

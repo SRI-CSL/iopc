@@ -3,6 +3,8 @@
 #include <errno.h>
 #include <string.h>
 #include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #include "iop_utils.h"
 #include "ec.h"
@@ -57,6 +59,23 @@ char* time2string(void){
     if(cr != NULL){ cr[0] = '\t';  }
   }
   return date;
+}
+
+
+
+char* iop_getcwd(void){
+  long maxpath = 0;
+  char *fullpath = NULL;
+  
+  if((maxpath = pathconf(".",  _PC_PATH_MAX)) != -1){
+    fullpath = (char *)calloc(maxpath, sizeof(char));
+    if(fullpath != NULL && getcwd(fullpath, maxpath) == NULL){
+      free(fullpath);
+      fullpath = NULL;
+    }
+  }
+  
+  return fullpath;
 }
 
 

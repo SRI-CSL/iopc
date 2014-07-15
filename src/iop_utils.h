@@ -36,5 +36,8 @@ void iop_usleep(uint32_t msec);
 
 char* time2string(void);
 
+char* iop_getcwd(void);
+
+
 
 #endif /* _IOP_UTILS_H */
