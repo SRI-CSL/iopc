@@ -1538,8 +1538,8 @@ static void  processRegistryRelocateMessage(char *sender, char *rest){
     char *fullpath = NULL;
 
     fullpath = iop_getcwd();
-    
-    fprintf(stderr, "%s\n%s\nrelocateOK %s\n", sender, REGISTRY_ACTOR, (fullpath != NULL ? fullpath :  path));
+
+    sendFormattedMsgFP(stdout, "%s\n%s\nrelocateOK %s\n", sender, REGISTRY_ACTOR, (fullpath != NULL ? fullpath :  path));
     
     free(fullpath);
   
@@ -1548,7 +1548,7 @@ static void  processRegistryRelocateMessage(char *sender, char *rest){
     }
     
   } else {
-    fprintf(stderr, "%s\n%s\nrelocateFAILED %s %d\n", sender, REGISTRY_ACTOR, path, errnumber);
+    sendFormattedMsgFP(stdout, "%s\n%s\nrelocateFAILED %s %d\n", sender, REGISTRY_ACTOR, path, errnumber);
   }
   
   return;
