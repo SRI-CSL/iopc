@@ -14,8 +14,10 @@ debug: c
 	ant -DDEBUG=on
 
 java:
+	ant jars
+
+antlr4:
 	ant antlr4
-	ant
 
 src-zip:
 	ant zip
