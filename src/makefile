@@ -72,6 +72,7 @@ EXE = talk2iop\
       iop_server\
       iop_daemon\
       iop_graphics2d_wrapper\
+      iop_java_wrapper\
       iop_pvs_wrapper\
       iop_qtbrowser_wrapper\
       iop_netrequest\
