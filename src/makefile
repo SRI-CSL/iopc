@@ -53,7 +53,7 @@ CWFLAGS	+=	-Wswitch-default
 CWFLAGS	+=	-D_REENTRANT 
 CWFLAGS	+=	-D_THREAD_SAFE 
 CWFLAGS	+=	-pipe 
-#CWFLAGS	+=	-Wunused 
+CWFLAGS	+=	-Wunused 
 CWFLAGS	+=	-Winit-self
 CWFLAGS	+=	-Wno-long-long 
 CWFLAGS	+=	-Wmissing-include-dirs
@@ -62,7 +62,7 @@ CWFLAGS	+=	-ansi
 CWFLAGS	+=	-std=c99
 CWFLAGS	+=	-pedantic
 
-CFLAGS += ${CWFLAGS}
+#CFLAGS += ${CWFLAGS}
 
 EXES = talk2iop\
       iop_executor\
