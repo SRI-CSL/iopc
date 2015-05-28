@@ -10,7 +10,7 @@ compiler:
 
 #tests
 script:
-  - ${IOP_HOME}/.travis/build.sh
+  - ./.travis/build.sh
 
   
 
