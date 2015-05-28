@@ -128,12 +128,6 @@ scripts:
 	mkdir -p ${BUILDDIR}
 	cp ${SCRIPTS}  ${BUILDDIR}/
 
-clean_tmp:
-	rm -f /tmp/iop_*
-
 clean:
 	rm -f ${EXE} ${COBJS} *.o
 
-zip: clean
-	rm -f *~ *.zip *.bak
-	cd ..; mv src.zip src.zip.bak; zip -r src src
