@@ -15,7 +15,7 @@ LOLA = lola-2-macintel
 LIBS = -lpthread -lm  -arch i386 
 else
 LIBS =  -lm -pthread 
-CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic -Wno-unused-but-set-variable
+CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic
 TARGET = LINUX
 # add to CFLAGS for debugging:
 # -g
