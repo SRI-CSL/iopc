@@ -1,0 +1,9 @@
+#!/bin/bash
+rm iopc.tgz
+tar czvf iopc.tgz cov-int
+curl --form token=fx_F0Q7aTN1M1iczkmImbQ \
+  --form email=iam@csl.sri.com \
+  --form file=@iopc.tgz \
+  --form version="Current  Stable" \
+  --form description="Interoperability Framework" \
+  https://scan.coverity.com/builds?project=SRI-CSL%2Fiopc
