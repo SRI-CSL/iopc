@@ -6,6 +6,15 @@
 
 The C infrastructure for the IOP system
 
+## Building and installing 
+
+```
+export IOPBINDIR = <where you want to install iop>
+make
+make install
+```
+
+
 
 Todo list:
 
