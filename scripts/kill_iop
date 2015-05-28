@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use Proc::ProcessTable;
+
+
+my  $t = new Proc::ProcessTable;
+my $iop_system_pid = 0;
+
+foreach my $p ( @{$t->table} ){
+    if($p->cmndline =~ /^system /){
+	$iop_system_pid = $p->pid;
+    }
+}
+
+if($iop_system_pid){
+    kill USR1 => $iop_system_pid;
+    print STDOUT "Sent $iop_system_pid the SIGUSR1 signal!\n";
+} else {
+    print STDOUT "Didn't see the system actor.\n";
+}
+

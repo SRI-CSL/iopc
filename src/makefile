@@ -3,20 +3,19 @@ COMPILER = gcc
 # location of temporary build products
 BUILDDIR = ../build
 
-OS       =  $(shell uname)
+OS  =  $(shell uname)
 
-ARCH     =  $(shell uname -p)
-
-CPU      =  Intel
 
 ifeq (Darwin, $(findstring Darwin, ${OS}))
 CFLAGS = -Wall -D_MAC -arch i386 -g
+TARGET = MAC
 # add to CFLAGS for debugging:
 # -g 
 LIBS = -lpthread -lm  -arch i386 
 else
 LIBS =  -lm -pthread 
 CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic -Wno-unused-but-set-variable
+TARGET = LINUX
 # add to CFLAGS for debugging:
 # -g 
 endif
@@ -61,7 +60,7 @@ CWFLAGS	+=	-pedantic
 
 CFLAGS += ${CWFLAGS}
 
-EXE = talk2iop\
+EXES = talk2iop\
       iop_executor\
       iop_registry\
       iop_main\
@@ -83,6 +82,7 @@ EXE = talk2iop\
       iop_sal_wrapper
 
 SCRIPTS = iop jlambda jl kill_iop
+
 HEADERS = actor.h\
 	  argv.h\
 	  authenticate.h\
@@ -113,12 +113,13 @@ COBJS = actor.o\
         iop_utils.o\
         socket_lib.o\
         msg.o argv.o wrapper_lib.o sal_lib.o\
-				ec.o macrostr.o
+	ec.o macrostr.o
 
+JARS = iop.jar
 
-all:  scripts ${EXE}
+all:  scripts ${EXES}
 
-${EXE}: %: %.o ${COBJS} ${HEADERS} ${MISC}
+${EXES}: %: %.o ${COBJS} ${HEADERS} ${MISC}
 	${COMPILER}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
 
 %.o: %.c %.h ${HEADERS} ${MISC}
@@ -126,8 +127,15 @@ ${EXE}: %: %.o ${COBJS} ${HEADERS} ${MISC}
 
 scripts:
 	mkdir -p ${BUILDDIR}
-	cp ${SCRIPTS}  ${BUILDDIR}/
+	for script in ${SCRIPTS} ; do cp ../scripts/$${script} ${BUILDDIR}; done
+
+install: all
+	echo "Installing for ${TARGET} in ${IOPBINDIR}"
+	mkdir -pv ${IOPBINDIR}
+	for exe in ${EXES} ; do cp ../build/$${exe} ${IOPBINDIR}; done
+	for script in ${SCRIPTS} ; do cp ../build/$${script} ${IOPBINDIR}; done
+	for jar in ${JARS}  ; do cp ../lib/$${jar} ${IOPBINDIR}; done
 
 clean:
-	rm -f ${EXE} ${COBJS} *.o
+	rm -f ${EXES} ${COBJS} *.o
 
