@@ -2,9 +2,14 @@
 [![Build Status](https://travis-ci.org/SRI-CSL/iopc.svg?branch=master)](https://travis-ci.org/SRI-CSL/iopc)
 
 
-# iopc
+## iopc
 
-The C infrastructure for the IOP system
+
+The C infrastructure for the IOP system (plus the latest iop.jar).
+
+## Prerequisites
+
+Using iop and jlambda requires Java and Maude.
 
 ## Building and installing 
 
@@ -12,6 +17,25 @@ The C infrastructure for the IOP system
 export IOPBINDIR = <where you want to install iop>
 make
 make install
+```
+
+## Using JLambda
+
+```
+export PATH = ${IOPBINDIR):${PATH}
+
+jlambda
+
+
+```
+
+## Using IOP 
+
+```
+export PATH = ${IOPBINDIR):${PATH}
+
+iop
+
 ```
 
 
