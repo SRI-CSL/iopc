@@ -1,0 +1,16 @@
+language: c
+
+compiler:
+  - clang
+  - gcc
+
+
+#dependencies
+  - export IOP_HOME=`pwd`
+
+#tests
+script:
+  - ${IOP_HOME}/.travis/build.sh
+
+  
+

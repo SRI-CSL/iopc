@@ -19,8 +19,8 @@ CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -ped
 TARGET = LINUX
 # add to CFLAGS for debugging:
 # -g
-#check the arch for 32 or 64 bit
 
+#check the arch for 32 or 64 bit
 ifeq (i386, $(findstring i386, ${ARCH}))
 LOLA = lola-2-linux32
 else
@@ -35,11 +35,9 @@ CWFLAGS	+=	-Wall
 CWFLAGS	+=	-Werror
 
 # Extended warnings
-CWFLAGS  +=     -Wextra
-#CWFLAGS	+=	-Wshadow 
+CWFLAGS +=      -Wextra
 CWFLAGS	+=	-Wpointer-arith 
 CWFLAGS	+=	-Wcast-align 
-#CWFLAGS	+=	-Wwrite-strings
 CWFLAGS	+=	-Waggregate-return 
 CWFLAGS	+=	-Wstrict-prototypes 
 CWFLAGS	+=	-Wmissing-prototypes
@@ -52,9 +50,6 @@ CWFLAGS	+=	-fstrict-aliasing
 CWFLAGS	+=	-fno-common 
 CWFLAGS	+=	-Wno-packed 
 CWFLAGS	+=	-Wswitch-default
-#CWFLAGS	+=	-Wformat=2 
-#CWFLAGS	+=	-Wformat-security
-#CWFLAGS	+=	-Wmissing-format-attribute
 CWFLAGS	+=	-D_REENTRANT 
 CWFLAGS	+=	-D_THREAD_SAFE 
 CWFLAGS	+=	-pipe 

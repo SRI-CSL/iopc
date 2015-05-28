@@ -1,3 +1,7 @@
+
+[![Build Status](https://travis-ci.org/SRI-CSL/iopc.svg?branch=master)](https://travis-ci.org/SRI-CSL/iopc)
+
+
 # iopc
 
 The C infrastructure for the IOP system
