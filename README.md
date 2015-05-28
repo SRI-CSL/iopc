@@ -1,6 +1,8 @@
 
 [![Build Status](https://travis-ci.org/SRI-CSL/iopc.svg?branch=master)](https://travis-ci.org/SRI-CSL/iopc)
 
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/5280/badge.svg)](https://scan.coverity.com/projects/5280)
+
 
 ## iopc
 
