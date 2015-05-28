@@ -3,12 +3,13 @@ COMPILER = gcc
 # location of temporary build products
 BUILDDIR = ../build
 
-OS  =  $(shell uname)
+OS   =  $(shell uname)
+ARCH =  $(shell uname -p)
 
 
 ifeq (Darwin, $(findstring Darwin, ${OS}))
 CFLAGS = -Wall -D_MAC -arch i386 -g
-TARGET = MAC
+LOLA = lola-2-macintel
 # add to CFLAGS for debugging:
 # -g 
 LIBS = -lpthread -lm  -arch i386 
@@ -17,7 +18,15 @@ LIBS =  -lm -pthread
 CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic -Wno-unused-but-set-variable
 TARGET = LINUX
 # add to CFLAGS for debugging:
-# -g 
+# -g
+#check the arch for 32 or 64 bit
+
+ifeq (i386, $(findstring i386, ${ARCH}))
+LOLA = lola-2-linux32
+else
+LOLA = lola-2-linux64
+endif
+
 endif
 
 
@@ -135,6 +144,7 @@ install: all
 	for exe in ${EXES} ; do cp ../build/$${exe} ${IOPBINDIR}; done
 	for script in ${SCRIPTS} ; do cp ../build/$${script} ${IOPBINDIR}; done
 	for jar in ${JARS}  ; do cp ../lib/$${jar} ${IOPBINDIR}; done
+	cp ../3rdParty/${LOLA}  ${IOPBINDIR}/lola-2
 
 clean:
 	rm -f ${EXES} ${COBJS} *.o
