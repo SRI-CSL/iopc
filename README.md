@@ -42,19 +42,14 @@ iop
 
 Todo list:
 
-0. install targets etc
+0.  use vagrant to improve the travis
 
-1.  iop.jar
+1.  coverity
 
-2.  travis
+2.  documentation
 
-3.  coverity
+3.  release
 
-4.  documentation
-
-5.  release
-
-6.  autoconf
 
 
 
