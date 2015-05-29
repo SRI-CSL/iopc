@@ -379,13 +379,13 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
  restart:
   if(*exitFlag){
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    return NULL;
+    goto fail;
   }
   eM("readMsgVolatile  in %d (exitFlag = %d) starting (or restarting)\n", getpid(), *exitFlag);
   if((bytes = read(fd, buff, BUFFSZ)) < 0){
     if(*exitFlag){ 
       eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-      return NULL; 
+      goto fail; 
     }
     if(errno == EINTR){
       eM("readMsgVolatile  in %d (exitFlag = %d) restarting after being interrupted by a signal\n", getpid(), *exitFlag);
@@ -409,14 +409,14 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   }
   if(*exitFlag){ 
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    return NULL; 
+    goto fail; 
   }    
-  if(setFlag(fd, O_NONBLOCK) < 0) goto fail;
+  if(setFlag(fd, O_NONBLOCK) < 0){  goto fail; }
   eM("readMsgVolatile in %d (exitFlag = %d) setFlag to O_NONBLOCK\n", getpid(), *exitFlag);
 
   if(*exitFlag){ 
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    return NULL; 
+    goto fail; 
   }
   if((retval = makeMsg(BUFFSZ)) == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
@@ -425,59 +425,61 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   eM("readMsgVolatile in %d (exitFlag = %d) made Msg\n", getpid(), *exitFlag);
   if(*exitFlag){ 
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    return NULL; 
+    goto fail; 
   }
   if(addToMsg(retval, bytes, buff) != 0){
     fprintf(stderr, "addToMsg in %d failed\n", getpid());
-    retval = NULL;
-    goto exit;
+    goto fail; 
   }
   eM("readMsgVolatile in %d (exitFlag = %d) added  buff to Msg\n", getpid(), *exitFlag);
   if(*exitFlag){ 
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    return NULL;
+    goto fail;
   }
   while(iop_usleep(1), 
 	(bytes = read(fd, buff, BUFFSZ)) > 0){
     if(*exitFlag){ 
       eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-      return NULL; 
+      goto fail; 
     }
     eM("readMsgVolatile in %d (exitFlag = %d) read in non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
     
     if(*exitFlag){ 
       eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-      return NULL; 
+      goto fail; 
     }
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg  in %d failed\n", getpid());
-      retval = NULL;
-      goto exit;
+      goto fail;
     }
   }
  exit:
   eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
   if(*exitFlag){ 
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    return NULL; 
+    goto fail; 
   } 
-  clearFlag(fd, O_NONBLOCK);
   
   eM("readMsgVolatile in %d (exitFlag = %d) cleared non-blocking flag\n", getpid(), *exitFlag);
   /* retval->data is a C string, and retval->bytesUsed is its C string length */
   if(retval != NULL){
     if(addToMsg(retval, 1, "\0") != 0){
       fprintf(stderr, "addToMsg  in %d failed\n", getpid());
-      freeMsg(retval);
-      retval = NULL;
-      return retval;
+      goto fail;
     }
     retval->bytesUsed--;
   }
+
+  clearFlag(fd, O_NONBLOCK);
+
   eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (retval->bytesUsed = %d)\n", getpid(), *exitFlag, retval->bytesUsed);
   return retval;
   
  fail:
+
+  clearFlag(fd, O_NONBLOCK);
+  freeMsg(retval);
+  retval = NULL;
   return retval;
 }
 
