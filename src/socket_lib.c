@@ -51,16 +51,18 @@ int *acceptSocket(int listenSocket, char **comments){
 
   if (*retval == INVALID_SOCKET){
     sprintf(buff, "acceptSocket: accept() error %d\n", errno);
+    
+  } else {
+
+    ip = inet_ntoa(from.sin_addr);
+    hostptr = gethostbyaddr((char*)&(from.sin_addr.s_addr), 4, AF_INET);
+
+    hostname = "unknown";
+    if(hostptr != NULL){ hostname = hostptr->h_name; }
+    snprintf(buff, 
+	     BUFFSZ, 
+	     "acceptSocket: host = %s, IP = %s\n", hostname, ip);
   }
-
-  ip = inet_ntoa(from.sin_addr);
-  hostptr = gethostbyaddr((char*)&(from.sin_addr.s_addr), 4, AF_INET);
-
-  hostname = "unknown";
-  if(hostptr != NULL){ hostname = hostptr->h_name; }
-  snprintf(buff, 
-	   BUFFSZ, 
-	   "acceptSocket: host = %s, IP = %s\n", hostname, ip);
   *comments = buff;
   return retval;
 }
