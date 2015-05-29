@@ -109,7 +109,7 @@ int allocateSocket(unsigned short port, char *host, int* sockp){
 
 int allocateListeningSocket(unsigned short port, int* sockp){
   struct sockaddr_in server;
-  int listen_socket;
+  int listen_socket = -1;
   int retval = -1;
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = INADDR_ANY; 
@@ -126,6 +126,7 @@ int allocateListeningSocket(unsigned short port, int* sockp){
 
   if(bind(listen_socket, (struct sockaddr*)&server, sizeof(server)) < 0){
     announce("bind failed in allocateListeningSocket:");
+    if(listen_socket >= 0){ close(listen_socket); }
     return retval;
   }
   
@@ -134,6 +135,7 @@ int allocateListeningSocket(unsigned short port, int* sockp){
       continue; 
     } else {
       announce("listen failed in allocateListeningSocket:");
+      if(listen_socket >= 0){ close(listen_socket); }
       return retval;
     }
   }
