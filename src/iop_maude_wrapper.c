@@ -96,8 +96,6 @@ int main(int argc, char** argv){
   } else { 
     /* i'm the boss */
     pthread_t echoMaudeThread;
-    char cmdBuff[PATH_MAX + SIZE];
-    int len;
     
     ec_neg1( close(pin[0]) );
     ec_neg1( close(perr[1]) );
@@ -113,18 +111,26 @@ int main(int argc, char** argv){
     }
 
     if(argc == 3){
+      int len = strlen(argv[2]);
+      char* cmdBuffer = (char *)calloc(len + 10, sizeof(char));
+      if(cmdBuffer == NULL){
+	fprintf(stderr, "calloc failed of cmdBuffer\n");
+        exit(EXIT_FAILURE);
+      }
       announce("%s\t:\tloading %s\n", argv[0], argv[2]); 
       
-      sprintf(cmdBuff, "load %s\n", argv[2]);
+      snprintf(cmdBuffer, len + 10, "load %s\n", argv[2]);
       
-      len = strlen(cmdBuff);
-      if(write(child_STDIN_FILENO, cmdBuff, len) !=  len){
-        fprintf(stderr, "write failed of \"%s\" command", cmdBuff);
+      len = strlen(cmdBuffer);
+      if(write(child_STDIN_FILENO, cmdBuffer, len) !=  len){
+        fprintf(stderr, "write failed of \"%s\" command", cmdBuffer);
         /* forge on, notify registry, die calmly? */
         exit(EXIT_FAILURE);
       };
       
-      announce(cmdBuff);
+      announce(cmdBuffer);
+      free(cmdBuffer);
+      
     }
           
     while(1){
