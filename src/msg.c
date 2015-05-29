@@ -689,7 +689,7 @@ msg* acceptMsg(int fd){
   if((errcode < 0) || (bytesIncoming <= 0)) return NULL;
   eM("acceptMsg: expecting %d bytes\n", bytesIncoming);
   retval = makeMsg(bytesIncoming + 1);
-  if(retval == NULL) goto fail;
+  if(retval == NULL){  goto fail; }
   bytesRemaining = bytesIncoming;
   while(1){
   restart:
@@ -708,8 +708,6 @@ msg* acceptMsg(int fd){
     eM("acceptMsg: got %d bytes\n", bytes);
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "acceptMsg: addToMsg failed\n");
-      freeMsg(retval);
-      retval = NULL;
       goto fail;
     }
     /* iam 05/04/22 hopefully stop message collisions */
@@ -726,6 +724,7 @@ msg* acceptMsg(int fd){
     }
   }
  fail:
+  freeMsg(retval);
   return NULL;
 }
 
