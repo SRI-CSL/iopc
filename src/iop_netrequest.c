@@ -98,10 +98,10 @@ static int msg2netlog(msg* message){
 }
 
 static void iop_netrequest_sigchild_handler(int sig){
-  fprintf(stderr, "%s died (%d)!\n", self, sig);
   /* for the prevention of zombies */
   pid_t child;
   int status;
+  fprintf(stderr, "%s died (%d)!\n", self, sig);
   child = wait(&status);
 }
 

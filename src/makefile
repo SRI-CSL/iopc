@@ -1,5 +1,3 @@
-COMPILER = gcc
-
 # location of temporary build products
 BUILDDIR = ../build
 
@@ -8,14 +6,21 @@ ARCH =  $(shell uname -p)
 
 
 ifeq (Darwin, $(findstring Darwin, ${OS}))
+
+######  DARWIN
+
 CFLAGS = -Wall -D_MAC -arch i386 -g
 LOLA = lola-2-macintel
 # add to CFLAGS for debugging:
 # -g 
 LIBS = -lpthread -lm  -arch i386 
+
 else
+
+######## LINUX
+
 LIBS =  -lm -pthread 
-CFLAGS =  -Wall -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic
+CFLAGS = -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic
 TARGET = LINUX
 # add to CFLAGS for debugging:
 # -g
@@ -29,40 +34,6 @@ endif
 
 endif
 
-
-# Standard Warnings
-CWFLAGS	+=	-Wall 
-CWFLAGS	+=	-Werror
-
-# Extended warnings
-CWFLAGS +=      -Wextra
-CWFLAGS	+=	-Wpointer-arith 
-CWFLAGS	+=	-Wcast-align 
-CWFLAGS	+=	-Waggregate-return 
-CWFLAGS	+=	-Wstrict-prototypes 
-CWFLAGS	+=	-Wmissing-prototypes
-CWFLAGS	+=	-Wmissing-declarations 
-CWFLAGS	+=	-Wredundant-decls 
-CWFLAGS	+=	-Wnested-externs
-CWFLAGS	+=	-Winline 
-CWFLAGS	+=	-Wbad-function-cast 
-CWFLAGS	+=	-fstrict-aliasing
-CWFLAGS	+=	-fno-common 
-CWFLAGS	+=	-Wno-packed 
-CWFLAGS	+=	-Wswitch-default
-CWFLAGS	+=	-D_REENTRANT 
-CWFLAGS	+=	-D_THREAD_SAFE 
-CWFLAGS	+=	-pipe 
-CWFLAGS	+=	-Wunused 
-CWFLAGS	+=	-Winit-self
-CWFLAGS	+=	-Wno-long-long 
-CWFLAGS	+=	-Wmissing-include-dirs
-CWFLAGS	+=	-Wno-variadic-macros
-CWFLAGS	+=	-ansi 
-CWFLAGS	+=	-std=c99
-CWFLAGS	+=	-pedantic
-
-#CFLAGS += ${CWFLAGS}
 
 EXES = talk2iop\
       iop_executor\
@@ -124,10 +95,10 @@ JARS = iop.jar
 all:  scripts ${EXES}
 
 ${EXES}: %: %.o ${COBJS} ${HEADERS} ${MISC}
-	${COMPILER}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
+	${CC}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
 
 %.o: %.c %.h ${HEADERS} ${MISC}
-	${COMPILER} ${CFLAGS} $< -c 
+	${CC} ${CFLAGS} $< -c 
 
 scripts:
 	mkdir -p ${BUILDDIR}

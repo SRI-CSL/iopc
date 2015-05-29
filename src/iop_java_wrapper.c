@@ -41,25 +41,6 @@ static char  g2dexe[] = "java";
 
 static char* entry_classname = NULL;
 
-/*
-        argv[0] = graphics2d
-	argv[1] = /Users/iam/bin/IOP
-	argv[2] = -Xms256m
-	argv[3] = -Xmx1024m
-	argv[4] = -Dcom.apple.mrj.application.apple.menu.about.name=PLA4
-	g2dargv[0] = java
-	g2dargv[1] = -cp
-	g2dargv[2] = /Users/iam/bin/IOP/iop.jar
-	g2dargv[3] = -Xms256m
-	g2dargv[4] = -Xmx1024m
-	g2dargv[5] = -Dcom.apple.mrj.application.apple.menu.about.name=PLA4
-	g2dargv[6] = g2d.Main
-	g2dargv[7] = graphics2d
-	g2dargv[8] = /Users/iam/bin/IOP
-	g2dargv[9] = (null)
- */
-
-
 
 static void chld_handler(int sig){
   fprintf(stderr, "%s died (%d)! Exiting\n", self, sig);
@@ -151,7 +132,7 @@ static int make_arguments(int argcIn, char** argvIn, char*** argvOut){
   }
 
   /* finally we pass in the main class, and the actor arguments */
-  argvO[tailc + 0] = entry_classname; //"g2d.Main";
+  argvO[tailc + 0] = entry_classname; 
   argvO[tailc + 1] = self;
   argvO[tailc + 2] = argvIn[1];
   argvO[tailc + 3] = NULL;

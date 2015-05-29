@@ -87,7 +87,7 @@ int main(int argc, char** argv){
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
 
-    // this hack is needed to convince maude to move its idea of where it is.
+    /*  this hack is needed to convince maude to move its idea of where it is.  */
     unsetenv("PWD");
 
     ec_neg1( execvp(maude_exe, maude_argv) );

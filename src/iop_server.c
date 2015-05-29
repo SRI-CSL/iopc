@@ -83,9 +83,10 @@ pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]){
     return -1;
   } else if(retval == 0){
     char token[1024];
+    int auth;
     memset(token, '\0', 1024);
     /* here is where we authenticate the client */
-    int auth = authenticate(socket, token, 1024);
+    auth = authenticate(socket, token, 1024);
     if(auth){
       serverLog("Authenticated %s\n", token);
       execvp(exe, cmd);
@@ -205,7 +206,6 @@ int main(int argc, char *argv[]){
     */
     
     child = spawnAuthenticatedProcess(*sockp, iop_argv[0], iop_argv);
-    //child = spawnProcess(iop_argv[0], iop_argv);
     close(*sockp);
     free(sockp);
     free(description);
