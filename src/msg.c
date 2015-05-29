@@ -345,6 +345,7 @@ msg* readMsg(int fd){
     eM("readMsg in %d read in non-blocking mode (bytes = %d)\n", getpid(), bytes);
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg  in %d failed\n", getpid());
+      freeMsg(retval);
       retval = NULL;
       goto exit;
     }
