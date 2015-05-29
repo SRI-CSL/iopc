@@ -811,6 +811,7 @@ int sendFormattedMsgFP(FILE* fp, char* fmt, ...){
   double dval;
   char numbuff[16];
   va_list ap;
+  int retval;
   msg* m = makeMsg(BUFFSZ);
   if(m == NULL) return -1;
   va_start(ap, fmt);
@@ -843,7 +844,9 @@ int sendFormattedMsgFP(FILE* fp, char* fmt, ...){
   m->data[m->bytesUsed] = '\0';
   fprintf(fp, "%d\n%s", m->bytesUsed, m->data);
   fflush(fp);
-  return m->bytesUsed;
+  retval = m->bytesUsed;
+  freeMsg(m);
+  return retval;
 }
 
 int sendFormattedMsgFD(int fd, char* fmt, ...){
