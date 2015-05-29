@@ -95,12 +95,13 @@ int authenticate(int socket, char* itoken, int itokensz){
       if(AUTH_DEBUG){ fprintf(stderr, "authenticate: got NULL token\n"); }
       close(socket);
     } else {
+      int version;
       /* cancel alarm then check the token  */
       alarm(0);
       if(itoken != NULL &&  token->bytesUsed <= itokensz){
         strncpy(itoken, token->data, itokensz);
       }
-      int version = clientOK(token);
+      version = clientOK(token);
 
       if(version > 0){
         int reply_ok = acknowledge(socket, version);
