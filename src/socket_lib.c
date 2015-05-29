@@ -38,8 +38,15 @@ int *acceptSocket(int listenSocket, char **comments){
   socklen_t fromlen = sizeof(from);
   struct hostent *hostptr;
   
-  if((retval == NULL) || (buff == NULL)){
-    fprintf(stderr, "calloc failed in acceptSocket\n");
+  if(retval == NULL){
+    fprintf(stderr, "calloc of retval failed in acceptSocket\n");
+    free(buff);
+    return NULL;
+  }
+  
+  if(buff == NULL){
+    fprintf(stderr, "calloc of buff failed in acceptSocket\n");
+    free(retval);
     return NULL;
   }
 
