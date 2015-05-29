@@ -121,6 +121,7 @@ int allocateListeningSocket(unsigned short port, int* sockp){
   struct sockaddr_in server;
   int listen_socket = -1;
   int retval = -1;
+  memset(&server, 0, sizeof(struct sockaddr_in));
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = INADDR_ANY; 
   server.sin_port = htons(port);
