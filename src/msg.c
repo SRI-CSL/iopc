@@ -297,6 +297,7 @@ msg* readPVSMsg(char *prompt, int fd){
   }
   return retval;
  fail:
+  freeMsg(msg);
   return NULL;
 }
 
