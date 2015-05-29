@@ -634,24 +634,34 @@ int writeActorSpec(int fd, actor_spec *act){
 
 actor_spec *readActorSpec(int fd){
   char *tempLine;
-  int i;
+  int i, linelen;
   actor_spec *retval = (actor_spec *)calloc(1, sizeof(actor_spec));
   if(retval ==  NULL){  return retval; }
   tempLine = readline(fd);
   if(tempLine == NULL){
-    free(retval);
-    return NULL;
+    goto fail;
   }
-  strcpy(retval->name, tempLine);
+  linelen = strlen(tempLine) + 1;
+  if(linelen >= PATH_MAX){
+    goto fail;
+  }
+  strncpy(retval->name, tempLine, linelen);
   free(tempLine);
-  if(readInt(fd, &retval->pid, "readActorSpec") != 1) return NULL; 
+  if(readInt(fd, &retval->pid, "readActorSpec") != 1){ goto fail; }
   for(i = 0; i < 3; i++){
     tempLine = readline(fd);
-    if(tempLine == NULL) return NULL;
-    strcpy(retval->fifos[i], tempLine);
+    if(tempLine == NULL){ goto fail; }
+    linelen = strlen(tempLine) + 1;
+    if(linelen >= PATH_MAX){ goto fail; }
+    strncpy(retval->fifos[i], tempLine, linelen);
     free(tempLine);
   }
   return retval;
+
+ fail:
+  fprintf(stderr, "Failing\n");
+  free(retval);
+  return NULL;
 }
 
 
