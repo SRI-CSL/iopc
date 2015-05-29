@@ -165,7 +165,8 @@ actor_spec* makeActorSpec(char *name){
     return retval;
   }
 EC_CLEANUP_BGN
-  return NULL;
+  free(retval);
+ return NULL;
 EC_CLEANUP_END
 }
 
