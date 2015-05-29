@@ -468,11 +468,16 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
       goto fail;
     }
     retval->bytesUsed--;
+
+    eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (retval->bytesUsed = %d)\n", getpid(), *exitFlag, retval->bytesUsed);
+
+  } else {
+
+    eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (retval = NULL)\n", getpid(), *exitFlag);
   }
 
   clearFlag(fd, O_NONBLOCK);
-
-  eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (retval->bytesUsed = %d)\n", getpid(), *exitFlag, retval->bytesUsed);
+  
   return retval;
   
  fail:
