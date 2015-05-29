@@ -856,6 +856,7 @@ int sendFormattedMsgFD(int fd, char* fmt, ...){
   int ival;
   double dval;
   char numbuff[16];
+  int retval;
   va_list ap;
   msg* m = makeMsg(BUFFSZ);
   if(m == NULL) return -1;
@@ -889,7 +890,9 @@ int sendFormattedMsgFD(int fd, char* fmt, ...){
   m->data[m->bytesUsed] = '\0';
   writeInt(fd, m->bytesUsed);
   write(fd, m->data, m->bytesUsed);
-  return m->bytesUsed;
+  retval = m->bytesUsed;
+  freeMsg(m);
+  return retval;
 }
 
 void echoMsgVolatile(int from, int to, volatile int* exitFlag){
