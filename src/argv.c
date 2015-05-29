@@ -122,6 +122,7 @@ int interpretTildes(const char* filename, char **newfilenamep){
       fprintf(stderr, 
 	      "Failure in interpretTildes: (newfilename == NULL) || (myEntry == NULL) -- %s\n",
 	      strerror(errno));
+      free(newfilename);
       return 0;
     }
     snprintf(newfilename, PATH_MAX, "%s%s", myEntry->pw_dir, filename + 1);
