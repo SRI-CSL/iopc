@@ -620,13 +620,11 @@ int readIntVolatile(int fd, int* nump, volatile int* exitFlag){
 int writeActorSpec(int fd, actor_spec *act){
   int i, len;
   if(act == NULL) return -1;
-  if(act->name == NULL)  return -1;
   len = strlen(act->name);
   if(write(fd, act->name, len) != len) return -1;
   if(write(fd, "\n", sizeof(char)) !=  sizeof(char)) return -1;
   if(writeInt(fd, act->pid) != 1) return -1;
   for(i = 0; i < 3; i++){
-    if(act->fifos[i] == NULL) return -1;
     len = strlen(act->fifos[i]);
     if(write(fd, act->fifos[i], len) != len) return -1;
     if(write(fd, "\n", sizeof(char)) != sizeof(char)) return -1;
