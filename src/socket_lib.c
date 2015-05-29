@@ -80,7 +80,7 @@ int allocateSocket(unsigned short port, char *host, int* sockp){
   int retval = - 1;
   struct sockaddr_in server;
   struct hostent *hp;
-  int  conn_socket;
+  int  conn_socket = -1;
   hp = gethostbyname(host);
   if (hp == NULL) {
     fprintf(stderr,
@@ -108,6 +108,7 @@ int allocateSocket(unsigned short port, char *host, int* sockp){
       continue; 
     } else {
       perror("allocateSocket: connect() failed:");
+      if(conn_socket >= 0){ close(conn_socket); }
       return retval;
     }
   }
