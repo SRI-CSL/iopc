@@ -297,7 +297,7 @@ EC_CLEANUP_END
 }
 
 int sendRequest(int index, int bytes, char* buff){
-  int reg_fd;
+  int reg_fd = -1;
   struct flock lock;
   registry_cmd_t cmd = SEND;
   announce("sendRequest\t:\tOpening Registry fifo\n");  
@@ -313,11 +313,12 @@ int sendRequest(int index, int bytes, char* buff){
   announce("sendRequest\t:\tWriting buff\n");  
   if(write(reg_fd, buff, bytes) != bytes){ goto unlock; }
  unlock:
-  if(unlockFD(&lock, reg_fd, "sendRequest: Registry fifo") <0){ goto fail; }
+  if(unlockFD(&lock, reg_fd, "sendRequest: Registry fifo") < 0){ goto fail; }
   announce("sendRequest\t:\tClosing fifo\n");  
   ec_neg1( close(reg_fd) );
   return 0;
  fail:
+  if(reg_fd >= 0){ ec_neg1( close(reg_fd) ); }
 EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
