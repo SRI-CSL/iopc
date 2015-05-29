@@ -297,7 +297,7 @@ msg* readPVSMsg(char *prompt, int fd){
   }
   return retval;
  fail:
-  freeMsg(msg);
+  freeMsg(retval);
   return NULL;
 }
 
@@ -636,9 +636,12 @@ actor_spec *readActorSpec(int fd){
   char *tempLine;
   int i;
   actor_spec *retval = (actor_spec *)calloc(1, sizeof(actor_spec));
-  if(retval ==  NULL) return retval;
+  if(retval ==  NULL){  return retval; }
   tempLine = readline(fd);
-  if(tempLine == NULL) return NULL;
+  if(tempLine == NULL){
+    free(retval);
+    return NULL;
+  }
   strcpy(retval->name, tempLine);
   free(tempLine);
   if(readInt(fd, &retval->pid, "readActorSpec") != 1) return NULL; 
