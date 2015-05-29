@@ -113,7 +113,7 @@ void ec_push(const char *fcn, const char *file, int line,
     if (ec_s_emergency[0] == '\0')
       node.ec_context = ec_s_emergency;
     else
-      node.ec_context = "?";
+      node.ec_context = "?";  /* FIXME: coverity error CID 88695 (we write 100 bytes on line 120) */
     len = sizeof(ec_s_emergency);
   }
   if (node.ec_context != NULL)

@@ -56,6 +56,7 @@ static void daemonLog(const char *format, ...){
   va_end(arg);
   return;
 EC_CLEANUP_BGN
+  if(logfp != NULL){ fclose(logfp); }
   va_end(arg);
   return;
 EC_CLEANUP_END
