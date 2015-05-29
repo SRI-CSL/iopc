@@ -219,7 +219,8 @@ void* socket2outGentleWithHttpAck(void *sp){
       for(i = 0; i < retval; i++) putc(buff[i], stdout);
       fprintf(stdout, "\n");
       fflush(stdout);
-      send(socket, ack204, strlen(ack204), 0);  
+      retval = send(socket, ack204, strlen(ack204), 0);
+      if(retval < 0){ perror("send failed\n"); }
       /*      close(socket);    */
     }
   };
