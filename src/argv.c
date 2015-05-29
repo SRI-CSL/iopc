@@ -139,6 +139,7 @@ char *argv2String(int argc, char** argv, const char* seperator){
       retval = (char *)calloc(len, sizeof(char));
       if(retval == NULL){ 
 	fprintf(stderr, "calloc failure in argv2String: %s\n", strerror(errno));
+	return retval;
       }
       strcpy(retval, arg);
     }
