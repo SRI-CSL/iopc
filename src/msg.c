@@ -891,8 +891,15 @@ int sendFormattedMsgFD(int fd, char* fmt, ...){
   }
   va_end(ap);
   m->data[m->bytesUsed] = '\0';
-  writeInt(fd, m->bytesUsed);
-  write(fd, m->data, m->bytesUsed);
+  
+  if(writeInt(fd, m->bytesUsed) < 0){
+    fprintf(stderr, "sendFormattedMsgFD: writeInt failed\n");
+  }
+
+  if(write(fd, m->data, m->bytesUsed) < 0){
+    fprintf(stderr, "sendFormattedMsgFD: write failed\n");
+  }
+
   retval = m->bytesUsed;
   freeMsg(m);
   return retval;
