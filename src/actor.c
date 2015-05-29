@@ -253,7 +253,7 @@ EC_CLEANUP_END
 
 
 int deleteFromRegistry(char *name){
-  int len, reg_wr_fd, reg_rd_fd, retval = -1;
+  int len, reg_wr_fd = -1, reg_rd_fd = -1, retval = -1;
   struct flock wr_lock, rd_lock;
   registry_cmd_t cmd = UNREGISTER;
   if(name == NULL){ goto fail; }
@@ -288,6 +288,8 @@ int deleteFromRegistry(char *name){
   ec_neg1( close(reg_rd_fd) ); 
   return retval;
  fail:
+  if(reg_wr_fd >= 0){ ec_neg1( close(reg_wr_fd) ); }
+  if(reg_rd_fd >= 0){ ec_neg1( close(reg_rd_fd) ); }
 EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
