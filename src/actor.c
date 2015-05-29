@@ -326,7 +326,7 @@ EC_CLEANUP_END
 }
 
 int terminateIOP(void){
-  int reg_fd;
+  int reg_fd = -1;
   struct flock lock;
   registry_cmd_t cmd = KILL;
   announce("Opening Registry fifo\n");  
@@ -341,6 +341,7 @@ int terminateIOP(void){
   ec_neg1( close(reg_fd) );
   return 0;
  fail:
+  if(reg_fd >= 0){ ec_neg1( close(reg_fd) ); }
 EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
