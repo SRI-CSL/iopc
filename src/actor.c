@@ -43,10 +43,11 @@ extern pid_t iop_pid;
 
 
 actor_spec* newActor(int notify, char* executable, char** argv){
+  actor_spec *retval = NULL;
   if((executable == NULL) ||  (argv == NULL)){
-    goto fail;
+    fprintf(stderr, "newActor\t:\tFailure in newActor: BAD ARGS\n");
+    return retval;
   } else {
-    actor_spec *retval;
     announce("newActor\t:\tMaking actor_spec\n");
     retval = makeActorSpec(argv[0]);
     announce("newActor\t:\tCalling spawnActor\n");
@@ -58,6 +59,7 @@ actor_spec* newActor(int notify, char* executable, char** argv){
     return retval;
   }
  fail:
+  free(retval);
   fprintf(stderr, "newActor\t:\tFailure in newActor: %s\n", strerror(errno));
   return NULL;
 }
