@@ -209,7 +209,7 @@ EC_CLEANUP_END
 }
 
 int notifyRegistry(actor_spec *acts){
-  int reg_wr_fd, reg_rd_fd, retval = -1;
+  int reg_wr_fd = -1, reg_rd_fd = -1, retval = -1;
   struct flock wr_lock, rd_lock;
   registry_cmd_t cmd = REGISTER;
   if(acts == NULL){ goto fail; }
@@ -242,6 +242,8 @@ int notifyRegistry(actor_spec *acts){
   ec_neg1( close(reg_rd_fd) ); 
   return retval;
  fail:
+  if(reg_wr_fd >= 0){ ec_neg1( close(reg_wr_fd) ); }
+  if(reg_rd_fd >= 0){ ec_neg1( close(reg_rd_fd) ); }
 EC_CLEANUP_BGN
   return -1;
 EC_CLEANUP_END
