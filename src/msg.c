@@ -747,7 +747,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
   bytesRemaining = bytesIncoming;
   while(1){
   restart:
-    if(*exitFlag) return NULL;
+    if(*exitFlag){ goto fail; }
     if((bytes = read(fd, buff, (bytesRemaining < BUFFSZ ? bytesRemaining : BUFFSZ))) < 0){
       if(errno == EINTR){
 	eM("acceptMsgVolatile: restarting after being interrupted by a signal\n");
@@ -758,17 +758,15 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
 	goto fail;
       }
       fprintf(stderr, "acceptMsgVolatile: read  returned with nothing\n");
-      return NULL;
+       goto fail;
     }
     eM("acceptMsgVolatile: got %d bytes\n", bytes);
     if(*exitFlag){
       eM("acceptMsgVolatile: bailing with NULL,  *exitFlag is true\n");
-     return NULL;
+      goto fail;
     }
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "acceptMsgVolatile: addToMsg failed\n");
-      freeMsg(retval);
-      retval = NULL;
       goto fail;
     }
     /* iam 05/04/22 hopefully stop message collisions */
@@ -784,6 +782,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
     }
   }
  fail:
+  freeMsg(retval);
   return NULL;
 }
 
