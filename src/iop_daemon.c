@@ -82,7 +82,6 @@ static int iop_daemon_io_config(void){
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
   if((dup2(outfd, STDOUT_FILENO) < 0) || (dup2(outfd, STDERR_FILENO) < 0)){
-    close(outfd);
     retval = 2 ;
   } else {
     retval = 0;
