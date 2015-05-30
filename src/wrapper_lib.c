@@ -55,10 +55,10 @@ void parseMaudeThenEcho(int from, int to){
     message->bytesUsed = length;
     if(sendMsg(to, message) < 0){
       fprintf(stderr, "sendMsg in parseMaudeThenEcho failed\n");
-      return;
+    } else {
+      if(MAUDE_WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
+      announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     }
-    if(MAUDE_WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
-    announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     freeMsg(message);
   }
 }
@@ -72,10 +72,10 @@ void parsePVSThenEcho(char *prompt, int from, int to){
     message->bytesUsed = length;
     if(sendMsg(to, message) < 0){
       fprintf(stderr, "sendMsg in parsePVSThenEcho failed\n");
-      return;
+    } else {
+      if(WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
+      announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     }
-    if(WRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
-    announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     freeMsg(message);
   }
 }
