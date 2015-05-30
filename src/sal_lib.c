@@ -68,8 +68,8 @@ void parseSalThenEcho(int from, int to){
   int length;
   announce("parseSalThenEcho\t:\tCalling wrapper_readSalMsg\n");
   message = wrapper_readSalMsg(from);
-  announce("parseSalThenEcho\t:\twrapper_readSalMsg returned %d bytes\n", message->bytesUsed);
   if(message != NULL){
+    announce("parseSalThenEcho\t:\twrapper_readSalMsg returned %d bytes\n", message->bytesUsed);
     length = parseString(message->data, message->bytesUsed);
     message->bytesUsed = length;
     if(sendMsg(to, message) < 0){
