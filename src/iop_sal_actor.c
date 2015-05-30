@@ -43,7 +43,7 @@ static void chld_handler(int sig){
 }
 
 int main(int argc, char** argv){
-  msg *messageIn = NULL, *messageOut = NULL;
+  msg *messageIn = NULL;
   char *sender, *body; 
   int retval;
   if(argv == NULL){
@@ -68,10 +68,6 @@ int main(int argc, char** argv){
       freeMsg(messageIn);
       messageIn = NULL;
     }  
-    if(messageOut != NULL){
-      freeMsg(messageOut);
-      messageOut = NULL;
-    }
     announce("%s waiting to process request number %d\n", self, requestNo);
     messageIn = acceptMsg(STDIN_FILENO);
     if(messageIn == NULL){
