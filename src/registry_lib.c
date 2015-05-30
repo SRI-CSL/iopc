@@ -689,23 +689,14 @@ static void parseOut(msg* outmsg){
   if(rest == NULL){ goto echo; }
   parsedmsgsz = outmsg->bytesUsed + 4;
   if((parsedmsg = (char *)calloc(parsedmsgsz, sizeof(char))) == NULL){ goto fail; }
-  /* true clause old way; false clause new way */
-  if(0){
-    bytes = snprintf(parsedmsg, parsedmsgsz, "(%s %s)", sender, rest);
-    log2File("snprintf formatted %d bytes, rest_offset = %d ... %c%c\n", bytes, rest_offset, copy[rest_offset], copy[rest_offset + 1]);
-  } else {
-    if((offset == 1) && (rest == NULL)){
-      offset = snprintf(parsedmsg, parsedmsgsz, "(%s)", sender);
-      bytes = offset;
-    } else {
-      offset = snprintf(parsedmsg, parsedmsgsz, "(%s ", sender);
-      memcpy(&parsedmsg[offset], &copy[rest_offset], outmsg->bytesUsed - rest_offset);
-      parsedmsg[offset + outmsg->bytesUsed - rest_offset]     = ')';
-      parsedmsg[offset + outmsg->bytesUsed - rest_offset + 1] = '\0';
-      bytes = 1 + offset + outmsg->bytesUsed - rest_offset;
-    }
-    log2File("snprintf, memcpy and brute force formatted %d bytes, rest_offset = %d ... %c%c\n", bytes, rest_offset, copy[rest_offset], copy[rest_offset + 1]);
-  }
+  offset = snprintf(parsedmsg, parsedmsgsz, "(%s ", sender);
+  memcpy(&parsedmsg[offset], &copy[rest_offset], outmsg->bytesUsed - rest_offset);
+  parsedmsg[offset + outmsg->bytesUsed - rest_offset]     = ')';
+  parsedmsg[offset + outmsg->bytesUsed - rest_offset + 1] = '\0';
+  bytes = 1 + offset + outmsg->bytesUsed - rest_offset;
+
+  log2File("snprintf, memcpy and brute force formatted %d bytes, rest_offset = %d ... %c%c\n", bytes, rest_offset, copy[rest_offset], copy[rest_offset + 1]);
+  
   
   log2File("parsedmsg = \"%s\"\n", parsedmsg);
   sendActor(recipient, bytes, parsedmsg);
