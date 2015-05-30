@@ -192,7 +192,6 @@ int main(int argc, char** argv){
 
       if((byteswritten = write(fd, rest, strlen(rest))) < 0){
         perror("filemanager append to file failed");
-	close(fd);
 	goto uafail;
       }
       announce("%s\n%s\nappendOK\n%s\n", sender, self, oldfilename);
@@ -203,6 +202,7 @@ int main(int argc, char** argv){
 
     uafail:
       unlockFD(&lock, fd, filename);
+      close(fd);
 
     afail:
       announce("%s\n%s\nappendFailure\n%s\n", sender, self, oldfilename);
