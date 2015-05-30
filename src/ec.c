@@ -85,6 +85,7 @@ static struct ec_node {
   EC_ERRTYPE ec_type;
   char *ec_context;
 } *ec_head, ec_node_emergency;
+
 static char ec_s_emergency[100];
 
 const int ec_in_cleanup = 0;
@@ -93,8 +94,7 @@ const int ec_in_cleanup = 0;
 #define SEP2 ":"
 #define SEP3 "] "
 
-void ec_push(const char *fcn, const char *file, int line,
-	     const char *str, int errno_arg, EC_ERRTYPE type){
+void ec_push(const char *fcn, const char *file, int line, const char *str, int errno_arg, EC_ERRTYPE type){
   struct ec_node node, *p;
   size_t len;
   static int attexit_called = 0;
@@ -102,24 +102,25 @@ void ec_push(const char *fcn, const char *file, int line,
   ec_mutex(1);
   node.ec_errno = errno_arg;
   node.ec_type = type;
-  if (str == NULL)
+  if (str == NULL){
     str = "";
-  len = strlen(fcn) + strlen(SEP1) + strlen(file) + strlen(SEP2) +
-    6 + strlen(SEP3) + strlen(str) + 1;
+  }
+  len = strlen(fcn) + strlen(SEP1) + strlen(file) + strlen(SEP2) + 6 + strlen(SEP3) + strlen(str) + 1;
   node.ec_context = (char *)calloc(1, len);
   if (node.ec_context == NULL) {
     if (ec_s_emergency[0] == '\0')
       node.ec_context = ec_s_emergency;
     else
-      node.ec_context = "?";  /* FIXME: coverity error CID 88695 (we write 100 bytes on line 120) */
+      node.ec_context = NULL; /* iam: was "?" */
     len = sizeof(ec_s_emergency);
   }
-  if (node.ec_context != NULL)
-    snprintf(node.ec_context, len, "%s%s%s%s%d%s%s", fcn, SEP1,
-	     file, SEP2, line, SEP3, str);
+  if (node.ec_context != NULL){
+    snprintf(node.ec_context, len, "%s%s%s%s%d%s%s", fcn, SEP1, file, SEP2, line, SEP3, str);
+  }
   p = (struct ec_node *)calloc(1, sizeof(struct ec_node));
-  if (p == NULL && ec_node_emergency.ec_context == NULL)
+  if (p == NULL && ec_node_emergency.ec_context == NULL){
     p = &ec_node_emergency; /* use just once */
+  }
   if (p != NULL) {
     node.ec_next = ec_head;
     ec_head = p;
@@ -133,8 +134,9 @@ void ec_push(const char *fcn, const char *file, int line,
       ec_print(); /* so at least the error gets shown */
     }
   }
-  else
+  else {
     ec_mutex(0);
+  }
 }
 
 void ec_print(void){
