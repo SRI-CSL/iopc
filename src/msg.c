@@ -648,6 +648,7 @@ actor_spec *readActorSpec(int fd){
   }
   linelen = strlen(tempLine) + 1;
   if(linelen >= PATH_MAX){
+    free(tempLine);
     goto fail;
   }
   strncpy(retval->name, tempLine, linelen);
