@@ -94,7 +94,6 @@ pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]){
       return -1;
     } else {
       serverLog("Couldn't authenticate process -- exiting: fyi token = %s\n", token);
-      close(socket);
       exit(EXIT_SUCCESS);
     }
   }
