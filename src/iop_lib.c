@@ -1027,7 +1027,7 @@ char* fetchActorName(int index){
 int waitForRegistry(void){
   int  reg_rd_fd;
   struct flock rd_lock;
-  char buff[SIZE];
+  char buff[SIZE + 1];
 
   announce("opening Registry read fifo\n");  
   if((reg_rd_fd = open(registry_fifo_out,  O_RDWR)) < 0) 

@@ -1039,7 +1039,7 @@ void *monitorInSocket(void *arg){
 
 static int wait4ReadyFromInputWindow(int in2regSocket){
   int  *msgsock, bytesread, retval = -1;
-  char *description = NULL, buff[SIZE];
+  char *description = NULL, buff[SIZE + 1];
   log2File("wait4ReadyFromInputWindow blocking on acceptSocket\n");
   msgsock = acceptSocket(in2regSocket, &description);
   if (*msgsock == INVALID_SOCKET){
