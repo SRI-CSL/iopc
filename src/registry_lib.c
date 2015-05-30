@@ -487,7 +487,6 @@ static actor_id *getActorByName(char *name){
   log2File("getActorByName locked mutex\n");  
   for(i = 0; i < theRegistrySize; i++){
     if(theRegistry[i] == NULL) continue;
-    if(theRegistry[i]->spec->name == NULL) continue;
     if(!strcmp(theRegistry[i]->spec->name, name)){ 
       retval =  theRegistry[i];
       goto exit;
