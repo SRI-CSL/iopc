@@ -128,7 +128,7 @@ int main(int argc, char** argv){
         exit(EXIT_FAILURE);
       };
       
-      announce(cmdBuffer);
+      announce("%s\n", cmdBuffer);
       free(cmdBuffer);
       
     }
