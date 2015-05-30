@@ -105,6 +105,7 @@ void log2File(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   _log2File(1, format, arg);
+  va_end(arg);
   return;
 }
 
@@ -112,6 +113,7 @@ void log2FileVolatile(const char *format, ...){
   va_list arg;
   va_start(arg, format);
   _log2File(0, format, arg);
+  va_end(arg);
   return;
 }
 
