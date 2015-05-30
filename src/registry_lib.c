@@ -1047,9 +1047,10 @@ static int wait4ReadyFromInputWindow(int in2regSocket){
   } else {
     if((bytesread = read(*msgsock, buff, SIZE)) < 0){
       fprintf(stderr, "read failed in wait4ReadyFromInputWindow\n");
+    } else {
+      buff[bytesread] = '\0';
+      retval = atoi(buff);
     }
-    buff[bytesread] = '\0';
-    retval = atoi(buff);
   }
   
   free(description);
