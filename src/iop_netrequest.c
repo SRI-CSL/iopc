@@ -74,11 +74,13 @@ void netlog(const char *format, ...){
     vfprintf(logfp, format, arg);
     ec_rv( pthread_mutex_unlock(&netrequest_log_mutex) );
     fclose(logfp);
+    logfp = NULL;
   }
   va_end(arg);
   return;
 EC_CLEANUP_BGN
   va_end(arg);
+  if(logfp != NULL){ fclose(logfp); }
   return;
 EC_CLEANUP_END
 #endif
