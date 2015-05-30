@@ -1038,22 +1038,22 @@ void *monitorInSocket(void *arg){
 }
 
 static int wait4ReadyFromInputWindow(int in2regSocket){
-  int  *msgsock, bytesread;
+  int  *msgsock, bytesread, retval = -1;
   char *description = NULL, buff[SIZE];
   log2File("wait4ReadyFromInputWindow blocking on acceptSocket\n");
   msgsock = acceptSocket(in2regSocket, &description);
   if (*msgsock == INVALID_SOCKET){
     fprintf(stderr, "acceptSocket failed: %s\n", description);
-    free(description);
-    return -1;
+  } else {
+    if((bytesread = read(*msgsock, buff, SIZE)) < 0){
+      fprintf(stderr, "read failed in wait4ReadyFromInputWindow\n");
+    }
+    buff[bytesread] = '\0';
+    retval = atoi(buff);
   }
-  if((bytesread = read(*msgsock, buff, SIZE)) < 0){
-    fprintf(stderr, "read failed in wait4ReadyFromInputWindow\n");
-    return -1;
-  }
-  buff[bytesread] = '\0';
+  
   free(description);
-  return atoi(buff);
+  return retval;
 }
 
 /* 
@@ -1186,7 +1186,7 @@ static char* registryLaunchActor(char* name, int argc, char** argv){
   log2File("registryLaunchActor unlocking mutex\n");  
   pthread_mutex_unlock(&theRegistryMutex);
   log2File("registryLaunchActor unlocked mutex\n");  
-  log2File("registryLaunchActor complete!\n");  
+  log2File("registryLaunchActor complete!\n");
   return retval;
 
 }
