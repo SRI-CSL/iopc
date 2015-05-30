@@ -34,17 +34,31 @@ int main(int argc, char** argv){
   unsigned short port;  
   char *host;
   int lsocket;
+
   if(argc != 3) {
     fprintf(stderr, "Usage: %s host port\n", argv[0]);
     return -1;
   }
-  host = argv[1];
-  port = atoi(argv[2]);
-  if(allocateSocket(port, host, &lsocket) != 1)
-    return 0;
-  pthread_create(&outThreadhandle, NULL, in2socket, &lsocket);
-  pthread_create(&inThreadhandle, NULL, socket2outViolent, &lsocket);
 
+  host = argv[1];
+
+  port = atoi(argv[2]);
+
+  if(allocateSocket(port, host, &lsocket) != 1){
+    return 0;
+  }
+
+  
+  if(pthread_create(&outThreadhandle, NULL, in2socket, &lsocket)){
+    fprintf(stderr, "Could not spawn in2socket thread\n");
+    return -1;
+  }
+  
+  if(pthread_create(&inThreadhandle, NULL, socket2outViolent, &lsocket)){
+    fprintf(stderr, "Could not spawn socket2outViolent thread\n");
+    return -1;
+  }
+  
   pthread_join(outThreadhandle, NULL);
   pthread_join(inThreadhandle, NULL);
 
