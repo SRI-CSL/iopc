@@ -74,10 +74,10 @@ void parseSalThenEcho(int from, int to){
     message->bytesUsed = length;
     if(sendMsg(to, message) < 0){
       fprintf(stderr, "sendMsg in parseSalThenEcho failed\n");
-      return;
+    } else {
+      if(SALWRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
+      announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     }
-    if(SALWRAPPER_DEBUG)writeMsg(STDERR_FILENO, message);
-    announce("\nparseThenEcho wrote %d bytes\n", message->bytesUsed);
     freeMsg(message);
   }
 }
