@@ -1654,14 +1654,16 @@ int registryProcessConfigFile(void){
 }
 
 int registryProcessStartupFile(char * sfile){
+  int retval = -1;
   FILE* startup = NULL;
   char * startfile = (sfile != NULL) ? sfile : STARTUP;
   startup = fopen(startfile, "r");
   if(startup == NULL){
     log2File("Startup file (%s) not opened: %s\n", startfile, strerror(errno));
-    return -1;
   } else {
-    return registryProcessFile(startup);
+    retval = registryProcessFile(startup);
+    fclose(startup);
   }
+  return retval;
 }
 
