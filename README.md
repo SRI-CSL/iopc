@@ -49,17 +49,6 @@ The iop manual can be found [here](https://github.com/SRI-CSL/iopc/blob/master/d
 
 
 
-Todo list:
-
-0.  use vagrant to improve the travis
-
-1.  coverity
-
-2.  documentation
-
-3.  release
-
-
 
 
 
