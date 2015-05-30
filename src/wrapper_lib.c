@@ -48,8 +48,8 @@ void parseMaudeThenEcho(int from, int to){
   int length;
   announce("parseMaudeThenEcho\t:\tCalling readMaudeMsg\n");
   message = readMaudeMsg(from);
-  announce("parseMaudeThenEcho\t:\treadMaudeMsg returned %d bytes\n", message->bytesUsed);
   if(message != NULL){
+    announce("parseMaudeThenEcho\t:\treadMaudeMsg returned %d bytes\n", message->bytesUsed);
     if(WATCH_MAUDE)logMsg(MAUDE_LOGFILE, message);
     length = parseString(message->data, message->bytesUsed);
     message->bytesUsed = length;
