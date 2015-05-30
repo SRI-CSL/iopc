@@ -43,10 +43,10 @@ iop
 
 ## Manuals
 
-The jlambda manual can be found here
+The jlambda manual can be found [here]:
 https://github.com/SRI-CSL/iopc/blob/master/doc/jlambda_manual.pdf?raw=true
 
-The iop manual can be found here
+The iop manual can be found [here]:
 https://github.com/SRI-CSL/iopc/blob/master/doc/iop_manual.pdf?raw=true
 
 
