@@ -74,16 +74,21 @@ static void iop_daemon_sigchild_handler(int sig){
 
 
 static int iop_daemon_io_config(void){
+  int retval = 1;
   int outfd = open(outputFile, O_CREAT|O_RDWR|O_APPEND, S_IRWXU);
   if(outfd < 0){
-    return 1;
+    return retval;
   }
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
   if((dup2(outfd, STDOUT_FILENO) < 0) || (dup2(outfd, STDERR_FILENO) < 0)){
-    return 2;
+    close(outfd);
+    retval = 2 ;
+  } else {
+    retval = 0;
   }
-  return 0;
+  close(outfd);
+  return retval;
 }
 
 
