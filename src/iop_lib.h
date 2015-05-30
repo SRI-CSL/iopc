@@ -26,18 +26,31 @@
 #define _IOP_LIB_H
 
 void announce(const char *format, ...);
+
 void spawnServer(int argc, char** argv, int no_windows);
+
 void spawnDaemon(int argc, char** argv);
+
 void iop_init(int argc, char** argv, int optind, int remoteFd);
+
 #ifdef _LINUX
+
 void parseOptions(int, char**, char*,  const struct option *);
+
 #elif defined(_MAC)
+
 void parseOptions(int, char**, const char* option);
+
 #endif
+
 pid_t spawnAuthenticatedProcess(int socket, char* exe, char* cmd[]);
+
 pid_t spawnProcess(char*, char*[]);
+
 int parseActorMsg(char*, char**, char**);
+
 int getNextToken(char *, char**, char**);
+
 char* iop_alloc_jarpath(char*, char*, char*);
 
 #endif /* _IOP_LIB_H */
