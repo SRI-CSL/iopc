@@ -11,7 +11,8 @@ The C infrastructure for the IOP system (plus the latest iop.jar).
 
 ## Prerequisites
 
-Using jlambda requires Java, using iop requires Java and Maude.
+Using jlambda requires Java, using iop with the GUI interface also Java.
+Without the GUI front end iop has no prerequisites.
 
 ## Building and installing 
 
