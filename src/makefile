@@ -68,7 +68,6 @@ HEADERS = actor.h\
 	  externs.h\
 	  iop_lib.h\
 	  iop_utils.h\
-	  macrostr.h\
 	  msg.h\
 	  options.h\
 	  registry_lib.h\
@@ -87,8 +86,10 @@ COBJS = actor.o\
         iop_lib.o\
         iop_utils.o\
         socket_lib.o\
-        msg.o argv.o wrapper_lib.o sal_lib.o\
-	ec.o macrostr.o
+        msg.o argv.o\
+	wrapper_lib.o\
+	sal_lib.o\
+	ec.o
 
 JARS = iop.jar
 

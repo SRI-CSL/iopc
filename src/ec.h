@@ -44,21 +44,11 @@ typedef enum {EC_ERRNO = 0, EC_EAI = 1, EC_GETDATE = 2, EC_NONE = 3} EC_ERRTYPE;
 		}\
 	}
 
-#define ec_ai(var)\
-	{\
-		int errrtn;\
-		assert(!ec_in_cleanup);\
-		if ((errrtn = (var)) != 0) {\
-			ec_push(__func__, __FILE__, __LINE__, #var, errrtn, EC_EAI);\
-			goto ec_cleanup_bgn;\
-		}\
-	}
-
-#define ec_neg1(x) ec_cmp(x, -1)
-#define ec_null(x) ec_cmp(x, 0)
-#define ec_zero(x) ec_null(x)
-#define ec_false(x) ec_cmp(x, 0)
-#define ec_eof(x) ec_cmp(x, EOF)
+#define ec_neg1(x)   ec_cmp(x, -1)
+#define ec_null(x)   ec_cmp(x, 0)
+#define ec_zero(x)   ec_null(x)
+#define ec_false(x)  ec_cmp(x, 0)
+#define ec_eof(x)    ec_cmp(x, EOF)
 #define ec_nzero(x)\
 	{\
 		if ((x) != 0)\

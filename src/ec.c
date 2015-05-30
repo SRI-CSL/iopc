@@ -9,7 +9,6 @@
   Munged by Ian A. Mason to be as self contained as possible.
 */
 #include "ec.h"
-#include "macrostr.h"
 #include "cheaders.h"
 
 static const char *getdate_strerror(int e);
@@ -31,30 +30,29 @@ static const char *getdate_strerror(int e){
 
 static char *syserrmsgtype(char *buf, size_t buf_max, const char *msg, int errno_arg, EC_ERRTYPE type);
 static char *syserrmsgtype(char *buf, size_t buf_max, const char *msg, int errno_arg, EC_ERRTYPE type){
-	const char *errmsg;
-	char *cat = "?";
-	if (msg == NULL)
-		msg = "???";
-	if (errno_arg == 0)
-		snprintf(buf, buf_max, "%s", msg);
-	else {
-		if (errno_arg == EC_EINTERNAL)
-			errmsg = "Internal error (nonstandard)";
-		else if (type == EC_EAI) {
-			cat = "eai";
-			errmsg = gai_strerror(errno_arg);
-		}
-		else if (type == EC_GETDATE)
-			errmsg = getdate_strerror(errno_arg);
-		else {
-			cat = "errno";
-			errmsg = strerror(errno_arg);
-		}
-		snprintf(buf, buf_max, "%s\n\t\t*** %s (%d: \"%s\") ***", msg,
-			 get_macrostr(cat, errno_arg, NULL), errno_arg,
-			 errmsg != NULL ? errmsg : "no message string");
-	}
-	return buf;
+  const char *errmsg;
+  char *cat = "?";
+
+  if (msg == NULL){ msg = "???"; }
+
+  if (errno_arg == 0){
+    snprintf(buf, buf_max, "%s", msg);
+  } else {
+    if (errno_arg == EC_EINTERNAL)
+      errmsg = "Internal error (nonstandard)";
+    else if (type == EC_EAI) {
+      cat = "eai";
+      errmsg = gai_strerror(errno_arg);
+    }
+    else if (type == EC_GETDATE)
+      errmsg = getdate_strerror(errno_arg);
+    else {
+      cat = "errno";
+      errmsg = strerror(errno_arg);
+    }
+    snprintf(buf, buf_max, "%s\n\t\t*** (%d: \"%s\") ***", msg, errno_arg, errmsg != NULL ? errmsg : "no message string");
+  }
+  return buf;
 }
 
 static void ec_mutex(int lock){
@@ -146,13 +144,12 @@ void ec_print(void){
   ec_mutex(1);
   for (e = ec_head; e != NULL; e = e->ec_next, level++) {
     char buf[200], buf2[25 + sizeof(buf)];
-
-    if (e == &ec_node_emergency)
+    
+    if (e == &ec_node_emergency){
       fprintf(stderr, "\t*** Trace may be incomplete ***\n");
-    syserrmsgtype(buf, sizeof(buf), e->ec_context,
-		  e->ec_next == NULL ? e->ec_errno : 0, e->ec_type);
-    snprintf(buf2, sizeof(buf2), "%s\t%d: %s",
-    	     (level == 0? "ERROR:" : ""), level, buf);
+    }
+    syserrmsgtype(buf, sizeof(buf), e->ec_context, e->ec_next == NULL ? e->ec_errno : 0, e->ec_type);
+    snprintf(buf2, sizeof(buf2), "%s\t%d: %s", (level == 0? "ERROR:" : ""), level, buf);
     fprintf(stderr, "%s\n", buf2);
   }
   ec_mutex(0);
