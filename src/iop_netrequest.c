@@ -153,7 +153,10 @@ int main(int argc, char *argv[]){
     exit(EXIT_FAILURE);
   }
 
-  pthread_create(&commandThread, NULL, netrequest_cmd_thread, NULL);
+  if(pthread_create(&commandThread, NULL, netrequest_cmd_thread, NULL)){
+      fprintf(stderr, "Could not spawn netrequest_cmd_thread thread\n");
+      return -1;
+    }
 
 
   if(allocateListeningSocket(port, &listen_socket) != 1){
