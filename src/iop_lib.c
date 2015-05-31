@@ -365,17 +365,35 @@ static char* iop_alloc_jarpath_aux(char* code_dir, char* who, char* classpath){
 
 char* iop_alloc_jarpath(char* code_dir, char* who, char* classpath){
   char* new_code_dir = NULL;
+  int reclaim_new_code_dir = 0;
   char* new_classpath = NULL;
-  /* fprintf(stderr, "iop_alloc_jarpath(%s, %s, %s)\n", code_dir, who, classpath); */
+  int reclaim_new_classpath = 0;
+  char* retval = NULL;
+  
+  /* returns 1 if it does something (callocs a new_code_dir); return 0 otherwise */
   int tilde = interpretTildes(code_dir, &new_code_dir);
+
   if(!tilde){
     new_code_dir = code_dir;
+  } else {
+    reclaim_new_code_dir = 1;
   }
+
+  /* returns > 0 if it does something (callocs a new_classpath); return 0 otherwise */
   tilde = interpretTildesCSL(classpath, &new_classpath);
+
   if(!tilde){
     new_classpath = classpath;
+  } else {
+    reclaim_new_classpath = 1;
   }
-  return iop_alloc_jarpath_aux(new_code_dir, who, new_classpath);
+  
+  retval = iop_alloc_jarpath_aux(new_code_dir, who, new_classpath);
+
+  if(reclaim_new_code_dir){ free(new_code_dir); }
+  if(reclaim_new_classpath){ free(new_classpath); }
+  
+  return retval;
 }
 
 static actor_spec *launchGUI(char* code_dir, char* pid_str, char* port_str){
