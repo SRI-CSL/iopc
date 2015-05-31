@@ -1316,6 +1316,7 @@ static void  processRegistryNameMessage(char *sender, char *rest){
           goto exit; 
         }  
         strncpy(aspec->name, name, PATH_MAX);
+	aspec->name[PATH_MAX - 1] = '\0'; /* failsafe */
         aspec->pid = 0;
         log2File("processRegistryNameMessage: calling makeActorId\n");
         actid = makeActorId(aspec);
