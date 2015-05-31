@@ -133,7 +133,8 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
   char reg_in[SIZE], reg_out[SIZE], iopPid[SIZE];
   char in2RegPortString[SIZE], in2RegFdString[SIZE];
   char** registry_argv;
-  actor_spec *registry_spec;
+  actor_spec *local_spec = NULL;
+  actor_spec *registry_spec = NULL;
   int spawn = !iop_minimal_actors_flag && iop_hardwired_actors_flag;
 
   announce("commencing\n");
@@ -237,38 +238,63 @@ void iop_init(int argc, char** argv, int optind, int remoteFd){
 
   announce("spawning GUI\n");
   if(!iop_no_windows_flag){
-    if(launchGUI(iop_bin_dir, iopPid, in2RegPortString) == NULL)
+    if((local_spec = launchGUI(iop_bin_dir, iopPid, in2RegPortString)) == NULL){
       goto bail;
+    } else {
+      free(local_spec);
+      local_spec = NULL;
+    }
   }
+  
   announce("spawned GUI\n");
 
   announce("spawning hardwired actors actors\n");
 
 
-  if(spawn && launchMaude(argc, argv) == NULL){  goto bail; }
-
-  /*
-    if((remoteFd == 0) && iop_hardwired_actors_flag && launchGraphics(iop_bin_dir) == NULL) 
+  if(spawn && ((local_spec = launchMaude(argc, argv)) == NULL)){
     goto bail;
-  */
-  
-  if((remoteFd == 0) && spawn && launchGraphics2d(iop_bin_dir) == NULL){ goto bail; }
-   
-  if(spawn && launchExecutor() == NULL){ goto bail; }
-  
-  if(spawn && launchFilemanager() == NULL){ goto bail; }
+  } else {
+    free(local_spec);
+    local_spec = NULL;
+  }
 
-  if(spawn && launchSocketfactory() == NULL){ goto bail; }
+  if((remoteFd == 0) && spawn && ((local_spec = launchGraphics2d(iop_bin_dir)) == NULL)){
+    goto bail;
+  } else {
+    free(local_spec);
+    local_spec = NULL;
+  }
+   
+  if(spawn && ((local_spec = launchExecutor()) == NULL)){
+    goto bail;
+  } else {
+    free(local_spec);
+    local_spec = NULL;
+  }
   
-  if((remoteFd > 0) && (launchRemoteActor(remoteFd) == NULL)) goto bail;
+  if(spawn && ((local_spec = launchFilemanager()) == NULL)){
+    goto bail;
+  } else {
+    free(local_spec);
+    local_spec = NULL;
+  }
+
+  if(spawn && ((local_spec = launchSocketfactory()) == NULL)){
+    goto bail;
+  } else {
+    free(local_spec);
+    local_spec = NULL;
+  }
   
-  /* 
-     if(iop_hardwired_actors_flag && launchPVS() == NULL) goto bail;
-  */
+  if((remoteFd > 0) && ((local_spec = launchRemoteActor(remoteFd)) == NULL)){
+    goto bail;
+  } else {
+    free(local_spec);
+    local_spec = NULL;
+  }
   
+
   announce("spawned actors\n");
-  
-  
   
   if(!iop_no_windows_flag){ 
     if(CHATTER){
