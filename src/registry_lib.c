@@ -1052,6 +1052,8 @@ static int wait4ReadyFromInputWindow(int in2regSocket){
       buff[bytesread] = '\0';
       retval = atoi(buff);
     }
+    close(*msgsock);
+    free(msgsock);
   }
   
   free(description);
