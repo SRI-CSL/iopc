@@ -1034,7 +1034,7 @@ char* fetchActorName(int index){
 
 
 int waitForRegistry(void){
-  int  reg_rd_fd;
+  int  reg_rd_fd = -1;
   struct flock rd_lock;
   char buff[SIZE + 1];
 
@@ -1058,14 +1058,12 @@ int waitForRegistry(void){
 
   unlockFD(&rd_lock, reg_rd_fd, "waitForRegistry: Registry read fifo");
   
-  
-  if(close(reg_rd_fd) == -1) 
-    goto fail;
+  close(reg_rd_fd); 
 
   return !strcmp(buff, REGREADY);
 
  fail:
-  
+  if(reg_rd_fd >= 0){ close(reg_rd_fd); }
   fprintf(stderr, "failure in waitForRegistry: %s\n", strerror(errno));
   return 0;
   
