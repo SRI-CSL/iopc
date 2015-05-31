@@ -848,10 +848,12 @@ void chatter(void){
           continue;
         }
         acursor(name);
+	free(name);
         if((bytesin = read(STDIN_FILENO, buff, BUFFSZ)) <= 0){ 
           fprintf(stderr, "read from STDIN_FILENO failed (buff 2) bytesin = %d\n", bytesin);
           return;
         }
+	buff[BUFFSZ] = '\0'; /* failsafe */
         /* doesn't seem necesssary any more	
            if(buff[bytesin - 1] == '\n'){
            if(IOP_LIB_DEBUG || iop_debug_flag)
