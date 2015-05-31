@@ -975,7 +975,7 @@ void killActors(){
 
 
 char* fetchActorName(int index){
-  int reg_wr_fd, reg_rd_fd;
+  int reg_wr_fd = -1, reg_rd_fd = -1;
   struct flock wr_lock, rd_lock;
   registry_cmd_t cmd = NAME;
   char *retval = (char*)calloc(SIZE + 1, sizeof(char));
@@ -1017,13 +1017,15 @@ char* fetchActorName(int index){
   
   unlockFD(&wr_lock, reg_wr_fd, "fetchActorName: Registry write fifo");
   
-  if((close(reg_wr_fd) == -1) || (close(reg_rd_fd) == -1)) 
-    goto fail;
-
+  close(reg_wr_fd);
+  close(reg_rd_fd); 
+  
   return retval;
 
  fail:
-  
+
+  if(reg_wr_fd >= 0){ close(reg_wr_fd); }
+  if(reg_rd_fd >= 0){ close(reg_rd_fd); }
   free(retval);
   fprintf(stderr, "failure in fetchActorName: %s\n", strerror(errno));
   return NULL;
