@@ -38,7 +38,7 @@ static char javaErrorsFileName[PATH_MAX];
 static char *errorsFileName = NULL;
 static FILE *errorsFile = NULL;
 static char cr = '\n';
-static char selectedActor[SIZE];
+static char selectedActor[SIZE + 1];
 static int  selected = 0;
 
 static pthread_mutex_t theRegistryMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -344,14 +344,14 @@ static int _allocateUniqueName(actor_spec *acts){
     log2File("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, oldName);
     return 1;
   } else {
-    int len = strlen(oldName) + 1;
-    char *newName = (char *)calloc(len + SIZE, sizeof(char));
+    int len = SIZE + strlen(oldName) + 1;
+    char *newName = (char *)calloc(len + 1, sizeof(char));
     int index = -1;
     if(newName == NULL){ return -1; }
-    if(len + SIZE > PATH_MAX){ return -1; }
+    if(len > PATH_MAX){ return -1; }
     while(found == 1){
       index++;
-      snprintf(newName, len + SIZE, "%s%d", oldName, index);
+      snprintf(newName, len, "%s%d", oldName, index);
       found = 0;
       for(i = 0; i < theRegistrySize; i++){
         if((theRegistry[i] != NULL) && (strcmp(theRegistry[i]->spec->name, newName) == 0)){
@@ -360,6 +360,7 @@ static int _allocateUniqueName(actor_spec *acts){
         }
       }
     }/* while(found == 1) */
+    newName[len] = '\0';
     strncpy(acts->name, newName, PATH_MAX);
     log2File("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, newName);
     free(newName);
@@ -1611,6 +1612,7 @@ static int registryProcessFile(FILE* filep){
       }
       log2File("registryProcessFile: selected actor = %s\n", name);
       strncpy(selectedActor, name, SIZE);
+      selectedActor[SIZE] = '\0';  /* failsafe */
       selected = 1;
     }
   }
