@@ -906,14 +906,17 @@ void registryDump(FILE* targ){
   {
     int i, reg_size;
     
-    if(readInt(reg_rd_fd, &reg_size, "registryDump") < 0 ) goto unlock;
+    if(readInt(reg_rd_fd, &reg_size, "registryDump") < 0 ){  goto unlock; }
     
     for(i = 0; i < reg_size; i++){
       int slot;
       char *actor;
-      readInt(reg_rd_fd, &slot, "registryDump");
+      
+      if(readInt(reg_rd_fd, &slot, "registryDump") < 0){  goto unlock; }
       actor = readline(reg_rd_fd);
-      fprintf(targ, "\tregistry[%d] = %s\n", slot, actor);
+      if(actor != NULL){
+	fprintf(targ, "\tregistry[%d] = %s\n", slot, actor);
+      }
       free(actor);
     }
   }
