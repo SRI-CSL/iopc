@@ -978,7 +978,8 @@ void registryDump(FILE* targ){
 
  fail:
   if(reg_wr_fd >= 0){ close(reg_wr_fd); }
-  if(reg_rd_fd >= 0){ close(reg_rd_fd); }
+  /* at this point reg_rd_fd must be -1!  Coverity is a smarty pants */
+  /* if(reg_rd_fd >= 0){ close(reg_rd_fd); } */
   
   fprintf(stderr, "failure in registryDump: %s\n", strerror(errno));
   return;
