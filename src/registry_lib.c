@@ -1203,8 +1203,8 @@ static void  processRegistryStartMessage(char *sender, char *rest, int notify){
     fprintf(stderr, "processRegistryStartMessage: didn't understand: (cmd)\n\t \"%s\" \n", rest);
     return;
   } else {
-    int argc;
-    char**argv;
+    int argc = -1;
+    char**argv = NULL;
     char* actorName;
     argc = makeArgv(args, " \t\n", &argv);
     /* printArgv(stderr, argc, argv, sender); */
@@ -1230,6 +1230,8 @@ static void  processRegistryStartMessage(char *sender, char *rest, int notify){
         log2File("processRegistryStartMessage notified GUI\n");  
       }
 
+    } else {
+      if(argv != NULL){ free(argv); }
     }
   }
 }
