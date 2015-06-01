@@ -1319,7 +1319,7 @@ static void  processRegistryNameMessage(char *sender, char *rest){
         fprintf(stderr, "processRegistryNameMessage: name is too long\n");
         goto exit; 
       } else {
-        actor_id* actid;
+        actor_id* actid = NULL;
         actor_spec *aspec = (actor_spec *)calloc(1, sizeof(actor_spec));
         if(aspec == NULL){
           fprintf(stderr, "processRegistryNameMessage: callocing aspec failed!\n");
@@ -1371,6 +1371,7 @@ static void  processRegistryNameMessage(char *sender, char *rest){
                              sender, REGISTRY_ACTOR, name, aspec->name, iop_pid);
         } else {
           sendFormattedMsgFP(stdout, "%s\n%s\nnameFAILED %s\n", sender, REGISTRY_ACTOR, name);
+	  free(actid);
         }
 
         return;
