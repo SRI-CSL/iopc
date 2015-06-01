@@ -330,7 +330,8 @@ static void outputRegistrySize(int fd){
 static int _allocateUniqueName(actor_spec *acts){
   static int requestNo = -1;
   char *oldName = acts->name;
-  int i, found = 0;
+  int i, found = 0, retval = -1;
+  char *newName = NULL;
   requestNo++;
   log2File("_allocateUniqueName(%d): nameIn  = %s\n", requestNo, oldName);
 
@@ -345,10 +346,11 @@ static int _allocateUniqueName(actor_spec *acts){
     return 1;
   } else {
     int len = SIZE + strlen(oldName) + 1;
-    char *newName = (char *)calloc(len + 1, sizeof(char));
     int index = -1;
-    if(newName == NULL){ return -1; }
-    if(len > PATH_MAX){ return -1; }
+    newName = (char *)calloc(len + 1, sizeof(char));
+    if((newName == NULL) || (len > PATH_MAX)){
+      goto exit;
+    }
     while(found == 1){
       index++;
       snprintf(newName, len, "%s%d", oldName, index);
@@ -363,8 +365,11 @@ static int _allocateUniqueName(actor_spec *acts){
     newName[len] = '\0';
     strncpy(acts->name, newName, PATH_MAX);
     log2File("_allocateUniqueName(%d): nameOut  = %s\n", requestNo, newName);
+    retval = 1;
+    
+  exit:
     free(newName);
-    return 1;
+    return retval;
   }
 }
 
@@ -1035,6 +1040,7 @@ void *monitorInSocket(void *arg){
     processRegistryCommand(*msgsock, *msgsock, 1);
     free(description); 
     close(*msgsock);
+    free(msgsock);
   }
 }
 
@@ -1100,8 +1106,8 @@ static char* registryLaunchActor(char* name, int argc, char** argv){
   int slot, i, errcode;
   char* retval = NULL;
   char* executable;
-  actor_id* actid;
-  actor_spec *spec;
+  actor_id* actid = NULL;
+  actor_spec *spec = NULL;
   log2File("registryLaunchActor calling makeActorSpec for %s\n", name);  
   spec = makeActorSpec(name);
   log2File("registryLaunchActor called makeActorSpec for %s\n", name);  
