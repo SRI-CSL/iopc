@@ -149,24 +149,18 @@ int addToMsg(msg* m, int bytes, char* buff){
 
 int setFlag(int fd, int flags){
   int val;
-  ec_neg1( val = fcntl(fd, F_GETFL, 0) );
+  if(val = fcntl(fd, F_GETFL, 0) == -1){ return -1; }
   val |= flags;
-  ec_neg1( fcntl(fd, F_SETFL, val) );
+  if(fcntl(fd, F_SETFL, val) == -1 ){ return -1; }
   return 0;
-EC_CLEANUP_BGN
-  return -1;
-EC_CLEANUP_END
 }
 
 int clearFlag(int fd, int flags){
   int val;
-  ec_neg1( val = fcntl(fd, F_GETFL, 0) );
+  if(val = fcntl(fd, F_GETFL, 0) == -1){ return -1; }
   val &= ~flags;
-  ec_neg1( fcntl(fd, F_SETFL, val) );
+  if(fcntl(fd, F_SETFL, val)== -1){ return -1; }
   return 0;
-EC_CLEANUP_BGN
-  return -1;
-EC_CLEANUP_END
 }
 
 msg* readMaudeMsg(int fd){
@@ -328,7 +322,7 @@ msg* readMsg(int fd){
       fprintf(stderr, "%c", buff[i]);
     fprintf(stderr, "\n\t%d\n", getpid());
   }
-  if(setFlag(fd, O_NONBLOCK) < 0) goto fail;
+  if(setFlag(fd, O_NONBLOCK) < 0){ goto fail; }
   eM("readMsg in %d setFlag to O_NONBLOCK\n", getpid());
   if((retval = makeMsg(BUFFSZ)) == NULL){
     fprintf(stderr, 
@@ -482,7 +476,7 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   
  fail:
 
-  clearFlag(fd, O_NONBLOCK);
+  clearFlag(fd, O_NONBLOCK); 
   freeMsg(retval);
   retval = NULL;
   return retval;
