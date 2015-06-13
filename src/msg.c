@@ -149,7 +149,7 @@ int addToMsg(msg* m, int bytes, char* buff){
 
 int setFlag(int fd, int flags){
   int val;
-  if(val = fcntl(fd, F_GETFL, 0) == -1){ return -1; }
+  if((val = fcntl(fd, F_GETFL, 0)) == -1){ return -1; }
   val |= flags;
   if(fcntl(fd, F_SETFL, val) == -1 ){ return -1; }
   return 0;
@@ -157,7 +157,7 @@ int setFlag(int fd, int flags){
 
 int clearFlag(int fd, int flags){
   int val;
-  if(val = fcntl(fd, F_GETFL, 0) == -1){ return -1; }
+  if((val = fcntl(fd, F_GETFL, 0)) == -1){ return -1; }
   val &= ~flags;
   if(fcntl(fd, F_SETFL, val)== -1){ return -1; }
   return 0;
