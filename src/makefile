@@ -56,7 +56,7 @@ EXES = talk2iop\
       iop_sal_spawner\
       iop_sal_wrapper
 
-SCRIPTS = iop jlambda jl kill_iop
+SCRIPTS = iop jlambda jl kill_iop kill-iop
 
 HEADERS = actor.h\
 	  argv.h\
