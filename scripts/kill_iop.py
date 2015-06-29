@@ -33,14 +33,14 @@ def filterCandidates(getCandidates):
 iops = filterCandidates(getIOPCandidates)
 #send them the SIGUSR1 signal, they should do the rest, if they are iops.        
 for pid in iops:
-    print pid
-    #os.kill(int(pid), signal.SIGUSR1)
+    print "Killing iop system: ", pid
+    os.kill(int(pid), signal.SIGUSR1)
 
 
 iopServers = filterCandidates(getIOPServerCandidates)
 #send them the SIGUSR1 signal, they should do the rest, if they are iops.        
 for pid in iopServers:
-    print pid
-    #os.kill(int(pid), signal.SIGUSR1)
+    print "Killing iop server: ", pid
+    os.kill(int(pid), signal.SIGUSR1)
 
 
