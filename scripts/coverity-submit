@@ -1,7 +1,17 @@
 #!/bin/bash
+
+if [ -z $1 ];
+then
+    echo "We need the coverity token: e.g. "
+    echo  "./coverity-submit tHiSiSnOtMyKeY"
+    exit 1
+else
+   COVERITY_TOKEN=$1
+fi
+
 rm iopc.tgz
 tar czvf iopc.tgz cov-int
-curl --form token=fx_F0Q7aTN1M1iczkmImbQ \
+curl --form token=${COVERITY_TOKEN} \
   --form email=iam@csl.sri.com \
   --form file=@iopc.tgz \
   --form version="Current  Stable" \
