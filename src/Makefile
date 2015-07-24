@@ -76,7 +76,7 @@ HEADERS = actor.h\
 	  types.h\
 	  version.h\
 	  wrapper_lib.h
-MISC    = makefile 
+MISC    = Makefile 
 
 vpath % ${BUILDDIR}
 
