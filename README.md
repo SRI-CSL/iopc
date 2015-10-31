@@ -39,6 +39,9 @@ export PATH = ${IOPBINDIR):${PATH}
 iop
 
 ```
+## Javadoc for iop.jar
+
+The javadoc for iop.jar is [here](http://www.jlambda.com/~iop/g2d/doc/)
 
 ## Manuals
 
