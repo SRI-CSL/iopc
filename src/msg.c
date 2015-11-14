@@ -145,7 +145,18 @@ int addToMsg(msg* m, int bytes, char* buff){
     free(tmp);
     return 0;
   }
-} 
+}
+
+static msg* abbreviateMsg(msg* m){
+  msg* retval;
+  int msgleni, msgleno;
+  if(m == NULL){ return m; }
+  msgleni = m->bytesUsed;
+  msgleni = msgleni < 100 ? msgleni : 100;
+  retval = makeMsg(msgleni);
+  msgleno =  addToMsg(retval, msgleni, m->data);
+  return retval;
+}
 
 int setFlag(int fd, int flags){
   int val;
@@ -519,7 +530,8 @@ int logMsg(char* from, char* filename, msg* message){
       write(fno, "start ", strlen("start "));
       write(fno, from, strlen(from));
       write(fno, "\n", strlen("\n"));
-      writeMsg(fno, message);
+      //writeMsg(fno, message);
+      writeMsg(fno, abbreviateMsg(message));      
       write(fno, "\nstop\n", strlen("\nstop\n"));
       fclose(fp);
       return 1;
