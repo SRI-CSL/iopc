@@ -509,16 +509,18 @@ int writeMsg(int fd, msg* m){
   return 1;
 }
 
-int logMsg(char* filename, msg* message){
+int logMsg(char* from, char* filename, msg* message){
   FILE* fp; 
   int fno;
   if(filename != NULL){
     fp = fopen(filename,"a");
     if(fp != NULL){
       fno = fileno(fp) ;
-      write(fno, "start\n", strlen("start\n"));
+      write(fno, "start ", strlen("start "));
+      write(fno, from, strlen(from));
+      write(fno, "\n", strlen("\n"));
       writeMsg(fno, message);
-      write(fno, "stop\n", strlen("stop\n"));
+      write(fno, "\nstop\n", strlen("\nstop\n"));
       fclose(fp);
       return 1;
     }
@@ -963,6 +965,7 @@ void echo2Maude(int from, int to){
   msg* message;
   message = acceptMsg(from);
   if(message != NULL){
+    if(WATCH_MAUDE)logMsg("notmaude", MAUDE_LOGFILE, message);
     writeMsg(to, message);
     if(MSG_DEBUG){
       writeMsg(STDERR_FILENO, message);
