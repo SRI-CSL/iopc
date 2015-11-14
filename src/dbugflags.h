@@ -26,6 +26,7 @@
 #define _IOP_DBUGFLGAS_H
 
 #define WATCH_MAUDE               0
+#define ABBREVIATE_MSGS           0
 #define MAUDE_LOGFILE             "/tmp/maude-out.txt"
 
 #define CHATTER                   0

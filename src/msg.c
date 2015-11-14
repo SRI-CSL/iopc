@@ -147,17 +147,6 @@ int addToMsg(msg* m, int bytes, char* buff){
   }
 }
 
-static msg* abbreviateMsg(msg* m){
-  msg* retval;
-  int msgleni, msgleno;
-  if(m == NULL){ return m; }
-  msgleni = m->bytesUsed;
-  msgleni = msgleni < 100 ? msgleni : 100;
-  retval = makeMsg(msgleni);
-  msgleno =  addToMsg(retval, msgleni, m->data);
-  return retval;
-}
-
 int setFlag(int fd, int flags){
   int val;
   if((val = fcntl(fd, F_GETFL, 0)) == -1){ return -1; }
@@ -520,6 +509,20 @@ int writeMsg(int fd, msg* m){
   return 1;
 }
 
+#if ABBREVIATE_MSGS
+static msg* abbreviateMsg(msg* m){
+  msg* retval;
+  int msgleni, msgleno;
+  if(m == NULL){ return m; }
+  msgleni = m->bytesUsed;
+  msgleni = msgleni < 100 ? msgleni : 100;
+  retval = makeMsg(msgleni);
+  msgleno =  addToMsg(retval, msgleni, m->data);
+  return retval;
+}
+#endif
+
+
 int logMsg(char* from, char* filename, msg* message){
   FILE* fp; 
   int fno;
@@ -530,8 +533,11 @@ int logMsg(char* from, char* filename, msg* message){
       write(fno, "start ", strlen("start "));
       write(fno, from, strlen(from));
       write(fno, "\n", strlen("\n"));
-      //writeMsg(fno, message);
+#if ABBREVIATE_MSGS
       writeMsg(fno, abbreviateMsg(message));      
+#else
+      writeMsg(fno, message);
+#endif
       write(fno, "\nstop\n", strlen("\nstop\n"));
       fclose(fp);
       return 1;
