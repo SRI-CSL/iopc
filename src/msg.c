@@ -538,7 +538,8 @@ int logMsg(char* from, char* filename, msg* message){
 #else
       writeMsg(fno, message);
 #endif
-      write(fno, "...\nstop\n", strlen("...\nstop\n"));
+      //      write(fno, "...\nstop\n", strlen("...\nstop\n"));
+      write(fno, "\nstop\n", strlen("\nstop\n"));
       fclose(fp);
       return 1;
     }
