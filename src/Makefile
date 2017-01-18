@@ -11,6 +11,7 @@ ifeq (Darwin, $(findstring Darwin, ${OS}))
 
 CFLAGS = -Wall -D_MAC -arch i386 -g
 LOLA = lola-2-macintel
+DOT = dot-macintel-10-10-5
 # add to CFLAGS for debugging:
 # -g 
 LIBS = -lpthread -lm  -arch i386 
@@ -28,8 +29,10 @@ TARGET = LINUX
 #check the arch for 32 or 64 bit
 ifeq (i386, $(findstring i386, ${ARCH}))
 LOLA = lola-2-linux32
+DOT = dot-linux64-precise
 else
 LOLA = lola-2-linux64
+DOT = dot-linux64-precise
 endif
 
 endif
@@ -112,6 +115,10 @@ install: all
 	for script in ${SCRIPTS} ; do cp ../build/$${script} ${IOPBINDIR}; done
 	for jar in ${JARS}  ; do cp ../lib/$${jar} ${IOPBINDIR}; done
 	cp ../3rdParty/${LOLA}  ${IOPBINDIR}/lola-2
+
+internal: install
+	cp ../3rdParty/${DOT}  ${IOPBINDIR}/dot
+
 
 clean:
 	rm -f ${EXES} ${COBJS} *.o

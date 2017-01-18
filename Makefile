@@ -13,6 +13,11 @@ c:
 install: c
 	$(MAKE) -C src install
 
+#a temporary target just for internal SRI use
+internal: c
+	$(MAKE) -C src internal
+
+
 clean: 
 	$(MAKE) -C src clean
 	rm -rf build
