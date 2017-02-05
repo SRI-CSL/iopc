@@ -11,7 +11,8 @@ ifeq (Darwin, $(findstring Darwin, ${OS}))
 
 CFLAGS = -Wall -D_MAC -arch i386 -g
 LOLA = lola-2-macintel
-DOT = dot-macintel-10-10-5
+#DOT = dot-macintel-10-10-5
+DOT = dot-macintel-10-11-6
 # add to CFLAGS for debugging:
 # -g 
 LIBS = -lpthread -lm  -arch i386 
