@@ -1,10 +1,10 @@
 /*
     The InterOperability Platform: IOP
     Copyright (C) 2004 Ian A. Mason
-    School of Mathematics, Statistics, and Computer Science   
+    School of Mathematics, Statistics, and Computer Science
     University of New England, Armidale, NSW 2351, Australia
-    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
-    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327
+    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312
 
 
     This program is free software; you can redistribute it and/or modify
@@ -40,24 +40,33 @@ static int clearFlag(int fd, int flags);
 extern int   self_debug_flag;
 extern char* self;
 
+
+
 /* local error logging */
 static pthread_mutex_t iop_err_mutex = PTHREAD_MUTEX_INITIALIZER;
 static void eM(const char *format, ...){
+  FILE* emerr;
   va_list arg;
+  if(DEBUG_LOGFILE != NULL){
+    emerr = fopen(DEBUG_LOGFILE, "a");
+  } else {
+    emerr = stderr;
+  }
   va_start(arg, format);
   if(format != NULL){
-    if(MSG_DEBUG && self_debug_flag){
+    if(MSG_DEBUG || self_debug_flag){
       ec_rv( pthread_mutex_lock(&iop_err_mutex) );
 #if defined(_LINUX)
-      fprintf(stderr, "MSG(%lu)\t:\t", (unsigned long)pthread_self());
+      fprintf(emerr, "MSG(%lu)\t:\t", (unsigned long)pthread_self());
 #elif defined(_MAC)
-      fprintf(stderr, "MSG(%p)\t:\t", (void *)pthread_self());
+      fprintf(emerr, "MSG(%p)\t:\t", (void *)pthread_self());
 #endif
-      vfprintf(stderr, format, arg);
+      vfprintf(emerr, format, arg);
       ec_rv( pthread_mutex_unlock(&iop_err_mutex) );
     }
   }
   va_end(arg);
+  if(DEBUG_LOGFILE != NULL){ fclose(emerr); }
   return;
 EC_CLEANUP_BGN
   va_end(arg);
@@ -66,16 +75,17 @@ EC_CLEANUP_END
 }
 
 
+
 int mywrite(int fd, char *buff, int count, int verbose){
   int bytesLeft = 0, bytesWritten = 0, index = 0;
   bytesLeft = count;
   while(bytesLeft > 0){
     bytesWritten = write(fd, buff + index, bytesLeft);
     if(bytesWritten < 0){
-      if(errno != EINTR){ 
+      if(errno != EINTR){
 	if(verbose)perror("write in mywrite failed:");
-	return -1; 
-      } else { 
+	return -1;
+      } else {
 	continue;
       }
     }
@@ -97,7 +107,7 @@ EC_CLEANUP_BGN
   free(retval);
   return NULL;
 EC_CLEANUP_END
-}  
+}
 
 void freeMsg(msg* m){
   if(m == NULL){ return; }
@@ -163,19 +173,39 @@ int clearFlag(int fd, int flags){
   return 0;
 }
 
+static void errDumpBytes(char* buff, int bytes){
+  FILE* emerr;
+  int i;
+  if(DEBUG_LOGFILE != NULL){
+    emerr = fopen(DEBUG_LOGFILE, "a");
+  } else {
+    emerr = stderr;
+  }
+  fprintf(emerr, "errDumpBytes\t:\t %d bytes read:\n", bytes);
+  fwrite(buff, sizeof(char), bytes, emerr);
+  fprintf(emerr, "\n");
+  for(i = 0; i < bytes; i++)
+    fprintf(emerr, "[%d]", buff[i]);
+  fprintf(emerr, "\n");
+  if(DEBUG_LOGFILE != NULL){ fclose(emerr); }
+  return;
+}
+/*
+*/
+
 msg* readMaudeMsg(int fd){
   char prompt[] = "Maude> ";
   char *promptPointer = NULL;
   int bytes = 0, iteration = 0, continuation = 0;
   msg* retval;
   static msg* next = NULL;
-  if(next == NULL){ 
+  if(next == NULL){
     retval = makeMsg(BUFFSZ);
   } else {
     continuation = 1;
     retval = next;
   }
-  
+
   next = NULL;
 
   if(retval == NULL){
@@ -185,12 +215,12 @@ msg* readMaudeMsg(int fd){
 
   while(1){
     char buff[BUFFSZ];
-    
+
     if(continuation){
       continuation = 0;
       goto checkprompt;
     }
-    
+
   restart:
 
     eM("readMaudeMsg\t:\tcommencing a read\n");
@@ -210,6 +240,10 @@ msg* readMaudeMsg(int fd){
 
     eM("readMaudeMsg\t:\tread read %d bytes\n", bytes);
 
+    if(0){
+      errDumpBytes(buff, bytes);
+    }
+
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg in %d failed\n", getpid());
       goto fail;
@@ -217,10 +251,13 @@ msg* readMaudeMsg(int fd){
 
 
   checkprompt:
-    
+
     iteration++;
-    
-    if((promptPointer = strstr(retval->data, prompt)) != NULL){  break; }
+
+    if((promptPointer = strstr(retval->data, prompt)) != NULL){
+      eM("readMaudeMsg\t:\tSAW PROMPT\n");
+      break;
+    }
 
   }/* while */
 
@@ -238,12 +275,12 @@ msg* readMaudeMsg(int fd){
       retval->bytesUsed -= strlen(prompt); /* chomp the prompt II */
     }
 
-    if((retval->bytesUsed == 0) || 
+    if((retval->bytesUsed == 0) ||
        ((retval->bytesUsed == 1) && (retval->data[0] == '\n'))){
       sprintf(retval->data, "OK\n");
       retval->bytesUsed = strlen("OK\n");
-      }
     }
+  }
 
   return retval;
 
@@ -315,7 +352,7 @@ msg* readMsg(int fd){
     fprintf(stderr, "Read  in %d returned with nothing\n", getpid());
     return retval;
   }
-  if(MSG_DEBUG){
+  if(MSG_DEBUG_VERBOSE){
     int i;
     eM("readMsg in %d going into non blocking mode (bytes = %d)\n", getpid(), bytes);
     for(i = 0; i < bytes; i++)
@@ -325,7 +362,7 @@ msg* readMsg(int fd){
   if(setFlag(fd, O_NONBLOCK) < 0){ goto fail; }
   eM("readMsg in %d setFlag to O_NONBLOCK\n", getpid());
   if((retval = makeMsg(BUFFSZ)) == NULL){
-    fprintf(stderr, 
+    fprintf(stderr,
 	    "makeMsg in %d failed\n", getpid());
     goto exit;
   }
@@ -377,9 +414,9 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   }
   eM("readMsgVolatile  in %d (exitFlag = %d) starting (or restarting)\n", getpid(), *exitFlag);
   if((bytes = read(fd, buff, BUFFSZ)) < 0){
-    if(*exitFlag){ 
+    if(*exitFlag){
       eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-      goto fail; 
+      goto fail;
     }
     if(errno == EINTR){
       eM("readMsgVolatile  in %d (exitFlag = %d) restarting after being interrupted by a signal\n", getpid(), *exitFlag);
@@ -392,55 +429,55 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
     eM("Read in %d (exitFlag = %d) returned with nothing\n", getpid(), *exitFlag);
     return retval;
   }
-  if(MSG_DEBUG){
+  if(MSG_DEBUG_VERBOSE){
     int i;
-    fprintf(stderr, 
-	    "readMsgVolatile in %d (exitFlag = %d) going into non blocking mode (bytes = %d)\n", 
+    fprintf(stderr,
+	    "readMsgVolatile in %d (exitFlag = %d) going into non blocking mode (bytes = %d)\n",
 	    getpid(), *exitFlag, bytes);
     for(i = 0; i < bytes; i++)
       fprintf(stderr, "%c", buff[i]);
     fprintf(stderr, "\n\t%d\n", getpid());
   }
-  if(*exitFlag){ 
+  if(*exitFlag){
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    goto fail; 
-  }    
+    goto fail;
+  }
   if(setFlag(fd, O_NONBLOCK) < 0){  goto fail; }
   eM("readMsgVolatile in %d (exitFlag = %d) setFlag to O_NONBLOCK\n", getpid(), *exitFlag);
 
-  if(*exitFlag){ 
+  if(*exitFlag){
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    goto fail; 
+    goto fail;
   }
   if((retval = makeMsg(BUFFSZ)) == NULL){
     fprintf(stderr, "makeMsg in %d failed\n", getpid());
     goto exit;
   }
   eM("readMsgVolatile in %d (exitFlag = %d) made Msg\n", getpid(), *exitFlag);
-  if(*exitFlag){ 
-    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    goto fail; 
-  }
-  if(addToMsg(retval, bytes, buff) != 0){
-    fprintf(stderr, "addToMsg in %d failed\n", getpid());
-    goto fail; 
-  }
-  eM("readMsgVolatile in %d (exitFlag = %d) added  buff to Msg\n", getpid(), *exitFlag);
-  if(*exitFlag){ 
+  if(*exitFlag){
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
     goto fail;
   }
-  while(iop_usleep(1), 
+  if(addToMsg(retval, bytes, buff) != 0){
+    fprintf(stderr, "addToMsg in %d failed\n", getpid());
+    goto fail;
+  }
+  eM("readMsgVolatile in %d (exitFlag = %d) added  buff to Msg\n", getpid(), *exitFlag);
+  if(*exitFlag){
+    eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
+    goto fail;
+  }
+  while(iop_usleep(1),
 	(bytes = read(fd, buff, BUFFSZ)) > 0){
-    if(*exitFlag){ 
+    if(*exitFlag){
       eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-      goto fail; 
+      goto fail;
     }
     eM("readMsgVolatile in %d (exitFlag = %d) read in non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
-    
-    if(*exitFlag){ 
+
+    if(*exitFlag){
       eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-      goto fail; 
+      goto fail;
     }
     if(addToMsg(retval, bytes, buff) != 0){
       fprintf(stderr, "addToMsg  in %d failed\n", getpid());
@@ -449,11 +486,11 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   }
  exit:
   eM("readMsgVolatile in %d (exitFlag = %d) read exiting non-blocking mode (bytes = %d)\n", getpid(), *exitFlag, bytes);
-  if(*exitFlag){ 
+  if(*exitFlag){
     eM("readMsgVolatile in %d (exitFlag = %d)\n", getpid(), *exitFlag);
-    goto fail; 
-  } 
-  
+    goto fail;
+  }
+
   eM("readMsgVolatile in %d (exitFlag = %d) cleared non-blocking flag\n", getpid(), *exitFlag);
   /* retval->data is a C string, and retval->bytesUsed is its C string length */
   if(retval != NULL){
@@ -471,12 +508,12 @@ msg* readMsgVolatile(int fd, volatile int* exitFlag){
   }
 
   clearFlag(fd, O_NONBLOCK);
-  
+
   return retval;
-  
+
  fail:
 
-  clearFlag(fd, O_NONBLOCK); 
+  clearFlag(fd, O_NONBLOCK);
   freeMsg(retval);
   retval = NULL;
   return retval;
@@ -491,13 +528,13 @@ int writeMsg(int fd, msg* m){
   buff = m->data;
   while(bytesRemaining > 0){
   restart:
-    if((bytesWritten = write(fd, 
-			     buff, 
-			     ((bytesRemaining < blksz) ? 
-			      bytesRemaining : 
+    if((bytesWritten = write(fd,
+			     buff,
+			     ((bytesRemaining < blksz) ?
+			      bytesRemaining :
 			      blksz))) < 0){
       if(errno == EINTR){
-	goto restart; 
+	goto restart;
       } else {
 	perror("Write failed in writeMsg");
       }
@@ -524,7 +561,7 @@ static msg* abbreviateMsg(msg* m){
 
 
 int logMsg(char* from, char* filename, msg* message){
-  FILE* fp; 
+  FILE* fp;
   int fno;
   if(filename != NULL){
     fp = fopen(filename,"a");
@@ -534,7 +571,7 @@ int logMsg(char* from, char* filename, msg* message){
       write(fno, from, strlen(from));
       write(fno, "\n", strlen("\n"));
 #if ABBREVIATE_MSGS
-      writeMsg(fno, abbreviateMsg(message));      
+      writeMsg(fno, abbreviateMsg(message));
 #else
       writeMsg(fno, message);
 #endif
@@ -565,7 +602,7 @@ int readInt(int fd, int* nump, const char* caller){
   } else {
     int i = 0, bad = 0;
     char buff[SIZE];
-    
+
   squareone:
     i = 0;
     while(i < SIZE){
@@ -735,7 +772,7 @@ msg* acceptMsg(int fd){
     if(bytesRemaining <= 0){
       eM("acceptMsg: retval->bytesUsed =  %d\n", retval->bytesUsed);
       if(bytesRemaining < 0){
-	fprintf(stderr, 
+	fprintf(stderr,
 		"acceptMsg: got %d more bytes than expected\n",
 		retval->bytesUsed - bytesIncoming);
       }
@@ -793,7 +830,7 @@ msg* acceptMsgVolatile(int fd, volatile int* exitFlag){
     bytesRemaining -= bytes;
     if(bytesRemaining <= 0){
       if(bytesRemaining < 0){
-	fprintf(stderr, 
+	fprintf(stderr,
 		"acceptMsgVolatile: got %d more bytes than expected\n",
 		retval->bytesUsed - bytesIncoming);
       }
@@ -810,16 +847,16 @@ int sendMsg(int fd, msg* m){
   errno = 0;
   if(m == NULL) goto fail;
   if(writeInt(fd, m->bytesUsed) < 0) goto fail;
-  if(MSG_DEBUG)
+  if(MSG_DEBUG_VERBOSE)
     if(writeInt(STDERR_FILENO, m->bytesUsed) < 0) goto fail;
   if(write(fd, m->data, m->bytesUsed) != m->bytesUsed) goto fail;
-  if(MSG_DEBUG)
+  if(MSG_DEBUG_VERBOSE)
     if(write(STDERR_FILENO, m->data, m->bytesUsed) != m->bytesUsed) goto fail;
   return m->bytesUsed;
  fail:
   if(errno != 0)
     fprintf(stderr, "sendMsg: failed -- %s\n", strerror(errno));
-  else 
+  else
     fprintf(stderr, "sendMsg: failed\n");
   return -1;
 }
@@ -906,7 +943,7 @@ int sendFormattedMsgFD(int fd, char* fmt, ...){
   }
   va_end(ap);
   m->data[m->bytesUsed] = '\0';
-  
+
   if(writeInt(fd, m->bytesUsed) < 0){
     fprintf(stderr, "sendFormattedMsgFD: writeInt failed\n");
   }
@@ -925,7 +962,7 @@ void echoMsgVolatile(int from, int to, volatile int* exitFlag){
   message = acceptMsgVolatile(from, exitFlag);
   if(message != NULL){
     sendMsg(to, message);
-    if(MSG_DEBUG){
+    if(MSG_DEBUG_VERBOSE){
       sendMsg(STDERR_FILENO, message);
       fprintf(stderr, "echoMsg: echo wrote %d bytes\n", message->bytesUsed);
     }
@@ -944,7 +981,7 @@ void* echoLoopDieOnFail(void* args){
     message = acceptMsg(from);
     if(message != NULL){
       sendMsg(to, message);
-      if(MSG_DEBUG ||  G2D_REMOTE_ACTOR_DEBUG){
+      if(MSG_DEBUG_VERBOSE ||  G2D_REMOTE_ACTOR_DEBUG){
 	sendMsg(STDERR_FILENO, message);
 	fprintf(stderr, "\nechoMsg: echo wrote %d bytes\n", message->bytesUsed);
       }
@@ -967,7 +1004,7 @@ void* echoLoop(void* args){
     message = acceptMsg(from);
     if(message != NULL){
       sendMsg(to, message);
-      if(MSG_DEBUG || G2D_REMOTE_ACTOR_DEBUG){
+      if(MSG_DEBUG_VERBOSE || G2D_REMOTE_ACTOR_DEBUG){
 	sendMsg(STDERR_FILENO, message);
 	eM("\nechoMsg: echo wrote %d bytes\n", message->bytesUsed);
       }
@@ -983,9 +1020,12 @@ void echo2Maude(int from, int to){
   msg* message;
   message = acceptMsg(from);
   if(message != NULL){
-    if(WATCH_MAUDE)logMsg("notmaude", MAUDE_LOGFILE, message);
+    if(WATCH_MAUDE){
+      logMsg("notmaude", MAUDE_LOGFILE, message);
+      errDumpBytes(message->data, message->bytesUsed);
+    }
     writeMsg(to, message);
-    if(MSG_DEBUG){
+    if(MSG_DEBUG_VERBOSE){
       writeMsg(STDERR_FILENO, message);
       eM("echo2Maude: wrote %d bytes\n", message->bytesUsed);
     }
@@ -998,7 +1038,7 @@ void echo2PVS(int from, int to){
   message = acceptMsg(from);
   if(message != NULL){
     writeMsg(to, message);
-    if(MSG_DEBUG){
+    if(MSG_DEBUG_VERBOSE){
       writeMsg(STDERR_FILENO, message);
       eM("echo2Pvs: wrote %d bytes\n", message->bytesUsed);
     }
@@ -1053,12 +1093,12 @@ void wait4IO(int fdout, int fderr, void (*fp)(int , int)){
   int maxfd = (fderr < fdout) ? fdout + 1 : fderr + 1;
   fd_set readset;
   int retval;
-  announce("entering wait4IO\n"); 
+  announce("entering wait4IO\n");
   FD_ZERO(&readset);
   FD_SET(fdout, &readset);
   FD_SET(fderr, &readset);
   retval = select(maxfd, &readset, NULL, NULL, NULL);
-  announce("wait4IO\t:\tselect returned %d (out: %d) (err: %d)\n", 
+  announce("wait4IO\t:\tselect returned %d (out: %d) (err: %d)\n",
 	   retval, FD_ISSET(fdout, &readset), FD_ISSET(fderr, &readset));
   if(retval < 0){
     fprintf(stderr, "wait4IO\t:\tselect error\n");
@@ -1074,7 +1114,7 @@ void wait4IO(int fdout, int fderr, void (*fp)(int , int)){
       delay.tv_sec = 1;
       delay.tv_usec = 0;
       retval = select(maxfd, &readset, NULL, NULL, &delay);
-      if(retval <= 0) 
+      if(retval <= 0)
 	goto exit;
       else if((retval == 2) || FD_ISSET(fderr, &readset)){
 	fprintf(stderr, "wait4IO\t:\tthis shouldn't happen\n");
@@ -1088,7 +1128,7 @@ void wait4IO(int fdout, int fderr, void (*fp)(int , int)){
   }
 
  exit:
-  announce("exiting wait4IO(pout[0], perr[0],fp(fdout,STDOUT_FILENO));\n"); 
+  announce("exiting wait4IO(pout[0], perr[0],fp(fdout,STDOUT_FILENO));\n");
   return;
 }
 

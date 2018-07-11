@@ -1,10 +1,10 @@
 /*
   The InterOperability Platform: IOP
   Copyright (C) 2004 Ian A. Mason
-  School of Mathematics, Statistics, and Computer Science   
+  School of Mathematics, Statistics, and Computer Science
   University of New England, Armidale, NSW 2351, Australia
-  iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
-  http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+  iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327
+  http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312
 
 
   This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@
 #include "iop_lib.h"
 #include "iop_utils.h"
 #include "dbugflags.h"
-#include "wrapper_lib.h" 
+#include "wrapper_lib.h"
 #include "externs.h"
 #include "ec.h"
 
@@ -36,7 +36,7 @@ static char* maudebindir;
 
 static char maude_exe[] = "maude";
 
-static char* maude_argv[] = {"maude", "-no-tecla", "-interactive", NULL};
+static char* maude_argv[] = {"maude", "-no-tecla", "-no-wrap", "-interactive", NULL};
 
 static void chld_handler(int sig){
   fprintf(stderr, "%s died (%d)!\n",  maude_exe, sig);
@@ -54,7 +54,7 @@ static void *echoMaude(void *arg){
     announce("Listening to Maude; %p\n", arg);
     wait4IO(child_STDOUT_FILENO, child_STDERR_FILENO, parseMaudeThenEcho);
   }
-  return NULL; 
+  return NULL;
 }
 
 
@@ -93,10 +93,10 @@ int main(int argc, char** argv){
     ec_neg1( execvp(maude_exe, maude_argv) );
 
     /* end of child code */
-  } else { 
+  } else {
     /* i'm the boss */
     pthread_t echoMaudeThread;
-    
+
     ec_neg1( close(pin[0]) );
     ec_neg1( close(perr[1]) );
     ec_neg1( close(pout[1]) );
@@ -104,7 +104,7 @@ int main(int argc, char** argv){
     child_STDIN_FILENO  = pin[1];
     child_STDOUT_FILENO = pout[0];
     child_STDERR_FILENO = perr[0];
-    
+
     if(pthread_create(&echoMaudeThread, NULL, echoMaude, NULL)){
       fprintf(stderr, "Could not spawn echoMaude thread\n");
       return -1;
@@ -117,25 +117,26 @@ int main(int argc, char** argv){
 	fprintf(stderr, "calloc failed of cmdBuffer\n");
         exit(EXIT_FAILURE);
       }
-      announce("%s\t:\tloading %s\n", argv[0], argv[2]); 
-      
+      announce("%s\t:\tloading %s\n", argv[0], argv[2]);
+
       snprintf(cmdBuffer, len + 10, "load %s\n", argv[2]);
-      
+
       len = strlen(cmdBuffer);
       if(write(child_STDIN_FILENO, cmdBuffer, len) !=  len){
         fprintf(stderr, "write failed of \"%s\" command", cmdBuffer);
         /* forge on, notify registry, die calmly? */
         exit(EXIT_FAILURE);
       };
-      
+
       announce("%s\n", cmdBuffer);
       free(cmdBuffer);
-      
+
     }
-          
+
     while(1){
       announce("Listening to IO\n");
       echo2Maude(STDIN_FILENO, child_STDIN_FILENO);
+      write(child_STDIN_FILENO, "\n", 1);  //iam: 5/4/2018 this hack introduced to handle new behaviour from Maude-Alpha114 onwards
     }
   } /* end of boss code */
 
@@ -146,6 +147,3 @@ int main(int argc, char** argv){
   EC_CLEANUP_END
 
     }
-
-
-

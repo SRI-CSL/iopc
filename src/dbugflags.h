@@ -1,10 +1,10 @@
 /*
     The InterOperability Platform: IOP
     Copyright (C) 2004 Ian A. Mason
-    School of Mathematics, Statistics, and Computer Science   
+    School of Mathematics, Statistics, and Computer Science
     University of New England, Armidale, NSW 2351, Australia
-    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327 
-    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312 
+    iam@turing.une.edu.au           Phone:  +61 (0)2 6773 2327
+    http://mcs.une.edu.au/~iam/     Fax:    +61 (0)2 6773 3312
 
 
     This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,9 @@
 #ifndef _IOP_DBUGFLGAS_H
 #define _IOP_DBUGFLGAS_H
 
+#define DEBUG_LOGFILE            NULL
+//#define DEBUG_LOGFILE            "/tmp/iop_debug_logging.txt"
+
 #define WATCH_MAUDE               0
 #define ABBREVIATE_MSGS           0
 #define MAUDE_LOGFILE             "/tmp/maude-out.txt"
@@ -40,7 +43,7 @@
 #define LISTEN2IOP_DEBUG          0
 #define SERVER_DEBUG              0
 #define DAEMON_DEBUG              0
-#define NETREQUEST_DEBUG          1 
+#define NETREQUEST_DEBUG          0
 #define LOCKS_DEBUG               0
 /*
   WARNING: Turning on both MSG_DEBUG and
@@ -49,6 +52,7 @@
   SILENCE!
 */
 #define MSG_DEBUG                 0
+#define MSG_DEBUG_VERBOSE         0
 #define REGISTRY_DEBUG            0
 #define SOCKET_DEBUG              0
 #define SOCKETFACTORY_DEBUG       0
