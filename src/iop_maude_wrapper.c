@@ -136,7 +136,7 @@ int main(int argc, char** argv){
     while(1){
       announce("Listening to IO\n");
       echo2Maude(STDIN_FILENO, child_STDIN_FILENO);
-      write(child_STDIN_FILENO, "\n", 1);  //iam: 5/4/2018 this hack introduced to handle new behaviour from Maude-Alpha114 onwards
+      /* write(child_STDIN_FILENO, "\n", 1);  //iam: 5/4/2018 this hack introduced to handle new behaviour from Maude-Alpha114 onwards */
     }
   } /* end of boss code */
 
