@@ -26,7 +26,9 @@
 #define _IOP_DBUGFLGAS_H
 
 #define DEBUG_LOGFILE            NULL
-//#define DEBUG_LOGFILE            "/tmp/iop_debug_logging.txt"
+/* 
+   #define DEBUG_LOGFILE            "/tmp/iop_debug_logging.txt" 
+*/
 
 #define WATCH_MAUDE               0
 #define ABBREVIATE_MSGS           0

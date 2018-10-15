@@ -2,20 +2,19 @@
 BUILDDIR = ../build
 
 OS   =  $(shell uname)
-ARCH =  $(shell uname -p)
-
+ARCH =  $(shell getconf LONG_BIT)
 
 ifeq (Darwin, $(findstring Darwin, ${OS}))
 
 ######  DARWIN
 
-CFLAGS = -Wall -D_MAC -arch i386 -g
+CFLAGS = -Wall -D_MAC -g
 LOLA = lola-2-macintel
 #DOT = dot-macintel-10-10-5
 DOT = dot-macintel-10-11-6
 # add to CFLAGS for debugging:
 # -g 
-LIBS = -lpthread -lm  -arch i386 
+LIBS = -lpthread -lm  
 
 else
 
@@ -28,7 +27,7 @@ TARGET = LINUX
 # -g
 
 #check the arch for 32 or 64 bit
-ifeq (i386, $(findstring i386, ${ARCH}))
+ifeq (32, $(findstring 32, ${ARCH}))
 LOLA = lola-2-linux32
 DOT = dot-linux64-precise
 else

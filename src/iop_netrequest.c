@@ -37,7 +37,9 @@ static char logFile[] = "/var/log/iop/netrequest.log";
 
 static int  requestNo = 0;
 
+#if NETREQUEST_DEBUG == 1
 static pthread_mutex_t netrequest_log_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 static pthread_mutex_t netrequest_output_mutex = PTHREAD_MUTEX_INITIALIZER;
 
