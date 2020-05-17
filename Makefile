@@ -11,14 +11,14 @@ c:
 	$(MAKE) -C src
 
 install: c
-	$(MAKE) -C src install
+	$(MAKE) IOPBINDIR=${IOPBINDIR} -C src install
 
 #a temporary target just for internal SRI use
 internal: c
-	$(MAKE) -C src internal
+	$(MAKE) IOPBINDIR=${IOPBINDIR} -C src internal
 
 
-clean: 
+clean:
 	$(MAKE) -C src clean
 	rm -rf build
 
@@ -29,5 +29,3 @@ ifeq ($(IOP_VERSION_NO),)
 endif
 	$(MAKE) -C src install IOPBINDIR="${PWD}/IOP-v$(IOP_VERSION_NO)"
 	zip -r IOP-v$(IOP_VERSION_NO) IOP-v$(IOP_VERSION_NO)
-
-
