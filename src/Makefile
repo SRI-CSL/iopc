@@ -9,18 +9,19 @@ ifeq (Darwin, $(findstring Darwin, ${OS}))
 ######  DARWIN
 
 CFLAGS = -Wall -D_MAC -g
+TARGET = DARWIN
 LOLA = lola-2-macintel
 #DOT = dot-macintel-10-10-5
 DOT = dot-macintel-10-11-6
 # add to CFLAGS for debugging:
-# -g 
-LIBS = -lpthread -lm  
+# -g
+LIBS = -lpthread -lm
 
 else
 
 ######## LINUX
 
-LIBS =  -lm -pthread 
+LIBS =  -lm -pthread
 CFLAGS = -pthread -D_LINUX -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE -pedantic
 TARGET = LINUX
 # add to CFLAGS for debugging:
@@ -79,7 +80,7 @@ HEADERS = actor.h\
 	  types.h\
 	  version.h\
 	  wrapper_lib.h
-MISC    = Makefile 
+MISC    = Makefile
 
 vpath % ${BUILDDIR}
 
@@ -102,7 +103,7 @@ ${EXES}: %: %.o ${COBJS} ${HEADERS} ${MISC}
 	${CC}  ${LIBS} ${COBJS} $< -o ${BUILDDIR}/$@
 
 %.o: %.c %.h ${HEADERS} ${MISC}
-	${CC} ${CFLAGS} $< -c 
+	${CC} ${CFLAGS} $< -c
 
 scripts:
 	mkdir -p ${BUILDDIR}
@@ -122,4 +123,3 @@ internal: install
 
 clean:
 	rm -f ${EXES} ${COBJS} *.o
-
