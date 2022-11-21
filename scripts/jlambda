@@ -16,7 +16,7 @@ then
     JLPATH=":${JLAMBDA_CLASSES}"
 fi
 
-CMD="java  -Dcom.apple.mrj.application.apple.menu.about.name=jlambda -Xms256m -Xmx1024m  -ea -cp ${IOP}/${JLAMBDAJAR}${JLPATH}  g2d/jlambda/ReadEvalPrintLoop ${IOP}"
+CMD="java  -Dcom.apple.mrj.application.apple.menu.about.name=jlambda -Xms256m -Xmx1024m  -ea -cp ${IOP}/${JLAMBDAJAR}${JLPATH} -javaagent:${IOP}/${JLAMBDAJAR}  g2d/jlambda/ReadEvalPrintLoop ${IOP}"
 
 if [ $1 ]; then 
     $CMD $1
